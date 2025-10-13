@@ -178,7 +178,7 @@
         /* Chat Styles */
         .chat-container { display: flex; flex-direction: column; height: calc(100vh - 100px); max-height: 700px; background: #ECE5DD; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
         .chat-header { background: #128C7E; color: white; padding: 16px 20px; border-radius: 0; display: flex; justify-content: space-between; align-items: center; }
-        .chat-header-left { flex: 1; display: flex; flex-direction: column; }
+        .chat-header-left { flex: 1; }
         .chat-partner-name { font-size: 18px; font-weight: 600; margin-bottom: 4px; letter-spacing: 0; }
         .chat-status { font-size: 13px; opacity: 0.9; font-weight: 400; }
         
@@ -215,26 +215,9 @@
         .template-item:hover { background: #667eea; color: white; border-left-color: #764ba2; transform: translateX(4px); box-shadow: 0 2px 6px rgba(102, 126, 234, 0.2); }
         
         .chat-input-area { background: #F0F0F0; padding: 12px 16px; border-top: 1px solid #ddd; border-radius: 0; }
-        .privacy-notice { background: linear-gradient(135deg, #fff8e1 0%, #fffbf0 100%); padding: 14px 16px; border-radius: 10px; font-size: 13px; color: #7d5d00; margin-bottom: 16px; border-left: 4px solid #ffc107; display: none; gap: 10px; align-items: flex-start; }
-.privacy-notice.show { display: flex; }
-.privacy-notice strong { color: #5d4700; font-weight: 700; }
-.privacy-info-icon { 
-    width: 20px; 
-    height: 20px; 
-    border-radius: 50%; 
-    background: #667eea; 
-    color: white; 
-    display: inline-flex; 
-    align-items: center; 
-    justify-content: center; 
-    font-weight: 700; 
-    font-size: 14px; 
-    cursor: pointer; 
-    margin-left: 8px; 
-    transition: all 0.2s;
-}
-.privacy-info-icon:hover { background: #764ba2; transform: scale(1.1); }
-.chat-action-buttons { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+        .privacy-notice { background: linear-gradient(135deg, #fff8e1 0%, #fffbf0 100%); padding: 14px 16px; border-radius: 10px; font-size: 13px; color: #7d5d00; margin-bottom: 16px; border-left: 4px solid #ffc107; display: flex; gap: 10px; align-items: flex-start; }
+        .privacy-notice strong { color: #5d4700; font-weight: 700; }
+        .chat-action-buttons { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
         .chat-action-buttons .btn { padding: 10px 16px; font-size: 13px; font-weight: 600; border-radius: 8px; transition: all 0.2s; }
         .contact-request-card { background: linear-gradient(135deg, #fff8e1 0%, #fffbf0 100%); padding: 16px; border-radius: 12px; margin: 10px 0; border-left: 4px solid #ffc107; }
 .contact-request-title { font-weight: 700; color: #5d4700; margin-bottom: 10px; font-size: 14px; }
@@ -251,15 +234,8 @@
         .chat-input-wrapper textarea { flex: 1; min-height: 42px; max-height: 120px; padding: 10px 14px; border: none; border-radius: 21px; font-family: inherit; font-size: 15px; resize: none; background: white; transition: all 0.2s; }
         .chat-input-wrapper textarea:focus { outline: none; box-shadow: 0 0 2px rgba(0, 0, 0, 0.1); }
         .chat-input-wrapper .btn { padding: 12px 24px; font-size: 14px; font-weight: 600; border-radius: 8px; }
-.file-input-label { background: #6c757d; color: white; padding: 11px 13px; border-radius: 8px; cursor: pointer; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; min-width: 48px; }
-.file-input-label:hover { background: #5a6268; transform: scale(1.05); }
-.plus-button { background: #6c757d; color: white; padding: 11px 13px; border-radius: 8px; cursor: pointer; font-size: 20px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; min-width: 48px; border: none; }
-.plus-button:hover { background: #5a6268; transform: scale(1.05); }
-.template-button { display: inline-flex; }
-.template-button.hide { display: none; }
-.btn-send { display: none; padding: 12px; min-width: 48px; background: #128C7E; border-radius: 50%; }
-.btn-send.show { display: inline-flex; align-items: center; justify-content: center; }
-.btn-send:hover { background: #0d6b5f; }
+        .file-input-label { background: #6c757d; color: white; padding: 11px 13px; border-radius: 8px; cursor: pointer; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; min-width: 48px; }
+        .file-input-label:hover { background: #5a6268; transform: scale(1.05); }
         
         /* Warranty Form */
         .warranty-form { background: linear-gradient(135deg, #f0f4ff 0%, #f8f9fa 100%); padding: 18px; border-radius: 12px; margin-top: 16px; border: 2px solid #e8ecff; }
@@ -447,11 +423,7 @@
                 🤝 HelpBuddy
             </div>
         </div>
-        <div class="user-menu" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-            <div style="display: flex; align-items: center; justify-content: center;">
-                <img id="headerUserPhoto" src="" alt="Profile" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 3px solid #667eea; display: none;">
-                <div id="headerUserPhotoPlaceholder" style="width: 50px; height: 50px; border-radius: 50%; background: rgba(102, 126, 234, 0.2); display: flex; align-items: center; justify-content: center; font-size: 28px; border: 2px solid #667eea;">👤</div>
-            </div>
+        <div class="user-menu">
             <button class="user-button" onclick="toggleUserDropdown()">
                 <span id="headerUsername">User</span>
                 <span>▼</span>
@@ -538,12 +510,14 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </div>            </div>
+
+            <button class="btn btn-full" onclick="handleLogout()" style="margin-top: 20px;">Logout</button>
         </div>
 
         <!-- Create Request View -->
-        <div id="createRequestView" class="hidden">            <button class="btn btn-secondary" onclick="backFromChat()">← Back to Responses</button>
+        <div id="createRequestView" class="hidden">
+            <button class="btn btn-secondary" onclick="backFromChat()">← Back to Responses</button>
             <h2 style="margin-top: 20px;">Create Service Request</h2>
             <div id="createRequestError" class="error hidden"></div>
             <div id="createRequestInfo" class="info hidden"></div>
@@ -701,27 +675,16 @@
     <div id="editProfileInfo" class="info hidden"></div>
     
     <form id="editProfileForm">
-       	<h3>👤 Personal Information</h3>
-<div class="form-group">
-    <div style="text-align: center; margin-bottom: 20px;">
-        <img id="currentProfilePhoto" src="" alt="Profile" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #667eea; display: none;">
-        <div id="noProfilePhoto" style="width: 120px; height: 120px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 48px; color: #999;">👤</div>
-    </div>
-    <label>Change Profile Photo</label>
-    <input type="file" id="editPhoto" accept="image/*">
-    <small style="color: #999; font-size: 12px;">Max size: 2MB. Leave empty to keep current photo</small>
-</div>
-
-<div class="form-group">
-    <label>Full Name <span class="required">*</span></label>
-    <input type="text" id="editName" required>
-</div>
-
-<div class="form-group">
-    <label>Phone Number <span class="required">*</span></label>
-    <input type="tel" id="editPhone" required>
-</div>
-
+        <h3>👤 Personal Information</h3>
+        <div class="form-group">
+            <label>Full Name <span class="required">*</span></label>
+            <input type="text" id="editName" required>
+        </div>
+        <div class="form-group">
+            <label>Phone Number <span class="required">*</span></label>
+            <input type="tel" id="editPhone" pattern="[0-9]{10}" required>
+        </div>
+        
         <h3>📍 Address Details</h3>
         <div class="form-group">
             <label>House Number</label>
@@ -808,15 +771,9 @@
             <button class="btn btn-secondary" onclick="backToDashboard()">← Back to Dashboard</button>
             <div class="chat-container" style="margin-top: 20px;">
                 <div class="chat-header">
-    <div style="display: flex; align-items: center; gap: 12px;">
-        <img id="chatPartnerPhoto" src="" alt="" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid white; display: none;">
-        <div id="chatPartnerPhotoPlaceholder" style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 20px;">👤</div>
-        <div class="chat-header-left">
-            <div class="chat-partner-name" id="chatPartnerName">Chat</div>
-            <div class="chat-status">Request Status: <span id="chatRequestStatus">In Progress</span></div>
-        </div>
-    </div>
-</div>
+                    <div class="chat-partner-name" id="chatPartnerName">Chat</div>
+                    <div class="chat-status">Request Status: <span id="chatRequestStatus">In Progress</span></div>
+                </div>
                 
                 <div class="chat-messages" id="chatMessages">
                     <!-- Messages will be loaded here -->
@@ -824,15 +781,12 @@
                 
                                 
                 <div class="chat-input-area">
-                    <div class="privacy-notice" id="privacyNotice">
+                    <div class="privacy-notice">
                         🔒 <strong>Privacy Protected:</strong> Phone numbers and addresses are hidden until both parties agree to share contact information.
                     </div>
                     
                     <div class="chat-action-buttons">
-                        <button class="btn btn-contact" onclick="requestContactSharing()">
-                            📞 Request Contact Sharing
-                            <span class="privacy-info-icon" onclick="event.stopPropagation(); togglePrivacyNotice()">!</span>
-                        </button>
+                        <button class="btn btn-contact" onclick="requestContactSharing()">📞 Request Contact Sharing</button>
                         <button class="btn btn-complete" id="markCompleteBtn" onclick="showWarrantyForm()" style="display: none;">✅ Mark Work Complete</button>
                     </div>
                     
@@ -860,12 +814,14 @@
                     </div>
                     
                     <div class="chat-input-wrapper">
-                        <button class="plus-button" onclick="showAttachmentOptions()" title="Attach">+</button>
-                        <textarea id="chatMessageInput" placeholder="Type your message..." rows="2" oninput="toggleSendButton()"></textarea>
-                        <button class="template-button" id="templateBtn" onclick="openTemplateModal()" title="Quick Templates">📋</button>
-                        <button class="btn btn-send" id="sendBtn" onclick="sendMessage()">➤</button>
+                        <label class="file-input-label" style="padding: 12px; cursor: pointer;">
+                            📷
+                            <input type="file" id="photoInput" accept="image/*" style="display: none;" onchange="handlePhotoUpload(event)">
+                        </label>
+                        <textarea id="chatMessageInput" placeholder="Type your message..." rows="2"></textarea>
+                        <button class="template-button" onclick="openTemplateModal()" title="Quick Templates">📋</button>
+                        <button class="btn" onclick="sendMessage()">Send</button>
                     </div>
-		<input type="file" id="photoInput" accept="image/*" style="display: none;" onchange="handlePhotoUpload(event)">
                 </div>
             </div>
         </div>
@@ -956,8 +912,6 @@
         
         let currentUser = null;
         let currentProfile = null;
-	console.log('Step 1: JavaScript loaded');
-        console.log('Step 2: Supabase client created');
         let selectedResponseRequest = null;
         let currentChatData = null;
         let chatRefreshInterval = null;
@@ -972,9 +926,7 @@
         };
 
         window.addEventListener('DOMContentLoaded', async () => {
-            console.log('Step 3: DOMContentLoaded fired');
             const { data: { user } } = await supabase.auth.getUser();
-            console.log('Step 4: Checked user:', user);
             if (user) { 
                 currentUser = user; 
                 await loadProfile(); 
@@ -1059,30 +1011,17 @@ async function showEditProfile() {
     document.getElementById('editProfileView').classList.remove('hidden');
     
     // Pre-fill form with current profile data
-    document.getElementById('editName').value = currentProfile.name || '';
-    document.getElementById('editPhone').value = currentProfile.phone || '';
+    document.getElementById('editName').value = currentProfile.name;
+    document.getElementById('editPhone').value = currentProfile.phone;
     document.getElementById('editHouseNumber').value = currentProfile.house_number || '';
-    document.getElementById('editAreaName').value = currentProfile.area_name || '';
+    document.getElementById('editAreaName').value = currentProfile.area_name;
     document.getElementById('editLandmark').value = currentProfile.landmark || '';
-    document.getElementById('editCity').value = currentProfile.city || '';
-    document.getElementById('editState').value = currentProfile.state || '';
-    document.getElementById('editPinCode').value = currentProfile.pin_code || '';
+    document.getElementById('editCity').value = currentProfile.city;
+    document.getElementById('editState').value = currentProfile.state;
+    document.getElementById('editPinCode').value = currentProfile.pin_code;
     document.getElementById('editRadius').value = currentProfile.radius_km || 10;
     
-    // Display current profile photo
-    if (currentProfile.profile_photo) {
-        document.getElementById('currentProfilePhoto').src = currentProfile.profile_photo;
-        document.getElementById('currentProfilePhoto').style.display = 'block';
-        document.getElementById('noProfilePhoto').style.display = 'none';
-    } else {
-        document.getElementById('currentProfilePhoto').style.display = 'none';
-        document.getElementById('noProfilePhoto').style.display = 'flex';
-    }
-    
-    // Now that form is populated, update provider button
-    setTimeout(() => {
-        updateProviderButton();
-    }, 100);
+    updateProviderButton();
     
     if (currentProfile.is_provider) {
         await loadCurrentServices();
@@ -1224,9 +1163,9 @@ function backFromChat() {
 function updateProviderButton() {
     const btn = document.getElementById('toggleProviderBtn');
     const text = document.getElementById('providerStatusText');
-    const isProvider = currentProfile.is_provider;
-    
-    if (!btn || !text) return; // Safety check
+    const isProvider = document.getElementById('editIsProvider') ? 
+                       document.getElementById('editIsProvider').checked : 
+                       currentProfile.is_provider;
     
     if (isProvider) {
         text.textContent = '✅ Providing Services (Click to Stop)';
@@ -1241,8 +1180,6 @@ function updateProviderButton() {
 
 async function toggleProviderStatus() {
     const isCurrentlyProvider = currentProfile.is_provider;
-    const btn = document.getElementById('toggleProviderBtn');
-    const text = document.getElementById('providerStatusText');
     
     if (!isCurrentlyProvider) {
         // User wants to become a provider
@@ -1286,84 +1223,70 @@ async function toggleProviderStatus() {
         });
 
         // Signup
-document.getElementById('signupForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const errorDiv = document.getElementById('signupError');
-    const infoDiv = document.getElementById('signupInfo');
-    
-    errorDiv.classList.add('hidden');
-    infoDiv.classList.add('hidden');
-    
-    try {
-        const formData = {
-            email: document.getElementById('signupEmail').value.trim(),
-            password: document.getElementById('signupPassword').value,
-            name: document.getElementById('signupName').value.trim(),
-            phone: document.getElementById('signupPhone').value.trim(),
-            house_number: document.getElementById('houseNumber').value.trim() || null,
-            area_name: document.getElementById('areaName').value.trim(),
-            landmark: document.getElementById('landmark').value.trim() || null,
-            city: document.getElementById('city').value,
-            state: document.getElementById('state').value,
-            pin_code: document.getElementById('pinCode').value.trim(),
-            is_provider: document.getElementById('isProvider').checked
-        };
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const errorDiv = document.getElementById('signupError');
+            const infoDiv = document.getElementById('signupInfo');
+            
+            errorDiv.classList.add('hidden');
+            infoDiv.classList.add('hidden');
+            
+            try {
+                const formData = {
+                    email: document.getElementById('signupEmail').value.trim(),
+                    password: document.getElementById('signupPassword').value,
+                    name: document.getElementById('signupName').value.trim(),
+                    phone: document.getElementById('signupPhone').value.trim(),
+                    house_number: document.getElementById('houseNumber').value.trim() || null,
+                    area_name: document.getElementById('areaName').value.trim(),
+                    landmark: document.getElementById('landmark').value.trim() || null,
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value,
+                    pin_code: document.getElementById('pinCode').value.trim(),
+                    is_provider: document.getElementById('isProvider').checked
+                };
 
-        // Handle profile photo
-        const photoFile = document.getElementById('signupPhoto').files[0];
-        let profilePhotoUrl = null;
+                infoDiv.textContent = '📍 Finding your location...';
+                infoDiv.classList.remove('hidden');
 
-        if (photoFile) {
-            if (photoFile.size > 2 * 1024 * 1024) {
-                throw new Error('Profile photo size should be less than 2MB');
+                const coords = await getCoordinates(formData);
+
+                infoDiv.textContent = '🔐 Creating your account...';
+
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: formData.email,
+                    password: formData.password
+                });
+
+                if (authError) throw authError;
+
+                infoDiv.textContent = '💾 Saving your profile...';
+
+                const { error: profileError } = await supabase.from('profiles').insert([{
+                    user_id: authData.user.id,
+                    name: formData.name,
+                    phone: formData.phone,
+                    house_number: formData.house_number,
+                    area_name: formData.area_name,
+                    landmark: formData.landmark,
+                    city: formData.city,
+                    state: formData.state,
+                    pin_code: formData.pin_code,
+                    latitude: coords.lat,
+                    longitude: coords.lng,
+                    is_provider: formData.is_provider
+                }]);
+
+                if (profileError) throw profileError;
+
+                currentUser = authData.user;
+                await loadProfile();
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+                infoDiv.classList.add('hidden');
             }
-            infoDiv.textContent = '📸 Uploading profile photo...';
-            infoDiv.classList.remove('hidden');
-            profilePhotoUrl = await convertImageToBase64(photoFile);
-        }
-
-        infoDiv.textContent = '📍 Finding your location...';
-        infoDiv.classList.remove('hidden');
-
-        const coords = await getCoordinates(formData);
-
-        infoDiv.textContent = '🔐 Creating your account...';
-
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-            email: formData.email,
-            password: formData.password
         });
-
-        if (authError) throw authError;
-
-        infoDiv.textContent = '💾 Saving your profile...';
-
-        const { error: profileError } = await supabase.from('profiles').insert([{
-            user_id: authData.user.id,
-            name: formData.name,
-            phone: formData.phone,
-            house_number: formData.house_number,
-            area_name: formData.area_name,
-            landmark: formData.landmark,
-            city: formData.city,
-            state: formData.state,
-            pin_code: formData.pin_code,
-            latitude: coords.lat,
-            longitude: coords.lng,
-            is_provider: formData.is_provider,
-            profile_photo: profilePhotoUrl
-        }]);
-
-        if (profileError) throw profileError;
-
-        currentUser = authData.user;
-        await loadProfile();
-    } catch (error) {
-        errorDiv.textContent = error.message;
-        errorDiv.classList.remove('hidden');
-        infoDiv.classList.add('hidden');
-    }
-});
 
         // Geocoding
         async function getCoordinates(formData) {
@@ -1413,16 +1336,6 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             });
         }
 
-        // Convert Image to Base64
-        function convertImageToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = (e) => resolve(e.target.result);
-                reader.onerror = (error) => reject(error);
-                reader.readAsDataURL(file);
-            });
-        }
-
         // Load Profile
         async function loadProfile() {
             showLoading();
@@ -1440,23 +1353,10 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
         }
 
         function displayProfile(profile) {
-    // Update header username and photo
+    // Update header username
     const headerUsername = document.getElementById('headerUsername');
-    const headerPhoto = document.getElementById('headerUserPhoto');
-    const headerPhotoPlaceholder = document.getElementById('headerUserPhotoPlaceholder');
-    
     if (headerUsername) {
         headerUsername.textContent = profile.name;
-    }
-    
-    // Display profile photo in header
-    if (profile.profile_photo) {
-        headerPhoto.src = profile.profile_photo;
-        headerPhoto.style.display = 'block';
-        headerPhotoPlaceholder.style.display = 'none';
-    } else {
-        headerPhoto.style.display = 'none';
-        headerPhotoPlaceholder.style.display = 'flex';
     }
 }
 
@@ -1784,18 +1684,8 @@ async function openChatBeforeSelection(requestId, providerId, chatSource = 'myRe
                 document.getElementById('chatView').classList.remove('hidden');
                 
                 // Update chat header
-document.getElementById('chatPartnerName').textContent = partner.name;
-document.getElementById('chatRequestStatus').textContent = request.status.replace('_', ' ').toUpperCase();
-
-// Update profile photo
-if (partner.profile_photo) {
-    document.getElementById('chatPartnerPhoto').src = partner.profile_photo;
-    document.getElementById('chatPartnerPhoto').style.display = 'block';
-    document.getElementById('chatPartnerPhotoPlaceholder').style.display = 'none';
-} else {
-    document.getElementById('chatPartnerPhoto').style.display = 'none';
-    document.getElementById('chatPartnerPhotoPlaceholder').style.display = 'flex';
-}
+                document.getElementById('chatPartnerName').textContent = `Chat with ${partner.name}`;
+                document.getElementById('chatRequestStatus').textContent = request.status.replace('_', ' ').toUpperCase();
                 
                 // Show appropriate templates
                 if (currentChatData.isProvider) {
@@ -1824,18 +1714,13 @@ if (partner.profile_photo) {
     try {
         const { data: chat, error } = await supabase
             .from('chats')
-            .select('messages')  // ← REMOVE contact_sharing_status
+            .select('messages, contact_sharing_status')
             .eq('request_id', currentChatData.requestId)
             .eq('provider_id', currentChatData.providerId)
             .single();
         
-        if (error) {
-            console.error('Error fetching chat:', error);
-            return;
-        }
-        
         const messages = chat?.messages || [];
-        const contactSharingApproved = false;  // Temporarily disable this feature
+        const contactSharingApproved = chat?.contact_sharing_status === 'approved';
         const container = document.getElementById('chatMessages');
         
         if (messages.length === 0) {
@@ -1862,6 +1747,7 @@ if (partner.profile_photo) {
                     cardClass += ' contact-status-declined';
                     statusHTML = '<p style="margin-top: 10px; font-weight: 600;">❌ Declined</p>';
                 } else if (!isSent && status === 'pending') {
+                    // Show approval buttons to receiver
                     statusHTML = `
                         <div class="contact-approval-buttons">
                             <button class="btn-approve" onclick="approveContactSharing(${index})">✅ Approve</button>
@@ -1903,20 +1789,15 @@ if (partner.profile_photo) {
         });
         
         // Show contact details if approved
-// if (contactSharingApproved) {
-//     html += await generateContactDetailsCard();
-// }
+        if (contactSharingApproved) {
+            html += await generateContactDetailsCard();
+        }
         
         container.innerHTML = html;
-        
-        // Scroll to bottom to show latest message
-        setTimeout(() => {
-            container.scrollTop = container.scrollHeight;
-        }, 100);
+        container.scrollTop = container.scrollHeight;
         
     } catch (error) {
         console.error('Error loading messages:', error);
-        document.getElementById('chatMessages').innerHTML = '<div class="empty-chat-state"><div class="empty-chat-state-text">Error loading messages. Please refresh.</div></div>';
     }
 }
 
@@ -1974,63 +1855,48 @@ function openImagePreview(imageUrl) {
 }
         // Send Message
         async function sendMessage() {
-    const input = document.getElementById('chatMessageInput');
-    const message = input.value.trim();
-    
-    if (!message) return;
-    
-    // Disable button during send to prevent double-clicks
-    const sendBtn = document.getElementById('sendBtn');
-    sendBtn.disabled = true;
-    
-    try {
-        // Get existing chat
-        const { data: existingChat, error: fetchError } = await supabase
-            .from('chats')
-            .select('messages')
-            .eq('request_id', currentChatData.requestId)
-            .eq('provider_id', currentChatData.providerId)
-            .single();
-        
-        let messages = existingChat?.messages || [];
-        
-        // Add new message
-        messages.push({
-            sender_id: currentUser.id,
-            sender_name: currentProfile.name,
-            message: message,
-            timestamp: new Date().toISOString()
-        });
-        
-        // Upsert chat
-        const { error: upsertError } = await supabase
-            .from('chats')
-            .upsert({
-                request_id: currentChatData.requestId,
-                provider_id: currentChatData.providerId,
-                messages: messages
-            }, { onConflict: 'request_id,provider_id' });
-        
-        if (upsertError) throw upsertError;
-        
-        // Clear input AFTER successful send
-        input.value = '';
-        
-        // Manually toggle buttons after clearing
-        sendBtn.classList.remove('show');
-        document.getElementById('templateBtn').classList.remove('hide');
-        
-        // Re-enable button
-        sendBtn.disabled = false;
-        
-        // Reload messages
-        await loadChatMessages();
-        
-    } catch (error) {
-        alert('Error sending message: ' + error.message);
-        sendBtn.disabled = false;
-    }
-}
+            const input = document.getElementById('chatMessageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            try {
+                // Get existing chat
+                const { data: existingChat, error: fetchError } = await supabase
+                    .from('chats')
+                    .select('messages')
+                    .eq('request_id', currentChatData.requestId)
+                    .eq('provider_id', currentChatData.providerId)
+                    .single();
+                
+                let messages = existingChat?.messages || [];
+                
+                // Add new message
+                messages.push({
+                    sender_id: currentUser.id,
+                    sender_name: currentProfile.name,
+                    message: message,
+                    timestamp: new Date().toISOString()
+                });
+                
+                // Upsert chat
+                const { error: upsertError } = await supabase
+                    .from('chats')
+                    .upsert({
+                        request_id: currentChatData.requestId,
+                        provider_id: currentChatData.providerId,
+                        messages: messages
+                    }, { onConflict: 'request_id,provider_id' });
+                
+                if (upsertError) throw upsertError;
+                
+                input.value = '';
+                await loadChatMessages();
+                
+            } catch (error) {
+                alert('Error sending message: ' + error.message);
+            }
+        }
 
         // Handle Photo Upload
         async function handlePhotoUpload(event) {
@@ -2509,14 +2375,9 @@ async function declineContactSharing(messageIndex) {
                                    diffMinutes < 1440 ? `${Math.floor(diffMinutes/60)} hours ago` :
                                    `${Math.floor(diffMinutes/1440)} days ago`;
                     
-                   const photoHTML = provider.profile_photo 
-    ? `<img src="${provider.profile_photo}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 3px solid #667eea; margin-bottom: 12px;">`
-    : `<div style="width: 60px; height: 60px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 12px;">👤</div>`;
-
-html += `
+                    html += `
     <div class="provider-card">
-        <div style="text-align: center;">${photoHTML}</div>
-        <div class="provider-name">${provider.name}</div>
+        <div class="provider-name">👤 ${provider.name}</div>
         <div class="provider-info">📍 Distance: ${distance} km away</div>
         <div class="provider-info">🕒 Responded: ${timeAgo}</div>
         <div class="rating-display">${ratingDisplay}</div>
@@ -3307,20 +3168,6 @@ document.getElementById('editProfileForm').addEventListener('submit', async (e) 
             radius_km: parseInt(document.getElementById('editRadius').value)
         };
         
-        // Handle profile photo update
-        const photoFile = document.getElementById('editPhoto').files[0];
-        if (photoFile) {
-            if (photoFile.size > 2 * 1024 * 1024) {
-                throw new Error('Profile photo size should be less than 2MB');
-            }
-            infoDiv.textContent = '📸 Uploading new profile photo...';
-            infoDiv.classList.remove('hidden');
-            formData.profile_photo = await convertImageToBase64(photoFile);
-        } else {
-            // Don't update photo if no file selected - keep existing
-            delete formData.profile_photo;
-        }
-        
         // Check if address changed
         const addressChanged = 
             formData.area_name !== currentProfile.area_name ||
@@ -3556,31 +3403,15 @@ document.addEventListener('click', function(event) {
             }
         }
 
-        // Toggle Send Button based on text input
-        function toggleSendButton() {
-            const input = document.getElementById('chatMessageInput');
-            const sendBtn = document.getElementById('sendBtn');
-            const templateBtn = document.getElementById('templateBtn');
-            
-            if (input.value.trim().length > 0) {
-                sendBtn.classList.add('show');
-                templateBtn.classList.add('hide');
-            } else {
-                sendBtn.classList.remove('show');
-                templateBtn.classList.remove('hide');
+        // Review character counter
+        document.addEventListener('DOMContentLoaded', () => {
+            const reviewTextarea = document.getElementById('ratingReview');
+            if (reviewTextarea) {
+                reviewTextarea.addEventListener('input', (e) => {
+                    document.getElementById('reviewCounter').textContent = e.target.value.length;
+                });
             }
-        }
-
-        // Toggle Privacy Notice
-        function togglePrivacyNotice() {
-            const notice = document.getElementById('privacyNotice');
-            notice.classList.toggle('show');
-        }
-
-        // Show Attachment Options
-        function showAttachmentOptions() {
-            document.getElementById('photoInput').click();
-        }
-</script>
+        });
+    </script>
 </body>
 </html>
