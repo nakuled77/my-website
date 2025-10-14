@@ -368,11 +368,7 @@
                     <input type="password" id="loginPassword" required>
                 </div>
                 <button type="submit" class="btn btn-full">Login</button>
-                <div style="text-align: center; margin-top: 20px; font-size: 14px;">
-                    <a href="#" onclick="showSignup(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Sign up for new user registration</a>
-                    <span style="margin: 0 10px; color: #ccc;">|</span>
-                    <a href="#" onclick="alert('Password reset feature coming soon!'); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Forgot Password?</a>
-                </div>
+                <button type="button" class="btn btn-secondary btn-full" onclick="showSignup()">Sign Up</button>
             </form>
         </div>
 
@@ -435,56 +431,9 @@
                     <input type="text" id="pinCode" pattern="[0-9]{6}" required>
                 </div>
                 <div class="checkbox-group">
-                    <input type="checkbox" id="isProvider" onchange="toggleProviderFieldsSignup()">
+                    <input type="checkbox" id="isProvider">
                     <label for="isProvider" style="margin: 0;">I want to provide services</label>
                 </div>
-                
-                <div id="signupProviderFields" class="hidden">
-                    <h3>🔧 Provider Settings</h3>
-                    <div class="form-group">
-                        <label>Service Radius <span class="required">*</span></label>
-                        <select id="signupRadius">
-                            <option value="2">2 km</option>
-                            <option value="5">5 km</option>
-                            <option value="10" selected>10 km</option>
-                            <option value="15">15 km</option>
-                            <option value="20">20 km</option>
-                            <option value="30">30 km</option>
-                            <option value="50">50 km</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Services I Provide <span class="required">*</span></label>
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="service_electrician" value="electrician">
-                                <label for="service_electrician" style="margin: 0;">🔧 Electrician</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="service_plumber" value="plumber">
-                                <label for="service_plumber" style="margin: 0;">🚰 Plumber</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="service_ac_repair" value="ac_repair">
-                                <label for="service_ac_repair" style="margin: 0;">❄️ AC Repair</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="service_carpenter" value="carpenter">
-                                <label for="service_carpenter" style="margin: 0;">🔨 Carpenter</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="service_painter" value="painter">
-                                <label for="service_painter" style="margin: 0;">🎨 Painter</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="service_cleaner" value="cleaner">
-                                <label for="service_cleaner" style="margin: 0;">🧹 Cleaner</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
                 <button type="submit" class="btn btn-full">Sign Up</button>
                 <button type="button" class="btn btn-secondary btn-full" onclick="showLogin()">Back to Login</button>
             </form>
@@ -764,16 +713,15 @@
 </div>
 
 <div class="form-group">
-                    <label>Full Name <span class="required">*</span></label>
-                    <input type="text" id="editName" required>
-                </div>
+    <label>Full Name <span class="required">*</span></label>
+    <input type="text" id="editName" required>
+</div>
 
-                <div class="form-group">
-                    <label>Phone Number <span class="required">*</span></label>
-                    <input type="tel" id="editPhone" maxlength="10" pattern="[6-9][0-9]{9}" required 
-                           oninput="validatePhoneInput(this)" title="Enter correct number">
-                    <div id="editPhoneError" style="color: #dc3545; font-size: 12px; margin-top: 5px; display: none;">Enter correct number</div>
-                </div>
+<div class="form-group">
+    <label>Phone Number <span class="required">*</span></label>
+    <input type="tel" id="editPhone" required>
+</div>
+
         <h3>📍 Address Details</h3>
         <div class="form-group">
             <label>House Number</label>
@@ -1273,61 +1221,6 @@ function backFromChat() {
             document.getElementById('customLocationFields').classList.toggle('hidden', !checked);
         }
 
-        function validatePhoneInput(input) {
-            const value = input.value;
-            const errorId = input.id + 'Error';
-            const errorDiv = document.getElementById(errorId);
-            
-            // Remove any non-digit characters
-            input.value = value.replace(/[^0-9]/g, '');
-            
-            // If empty, hide error
-            if (input.value.length === 0) {
-                if (errorDiv) errorDiv.style.display = 'none';
-                return;
-            }
-            
-            // Check if first digit is 6, 7, 8, or 9
-            const firstDigit = input.value.charAt(0);
-            if (firstDigit !== '6' && firstDigit !== '7' && firstDigit !== '8' && firstDigit !== '9') {
-                if (errorDiv) errorDiv.style.display = 'block';
-                return;
-            }
-            
-            // Check if length is less than 10
-            if (input.value.length < 10) {
-                if (errorDiv) errorDiv.style.display = 'block';
-                return;
-            }
-            
-            // Indian number validation checks
-            // Check 1: All digits are the same (e.g., 6666666666)
-            if (/^(\d)\1{9}$/.test(input.value)) {
-                if (errorDiv) errorDiv.style.display = 'block';
-                return;
-            }
-            
-            // Check 2: Sequential digits (e.g., 1234567890)
-            if (/^(0123456789|1234567890|2345678901|3456789012|4567890123|5678901234|6789012345|7890123456|8901234567|9012345678)$/.test(input.value)) {
-                if (errorDiv) errorDiv.style.display = 'block';
-                return;
-            }
-            
-            // Check 3: Reverse sequential (e.g., 9876543210)
-            if (/^(9876543210|8765432109|7654321098|6543210987|5432109876|4321098765|3210987654|2109876543|1098765432|0987654321)$/.test(input.value)) {
-                if (errorDiv) errorDiv.style.display = 'block';
-                return;
-            }
-            
-            // If all validations pass, hide error
-            if (errorDiv) errorDiv.style.display = 'none';
-        }
-
-        function toggleProviderFieldsSignup() {
-            const checked = document.getElementById('isProvider').checked;
-            document.getElementById('signupProviderFields').classList.toggle('hidden', !checked);
-        }
-
 function updateProviderButton() {
     const btn = document.getElementById('toggleProviderBtn');
     const text = document.getElementById('providerStatusText');
@@ -1416,7 +1309,21 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             is_provider: document.getElementById('isProvider').checked
         };
 
-        infoDiv.textContent = '📍 Finding your location...';        infoDiv.classList.remove('hidden');
+        // Handle profile photo
+        const photoFile = document.getElementById('signupPhoto').files[0];
+        let profilePhotoUrl = null;
+
+        if (photoFile) {
+            if (photoFile.size > 2 * 1024 * 1024) {
+                throw new Error('Profile photo size should be less than 2MB');
+            }
+            infoDiv.textContent = '📸 Uploading profile photo...';
+            infoDiv.classList.remove('hidden');
+            profilePhotoUrl = await convertImageToBase64(photoFile);
+        }
+
+        infoDiv.textContent = '📍 Finding your location...';
+        infoDiv.classList.remove('hidden');
 
         const coords = await getCoordinates(formData);
 
@@ -1443,59 +1350,16 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             pin_code: formData.pin_code,
             latitude: coords.lat,
             longitude: coords.lng,
-            is_provider: formData.is_provider
+            is_provider: formData.is_provider,
+            profile_photo: profilePhotoUrl
         }]);
 
         if (profileError) throw profileError;
 
-        // If user is a provider, save their services
-        if (formData.is_provider) {
-            infoDiv.textContent = '🔧 Saving provider services...';
-            
-            const radius = parseInt(document.getElementById('signupRadius').value);
-            const selectedServices = [];
-            
-            // Check which services are selected
-            const serviceCheckboxes = [
-                'service_electrician',
-                'service_plumber',
-                'service_ac_repair',
-                'service_carpenter',
-                'service_painter',
-                'service_cleaner'
-            ];
-            
-            serviceCheckboxes.forEach(checkboxId => {
-                const checkbox = document.getElementById(checkboxId);
-                if (checkbox && checkbox.checked) {
-                    selectedServices.push({
-                        provider_id: authData.user.id,
-                        service_id: checkbox.value,
-                        service_radius: radius
-                    });
-                }
-            });
-            
-            if (selectedServices.length > 0) {
-                const { error: servicesError } = await supabase
-                    .from('provider_services')
-                    .insert(selectedServices);
-                
-                if (servicesError) throw servicesError;
-            }
-            
-            // Update profile with radius
-            const { error: updateError } = await supabase
-                .from('profiles')
-                .update({ radius_km: radius })
-                .eq('user_id', authData.user.id);
-            
-            if (updateError) throw updateError;
-        }
-
         currentUser = authData.user;
         await loadProfile();
-    } catch (error) {        errorDiv.textContent = error.message;
+    } catch (error) {
+        errorDiv.textContent = error.message;
         errorDiv.classList.remove('hidden');
         infoDiv.classList.add('hidden');
     }
@@ -2289,7 +2153,6 @@ function openImagePreview(imageUrl) {
         // Select Template Option
         function selectTemplateOption(element) {
             document.getElementById('chatMessageInput').value = element.textContent.trim();
-            toggleSendButton();
             document.getElementById('chatMessageInput').focus();
             closeTemplateModal();
         }
@@ -2734,21 +2597,7 @@ html += `
                     });
                 }
                 
-                const photoHTML = provider.profile_photo 
-                    ? `<div style="text-align: center; margin-bottom: 20px;">
-                        <img src="${provider.profile_photo}" 
-                             onclick="openImagePreview('${provider.profile_photo}')" 
-                             style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid #667eea; cursor: pointer; transition: transform 0.2s;" 
-                             onmouseover="this.style.transform='scale(1.05)'" 
-                             onmouseout="this.style.transform='scale(1)'">
-                        <p style="font-size: 12px; color: #999; margin-top: 8px;">Click photo to view full size</p>
-                       </div>`
-                    : `<div style="text-align: center; margin-bottom: 20px;">
-                        <div style="width: 150px; height: 150px; border-radius: 50%; background: #e0e0e0; display: inline-flex; align-items: center; justify-content: center; font-size: 64px; border: 4px solid #667eea;">👤</div>
-                       </div>`;
-                
                 document.getElementById('profileContent').innerHTML = `
-                    ${photoHTML}
                     <div class="profile-details">
                         <p><strong>👤 Name:</strong> ${provider.name}</p>
                         <p><strong>⭐ Rating:</strong> ${ratingDisplay}</p>
@@ -3520,12 +3369,6 @@ document.getElementById('editProfileForm').addEventListener('submit', async (e) 
         }
         
         alert('✅ Profile updated successfully!');
-        
-        // Re-enable button before redirect
-        submitBtn.disabled = false;
-        submitBtn.textContent = '💾 Save Changes';
-        infoDiv.classList.add('hidden');
-        
         await loadProfile();
         showDashboard();
         
