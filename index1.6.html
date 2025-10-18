@@ -159,13 +159,7 @@
         .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #667eea; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 10px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .notification-count { background: #dc3545; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-        .autocomplete-suggestions { position: absolute; background: white; border: 2px solid #e0e0e0; border-top: none; border-radius: 0 0 8px 8px; max-height: 200px; overflow-y: auto; z-index: 1000; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: calc(100% - 4px); margin-top: -2px; }
-        .autocomplete-suggestions.active { display: block; }
-        .suggestion-item { padding: 12px 15px; cursor: pointer; transition: background 0.2s; font-size: 14px; color: #333; border-bottom: 1px solid #f0f0f0; }
-        .suggestion-item:last-child { border-bottom: none; }
-        .suggestion-item:hover { background: #f0f4ff; color: #667eea; }
-        .suggestion-item.loading { text-align: center; color: #999; font-style: italic; }
-	.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
         .modal.active { display: flex; }
         .modal-content { background: white; border-radius: 20px; padding: 30px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -424,11 +418,9 @@
                     <input type="email" id="signupEmail" required>
                 </div>
                 <div class="form-group">
-    <label>Phone Number <span class="required">*</span></label>
-    <input type="tel" id="signupPhone" pattern="[0-9]{10}" required 
-           oninput="validatePhoneInput(this)" title="Enter correct number">
-    <div id="signupPhoneError" style="color: #dc3545; font-size: 12px; margin-top: 5px; display: none;">Enter correct number</div>
-</div>
+                    <label>Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="signupPhone" pattern="[0-9]{10}" required>
+                </div>
                 <div class="form-group">
                     <label>Password <span class="required">*</span></label>
                     <input type="password" id="signupPassword" minlength="6" required>
@@ -449,8 +441,107 @@
                 <div class="row">
                     <div class="form-group">
     <label>City <span class="required">*</span></label>
-    <input type="text" id="city" placeholder="Type your city name..." required autocomplete="off">
-    <div id="citySuggestions" class="autocomplete-suggestions"></div>
+    <select id="city" required>
+        <option value="">Select City</option>
+        <option value="Ahmedabad">Ahmedabad</option>
+        <option value="Bengaluru">Bengaluru</option>
+        <option value="Chennai">Chennai</option>
+        <option value="Delhi">Delhi</option>
+        <option value="Hyderabad">Hyderabad</option>
+        <option value="Kolkata">Kolkata</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Pune">Pune</option>
+        
+        <option value="Agra">Agra</option>
+        <option value="Ajmer">Ajmer</option>
+        <option value="Akola">Akola</option>
+        <option value="Aligarh">Aligarh</option>
+        <option value="Allahabad">Allahabad (Prayagraj)</option>
+        <option value="Amravati">Amravati</option>
+        <option value="Amritsar">Amritsar</option>
+        <option value="Asansol">Asansol</option>
+        <option value="Aurangabad">Aurangabad</option>
+        <option value="Bareilly">Bareilly</option>
+        <option value="Belagavi">Belagavi (Belgaum)</option>
+        <option value="Bhavnagar">Bhavnagar</option>
+        <option value="Bhilai">Bhilai</option>
+        <option value="Bhiwandi">Bhiwandi</option>
+        <option value="Bhopal">Bhopal</option>
+        <option value="Bhubaneswar">Bhubaneswar</option>
+        <option value="Bikaner">Bikaner</option>
+        <option value="Bilaspur">Bilaspur</option>
+        <option value="Bokaro Steel City">Bokaro Steel City</option>
+        <option value="Chandigarh">Chandigarh</option>
+        <option value="Coimbatore">Coimbatore</option>
+        <option value="Cuttack">Cuttack</option>
+        <option value="Dehradun">Dehradun</option>
+        <option value="Dhanbad">Dhanbad</option>
+        <option value="Dombivli">Dombivli</option>
+        <option value="Durgapur">Durgapur</option>
+        <option value="Faridabad">Faridabad</option>
+        <option value="Ghaziabad">Ghaziabad</option>
+        <option value="Gorakhpur">Gorakhpur</option>
+        <option value="Guntur">Guntur</option>
+        <option value="Gurgaon">Gurgaon (Gurugram)</option>
+        <option value="Guwahati">Guwahati</option>
+        <option value="Gwalior">Gwalior</option>
+        <option value="Hubballi–Dharwad">Hubballi–Dharwad</option>
+        <option value="Indore">Indore</option>
+        <option value="Jabalpur">Jabalpur</option>
+        <option value="Jaipur">Jaipur</option>
+        <option value="Jalandhar">Jalandhar</option>
+        <option value="Jammu">Jammu</option>
+        <option value="Jamshedpur">Jamshedpur</option>
+        <option value="Jamnagar">Jamnagar</option>
+        <option value="Jodhpur">Jodhpur</option>
+        <option value="Kakinada">Kakinada</option>
+        <option value="Kanpur">Kanpur</option>
+        <option value="Karnal">Karnal</option>
+        <option value="Kochi">Kochi</option>
+        <option value="Kolhapur">Kolhapur</option>
+        <option value="Kota">Kota</option>
+        <option value="Kozhikode">Kozhikode</option>
+        <option value="Kumbakonam">Kumbakonam</option>
+        <option value="Kurnool">Kurnool</option>
+        <option value="Ludhiana">Ludhiana</option>
+        <option value="Lucknow">Lucknow</option>
+        <option value="Madurai">Madurai</option>
+        <option value="Mangaluru">Mangaluru</option>
+        <option value="Meerut">Meerut</option>
+        <option value="Mohali">Mohali</option>
+        <option value="Moradabad">Moradabad</option>
+        <option value="Mysuru">Mysuru</option>
+        <option value="Nagpur">Nagpur</option>
+        <option value="Nanded">Nanded</option>
+        <option value="Nashik">Nashik</option>
+        <option value="Nellore">Nellore</option>
+        <option value="Noida">Noida</option>
+        <option value="Patna">Patna</option>
+        <option value="Pimpri-Chinchwad">Pimpri-Chinchwad</option>
+        <option value="Puducherry">Puducherry</option>
+        <option value="Raipur">Raipur</option>
+        <option value="Rajkot">Rajkot</option>
+        <option value="Ranchi">Ranchi</option>
+        <option value="Rourkela">Rourkela</option>
+        <option value="Saharanpur">Saharanpur</option>
+        <option value="Salem">Salem</option>
+        <option value="Shimla">Shimla</option>
+        <option value="Siliguri">Siliguri</option>
+        <option value="Solapur">Solapur</option>
+        <option value="Srinagar">Srinagar</option>
+        <option value="Surat">Surat</option>
+        <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+        <option value="Thrissur">Thrissur</option>
+        <option value="Tiruchirappalli">Tiruchirappalli</option>
+        <option value="Tirunelveli">Tirunelveli</option>
+        <option value="Ujjain">Ujjain</option>
+        <option value="Vadodara">Vadodara</option>
+        <option value="Varanasi">Varanasi</option>
+        <option value="Vasai-Virar">Vasai-Virar</option>
+        <option value="Vijayawada">Vijayawada</option>
+        <option value="Visakhapatnam">Visakhapatnam</option>
+        <option value="Warangal">Warangal</option>
+        </select>
 </div>
                     <div class="form-group">
     <label>State <span class="required">*</span></label>
@@ -518,7 +609,7 @@
                             <option value="50">50 km</option>
                         </select>
                     </div>
-                       
+                    
                     <div class="form-group">
                         <label>Services I Provide <span class="required">*</span></label>
                         <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -604,11 +695,10 @@
                         <div class="section-content" id="myRequestsContent">
                             <div class="section-inner">
                                 <div class="sub-tabs">
-    <button class="sub-tab active" onclick="filterMyRequests('all')">All</button>
-    <button class="sub-tab" onclick="filterMyRequests('open')">📋 Open <span class="count-badge" id="openCount">0</span></button>
-    <button class="sub-tab" onclick="filterMyRequests('responded')">💬 Responded <span class="count-badge" id="respondedCount">0</span></button>
-    <button class="sub-tab" onclick="filterMyRequests('completed')">✅ Completed <span class="count-badge" id="completedCount">0</span></button>
-</div>
+                                    <button class="sub-tab active" onclick="filterMyRequests('all')">All</button>
+                                    <button class="sub-tab" onclick="filterMyRequests('open')">📋 Open <span class="count-badge" id="openCount">0</span></button>
+                                    <button class="sub-tab" onclick="filterMyRequests('responded')">💬 Responded <span class="count-badge" id="respondedCount">0</span></button>
+                                </div>
                                 <div id="myRequestsList"></div>
                             </div>
                         </div>
@@ -947,105 +1037,200 @@
     <div id="editProfileInfo" class="info hidden"></div>
     
     <form id="editProfileForm">
-        <h3>👤 Personal Information</h3>
-        <div class="form-group">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <img id="currentProfilePhoto" src="" alt="Profile" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #667eea; display: none;">
-                <div id="noProfilePhoto" style="width: 120px; height: 120px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 48px; color: #999;">👤</div>
-            </div>
-            <label>Change Profile Photo</label>
-            <input type="file" id="editPhoto" accept="image/*">
-            <small style="color: #999; font-size: 12px;">Max size: 2MB. Leave empty to keep current photo</small>
-        </div>
+       	<h3>👤 Personal Information</h3>
+<div class="form-group">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <img id="currentProfilePhoto" src="" alt="Profile" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #667eea; display: none;">
+        <div id="noProfilePhoto" style="width: 120px; height: 120px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 48px; color: #999;">👤</div>
+    </div>
+    <label>Change Profile Photo</label>
+    <input type="file" id="editPhoto" accept="image/*">
+    <small style="color: #999; font-size: 12px;">Max size: 2MB. Leave empty to keep current photo</small>
+</div>
 
-        <div class="form-group">
-            <label>Full Name <span class="required">*</span></label>
-            <input type="text" id="editName" required>
-        </div>
+<div class="form-group">
+                    <label>Full Name <span class="required">*</span></label>
+                    <input type="text" id="editName" required>
+                </div>
 
-        <div class="form-group">
-            <label>Phone Number <span class="required">*</span></label>
-            <input type="tel" id="editPhone" maxlength="10" pattern="[6-9][0-9]{9}" required 
-                   oninput="validatePhoneInput(this)" title="Enter correct number">
-            <div id="editPhoneError" style="color: #dc3545; font-size: 12px; margin-top: 5px; display: none;">Enter correct number</div>
-        </div>
-
+                <div class="form-group">
+                    <label>Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="editPhone" maxlength="10" pattern="[6-9][0-9]{9}" required 
+                           oninput="validatePhoneInput(this)" title="Enter correct number">
+                    <div id="editPhoneError" style="color: #dc3545; font-size: 12px; margin-top: 5px; display: none;">Enter correct number</div>
+                </div>
         <h3>📍 Address Details</h3>
         <div class="form-group">
             <label>House Number</label>
             <input type="text" id="editHouseNumber">
         </div>
-
         <div class="form-group">
             <label>Area Name <span class="required">*</span></label>
             <input type="text" id="editAreaName" required>
         </div>
-
         <div class="form-group">
             <label>Landmark</label>
             <input type="text" id="editLandmark">
         </div>
-
-        <div class="form-group">
-            <label>City <span class="required">*</span></label>
-            <input type="text" id="editCity" placeholder="Type your city name..." required autocomplete="off">
-            <div id="editCitySuggestions" class="autocomplete-suggestions"></div>
+        <div class="row">
+            <div class="form-group">
+    <label>City <span class="required">*</span></label>
+    <select id="city" required>
+        <option value="">Select City</option>
+        <option value="Ahmedabad">Ahmedabad</option>
+        <option value="Bengaluru">Bengaluru</option>
+        <option value="Chennai">Chennai</option>
+        <option value="Delhi">Delhi</option>
+        <option value="Hyderabad">Hyderabad</option>
+        <option value="Kolkata">Kolkata</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Pune">Pune</option>
+        
+        <option value="Agra">Agra</option>
+        <option value="Ajmer">Ajmer</option>
+        <option value="Akola">Akola</option>
+        <option value="Aligarh">Aligarh</option>
+        <option value="Allahabad">Allahabad (Prayagraj)</option>
+        <option value="Amravati">Amravati</option>
+        <option value="Amritsar">Amritsar</option>
+        <option value="Asansol">Asansol</option>
+        <option value="Aurangabad">Aurangabad</option>
+        <option value="Bareilly">Bareilly</option>
+        <option value="Belagavi">Belagavi (Belgaum)</option>
+        <option value="Bhavnagar">Bhavnagar</option>
+        <option value="Bhilai">Bhilai</option>
+        <option value="Bhiwandi">Bhiwandi</option>
+        <option value="Bhopal">Bhopal</option>
+        <option value="Bhubaneswar">Bhubaneswar</option>
+        <option value="Bikaner">Bikaner</option>
+        <option value="Bilaspur">Bilaspur</option>
+        <option value="Bokaro Steel City">Bokaro Steel City</option>
+        <option value="Chandigarh">Chandigarh</option>
+        <option value="Coimbatore">Coimbatore</option>
+        <option value="Cuttack">Cuttack</option>
+        <option value="Dehradun">Dehradun</option>
+        <option value="Dhanbad">Dhanbad</option>
+        <option value="Dombivli">Dombivli</option>
+        <option value="Durgapur">Durgapur</option>
+        <option value="Faridabad">Faridabad</option>
+        <option value="Ghaziabad">Ghaziabad</option>
+        <option value="Gorakhpur">Gorakhpur</option>
+        <option value="Guntur">Guntur</option>
+        <option value="Gurgaon">Gurgaon (Gurugram)</option>
+        <option value="Guwahati">Guwahati</option>
+        <option value="Gwalior">Gwalior</option>
+        <option value="Hubballi–Dharwad">Hubballi–Dharwad</option>
+        <option value="Indore">Indore</option>
+        <option value="Jabalpur">Jabalpur</option>
+        <option value="Jaipur">Jaipur</option>
+        <option value="Jalandhar">Jalandhar</option>
+        <option value="Jammu">Jammu</option>
+        <option value="Jamshedpur">Jamshedpur</option>
+        <option value="Jamnagar">Jamnagar</option>
+        <option value="Jodhpur">Jodhpur</option>
+        <option value="Kakinada">Kakinada</option>
+        <option value="Kanpur">Kanpur</option>
+        <option value="Karnal">Karnal</option>
+        <option value="Kochi">Kochi</option>
+        <option value="Kolhapur">Kolhapur</option>
+        <option value="Kota">Kota</option>
+        <option value="Kozhikode">Kozhikode</option>
+        <option value="Kumbakonam">Kumbakonam</option>
+        <option value="Kurnool">Kurnool</option>
+        <option value="Ludhiana">Ludhiana</option>
+        <option value="Lucknow">Lucknow</option>
+        <option value="Madurai">Madurai</option>
+        <option value="Mangaluru">Mangaluru</option>
+        <option value="Meerut">Meerut</option>
+        <option value="Mohali">Mohali</option>
+        <option value="Moradabad">Moradabad</option>
+        <option value="Mysuru">Mysuru</option>
+        <option value="Nagpur">Nagpur</option>
+        <option value="Nanded">Nanded</option>
+        <option value="Nashik">Nashik</option>
+        <option value="Nellore">Nellore</option>
+        <option value="Noida">Noida</option>
+        <option value="Patna">Patna</option>
+        <option value="Pimpri-Chinchwad">Pimpri-Chinchwad</option>
+        <option value="Puducherry">Puducherry</option>
+        <option value="Raipur">Raipur</option>
+        <option value="Rajkot">Rajkot</option>
+        <option value="Ranchi">Ranchi</option>
+        <option value="Rourkela">Rourkela</option>
+        <option value="Saharanpur">Saharanpur</option>
+        <option value="Salem">Salem</option>
+        <option value="Shimla">Shimla</option>
+        <option value="Siliguri">Siliguri</option>
+        <option value="Solapur">Solapur</option>
+        <option value="Srinagar">Srinagar</option>
+        <option value="Surat">Surat</option>
+        <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+        <option value="Thrissur">Thrissur</option>
+        <option value="Tiruchirappalli">Tiruchirappalli</option>
+        <option value="Tirunelveli">Tirunelveli</option>
+        <option value="Ujjain">Ujjain</option>
+        <option value="Vadodara">Vadodara</option>
+        <option value="Varanasi">Varanasi</option>
+        <option value="Vasai-Virar">Vasai-Virar</option>
+        <option value="Vijayawada">Vijayawada</option>
+        <option value="Visakhapatnam">Visakhapatnam</option>
+        <option value="Warangal">Warangal</option>
+        </select>
+</div>
+            <div class="form-group">
+    <label>State <span class="required">*</span></label>
+    <select id="state" required>
+        <option value="">Select State/Union Territory</option>
+        <option value="Andhra Pradesh">Andhra Pradesh</option>
+        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+        <option value="Assam">Assam</option>
+        <option value="Bihar">Bihar</option>
+        <option value="Chhattisgarh">Chhattisgarh</option>
+        <option value="Goa">Goa</option>
+        <option value="Gujarat">Gujarat</option>
+        <option value="Haryana">Haryana</option>
+        <option value="Himachal Pradesh">Himachal Pradesh</option>
+        <option value="Jharkhand">Jharkhand</option>
+        <option value="Karnataka">Karnataka</option>
+        <option value="Kerala">Kerala</option>
+        <option value="Madhya Pradesh">Madhya Pradesh</option>
+        <option value="Maharashtra">Maharashtra</option>
+        <option value="Manipur">Manipur</option>
+        <option value="Meghalaya">Meghalaya</option>
+        <option value="Mizoram">Mizoram</option>
+        <option value="Nagaland">Nagaland</option>
+        <option value="Odisha">Odisha</option>
+        <option value="Punjab">Punjab</option>
+        <option value="Rajasthan">Rajasthan</option>
+        <option value="Sikkim">Sikkim</option>
+        <option value="Tamil Nadu">Tamil Nadu</option>
+        <option value="Telangana">Telangana</option>
+        <option value="Tripura">Tripura</option>
+        <option value="Uttar Pradesh">Uttar Pradesh</option>
+        <option value="Uttarakhand">Uttarakhand</option>
+        <option value="West Bengal">West Bengal</option>
+        <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+        <option value="Chandigarh">Chandigarh</option>
+        <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+        <option value="National Capital Territory of Delhi">National Capital Territory of Delhi</option>
+        <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+        <option value="Ladakh">Ladakh</option>
+        <option value="Lakshadweep">Lakshadweep</option>
+        <option value="Puducherry">Puducherry</option>
+    </select>
+</div>
         </div>
-
-        <div class="form-group">
-            <label>State <span class="required">*</span></label>
-            <select id="editState" required>
-                <option value="">Select State/Union Territory</option>
-                <option value="Andhra Pradesh">Andhra Pradesh</option>
-                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                <option value="Assam">Assam</option>
-                <option value="Bihar">Bihar</option>
-                <option value="Chhattisgarh">Chhattisgarh</option>
-                <option value="Goa">Goa</option>
-                <option value="Gujarat">Gujarat</option>
-                <option value="Haryana">Haryana</option>
-                <option value="Himachal Pradesh">Himachal Pradesh</option>
-                <option value="Jharkhand">Jharkhand</option>
-                <option value="Karnataka">Karnataka</option>
-                <option value="Kerala">Kerala</option>
-                <option value="Madhya Pradesh">Madhya Pradesh</option>
-                <option value="Maharashtra">Maharashtra</option>
-                <option value="Manipur">Manipur</option>
-                <option value="Meghalaya">Meghalaya</option>
-                <option value="Mizoram">Mizoram</option>
-                <option value="Nagaland">Nagaland</option>
-                <option value="Odisha">Odisha</option>
-                <option value="Punjab">Punjab</option>
-                <option value="Rajasthan">Rajasthan</option>
-                <option value="Sikkim">Sikkim</option>
-                <option value="Tamil Nadu">Tamil Nadu</option>
-                <option value="Telangana">Telangana</option>
-                <option value="Tripura">Tripura</option>
-                <option value="Uttar Pradesh">Uttar Pradesh</option>
-                <option value="Uttarakhand">Uttarakhand</option>
-                <option value="West Bengal">West Bengal</option>
-                <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
-                <option value="Chandigarh">Chandigarh</option>
-                <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
-                <option value="National Capital Territory of Delhi">National Capital Territory of Delhi</option>
-                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
-                <option value="Ladakh">Ladakh</option>
-                <option value="Lakshadweep">Lakshadweep</option>
-                <option value="Puducherry">Puducherry</option>
-            </select>
-        </div>
-
         <div class="form-group">
             <label>PIN Code <span class="required">*</span></label>
             <input type="text" id="editPinCode" pattern="[0-9]{6}" required>
         </div>
         
         <h3>🔧 Provider Settings</h3>
-        <div style="margin-bottom: 20px;">
-            <button type="button" class="btn" id="toggleProviderBtn" onclick="toggleProviderStatus()" style="width: 100%;">
-                <span id="providerStatusText">Loading...</span>
-            </button>
-        </div>
+<div style="margin-bottom: 20px;">
+    <button type="button" class="btn" id="toggleProviderBtn" onclick="toggleProviderStatus()" style="width: 100%;">
+        <span id="providerStatusText">Loading...</span>
+    </button>
+</div>
         
         <div id="providerSettings" class="hidden">
             <div class="form-group">
@@ -1293,7 +1478,6 @@
                 showLogin(); 
             }
             setupCharCounters();
-            setupCityAutocomplete();
         });
 
         function hideAllViews() { 
@@ -1785,14 +1969,6 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
     infoDiv.classList.add('hidden');
     
     try {
-	// Validate phone number before proceeding
-        const phoneInput = document.getElementById('signupPhone');
-        if (!validatePhoneInput(phoneInput)) {
-            errorDiv.textContent = 'Please enter a valid phone number';
-            errorDiv.classList.remove('hidden');
-            return;
-        }	
-
         const formData = {
             email: document.getElementById('signupEmail').value.trim(),
             password: document.getElementById('signupPassword').value,
@@ -2040,9 +2216,8 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
                 return;
             }
 
-           // Count statistics
+            // Count statistics
             const respondedRequests = [];
-            const responseCountMap = {}; // NEW: Store response counts for each request
             let newMessagesTotal = 0;
 
             // Check for responses and new messages
@@ -2053,10 +2228,7 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
                         .select('id')
                         .eq('request_id', req.id);
                     
-                    const responseCount = responses ? responses.length : 0;
-                    responseCountMap[req.id] = responseCount; // NEW: Store the count
-                    
-                    if (responseCount > 0) {
+                    if (responses && responses.length > 0) {
                         respondedRequests.push(req.id);
                     }
                 } else if (req.status === 'in_progress' || req.status === 'completed') {
@@ -2079,13 +2251,9 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
                 }
             }
             // Update section badges
-            const completedRequests = requests.filter(r => r.status === 'completed');
-            const activeResponses = requests.filter(r => respondedRequests.includes(r.id) && r.status !== 'completed');
-            
             document.getElementById('myRequestsTotal').textContent = requests.length;
             document.getElementById('openCount').textContent = requests.filter(r => !respondedRequests.includes(r.id) && r.status === 'open').length;
-            document.getElementById('respondedCount').textContent = activeResponses.length;
-            document.getElementById('completedCount').textContent = completedRequests.length;
+            document.getElementById('respondedCount').textContent = respondedRequests.length;
             if (newMessagesTotal > 0) {
                 document.getElementById('myRequestsNew').textContent = `🔴 ${newMessagesTotal}`;
                 document.getElementById('myRequestsNew').classList.remove('hidden');
@@ -2098,9 +2266,7 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             if (currentRequestFilter === 'open') {
                 filteredRequests = requests.filter(r => !respondedRequests.includes(r.id) && r.status === 'open');
             } else if (currentRequestFilter === 'responded') {
-                filteredRequests = requests.filter(r => respondedRequests.includes(r.id) && r.status !== 'completed');
-            } else if (currentRequestFilter === 'completed') {
-                filteredRequests = requests.filter(r => r.status === 'completed');
+                filteredRequests = requests.filter(r => respondedRequests.includes(r.id) || r.status === 'in_progress' || r.status === 'completed');
             }
 
             if (filteredRequests.length === 0) {
@@ -2148,12 +2314,13 @@ if (req.status === 'completed' && req.warranty_end_date) {
                 let showChat = false;
 let newMessagesCount = 0;
 
-let responseCount = 0;
-let showResponses = false;
-
 if (req.status === 'open') {
-    // NEW: Use the pre-calculated map instead of querying database
-    responseCount = responseCountMap[req.id] || 0;
+    const { data: responses } = await supabase
+        .from('request_responses')
+        .select('id')
+        .eq('request_id', req.id);
+    
+    responseCount = responses ? responses.length : 0;
     showResponses = responseCount > 0;
 } else if ((req.status === 'in_progress' || req.status === 'pending_completion' || req.status === 'completed') && req.selected_provider_id) {
     showChat = true;
@@ -3701,46 +3868,23 @@ async function displayProviderResponses(activeResponses, missedOpportunities) {
                 return;
             }
             
-            // Separate completed from active responses
-            const completedResponses = activeResponses.filter(r => r.request.status === 'completed');
-            const trueActiveResponses = activeResponses.filter(r => r.request.status !== 'completed');
-            
-            // Add sub-tabs for Active, Missed Opportunities, and Completed
+            // Add sub-tabs for Active and Missed Opportunities
             let tabsHTML = '<div class="sub-tabs" style="margin-bottom: 20px;">';
-            tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'active' ? 'active' : ''}" onclick="filterResponses('active')">💼 Active <span class="count-badge">${trueActiveResponses.length}</span></button>`;
+            tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'active' ? 'active' : ''}" onclick="filterResponses('active')">💼 Active <span class="count-badge">${activeResponses.length}</span></button>`;
             if (missedOpportunities.length > 0) {
                 tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'missed' ? 'active' : ''}" onclick="filterResponses('missed')">⛔ Missed Opportunities <span class="count-badge">${missedOpportunities.length}</span></button>`;
-            }
-            if (completedResponses.length > 0) {
-                tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'completed' ? 'active' : ''}" onclick="filterResponses('completed')">✅ Completed <span class="count-badge">${completedResponses.length}</span></button>`;
             }
             tabsHTML += '</div>';
             
             // Determine which data to show based on filter
-            let responsesData = trueActiveResponses;
-            if (currentResponseFilter === 'missed') {
-                responsesData = missedOpportunities;
-            } else if (currentResponseFilter === 'completed') {
-                responsesData = completedResponses;
-            }
+            const responsesData = currentResponseFilter === 'missed' ? missedOpportunities : activeResponses;
             
-           // If filtered data is empty, show empty state
+            // If filtered data is empty, show empty state
             if (!responsesData || responsesData.length === 0) {
-                let emptyIcon = '💬';
-                let emptyText = 'active responses';
-                
-                if (currentResponseFilter === 'missed') {
-                    emptyIcon = '⛔';
-                    emptyText = 'missed opportunities';
-                } else if (currentResponseFilter === 'completed') {
-                    emptyIcon = '✅';
-                    emptyText = 'completed requests';
-                }
-                
                 container.innerHTML = tabsHTML + `
                     <div class="empty-state">
-                        <div class="empty-state-icon">${emptyIcon}</div>
-                        <div class="empty-state-text">No ${emptyText} yet</div>
+                        <div class="empty-state-icon">${currentResponseFilter === 'missed' ? '⛔' : '💬'}</div>
+                        <div class="empty-state-text">No ${currentResponseFilter === 'missed' ? 'missed opportunities' : 'active responses'} yet</div>
                     </div>
                 `;
                 return;
@@ -4568,17 +4712,17 @@ document.addEventListener('click', function(event) {
         }
 
         function filterMyRequests(filter) {
-    currentRequestFilter = filter;
-    
-    // Update active tab
-    document.querySelectorAll('#seekerSection .sub-tab').forEach(tab => {
-        tab.classList.remove('active');
-    });
-    event.target.classList.add('active');
-    
-    // Reload and filter requests
-    loadUserRequests();
-}
+            currentRequestFilter = filter;
+            
+            // Update active tab
+            document.querySelectorAll('#seekerSection .sub-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Reload and filter requests
+            loadUserRequests();
+        }
 
         function filterByUrgency(urgency) {
             currentUrgencyFilter = urgency;
@@ -4622,164 +4766,7 @@ document.addEventListener('click', function(event) {
         function updateSectionBadges() {
             // This will be called after loading data to update badge counts
         }
-	
-	
-        // ========== AUTOCOMPLETE FUNCTIONS ==========
-        
-        // Debounce function to avoid too many API calls
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        // Fetch city suggestions from Nominatim
-        async function getCitySuggestions(query) {
-            if (query.length < 2) return [];
-            
-            try {
-                const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)},India&format=json&limit=8&addressdetails=1`;
-                const response = await fetch(url, {
-                    headers: { 'User-Agent': 'HelpBuddy/1.0' }
-                });
-                const data = await response.json();
-                
-                // Extract unique city names
-                const cities = [];
-                const seen = new Set();
-                
-                data.forEach(item => {
-                    const city = item.address?.city || 
-                                item.address?.town || 
-                                item.address?.village || 
-                                item.address?.municipality;
-                    
-                    if (city && !seen.has(city.toLowerCase())) {
-                        seen.add(city.toLowerCase());
-                        cities.push({
-                            name: city,
-                            state: item.address?.state || ''
-                        });
-                    }
-                });
-                
-                return cities;
-            } catch (error) {
-                console.error('Error fetching city suggestions:', error);
-                return [];
-            }
-        }
-
-        
-        // Setup city autocomplete
-        function setupCityAutocomplete() {
-            // Setup for SIGNUP form (id="city")
-            const cityInput = document.getElementById('city');
-            if (cityInput) {
-                setupCityAutocompleteForField(cityInput, 'citySuggestions', 'state');
-            }
-            
-            // Setup for EDIT PROFILE form (id="editCity")
-            const editCityInput = document.getElementById('editCity');
-            if (editCityInput) {
-                setupCityAutocompleteForField(editCityInput, 'editCitySuggestions', 'editState');
-            }
-        }
-
-        // Generic setup for any city field
-        function setupCityAutocompleteForField(inputElement, suggestionsId, stateFieldId) {
-            const debouncedSearch = debounce(async (query) => {
-                if (query.length < 2) {
-                    document.getElementById(suggestionsId).classList.remove('active');
-                    return;
-                }
-                
-                // Show loading
-                const container = document.getElementById(suggestionsId);
-                if (!container) return;
-                
-                container.innerHTML = '<div class="suggestion-item loading">Searching...</div>';
-                container.classList.add('active');
-                
-                const suggestions = await getCitySuggestions(query);
-                showCitySuggestionsForField(inputElement, suggestions, suggestionsId, stateFieldId);
-            }, 300);
-            
-            inputElement.addEventListener('input', (e) => {
-                debouncedSearch(e.target.value.trim());
-            });
-            
-            // Hide suggestions when clicking outside
-            document.addEventListener('click', (e) => {
-                const suggestionsContainer = document.getElementById(suggestionsId);
-                if (suggestionsContainer && !inputElement.contains(e.target) && !suggestionsContainer.contains(e.target)) {
-                    suggestionsContainer.classList.remove('active');
-                }
-            });
-        }
-
-        // Show suggestions for specific field
-        function showCitySuggestionsForField(inputElement, suggestions, suggestionsId, stateFieldId) {
-            const container = document.getElementById(suggestionsId);
-            if (!container) return;
-            
-            if (suggestions.length === 0) {
-                container.classList.remove('active');
-                return;
-            }
-            
-            let html = '';
-            suggestions.forEach(item => {
-                const cityName = item.name.replace(/'/g, "\\'");
-                const stateName = item.state.replace(/'/g, "\\'");
-                html += `
-                    <div class="suggestion-item" onclick="selectCityForField('${inputElement.id}', '${cityName}', '${stateFieldId}', '${stateName}', '${suggestionsId}')">
-                        ${item.name}${item.state ? ', ' + item.state : ''}
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            container.classList.add('active');
-        }
-
-        // Select city for specific field
-        function selectCityForField(inputId, cityName, stateFieldId, stateName, suggestionsId) {
-            const cityInput = document.getElementById(inputId);
-            if (cityInput) {
-                cityInput.value = cityName;
-            }
-            
-            // Auto-fill state if available
-            const stateField = document.getElementById(stateFieldId);
-            if (stateName && stateField) {
-                if (stateField.tagName === 'SELECT') {
-                    // Try to find matching state in dropdown
-                    const options = Array.from(stateField.options);
-                    const matchingOption = options.find(opt => opt.value === stateName);
-                    if (matchingOption) {
-                        stateField.value = stateName;
-                    }
-                } else {
-                    // If it's a text input (for future state autocomplete)
-                    stateField.value = stateName;
-                }
-            }
-            
-            // Hide suggestions
-            const container = document.getElementById(suggestionsId);
-            if (container) {
-                container.classList.remove('active');
-            }
-        }
-
-	// Rating System Functions
+// Rating System Functions
         let currentRatingData = null;
         let selectedRating = 0;
 
