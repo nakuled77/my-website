@@ -710,18 +710,18 @@
                     <label for="differentLocation" style="margin: 0;">Use different location for this service</label>
                 </div>
                 <div id="customLocationFields" class="hidden">
-    <div class="form-group">
-        <label>Area Name <span class="required">*</span></label>
-        <input type="text" id="customAreaName">
-    </div>
-    <div class="form-group">
-        <label>Landmark</label>
-        <input type="text" id="customLandmark">
-    </div>
-    <div class="row">
-        <div class="form-group">
+                    <div class="form-group">
+                        <label>Area Name <span class="required">*</span></label>
+                        <input type="text" id="customAreaName">
+                    </div>
+                    <div class="form-group">
+                        <label>Landmark</label>
+                        <input type="text" id="customLandmark">
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
     <label>City <span class="required">*</span></label>
-    <select id="customCity">
+    <select id="city" required>
         <option value="">Select City</option>
         <option value="Ahmedabad">Ahmedabad</option>
         <option value="Bengaluru">Bengaluru</option>
@@ -822,9 +822,10 @@
         <option value="Visakhapatnam">Visakhapatnam</option>
         <option value="Warangal">Warangal</option>
         </select>
-</div><div class="form-group">
+</div>
+                        <div class="form-group">
     <label>State <span class="required">*</span></label>
-    <select id="customState">
+    <select id="state" required>
         <option value="">Select State/Union Territory</option>
         <option value="Andhra Pradesh">Andhra Pradesh</option>
         <option value="Arunachal Pradesh">Arunachal Pradesh</option>
@@ -2169,16 +2170,6 @@ if (req.status === 'open') {
                     }
                 }
 
-		// Check if request can be reactivated (warranty still active)
-                let reactivateButton = '';
-                if (req.status === 'completed' && req.warranty_end_date) {
-                    const warrantyEndDate = new Date(req.warranty_end_date);
-                    const today = new Date();
-                    if (warrantyEndDate > today) {
-                        reactivateButton = `<button class="btn btn-select action-btn-compact" onclick="reactivateRequest('${req.id}')">🔄 Reactivate</button>`;
-                    }
-                }
-		
                 const urgencyBadge = req.urgency === 'urgent' ? '<span class="urgent-indicator">⚡ URGENT</span>' : '';
                 const newMessagesBadge = newMessagesCount > 0 ? `<span class="notification-badge">💬 ${newMessagesCount} New</span>` : '';
                 const responsesBadge = showResponses ? `<span class="info-badge">👥 ${responseCount} Response${responseCount > 1 ? 's' : ''}</span>` : '';
@@ -2203,7 +2194,6 @@ if (req.status === 'open') {
                                 ${req.status === 'open' ? '<button class="btn btn-edit action-btn-compact" onclick="editRequest(\'' + req.id + '\')">✏️ Edit</button>' : ''}
                                 ${showResponses ? '<button class="btn btn-select action-btn-compact" onclick="viewResponses(\'' + req.id + '\')">View Responses</button>' : ''}
                                 ${showChat ? '<button class="btn btn-chat action-btn-compact" onclick="openChat(\'' + req.id + '\', \'' + req.selected_provider_id + '\')">💬 Chat</button>' : ''}
-                                ${reactivateButton}
                                 <button class="expand-btn" onclick="toggleRequestDetails(event, '${req.id}')">Details ▼</button>
                             </div>
                         <div class="request-details" id="details-${req.id}">
@@ -3789,16 +3779,13 @@ async function displayProviderResponses(activeResponses, missedOpportunities) {
                         statusBadge = '<span class="status-badge" style="background: #6c757d; color: white;">👥 Assigned to Others</span>';
                     }
                     chatButton = `<button class="btn btn-chat action-btn-compact" style="background: #6c757d;" onclick="openChat('${req.id}', '${currentProfile.user_id}')">👁️ View Chat (Read-Only)</button>`;
-               } else {
+                } else {
                     // Active response - normal buttons
                     if (req.status === 'completed') {
                         statusBadge = '<span class="status-badge status-completed">✅ COMPLETED</span>';
                         chatButton = `<button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">View Chat</button>`;
                     } else if (req.status === 'pending_completion' && req.selected_provider_id === currentProfile.user_id) {
                         statusBadge = '<span class="status-badge" style="background: #fff3cd; color: #856404;">⏳ PENDING APPROVAL</span>';
-                        chatButton = `<button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">💬 Chat</button>`;
-                    } else if (req.status === 'in_progress' && req.selected_provider_id === currentProfile.user_id) {
-                        statusBadge = '<span class="status-badge" style="background: #cce5ff; color: #004085;">🔄 IN PROGRESS</span>';
                         chatButton = `<button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">💬 Chat</button>`;
                     } else if (req.status === 'open') {
                         statusBadge = '<span class="status-badge status-open">⏳ PENDING</span>';
@@ -4239,30 +4226,6 @@ respondBtn.disabled = false;
                 loadUserRequests();
             } catch (error) {
                 alert('Error cancelling request: ' + error.message);
-            }
-        }
-
-// Reactivate Request (during warranty period)
-        async function reactivateRequest(requestId) {
-            if (!confirm('🔄 Reactivate this request?\n\nThe provider will be notified that you need service again within the warranty period. The same process will repeat.')) return;
-            
-            try {
-                const { error } = await supabase
-                    .from('requests')
-                    .update({
-                        status: 'in_progress',
-                        warranty_period: null,
-                        warranty_end_date: null
-                    })
-                    .eq('id', requestId);
-                
-                if (error) throw error;
-                
-                alert('✅ Request reactivated! The provider will be notified.');
-                loadUserRequests();
-                
-            } catch (error) {
-                alert('Error reactivating request: ' + error.message);
             }
         }
 
