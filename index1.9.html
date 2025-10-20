@@ -3377,11 +3377,17 @@ async function rejectCompletion() {
                         .eq('user_id', response.provider_id)
                         .single();
                     
+                    const { data: ratings } = await supabase
+                        .from('ratings')
+                        .select('rating')
+                        .eq('provider_id', response.provider_id);
+                    
                     let ratingDisplay = 'No ratings yet';
-    if (provider.average_rating && provider.average_rating > 0 && provider.total_ratings > 0) {
-        const stars = '⭐'.repeat(Math.round(provider.average_rating));
-        ratingDisplay = `${stars} ${provider.average_rating}/5 (${provider.total_ratings} ${provider.total_ratings === 1 ? 'rating' : 'ratings'})`;
-    }
+                    if (ratings && ratings.length > 0) {
+                        const avgRating = (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1);
+                        const stars = '⭐'.repeat(Math.round(avgRating));
+                        ratingDisplay = `${stars} ${avgRating}/5 (${ratings.length} ${ratings.length === 1 ? 'rating' : 'ratings'})`;
+                    }
                     
                     const { data: request } = await supabase
                         .from('requests')
@@ -3489,35 +3495,34 @@ async function rejectCompletion() {
                 
                 const addr = [provider.house_number, provider.area_name, provider.landmark, provider.city, provider.state, provider.pin_code].filter(Boolean).join(', ');
                 
+                const { data: ratings } = await supabase
+                    .from('ratings')
+                    .select('rating, review, created_at')
+                    .eq('provider_id', providerId)
+                    .order('created_at', { ascending: false });
+                
                 let ratingDisplay = 'No ratings yet';
-let ratingDetailsHTML = '';
-
-if (provider.average_rating && provider.average_rating > 0 && provider.total_ratings > 0) {
-    const stars = '⭐'.repeat(Math.round(provider.average_rating));
-    ratingDisplay = `${stars} ${provider.average_rating}/5 (${provider.total_ratings} ${provider.total_ratings === 1 ? 'rating' : 'ratings'})`;
-    
-    // Still fetch review details for display
-    const { data: ratings } = await supabase
-        .from('ratings')
-        .select('rating, review, created_at')
-        .eq('provider_id', providerId)
-        .order('created_at', { ascending: false });
-    
-    if (ratings && ratings.length > 0) {
-        ratingDetailsHTML = '<hr style="margin: 20px 0;"><h3 style="margin-bottom: 15px;">Recent Reviews:</h3>';
-        ratings.slice(0, 3).forEach(r => {
-            const reviewStars = '⭐'.repeat(r.rating);
-            const reviewDate = new Date(r.created_at).toLocaleDateString();
-            ratingDetailsHTML += `
-                <div style="background: #f5f5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
-                    <div style="font-weight: 600; color: #667eea; margin-bottom: 5px;">${reviewStars} ${r.rating}/5</div>
-                    ${r.review ? `<p style="color: #555; margin-bottom: 5px;">"${r.review}"</p>` : ''}
-                    <p style="font-size: 12px; color: #999;">${reviewDate}</p>
-                </div>
-            `;
-        });
-    }
-}
+                let ratingDetailsHTML = '';
+                
+                if (ratings && ratings.length > 0) {
+                    const avgRating = (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1);
+                    const stars = '⭐'.repeat(Math.round(avgRating));
+                    ratingDisplay = `${stars} ${avgRating}/5 (${ratings.length} ${ratings.length === 1 ? 'rating' : 'ratings'})`;
+                    
+                    // Show recent reviews
+                    ratingDetailsHTML = '<hr style="margin: 20px 0;"><h3 style="margin-bottom: 15px;">Recent Reviews:</h3>';
+                    ratings.slice(0, 3).forEach(r => {
+                        const reviewStars = '⭐'.repeat(r.rating);
+                        const reviewDate = new Date(r.created_at).toLocaleDateString();
+                        ratingDetailsHTML += `
+                            <div style="background: #f5f5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                                <div style="font-weight: 600; color: #667eea; margin-bottom: 5px;">${reviewStars} ${r.rating}/5</div>
+                                ${r.review ? `<p style="color: #555; margin-bottom: 5px;">"${r.review}"</p>` : ''}
+                                <p style="font-size: 12px; color: #999;">${reviewDate}</p>
+                            </div>
+                        `;
+                    });
+                }
                 
                 const photoHTML = provider.profile_photo 
                     ? `<div style="text-align: center; margin-bottom: 20px;">
@@ -4242,17 +4247,7 @@ respondBtn.disabled = false;
             if (!confirm('🔄 Reactivate this request?\n\nThe provider will be notified that you need service again within the warranty period. The same process will repeat.')) return;
             
             try {
-                // Get request details to find selected provider
-                const { data: request, error: reqError } = await supabase
-                    .from('requests')
-                    .select('selected_provider_id')
-                    .eq('id', requestId)
-                    .single();
-                
-                if (reqError || !request) throw reqError || new Error('Request not found');
-                
-                // Update request status
-                const { error: updateError } = await supabase
+                const { error } = await supabase
                     .from('requests')
                     .update({
                         status: 'in_progress',
@@ -4261,33 +4256,7 @@ respondBtn.disabled = false;
                     })
                     .eq('id', requestId);
                 
-                if (updateError) throw updateError;
-                
-                // Add system message to chat
-                const { data: existingChat } = await supabase
-                    .from('chats')
-                    .select('messages')
-                    .eq('request_id', requestId)
-                    .eq('provider_id', request.selected_provider_id)
-                    .single();
-                
-                let messages = existingChat?.messages || [];
-                
-                messages.push({
-                    sender_id: currentUser.id,
-                    sender_name: currentProfile.name,
-                    message: '🔄 Seeker has reactivated this request. Service needed again within warranty period.',
-                    message_type: 'system',
-                    timestamp: new Date().toISOString()
-                });
-                
-                await supabase
-                    .from('chats')
-                    .upsert({
-                        request_id: requestId,
-                        provider_id: request.selected_provider_id,
-                        messages: messages
-                    }, { onConflict: 'request_id,provider_id' });
+                if (error) throw error;
                 
                 alert('✅ Request reactivated! The provider will be notified.');
                 loadUserRequests();
@@ -4985,33 +4954,32 @@ document.addEventListener('click', function(event) {
         
         // Get partner's ratings
         let ratingsHTML = '';
-if (partnerProfile.average_rating && partnerProfile.average_rating > 0 && partnerProfile.total_ratings > 0) {
-    const stars = '⭐'.repeat(Math.round(partnerProfile.average_rating));
-    ratingsHTML = `<h3 style="margin-top: 20px; margin-bottom: 10px;">Rating: ${stars} ${partnerProfile.average_rating}/5 (${partnerProfile.total_ratings} ${partnerProfile.total_ratings === 1 ? 'review' : 'reviews'})</h3>`;
-    
-    // Fetch review details for display
-    const { data: ratings } = await supabase
-        .from('ratings')
-        .select('rating, review, created_at')
-        .eq('provider_id', partnerProfile.user_id)
-        .order('created_at', { ascending: false });
-    
-    if (ratings && ratings.length > 0) {
-        ratingsHTML += '<div style="margin-top: 10px;">';
-        ratings.slice(0, 3).forEach(r => {
-            const reviewStars = '⭐'.repeat(r.rating);
-            const reviewDate = new Date(r.created_at).toLocaleDateString();
-            ratingsHTML += `
-                <div style="background: #f5f5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
-                    <div style="font-weight: 600; color: #667eea; margin-bottom: 5px;">${reviewStars} ${r.rating}/5</div>
-                    ${r.review ? `<p style="color: #555; margin-bottom: 5px; font-size: 14px;">"${r.review}"</p>` : ''}
-                    <p style="font-size: 12px; color: #999;">${reviewDate}</p>
-                </div>
-            `;
-        });
-        ratingsHTML += '</div>';
-    }
-}
+        const { data: ratings } = await supabase
+            .from('ratings')
+            .select('rating, review, created_at')
+            .eq('provider_id', partnerProfile.user_id)
+            .order('created_at', { ascending: false });
+        
+        if (ratings && ratings.length > 0) {
+            const avgRating = (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1);
+            const stars = '⭐'.repeat(Math.round(avgRating));
+            ratingsHTML = `<h3 style="margin-top: 20px; margin-bottom: 10px;">Rating: ${stars} ${avgRating}/5 (${ratings.length} ${ratings.length === 1 ? 'review' : 'reviews'})</h3>`;
+            
+            // Show recent reviews
+            ratingsHTML += '<div style="margin-top: 10px;">';
+            ratings.slice(0, 3).forEach(r => {
+                const reviewStars = '⭐'.repeat(r.rating);
+                const reviewDate = new Date(r.created_at).toLocaleDateString();
+                ratingsHTML += `
+                    <div style="background: #f5f5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="font-weight: 600; color: #667eea; margin-bottom: 5px;">${reviewStars} ${r.rating}/5</div>
+                        ${r.review ? `<p style="color: #555; margin-bottom: 5px; font-size: 14px;">"${r.review}"</p>` : ''}
+                        <p style="font-size: 12px; color: #999;">${reviewDate}</p>
+                    </div>
+                `;
+            });
+            ratingsHTML += '</div>';
+        }
         
         // Build full address
         const partnerAddress = [
@@ -5059,44 +5027,56 @@ if (partnerProfile.average_rating && partnerProfile.average_rating > 0 && partne
     }
 }	
 
-async function submitRating() {
-    if (selectedRating === 0) {
-        document.getElementById('ratingError').textContent = 'Please select a rating';
-        document.getElementById('ratingError').classList.remove('hidden');
-        return;
-    }
-    
-    const submitBtn = document.getElementById('submitRatingBtn');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Submitting...';
-    
-    try {
-        const review = document.getElementById('ratingReview').value.trim();
-        
-        const { error } = await supabase
-            .from('ratings')
-            .insert([{
-                request_id: currentRatingData.requestId,
-                seeker_id: currentUser.id,
-                provider_id: currentRatingData.providerId,
-                rating: selectedRating,
-                review: review || null
-            }]);
-        
-        if (error) throw error;
-        
-        alert('✅ Rating submitted successfully! Thank you for your feedback.');
-        closeRatingModal();
-        await loadUserRequests();
-        viewResponses(currentRatingData.requestId);
-        
-    } catch (error) {
-        document.getElementById('ratingError').textContent = 'Error: ' + error.message;
-        document.getElementById('ratingError').classList.remove('hidden');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit Rating';
-    }
-}
+        async function submitRating() {
+            if (selectedRating === 0) {
+                document.getElementById('ratingError').textContent = 'Please select a rating';
+                document.getElementById('ratingError').classList.remove('hidden');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitRatingBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            try {
+                // Check for duplicate rating
+                const { data: existingRating } = await supabase
+                    .from('ratings')
+                    .select('id')
+                    .eq('request_id', currentRatingData.requestId)
+                    .eq('user_id', currentUser.id);
+                
+                if (existingRating && existingRating.length > 0) {
+                    alert('⚠️ You have already rated this provider for this request!');
+                    closeRatingModal();
+                    return;
+                }
+                
+                const review = document.getElementById('ratingReview').value.trim();
+                
+                const { error } = await supabase
+                    .from('ratings')
+                    .insert([{
+                        request_id: currentRatingData.requestId,
+                        user_id: currentUser.id,
+                        provider_id: currentRatingData.providerId,
+                        rating: selectedRating,
+                        review: review || null
+                    }]);
+                
+                if (error) throw error;
+                
+                alert('✅ Rating submitted successfully! Thank you for your feedback.');
+                closeRatingModal();
+                loadUserRequests();
+                
+            } catch (error) {
+                document.getElementById('ratingError').textContent = 'Error: ' + error.message;
+                document.getElementById('ratingError').classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Rating';
+            }
+        }
 
        // Toggle Send Button based on text input
         function toggleSendButton() {
@@ -5124,6 +5104,9 @@ async function submitRating() {
             document.getElementById('photoInput').click();
         }
 
+
+</script>
+        }
 </script>
 </body>
 </html>
