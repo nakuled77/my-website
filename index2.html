@@ -48,32 +48,7 @@
         .btn-cancel { background: #e74c3c; padding: 8px 16px; font-size: 14px; }
         .btn-edit { background: #34495e; padding: 8px 16px; font-size: 14px; color: white; }
         .btn-chat { background: #128C7E; padding: 8px 16px; font-size: 14px; }
-        /* Chat button with unread badge */
-.chat-btn-wrapper {
-    position: relative;
-    display: inline-block;
-}
-
-.chat-unread-badge {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    min-width: 18px;
-    height: 18px;
-    background: #dc3545;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: white;
-    padding: 0 5px;
-    box-shadow: 0 2px 6px rgba(220, 53, 69, 0.5);
-    border: 2px solid white;
-    z-index: 10;
-}
-	.btn-complete { background: #27ae60; padding: 10px 20px; font-size: 14px; }
+        .btn-complete { background: #27ae60; padding: 10px 20px; font-size: 14px; }
         .btn-contact { background: #34495e; padding: 10px 20px; font-size: 14px; }
         
         @media (max-width: 480px) {
@@ -128,83 +103,8 @@
             .request-card-left { min-width: 100%; }
             .request-card-right { width: 100%; justify-content: space-between; gap: 6px; }
         }
-        .request-title-compact { 
-    font-size: 16px; 
-    font-weight: 600; 
-    color: #667eea; /* 👈 CHANGED: Purple theme color */
-    margin-bottom: 8px; 
-    line-height: 1.3;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: -8px -12px 8px -12px;
-}
-
-.request-title-compact:hover {
-    background: rgba(102, 126, 234, 0.1); /* 👈 CHANGED: Stronger purple background */
-    color: #5568d3; /* 👈 NEW: Darker purple on hover */
-}
-
-.request-title-compact:hover {
-    background: rgba(102, 126, 234, 0.05);
-}
-
-.request-title-text {
-    flex: 1;
-}
-
-.request-chevron {
-    font-size: 14px;
-    transition: transform 0.3s ease;
-    color: #667eea;
-    font-weight: bold;
-}
-
-.request-chevron.expanded {
-    transform: rotate(180deg);
-}
-        /* Urgency bubble indicator */
-.urgency-bubble {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 8px;
-    flex-shrink: 0;
-}
-
-.urgency-bubble.urgent {
-    background: #dc3545;
-}
-
-.urgency-bubble.normal {
-    background: #ffc107;
-}
-
-.urgency-bubble.low {
-    background: #28a745;
-}
-
-/* Clickable request title */
-.request-title-clickable {
-    color: #667eea;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-}
-
-.request-title-clickable:hover {
-    color: #5568d3;
-    text-decoration: underline;
-}
-	.request-summary { font-size: 13px; color: #666; line-height: 1.4; }
+        .request-title-compact { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 8px; line-height: 1.3; }
+        .request-summary { font-size: 13px; color: #666; line-height: 1.4; }
         .request-details { margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f0f0; display: none; }
         .request-details.expanded { display: block; animation: slideDown 0.3s ease-out; }
         @keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 500px; } }
@@ -242,185 +142,18 @@
         .section-toggle:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4); }
         .section-toggle:active { transform: translateY(0); }
         .section-toggle-left { display: flex; align-items: center; gap: 12px; flex: 1; }
-        .section-toggle-right { 
-    display: flex; 
-    align-items: center; 
-    gap: 8px;
-    flex-wrap: nowrap;
-    justify-content: flex-end;
-}
+        .section-toggle-right { display: flex; align-items: center; gap: 10px; }
         .toggle-icon { font-size: 20px; transition: transform 0.3s; }
         .toggle-icon.expanded { transform: rotate(180deg); }
         .section-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
         .section-content.expanded { max-height: 5000px; transition: max-height 0.5s ease-in; }
         .section-inner { padding: 20px 0 0 0; }
         .sub-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .sub-tab { 
-    background: white; 
-    border: 2px solid #e0e0e0; 
-    color: #666; 
-    padding: 10px 14px; 
-    border-radius: 10px; 
-    cursor: pointer; 
-    font-weight: 600; 
-    font-size: 13px; 
-    transition: all 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    flex: 1;
-    min-width: 0;
-    position: relative;
-    justify-content: center;
-}
-
-.sub-tab > span:first-child {
-    line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-    text-align: center;
-}
-
-/* Badge row container - holds count + message badges side by side */
-.sub-tab-badges {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: nowrap;
-}
-
-.sub-tab .count-badge {
-    margin-top: 0;
-}
-
-.sub-tab .badge-container {
-    margin-top: 0;
-}
-
-.sub-tab:hover { 
-    border-color: #4285F4; 
-    color: #4285F4; 
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.2);
-}
-
-.sub-tab.active { 
-    background: #4285F4; 
-    border-color: #4285F4; 
-    color: white;
-    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
-}
-
-.sub-tab.active .count-badge {
-    background: rgba(255, 255, 255, 0.3);
-    color: white;
-}
-        .section-toggle { 
-    background: linear-gradient(135deg, #4285F4 0%, #34A853 100%); 
-    color: white; 
-    border: none; 
-    border-radius: 12px; 
-    padding: 18px 24px; 
-    width: 100%; 
-    text-align: left; 
-    cursor: pointer; 
-    font-size: 16px; 
-    font-weight: 700; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    transition: all 0.3s; 
-    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3); 
-}
-
-.section-toggle:hover { 
-    transform: translateY(-2px); 
-    box-shadow: 0 6px 16px rgba(66, 133, 244, 0.4); 
-}
-
-.count-badge { 
-    background: #4285F4; 
-    color: white; 
-    padding: 4px 10px; 
-    border-radius: 12px; 
-    font-size: 11px; 
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 24px;
-    height: 24px;
-    text-align: center;
-    flex-shrink: 0;
-}
-
-.sub-tab .count-badge {
-    background: rgba(66, 133, 244, 0.15);
-    color: #4285F4;
-}
-
-.sub-tab.active .count-badge {
-    background: rgba(255, 255, 255, 0.3);
-    color: white;
-}
-
-/* Chat Bubble Badge Container */
-.badge-container {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    flex-shrink: 0;
-}
-
-/* The Chat Bubble Icon */
-.chat-bubble-icon {
-    width: 30px;
-    height: 30px;
-    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-    border-radius: 50% 50% 50% 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    box-shadow: 0 2px 8px rgba(37, 211, 102, 0.4);
-    flex-shrink: 0;
-    transform: rotate(-45deg);
-}
-
-/* White dots inside bubble (optional decorative element) */
-.chat-bubble-icon::before {
-    content: '💬';
-    position: absolute;
-    font-size: 16px;
-    transform: rotate(45deg);
-    filter: brightness(0) invert(1);
-}
-
-/* Red Badge (number circle) */
-.unread-badge {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    min-width: 18px;
-    height: 18px;
-    background: #dc3545;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: white;
-    padding: 0 5px;
-    box-shadow: 0 2px 6px rgba(220, 53, 69, 0.5);
-    border: 2px solid white;
-    z-index: 10;
-}
+        .sub-tab { background: white; border: 2px solid #e0e0e0; color: #666; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s; }
+        .sub-tab:hover { border-color: #667eea; color: #667eea; }
+        .sub-tab.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-color: #667eea; color: white; }
+        .count-badge { background: rgba(255, 255, 255, 0.3); padding: 4px 10px; border-radius: 12px; font-size: 13px; font-weight: 700; }
+        .new-badge { background: #dc3545; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; animation: pulse 2s infinite; }
 	.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px; }
         .loading { text-align: center; padding: 40px; color: #667eea; }
         .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #667eea; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 10px; }
@@ -859,57 +592,22 @@
                     
                     <div class="collapsible-section">
                         <button class="section-toggle" onclick="toggleSection('myRequests')">
-    <div class="section-toggle-left">
-        <span>📋 MY REQUESTS</span>
-        <span class="count-badge" id="myRequestsTotal">0</span>
-        <div class="badge-container hidden" id="myRequestsUnreadBadge">
-            <div class="chat-bubble-icon"></div>
-            <span class="unread-badge">0</span>
-        </div>
-    </div>
-    <div class="section-toggle-right">
-        <span class="toggle-icon" id="myRequestsIcon">▼</span>
-    </div>
-</button>
+                            <div class="section-toggle-left">
+                                <span>📋 MY REQUESTS</span>
+                                <span class="count-badge" id="myRequestsTotal">0</span>
+                                <span class="new-badge hidden" id="myRequestsNew">🔴 0</span>
+                            </div>
+                            <div class="section-toggle-right">
+                                <span class="toggle-icon" id="myRequestsIcon">▼</span>
+                            </div>
+                        </button>
                         <div class="section-content" id="myRequestsContent">
                             <div class="section-inner">
                                 <div class="sub-tabs">
-    <button class="sub-tab active" onclick="filterMyRequests('open')">
-    <span>Open</span>
-        <div class="sub-tab-badges">
-            <span class="count-badge" id="openCount">0</span>
-        </div>
-    </button>
-    <button class="sub-tab" onclick="filterMyRequests('responded')">
-    <span>Responded</span>
-    <div class="sub-tab-badges">
-        <span class="count-badge" id="respondedCount">0</span>
-        <div class="badge-container hidden" id="respondedUnread" style="display: none;">
-            <div class="chat-bubble-icon"></div>
-            <span class="unread-badge">0</span>
-        </div>
-    </div>
-</button>
-    <button class="sub-tab" onclick="filterMyRequests('pending')">
-    <span>Pending</span>
-    <div class="sub-tab-badges">
-        <span class="count-badge" id="pendingCount">0</span>
-        <div class="badge-container hidden" id="pendingUnread" style="display: none;">
-            <div class="chat-bubble-icon"></div>
-            <span class="unread-badge">0</span>
-        </div>
-    </div>
-</button>
-<button class="sub-tab" onclick="filterMyRequests('completed')">
-    <span>Completed</span>
-    <div class="sub-tab-badges">
-        <span class="count-badge" id="completedCount">0</span>
-        <div class="badge-container hidden" id="completedUnread" style="display: none;">
-            <div class="chat-bubble-icon"></div>
-            <span class="unread-badge">0</span>
-        </div>
-    </div>
-</button>
+    <button class="sub-tab active" onclick="filterMyRequests('all')">All</button>
+    <button class="sub-tab" onclick="filterMyRequests('open')">📋 Open <span class="count-badge" id="openCount">0</span></button>
+    <button class="sub-tab" onclick="filterMyRequests('responded')">💬 Responded <span class="count-badge" id="respondedCount">0</span></button>
+    <button class="sub-tab" onclick="filterMyRequests('completed')">✅ Completed <span class="count-badge" id="completedCount">0</span></button>
 </div>
                                 <div id="myRequestsList"></div>
                             </div>
@@ -921,18 +619,15 @@
                 <div id="providerSection" class="hidden">
                     <div class="collapsible-section">
                         <button class="section-toggle" onclick="toggleSection('myResponses')">
-    <div class="section-toggle-left">
-        <span>💬 MY RESPONSES</span>
-        <span class="count-badge" id="myResponsesTotal">0</span>
-        <div class="badge-container hidden" id="myResponsesNew" style="display: none;">
-    <div class="chat-bubble-icon"></div>
-    <span class="unread-badge">0</span>
-</div>
-    </div>
-    <div class="section-toggle-right">
-        <span class="toggle-icon" id="myResponsesIcon">▼</span>
-    </div>
-</button>
+                            <div class="section-toggle-left">
+                                <span>💬 MY RESPONSES</span>
+                                <span class="count-badge" id="myResponsesTotal">0</span>
+                                <span class="new-badge hidden" id="myResponsesNew">🔴 0</span>
+                            </div>
+                            <div class="section-toggle-right">
+                                <span class="toggle-icon" id="myResponsesIcon">▼</span>
+                            </div>
+                        </button>
                         <div class="section-content" id="myResponsesContent">
                             <div class="section-inner">
                                 <div id="myResponsesList"></div>
@@ -942,15 +637,15 @@
                     
                     <div class="collapsible-section">
                         <button class="section-toggle" onclick="toggleSection('availableWork')">
-    <div class="section-toggle-left">
-        <span>💼 WORK OPPORTUNITIES</span>
-        <span class="count-badge" id="availableWorkTotal">0</span>
-        <span class="new-badge hidden" id="availableWorkNew" style="display: none;">🆕 0</span>
-    </div>
-    <div class="section-toggle-right">
-        <span class="toggle-icon" id="availableWorkIcon">▼</span>
-    </div>
-</button>
+                            <div class="section-toggle-left">
+                                <span>📍 AVAILABLE WORK</span>
+                                <span class="count-badge" id="availableWorkTotal">0</span>
+                                <span class="new-badge hidden" id="availableWorkNew">🆕 0</span>
+                            </div>
+                            <div class="section-toggle-right">
+                                <span class="toggle-icon" id="availableWorkIcon">▼</span>
+                            </div>
+                        </button>
                         <div class="section-content" id="availableWorkContent">
                             <div class="section-inner">
                                 <div class="sub-tabs" id="urgencyTabs">
@@ -1180,7 +875,7 @@
         </div>
 <!-- Edit Request View -->
         <div id="editRequestView" class="hidden">
-            <button class="btn btn-secondary" onclick="window.history.back()">← Back</button>
+            <button class="btn btn-secondary" onclick="backToDashboard()">← Back to Dashboard</button>
             <h2 style="margin-top: 20px;">Edit Service Request</h2>
             <div id="editRequestError" class="error hidden"></div>
             <div id="editRequestInfo" class="info hidden"></div>
@@ -1245,7 +940,7 @@
 
 <!-- Edit Profile View -->
 <div id="editProfileView" class="hidden">
-    <button class="btn btn-secondary" onclick="smartBack()">← Back</button>
+    <button class="btn btn-secondary" onclick="backToDashboard()">← Back to Dashboard</button>
     <h2 style="margin-top: 20px;">Edit Profile</h2>
     <div id="editProfileError" class="error hidden"></div>
     <div id="editProfileInfo" class="info hidden"></div>
@@ -1390,7 +1085,7 @@
 </div>
         <!-- Chat View -->
         <div id="chatView" class="hidden">
-            <button class="btn btn-secondary" onclick="smartBack()">← Back</button>
+            <button class="btn btn-secondary" onclick="backToDashboard()">← Back to Dashboard</button>
             <div class="chat-container" style="margin-top: 20px;">
                 <div class="chat-header">
     <div style="display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="openChatPartnerProfile()">
@@ -1472,16 +1167,15 @@
         </div>
 
         <!-- Responses Modal -->
-<div id="responsesModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <button class="btn btn-secondary" onclick="closeResponsesModalAndGoBack()" style="padding: 8px 16px; font-size: 14px; margin-right: auto;">← Back to Dashboard</button>
-            <h2 class="modal-title" style="flex: 1; text-align: center;">👥 Providers Who Responded</h2>
-            <button class="close-btn" onclick="closeResponsesModal()">×</button>
+        <div id="responsesModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">👥 Providers Who Responded</h2>
+                    <button class="close-btn" onclick="closeResponsesModal()">×</button>
+                </div>
+                <div id="responsesList"></div>
+            </div>
         </div>
-        <div id="responsesList"></div>
-    </div>
-</div>
 
         <!-- Provider Profile Modal -->
         <div id="profileModal" class="modal">
@@ -1546,10 +1240,9 @@
 <div id="contactDetailsModal" class="modal">
     <div class="modal-content" style="max-width: 500px;">
         <div class="modal-header">
-    <button class="btn btn-secondary" onclick="closeResponsesModalAndGoBack()" style="padding: 8px 16px; font-size: 14px; margin-right: 10px;">← Back</button>
-    <h2 class="modal-title" style="flex: 1;">👥 Providers Who Responded</h2>
-    <button class="close-btn" onclick="closeResponsesModal()">×</button>
-</div>
+            <h2 class="modal-title">📞 Contact Details</h2>
+            <button class="close-btn" onclick="closeContactDetailsModal()">×</button>
+        </div>
         <div id="contactDetailsModalContent" style="padding: 20px 0;">
             <!-- Contact details will be loaded here -->
         </div>
@@ -1578,7 +1271,6 @@
         let currentChatData = null;
         let chatRefreshInterval = null;
 	let currentResponseFilter = 'active';
-	let chatOpenedFrom = null; // Track where chat was opened from
 
         const SERVICE_ICONS = {
             electrician: '🔧',
@@ -1682,27 +1374,6 @@
     }
     
     showDashboard(); 
-}
-
-// Smart back function - goes to previous page or dashboard
-function smartBack() {
-    // Clear chat refresh interval
-    if (chatRefreshInterval) {
-        clearInterval(chatRefreshInterval);
-        chatRefreshInterval = null;
-    }
-    
-    // Check where chat was opened from
-    if (chatOpenedFrom === 'responses-modal') {
-        // Go back to responses modal
-        closeResponsesModal(); // Close it first
-        viewResponses(currentChatData.requestId); // Re-open it
-        chatOpenedFrom = null; // Reset
-    } else {
-        // Go to dashboard
-        showDashboard();
-        chatOpenedFrom = null; // Reset
-    }
 }
 
 async function showEditProfile() {
@@ -2348,7 +2019,7 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             }
         }
 
-async function displayUserRequests(requests) {
+        async function displayUserRequests(requests) {
             const container = document.getElementById('myRequestsList');
 
             if (requests.length === 0) {
@@ -2365,19 +2036,13 @@ async function displayUserRequests(requests) {
                 document.getElementById('myRequestsNew').classList.add('hidden');
                 document.getElementById('openCount').textContent = '0';
                 document.getElementById('respondedCount').textContent = '0';
-                document.getElementById('pendingCount').textContent = '0';
-                document.getElementById('completedCount').textContent = '0';
                 return;
             }
 
-            // Count statistics
+           // Count statistics
             const respondedRequests = [];
-            const pendingRequests = [];
-            const responseCountMap = {};
+            const responseCountMap = {}; // NEW: Store response counts for each request
             let newMessagesTotal = 0;
-            let respondedUnreadCount = 0;
-            let pendingUnreadCount = 0;
-            let completedUnreadCount = 0;
 
             // Check for responses and new messages
             for (let req of requests) {
@@ -2388,49 +2053,20 @@ async function displayUserRequests(requests) {
                         .eq('request_id', req.id);
                     
                     const responseCount = responses ? responses.length : 0;
-                    responseCountMap[req.id] = responseCount;
+                    responseCountMap[req.id] = responseCount; // NEW: Store the count
                     
                     if (responseCount > 0) {
                         respondedRequests.push(req.id);
                     }
-                } else if (req.status === 'in_progress') {
-                    respondedRequests.push(req.id);
-                } else if (req.status === 'pending_completion') {
-                    pendingRequests.push(req.id);
-                } else if (req.status === 'completed') {
+                } else if (req.status === 'in_progress' || req.status === 'completed') {
+                    // In progress and completed requests also count as "responded"
                     respondedRequests.push(req.id);
                 }
                 
                 if ((req.status === 'in_progress' || req.status === 'completed') && req.selected_provider_id) {
                     const { data: chat } = await supabase
-    .from('chats')
-    .select('messages, seeker_last_viewed_at, provider_last_viewed_at')
-    .eq('request_id', req.id)
-    .eq('provider_id', req.selected_provider_id)
-    .single();
-                    
-                    if (chat && chat.messages) {
-                        // Get last viewed time for seeker
-const lastViewedAt = chat.seeker_last_viewed_at;
-
-// Count only messages AFTER last viewed time
-const unread = chat.messages.filter(m => 
-    m.sender_id !== currentUser.id &&
-    (!lastViewedAt || new Date(m.timestamp) > new Date(lastViewedAt))
-).length;
-                        newMessagesTotal += unread;
-                        
-                        // Add to category-specific counters
-                        if (req.status === 'in_progress') {
-                            respondedUnreadCount += unread;
-                        } else if (req.status === 'completed') {
-                            completedUnreadCount += unread;
-                        }
-                    }
-                } else if (req.status === 'pending_completion' && req.selected_provider_id) {
-                    const { data: chat } = await supabase
                         .from('chats')
-                        .select('messages, seeker_last_viewed_at, provider_last_viewed_at')
+                        .select('messages')
                         .eq('request_id', req.id)
                         .eq('provider_id', req.selected_provider_id)
                         .single();
@@ -2438,121 +2074,33 @@ const unread = chat.messages.filter(m =>
                     if (chat && chat.messages) {
                         const unread = chat.messages.filter(m => m.sender_id !== currentUser.id).length;
                         newMessagesTotal += unread;
-                        pendingUnreadCount += unread;
                     }
                 }
             }
-
             // Update section badges
             const completedRequests = requests.filter(r => r.status === 'completed');
-            const activeResponses = requests.filter(r => respondedRequests.includes(r.id) && r.status !== 'completed' && r.status !== 'pending_completion');
-            const openWithoutResponse = requests.filter(r => !respondedRequests.includes(r.id) && !pendingRequests.includes(r.id) && r.status === 'open');
+            const activeResponses = requests.filter(r => respondedRequests.includes(r.id) && r.status !== 'completed');
             
-            // Update section badges with null checks
-const myRequestsTotalEl = document.getElementById('myRequestsTotal');
-const openCountEl = document.getElementById('openCount');
-const respondedCountEl = document.getElementById('respondedCount');
-const pendingCountEl = document.getElementById('pendingCount');
-const completedCountEl = document.getElementById('completedCount');
-
-if (myRequestsTotalEl) myRequestsTotalEl.textContent = requests.length;
-if (openCountEl) openCountEl.textContent = openWithoutResponse.length;
-if (respondedCountEl) respondedCountEl.textContent = activeResponses.length;
-if (pendingCountEl) pendingCountEl.textContent = pendingRequests.length;
-if (completedCountEl) completedCountEl.textContent = completedRequests.length;
-            
-            const myRequestsNewEl = document.getElementById('myRequestsUnreadBadge');
-if (myRequestsNewEl) {
-    if (newMessagesTotal > 0) {
-        const unreadBadge = myRequestsNewEl.querySelector('.unread-badge');
-if (unreadBadge) unreadBadge.textContent = newMessagesTotal;
-        myRequestsNewEl.classList.remove('hidden');
-    } else {
-        myRequestsNewEl.classList.add('hidden');
-    }
-}
-            
-            // Update main header badge (MY REQUESTS)
-try {
-    const mainHeaderBadge = document.getElementById('myRequestsUnreadBadge');
-    if (mainHeaderBadge) {
-        const unreadBadge = mainHeaderBadge.querySelector('.unread-badge');
-        if (newMessagesTotal > 0) {
-            if (unreadBadge) unreadBadge.textContent = newMessagesTotal;
-            mainHeaderBadge.classList.remove('hidden');
-            mainHeaderBadge.style.display = 'inline-flex';
-        } else {
-            mainHeaderBadge.classList.add('hidden');
-            mainHeaderBadge.style.display = 'none';
-        }
-    }
-} catch (error) {
-    console.log('Badge update error (main):', error);
-}
-
-// Update individual tab unread badges
-try {
-    const respondedUnreadBadge = document.getElementById('respondedUnread');
-    if (respondedUnreadBadge) {
-        const badge = respondedUnreadBadge.querySelector('.unread-badge');
-        if (respondedUnreadCount > 0) {
-            if (badge) badge.textContent = respondedUnreadCount;
-            respondedUnreadBadge.classList.remove('hidden');
-            respondedUnreadBadge.style.display = 'inline-flex';
-        } else {
-            respondedUnreadBadge.classList.add('hidden');
-            respondedUnreadBadge.style.display = 'none';
-        }
-    }
-} catch (error) {
-    console.log('Badge update error (responded):', error);
-}
-
-try {
-    const pendingUnreadBadge = document.getElementById('pendingUnread');
-    if (pendingUnreadBadge) {
-        const badge = pendingUnreadBadge.querySelector('.unread-badge');
-        if (pendingUnreadCount > 0) {
-            if (badge) badge.textContent = pendingUnreadCount;
-            pendingUnreadBadge.classList.remove('hidden');
-            pendingUnreadBadge.style.display = 'inline-flex';
-        } else {
-            pendingUnreadBadge.classList.add('hidden');
-            pendingUnreadBadge.style.display = 'none';
-        }
-    }
-} catch (error) {
-    console.log('Badge update error (pending):', error);
-}
-
-try {
-    const completedUnreadBadge = document.getElementById('completedUnread');
-    if (completedUnreadBadge) {
-        const badge = completedUnreadBadge.querySelector('.unread-badge');
-        if (completedUnreadCount > 0) {
-            if (badge) badge.textContent = completedUnreadCount;
-            completedUnreadBadge.classList.remove('hidden');
-            completedUnreadBadge.style.display = 'inline-flex';
-        } else {
-            completedUnreadBadge.classList.add('hidden');
-            completedUnreadBadge.style.display = 'none';
-        }
-    }
-} catch (error) {
-    console.log('Badge update error (completed):', error);
-}
+            document.getElementById('myRequestsTotal').textContent = requests.length;
+            document.getElementById('openCount').textContent = requests.filter(r => !respondedRequests.includes(r.id) && r.status === 'open').length;
+            document.getElementById('respondedCount').textContent = activeResponses.length;
+            document.getElementById('completedCount').textContent = completedRequests.length;
+            if (newMessagesTotal > 0) {
+                document.getElementById('myRequestsNew').textContent = `🔴 ${newMessagesTotal}`;
+                document.getElementById('myRequestsNew').classList.remove('hidden');
+            } else {
+                document.getElementById('myRequestsNew').classList.add('hidden');
+            }
 
             // Filter requests based on current filter
-let filteredRequests = requests;
-if (currentRequestFilter === 'open') {
-    filteredRequests = openWithoutResponse;
-} else if (currentRequestFilter === 'responded') {
-    filteredRequests = activeResponses;
-} else if (currentRequestFilter === 'pending') {
-    filteredRequests = requests.filter(r => pendingRequests.includes(r.id));
-} else if (currentRequestFilter === 'completed') {
-    filteredRequests = completedRequests;
-}
+            let filteredRequests = requests;
+            if (currentRequestFilter === 'open') {
+                filteredRequests = requests.filter(r => !respondedRequests.includes(r.id) && r.status === 'open');
+            } else if (currentRequestFilter === 'responded') {
+                filteredRequests = requests.filter(r => respondedRequests.includes(r.id) && r.status !== 'completed');
+            } else if (currentRequestFilter === 'completed') {
+                filteredRequests = requests.filter(r => r.status === 'completed');
+            }
 
             if (filteredRequests.length === 0) {
                 container.innerHTML = `
@@ -2564,57 +2112,64 @@ if (currentRequestFilter === 'open') {
                 return;
             }
 
-            let html = '';            
-
+            let html = '';
+            
             for (let req of filteredRequests) {
                 const serviceIcon = SERVICE_ICONS[req.service_category] || '🔧';
                 const statusClass = `status-${req.status.replace('_', '-')}`;
-                let statusText = req.status.replace('_', ' ').toUpperCase();
-                const timeAgo = getTimeAgo(new Date(req.created_at));
+let statusText = req.status.replace('_', ' ').toUpperCase();
+const timeAgo = getTimeAgo(new Date(req.created_at));
 
-                let warrantyBadge = '';
-                if (req.status === 'completed' && req.warranty_end_date) {
-                    const isSeeker = req.user_id === currentUser.id;
-                    const isSelectedProvider = req.selected_provider_id === currentProfile.user_id;
-                    
-                    if (isSeeker || isSelectedProvider) {
-                        const warrantyEndDate = new Date(req.warranty_end_date);
-                        const today = new Date();
-                        const remainingDays = Math.ceil((warrantyEndDate - today) / (1000 * 60 * 60 * 24));
-                        
-                        if (remainingDays > 0) {
-                            warrantyBadge = `<span class="info-badge" style="background: #28a745;">🛡️ ${remainingDays} day${remainingDays > 1 ? 's' : ''} warranty left</span>`;
-                        } else if (remainingDays === 0) {
-                            warrantyBadge = `<span class="info-badge" style="background: #ffc107; color: #333;">🛡️ Warranty expires today</span>`;
-                        } else {
-                            warrantyBadge = `<span class="info-badge" style="background: #dc3545;">🛡️ Warranty expired</span>`;
-                        }
-                    }
-                }
-
+// Calculate remaining warranty if completed
+// Only show warranty for: Seeker OR Selected Provider (not for non-selected providers)
+let warrantyBadge = '';
+if (req.status === 'completed' && req.warranty_end_date) {
+    // Check if current user is allowed to see warranty
+    const isSeeker = req.user_id === currentUser.id;
+    const isSelectedProvider = req.selected_provider_id === currentProfile.user_id;
+    
+    // Only show warranty if user is seeker or selected provider
+    if (isSeeker || isSelectedProvider) {
+        const warrantyEndDate = new Date(req.warranty_end_date);
+        const today = new Date();
+        const remainingDays = Math.ceil((warrantyEndDate - today) / (1000 * 60 * 60 * 24));
+        
+        if (remainingDays > 0) {
+            warrantyBadge = `<span class="info-badge" style="background: #28a745;">🛡️ ${remainingDays} day${remainingDays > 1 ? 's' : ''} warranty left</span>`;
+        } else if (remainingDays === 0) {
+            warrantyBadge = `<span class="info-badge" style="background: #ffc107; color: #333;">🛡️ Warranty expires today</span>`;
+        } else {
+            warrantyBadge = `<span class="info-badge" style="background: #dc3545;">🛡️ Warranty expired</span>`;
+        }
+    }
+    // If non-selected provider: warrantyBadge stays empty string (nothing shown)
+}
                 let showChat = false;
-                let newMessagesCount = 0;
-                let responseCount = 0;
-                let showResponses = false;
+let newMessagesCount = 0;
 
-                if (req.status === 'open') {
-                    responseCount = responseCountMap[req.id] || 0;
-                    showResponses = responseCount > 0;
-                } else if ((req.status === 'in_progress' || req.status === 'pending_completion' || req.status === 'completed') && req.selected_provider_id) {
-                    showChat = true;
+let responseCount = 0;
+let showResponses = false;
+
+if (req.status === 'open') {
+    // NEW: Use the pre-calculated map instead of querying database
+    responseCount = responseCountMap[req.id] || 0;
+    showResponses = responseCount > 0;
+} else if ((req.status === 'in_progress' || req.status === 'pending_completion' || req.status === 'completed') && req.selected_provider_id) {
+    showChat = true;
                     
                     const { data: chat } = await supabase
-    .from('chats')
-    .select('messages, seeker_last_viewed_at, provider_last_viewed_at')
-    .eq('request_id', req.id)
-    .eq('provider_id', req.selected_provider_id)
-    .single();
+                        .from('chats')
+                        .select('messages')
+                        .eq('request_id', req.id)
+                        .eq('provider_id', req.selected_provider_id)
+                        .single();
                     
                     if (chat && chat.messages) {
                         newMessagesCount = chat.messages.filter(m => m.sender_id !== currentUser.id).length;
                     }
                 }
 
+		// Check if request can be reactivated (warranty still active)
                 let reactivateButton = '';
                 if (req.status === 'completed' && req.warranty_end_date) {
                     const warrantyEndDate = new Date(req.warranty_end_date);
@@ -2623,49 +2178,41 @@ if (currentRequestFilter === 'open') {
                         reactivateButton = `<button class="btn btn-select action-btn-compact" onclick="reactivateRequest('${req.id}')">🔄 Reactivate</button>`;
                     }
                 }
-                                
+		
+                const urgencyBadge = req.urgency === 'urgent' ? '<span class="urgent-indicator">⚡ URGENT</span>' : '';
                 const newMessagesBadge = newMessagesCount > 0 ? `<span class="notification-badge">💬 ${newMessagesCount} New</span>` : '';
                 const responsesBadge = showResponses ? `<span class="info-badge">👥 ${responseCount} Response${responseCount > 1 ? 's' : ''}</span>` : '';
 
-              html += `
-    <div class="request-card compact">
-        <div class="request-card-main">
-            <div class="request-card-left">
-                <div class="request-title-compact" onclick="toggleRequestDetails(event, '${req.id}')">
-                    <span class="urgency-bubble ${req.urgency}"></span>
-                    <span class="request-title-text">${serviceIcon} ${req.title}</span>
-                    <span class="request-chevron" id="chevron-${req.id}">▼</span>
-                </div>
+                html += `
+                    <div class="request-card compact">
+                        <div class="request-card-main">
+                            <div class="request-card-left">
+                                <div class="request-title-compact">${serviceIcon} ${req.title}</div>
                                 <div class="request-summary">
                                     <span class="status-badge ${statusClass}">${statusText}</span>
+                                    ${urgencyBadge}
                                     ${responsesBadge}
                                     ${newMessagesBadge}
                                     ${warrantyBadge}
-                                </div>
-                                <div class="request-summary" style="margin-top: 6px; color: #999;">
+                                </div>                                <div class="request-summary" style="margin-top: 6px; color: #999;">
                                     📍 ${req.request_location_address.split(',').slice(0, 2).join(',')} • 🕒 ${timeAgo}
-                                </div>
-                            </div>
-                            <div class="request-card-right">
-                                ${showResponses ? '<button class="btn btn-select action-btn-compact" onclick="viewResponses(\'' + req.id + '\')">View Responses</button>' : ''}
-                                ${showChat ? '<button class="btn btn-chat action-btn-compact" onclick="chatOpenedFrom=\'dashboard\'; openChat(\'' + req.id + '\', \'' + req.selected_provider_id + '\')">💬 Chat</button>' : ''}
-                                ${reactivateButton}
-                               
+                               </div>
                             </div>
                         </div>
-                        <div class="request-details" id="details-resp-${req.id}">
+                        <div class="request-card-right">
+                                ${req.status === 'open' ? '<button class="btn btn-edit action-btn-compact" onclick="editRequest(\'' + req.id + '\')">✏️ Edit</button>' : ''}
+                                ${showResponses ? '<button class="btn btn-select action-btn-compact" onclick="viewResponses(\'' + req.id + '\')">View Responses</button>' : ''}
+                                ${showChat ? '<button class="btn btn-chat action-btn-compact" onclick="openChat(\'' + req.id + '\', \'' + req.selected_provider_id + '\')">💬 Chat</button>' : ''}
+                                ${reactivateButton}
+                                <button class="expand-btn" onclick="toggleRequestDetails(event, '${req.id}')">Details ▼</button>
+                            </div>
+                        <div class="request-details" id="details-${req.id}">
                             <div class="request-description"><strong>Description:</strong> ${req.description}</div>
                             <div class="request-location" style="margin-top: 8px;"><strong>Full Address:</strong> ${req.request_location_address}</div>
                             <div class="request-meta" style="margin-top: 8px;">
-    <span class="meta-item">🔧 Service: ${req.service_category}</span>
-    <span class="meta-item">⚡ Urgency: ${req.urgency.toUpperCase()}</span>
-</div>
-                           ${req.status === 'open' ? `
-    <div style="display: flex; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0f0f0;">
-        <button class="btn" style="flex: 1; background: #128C7E; color: white;" onclick="editRequest('${req.id}')">✏️ Edit Request</button>
-        <button class="btn btn-cancel" style="flex: 1;" onclick="cancelRequest('${req.id}')">❌ Cancel Request</button>
-    </div>
-` : ''}
+                                <span class="meta-item">🔧 Service: ${req.service_category}</span>
+                            </div>
+                            ${req.status === 'open' ? `<button class="btn btn-cancel" style="margin-top: 12px;" onclick="cancelRequest('${req.id}')">Cancel Request</button>` : ''}
                         </div>
                     </div>
                 `;
@@ -2689,21 +2236,19 @@ if (currentRequestFilter === 'open') {
         }
 
         // Toggle request details
-function toggleRequestDetails(event, requestId) {
-    event.stopPropagation();
-    const details = document.getElementById('details-' + requestId);
-    const chevron = document.getElementById('chevron-' + requestId);
-    
-    if (!details || !chevron) return; // Safety check
-    
-    if (details.classList.contains('expanded')) {
-        details.classList.remove('expanded');
-        chevron.classList.remove('expanded');
-    } else {
-        details.classList.add('expanded');
-        chevron.classList.add('expanded');
-    }
-}
+        function toggleRequestDetails(event, requestId) {
+            event.stopPropagation();
+            const details = document.getElementById('details-' + requestId);
+            const btn = event.target;
+            
+            if (details.classList.contains('expanded')) {
+                details.classList.remove('expanded');
+                btn.textContent = 'Details ▼';
+            } else {
+                details.classList.add('expanded');
+                btn.textContent = 'Details ▲';
+            }
+        }
 
         // Open Chat
 // Open Chat Before Selection (Multi-Chat)
@@ -2818,7 +2363,6 @@ if (!partner) {
             requestStatus: request.status,
             chatSource: chatSource
         };
-	// Remember where chat was opened from
         
         // Show chat view
         hideAllViews();
@@ -2838,27 +2382,8 @@ if (!partner) {
             document.getElementById('chatPartnerPhotoPlaceholder').style.display = 'flex';
         }
         
-        
-// Load messages first to check contact sharing status
+        // Load messages first to check contact sharing status
 await loadChatMessages();
-
-// STEP 2: Mark chat as viewed (save timestamp)
-try {
-    const viewedField = currentChatData.isProvider ? 'provider_last_viewed_at' : 'seeker_last_viewed_at';
-    
-    const { error: viewError } = await supabase
-        .from('chats')
-        .update({ [viewedField]: new Date().toISOString() })
-        .eq('request_id', currentChatData.requestId)
-        .eq('provider_id', currentChatData.providerId);
-    
-    if (viewError) {
-        console.error('Error marking chat as viewed:', viewError);
-    }
-} catch (error) {
-    console.error('Error updating last viewed timestamp:', error);
-}
-
 
 // Check if contact sharing was already approved
 const { data: chatData } = await supabase
@@ -3839,7 +3364,6 @@ async function rejectCompletion() {
                             <div class="empty-state-text">No responses yet</div>
                         </div>
                     `;
-			chatOpenedFrom = 'responses-modal'; 
                     document.getElementById('responsesModal').classList.add('active');
                     return;
                 }
@@ -3866,11 +3390,11 @@ async function rejectCompletion() {
                         .single();
                     
                     const distance = calculateDistance(
-    provider.latitude,          // ← Provider first
-    provider.longitude,
-    request.request_latitude,   // ← Request second
-    request.request_longitude
-);
+                        request.request_latitude,
+                        request.request_longitude,
+                        provider.latitude,
+                        provider.longitude
+                    );
                     
                     const respondedTime = new Date(response.created_at);
                     const now = new Date();
@@ -3927,10 +3451,7 @@ async function rejectCompletion() {
                 }
                 
                 document.getElementById('responsesList').innerHTML = html;
-
-// Mark that we're in responses modal
-chatOpenedFrom = 'responses-modal';
-document.getElementById('responsesModal').classList.add('active');
+                document.getElementById('responsesModal').classList.add('active');
             } catch (error) {
                 alert('Error loading responses: ' + error.message);
             }
@@ -4056,18 +3577,13 @@ if (provider.average_rating && provider.average_rating > 0 && provider.total_rat
         }
 
         // Close Modals
-function closeResponsesModal() {
-    document.getElementById('responsesModal').classList.remove('active');
-}
+        function closeResponsesModal() {
+            document.getElementById('responsesModal').classList.remove('active');
+        }
 
-function closeResponsesModalAndGoBack() {
-    document.getElementById('responsesModal').classList.remove('active');
-    showDashboard();
-}
-
-function closeProfileModal() {
-    document.getElementById('profileModal').classList.remove('active');
-}
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.remove('active');
+        }
 
 // Load Provider Responses
         async function loadProviderResponses() {
@@ -4115,21 +3631,16 @@ function closeProfileModal() {
         const chatChecks = await Promise.all(responses.map(async (response) => {
             const { data: chat } = await supabase
                 .from('chats')
-                .select('messages, seeker_last_viewed_at, provider_last_viewed_at')
+                .select('messages')
                 .eq('request_id', response.request_id)
                 .eq('provider_id', currentProfile.user_id)
                 .single();
             
             if (!chat || !chat.messages) return { requestId: response.request_id, hasMessages: false, unreadCount: 0 };
             
-            // Get last viewed time for provider
-const lastViewedAt = chat.provider_last_viewed_at;
-
-// Count only messages AFTER last viewed time
-const unreadCount = chat.messages.filter(m => 
-    m.sender_id !== currentProfile.user_id &&
-    (!lastViewedAt || new Date(m.timestamp) > new Date(lastViewedAt))
-).length;
+            const unreadCount = chat.messages.filter(m => 
+                m.sender_id !== currentProfile.user_id
+            ).length;
             
             return { 
                 requestId: response.request_id, 
@@ -4195,77 +3706,37 @@ async function displayProviderResponses(activeResponses, missedOpportunities) {
                 return;
             }
             
-            // NEW LOGIC: Separate into 4 categories
-            const activeNegotiating = activeResponses.filter(r => 
-                r.request.status === 'open' // Still negotiating, not selected yet
-            );
+            // Separate completed from active responses
+            const completedResponses = activeResponses.filter(r => r.request.status === 'completed');
+            const trueActiveResponses = activeResponses.filter(r => r.request.status !== 'completed');
             
-            const inProgress = activeResponses.filter(r => 
-                r.request.status === 'in_progress' && 
-                !r.request.warranty_end_date // In progress but NOT reactivated
-            );
-            
-            const reactivated = activeResponses.filter(r => 
-                r.request.status === 'in_progress' && 
-                r.request.warranty_end_date // In progress AND was completed before (has warranty date)
-            );
-            
-            const completedResponses = activeResponses.filter(r => 
-                r.request.status === 'completed'
-            );
-            
-            // NEW: Add sub-tabs for Active, In Progress, Reactivated, Completed
+            // Add sub-tabs for Active, Missed Opportunities, and Completed
             let tabsHTML = '<div class="sub-tabs" style="margin-bottom: 20px;">';
-            
-            // Tab 1: Active (Negotiating)
-            if (activeNegotiating.length > 0) {
-                tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'active' ? 'active' : ''}" onclick="filterResponses('active')">🔄 Active <span class="count-badge">${activeNegotiating.length}</span></button>`;
+            tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'active' ? 'active' : ''}" onclick="filterResponses('active')">💼 Active <span class="count-badge">${trueActiveResponses.length}</span></button>`;
+            if (missedOpportunities.length > 0) {
+                tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'missed' ? 'active' : ''}" onclick="filterResponses('missed')">⛔ Missed Opportunities <span class="count-badge">${missedOpportunities.length}</span></button>`;
             }
-            
-            // Tab 2: In Progress
-            if (inProgress.length > 0) {
-                tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'in_progress' ? 'active' : ''}" onclick="filterResponses('in_progress')">⚙️ In Progress <span class="count-badge">${inProgress.length}</span></button>`;
-            }
-            
-            // Tab 3: Reactivated
-            if (reactivated.length > 0) {
-                tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'reactivated' ? 'active' : ''}" onclick="filterResponses('reactivated')">🔁 Reactivated <span class="count-badge">${reactivated.length}</span></button>`;
-            }
-            
-            // Tab 4: Completed
             if (completedResponses.length > 0) {
                 tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'completed' ? 'active' : ''}" onclick="filterResponses('completed')">✅ Completed <span class="count-badge">${completedResponses.length}</span></button>`;
             }
-            
             tabsHTML += '</div>';
             
-            // NEW: Determine which data to show based on filter
-            let responsesData = activeNegotiating; // Default to Active
-            
-            if (currentResponseFilter === 'active') {
-                responsesData = activeNegotiating;
-            } else if (currentResponseFilter === 'in_progress') {
-                responsesData = inProgress;
-            } else if (currentResponseFilter === 'reactivated') {
-                responsesData = reactivated;
+            // Determine which data to show based on filter
+            let responsesData = trueActiveResponses;
+            if (currentResponseFilter === 'missed') {
+                responsesData = missedOpportunities;
             } else if (currentResponseFilter === 'completed') {
                 responsesData = completedResponses;
             }
             
-           // NEW: If filtered data is empty, show empty state
+           // If filtered data is empty, show empty state
             if (!responsesData || responsesData.length === 0) {
                 let emptyIcon = '💬';
                 let emptyText = 'active responses';
                 
-                if (currentResponseFilter === 'active') {
-                    emptyIcon = '🔄';
-                    emptyText = 'active negotiating requests';
-                } else if (currentResponseFilter === 'in_progress') {
-                    emptyIcon = '⚙️';
-                    emptyText = 'in progress requests';
-                } else if (currentResponseFilter === 'reactivated') {
-                    emptyIcon = '🔁';
-                    emptyText = 'reactivated requests';
+                if (currentResponseFilter === 'missed') {
+                    emptyIcon = '⛔';
+                    emptyText = 'missed opportunities';
                 } else if (currentResponseFilter === 'completed') {
                     emptyIcon = '✅';
                     emptyText = 'completed requests';
@@ -4280,26 +3751,16 @@ async function displayProviderResponses(activeResponses, missedOpportunities) {
                 return;
             }
             
-            // NEW: Count unread messages only for In Progress and Reactivated (where provider is selected)
-            const inProgressUnread = inProgress.reduce((sum, d) => sum + (d.unreadCount || 0), 0);
-            const reactivatedUnread = reactivated.reduce((sum, d) => sum + (d.unreadCount || 0), 0);
-            const totalUnread = inProgressUnread + reactivatedUnread;
+            // Count statistics - only for ACTIVE responses (not missed opportunities)
+            const unreadTotal = currentResponseFilter === 'active' ? responsesData.reduce((sum, d) => sum + (d.unreadCount || 0), 0) : 0;
             
-            // Update section badges - show total unread count with chat bubble icon
-const myResponsesNewEl = document.getElementById('myResponsesNew');
-if (myResponsesNewEl) {
-    if (totalUnread > 0) {
-        const unreadBadge = myResponsesNewEl.querySelector('.unread-badge');
-        if (unreadBadge) {
-            unreadBadge.textContent = totalUnread;
-        }
-        myResponsesNewEl.classList.remove('hidden');
-        myResponsesNewEl.style.display = 'inline-flex';
-    } else {
-        myResponsesNewEl.classList.add('hidden');
-        myResponsesNewEl.style.display = 'none';
-    }
-}
+            // Update section badges - show unread only for active
+            if (unreadTotal > 0 && currentResponseFilter === 'active') {
+                document.getElementById('myResponsesNew').textContent = `🔴 ${unreadTotal}`;
+                document.getElementById('myResponsesNew').classList.remove('hidden');
+            } else {
+                document.getElementById('myResponsesNew').classList.add('hidden');
+            }
             
             let html = tabsHTML; // Start with tabs
             
@@ -4313,28 +3774,34 @@ if (myResponsesNewEl) {
                 // Determine status
                 let statusBadge = '';
                 let chatButton = '';
-
-if (data.isMissedOpportunity) {
-    // Read-only chat button
-    chatButton = `<button class="btn btn-chat action-btn-compact" style="background: #6c757d;" onclick="openChat('${req.id}', '${currentProfile.user_id}')">👁️ View Chat</button>`;
-} else {
-    // Active response - normal buttons with unread badge
-    const unreadBadgeHTML = data.unreadCount > 0 ? `<span class="chat-unread-badge">${data.unreadCount}</span>` : '';
-    
-    if (req.status === 'completed') {
-        statusBadge = '<span class="status-badge status-completed">✅ COMPLETED</span>';
-        chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">👁️ View Chat</button>${unreadBadgeHTML}</div>`;
-    } else if (req.status === 'pending_completion' && req.selected_provider_id === currentProfile.user_id) {
-        statusBadge = '<span class="status-badge" style="background: #fff3cd; color: #856404;">⏳ PENDING APPROVAL</span>';
-        chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">💬 Chat</button>${unreadBadgeHTML}</div>`;
-    } else if (req.status === 'in_progress' && req.selected_provider_id === currentProfile.user_id) {
-        statusBadge = '<span class="status-badge" style="background: #cce5ff; color: #004085;">🔄 IN PROGRESS</span>';
-        chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">💬 Chat</button>${unreadBadgeHTML}</div>`;
-    } else if (req.status === 'open') {
-        statusBadge = '<span class="status-badge status-open">⏳ PENDING</span>';
-        chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">💬 Chat</button>${unreadBadgeHTML}</div>`;
-    }
-}
+                
+                // Check if this is a missed opportunity (not selected)
+                if (data.isMissedOpportunity) {
+                    // This is a missed opportunity - show read-only indicator
+                    if (req.status === 'completed') {
+                        statusBadge = '<span class="status-badge" style="background: #6c757d; color: white;">✅ Completed by Others</span>';
+                    } else if (req.status === 'in_progress' || req.status === 'pending_completion') {
+                        statusBadge = '<span class="status-badge" style="background: #6c757d; color: white;">👥 Assigned to Others</span>';
+                    }
+                    chatButton = `<button class="btn btn-chat action-btn-compact" style="background: #6c757d;" onclick="openChat('${req.id}', '${currentProfile.user_id}')">👁️ View Chat (Read-Only)</button>`;
+               } else {
+                    // Active response - normal buttons
+                    if (req.status === 'completed') {
+                        statusBadge = '<span class="status-badge status-completed">✅ COMPLETED</span>';
+                        chatButton = `<button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">View Chat</button>`;
+                    } else if (req.status === 'pending_completion' && req.selected_provider_id === currentProfile.user_id) {
+                        statusBadge = '<span class="status-badge" style="background: #fff3cd; color: #856404;">⏳ PENDING APPROVAL</span>';
+                        chatButton = `<button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">💬 Chat</button>`;
+                    } else if (req.status === 'in_progress' && req.selected_provider_id === currentProfile.user_id) {
+                        statusBadge = '<span class="status-badge" style="background: #cce5ff; color: #004085;">🔄 IN PROGRESS</span>';
+                        chatButton = `<button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">💬 Chat</button>`;
+                    } else if (req.status === 'open') {
+                        statusBadge = '<span class="status-badge status-open">⏳ PENDING</span>';
+                        chatButton = `<button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">💬 Chat</button>`;
+                    }
+                }
+                
+                const urgencyBadge = req.urgency === 'urgent' ? '<span class="urgent-indicator">⚡ URGENT</span>' : '';
                 const unreadBadge = data.unreadCount > 0 ? `<span class="notification-badge">💬 ${data.unreadCount} New</span>` : '';
                 
                 // Calculate remaining warranty if completed
@@ -4369,22 +3836,20 @@ if (req.status === 'completed' && req.warranty_end_date) {
                     <div class="request-card compact">
                         <div class="request-card-main">
                             <div class="request-card-left">
-                                <div class="request-title-compact" onclick="toggleRequestDetails(event, 'resp-${req.id}')">
-    <span class="urgency-bubble ${req.urgency}"></span>
-    <span class="request-title-text">${icon} ${req.title}</span>
-    <span class="request-chevron" id="chevron-resp-${req.id}">▼</span>
-</div>
+                                <div class="request-title-compact">${icon} ${req.title}</div>
                                 <div class="request-summary">
                                     ${statusBadge}
-				    ${unreadBadge}                                                                       ${unreadBadge}
+                                    ${urgencyBadge}
+                                    ${unreadBadge}
                                     ${warrantyBadge}
                                 </div>                                <div class="request-summary" style="margin-top: 6px; color: #999;">
                                     👤 ${data.seekerName} • 📍 ${distance} km • 🕒 ${timeAgo}
                                 </div>
                             </div>
                             <div class="request-card-right">
-    ${chatButton}
-</div>
+                                ${chatButton}
+                                <button class="expand-btn" onclick="toggleRequestDetails(event, 'resp-${req.id}')">Details ▼</button>
+                            </div>
                         </div>
                         <div class="request-details" id="details-resp-${req.id}">
                             <div class="request-description"><strong>Description:</strong> ${req.description}</div>
@@ -4464,31 +3929,18 @@ async function loadNearbyRequests() {
         
         if (totalElement) totalElement.textContent = totalCount;
         
-        // NEW LOGIC: Count requests created AFTER provider last opened the tab
-        const lastOpenedAt = currentProfile.available_work_last_opened_at;
-        let newCount = 0;
+        // Count new requests (less than 2 hours old)
+        const newCount = nearby.filter(r => {
+            const hoursSince = (new Date() - new Date(r.created_at)) / (1000 * 60 * 60);
+            return hoursSince < 2;
+        }).length;
         
-        if (!lastOpenedAt) {
-            // Provider has NEVER opened "Work Opportunities" before
-            // ALL requests are new
-            newCount = nearby.length;
-        } else {
-            // Count requests created AFTER last opened time
-            const lastOpenedDate = new Date(lastOpenedAt);
-            newCount = nearby.filter(r => {
-                const requestCreatedAt = new Date(r.created_at);
-                return requestCreatedAt > lastOpenedDate;
-            }).length;
-        }
-
         if (newElement) {
             if (newCount > 0) {
                 newElement.textContent = `🆕 ${newCount}`;
                 newElement.classList.remove('hidden');
-                newElement.style.display = 'inline-block';
             } else {
                 newElement.classList.add('hidden');
-                newElement.style.display = 'none';
             }
         }
         
@@ -4511,18 +3963,18 @@ async function loadNearbyRequests() {
     requests = requests.filter(req => !respondedIds.has(req.id));
     
     // Handle empty state
-        if (requests.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">💼</div>
-                    <div class="empty-state-text">No work opportunities available</div>
-                </div>
-            `;
-            tabsContainer.innerHTML = '';
-            document.getElementById('availableWorkTotal').textContent = '0';
-            document.getElementById('availableWorkNew').classList.add('hidden');
-            return;
-        }
+    if (requests.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">📍</div>
+                <div class="empty-state-text">No nearby requests available</div>
+            </div>
+        `;
+        tabsContainer.innerHTML = '';
+        document.getElementById('availableWorkTotal').textContent = '0';
+        document.getElementById('availableWorkNew').classList.add('hidden');
+        return;
+    }
 
     // Count by urgency for tabs
     const urgentCount = requests.filter(r => r.urgency === 'urgent').length;
@@ -4542,11 +3994,18 @@ async function loadNearbyRequests() {
         document.getElementById('availableWorkNew').classList.add('hidden');
     }
 
-    // NEW: Build subtabs for Available Work and Missed Opportunities
-    let tabsHTML = `<button class="sub-tab active" onclick="filterWorkOpportunities('available')">📍 Available Work <span class="count-badge">${requests.length}</span></button>`;
+    // Build dynamic tabs
+    let tabsHTML = `<button class="sub-tab ${currentUrgencyFilter === 'all' ? 'active' : ''}" onclick="filterByUrgency('all')">All <span class="count-badge">${requests.length}</span></button>`;
     
-    // TODO: Missed Opportunities tab will be added in Phase 4
-    // tabsHTML += `<button class="sub-tab" onclick="filterWorkOpportunities('missed')">⛔ Missed Opportunities <span class="count-badge">0</span></button>`;
+    if (urgentCount > 0) {
+        tabsHTML += `<button class="sub-tab ${currentUrgencyFilter === 'urgent' ? 'active' : ''}" onclick="filterByUrgency('urgent')">⚡ URGENT <span class="count-badge">${urgentCount}</span></button>`;
+    }
+    if (normalCount > 0) {
+        tabsHTML += `<button class="sub-tab ${currentUrgencyFilter === 'normal' ? 'active' : ''}" onclick="filterByUrgency('normal')">🟡 NORMAL <span class="count-badge">${normalCount}</span></button>`;
+    }
+    if (flexibleCount > 0) {
+        tabsHTML += `<button class="sub-tab ${currentUrgencyFilter === 'low' ? 'active' : ''}" onclick="filterByUrgency('low')">🟢 FLEXIBLE <span class="count-badge">${flexibleCount}</span></button>`;
+    }
     
     tabsContainer.innerHTML = tabsHTML;
 
@@ -4571,29 +4030,32 @@ async function loadNearbyRequests() {
     
     for (let req of filteredRequests) {
         const icon = SERVICE_ICONS[req.service_category] || '🔧';
-        const timeAgo = getTimeAgo(new Date(req.created_at));                                         
+        const timeAgo = getTimeAgo(new Date(req.created_at));
+        
+        const urgencyBadge = req.urgency === 'urgent' ? '<span class="urgent-indicator">⚡ URGENT</span>' : 
+                             req.urgency === 'normal' ? '<span style="background: #ffc107; color: #333; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700;">🟡 NORMAL</span>' :
+                             '<span style="background: #28a745; color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700;">🟢 FLEXIBLE</span>';
+        
         const newBadge = ((new Date() - new Date(req.created_at)) / (1000 * 60 * 60)) < 2 ? '<span class="info-badge">🆕 NEW</span>' : '';
         
         html += `
             <div class="request-card compact">
                 <div class="request-card-main">
                     <div class="request-card-left">
-                        <div class="request-title-compact" onclick="toggleRequestDetails(event, 'nearby-${req.id}')">
-    <span class="urgency-bubble ${req.urgency}"></span>
-    <span class="request-title-text">${icon} ${req.title}</span>
-    <span class="request-chevron" id="chevron-nearby-${req.id}">▼</span>
-</div>
+                        <div class="request-title-compact">${icon} ${req.title}</div>
                         <div class="request-summary">
-    <span class="info-badge">📍 ${req.distance} km</span>
-    ${newBadge}
-</div>
+                            <span class="info-badge">📍 ${req.distance} km</span>
+                            ${urgencyBadge}
+                            ${newBadge}
+                        </div>
                         <div class="request-summary" style="margin-top: 6px; color: #999;">
                             🕒 ${timeAgo} • 🔧 ${req.service_category}
                         </div>
                     </div>
                     <div class="request-card-right">
-    <button class="btn btn-respond action-btn-compact" onclick="respondToRequest('${req.id}')">Respond</button>
-</div>
+                        <button class="btn btn-respond action-btn-compact" onclick="respondToRequest('${req.id}')">Respond</button>
+                        <button class="expand-btn" onclick="toggleRequestDetails(event, 'nearby-${req.id}')">Details ▼</button>
+                    </div>
                 </div>
                 <div class="request-details" id="details-nearby-${req.id}">
                     <div class="request-description"><strong>Description:</strong> ${req.description}</div>
@@ -5141,7 +4603,7 @@ document.getElementById('editProfileForm').addEventListener('submit', async (e) 
         }
 
 // Collapsible Section Management
-        let currentRequestFilter = 'open'; // Default to 'open' tab
+        let currentRequestFilter = 'all';
         let currentUrgencyFilter = 'all';
 	
 	// User dropdown toggle
@@ -5160,7 +4622,7 @@ document.addEventListener('click', function(event) {
     }
 });
         
-	async function toggleSection(sectionId) {
+	function toggleSection(sectionId) {
             const content = document.getElementById(sectionId + 'Content');
             const icon = document.getElementById(sectionId + 'Icon');
             
@@ -5170,33 +4632,17 @@ document.addEventListener('click', function(event) {
             } else {
                 content.classList.add('expanded');
                 icon.classList.add('expanded');
-                
-                // NEW: If opening "Work Opportunities", mark all requests as seen
-                if (sectionId === 'availableWork' && currentProfile.is_provider) {
-                    await markAvailableWorkAsSeen();
-                }
             }
         }
 
         function filterMyRequests(filter) {
     currentRequestFilter = filter;
     
-    // Update active tab - remove all active classes first
-    const allTabs = document.querySelectorAll('#seekerSection .sub-tab');
-    if (allTabs && allTabs.length > 0) {
-        allTabs.forEach(tab => {
-            tab.classList.remove('active');
-        });
-    }
-    
-    // Add active class to clicked tab
-    if (event && event.target) {
-        // Find the button element (in case user clicked on child element)
-        const clickedButton = event.target.closest('.sub-tab');
-        if (clickedButton) {
-            clickedButton.classList.add('active');
-        }
-    }
+    // Update active tab
+    document.querySelectorAll('#seekerSection .sub-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    event.target.classList.add('active');
     
     // Reload and filter requests
     loadUserRequests();
@@ -5231,21 +4677,11 @@ document.addEventListener('click', function(event) {
         function filterResponses(filter) {
             currentResponseFilter = filter;
             
-            // Update active tab - find tabs within MY RESPONSES section only
-            const responsesTabs = document.querySelectorAll('#myResponsesList .sub-tab');
-            if (responsesTabs && responsesTabs.length > 0) {
-                responsesTabs.forEach(tab => {
-                    tab.classList.remove('active');
-                });
-            }
-            
-            // Add active class to clicked tab
-            if (event && event.target) {
-                const clickedButton = event.target.closest('.sub-tab');
-                if (clickedButton) {
-                    clickedButton.classList.add('active');
-                }
-            }
+            // Update active tab
+            document.querySelectorAll('#providerSection .sub-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
             
             // Reload provider responses with new filter
             loadProviderResponses();
@@ -5253,37 +4689,6 @@ document.addEventListener('click', function(event) {
 
         function updateSectionBadges() {
             // This will be called after loading data to update badge counts
-        }
-
-	// Mark all available work requests as seen
-        async function markAvailableWorkAsSeen() {
-            try {
-                const now = new Date().toISOString();
-                
-                // Update profile with current timestamp
-                const { error } = await supabase
-                    .from('profiles')
-                    .update({ available_work_last_opened_at: now })
-                    .eq('user_id', currentProfile.user_id);
-                
-                if (error) throw error;
-                
-                // Update local profile
-                currentProfile.available_work_last_opened_at = now;
-                
-                // Reload nearby requests to update badge to 0
-                await loadNearbyRequests();
-                
-            } catch (error) {
-                console.error('Error marking available work as seen:', error);
-            }
-        }
-
-	// Filter work opportunities (Available vs Missed)
-        function filterWorkOpportunities(filter) {
-            // TODO: Will implement in Phase 4
-            // For now, just show available work
-            console.log('Filter:', filter);
         }
 	
 	
