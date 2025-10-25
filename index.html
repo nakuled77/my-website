@@ -135,7 +135,6 @@
     align-items: center !important;
     margin-left: 20px !important;
 }
-
 /* Desktop: request-summary should display inline */
 #myResponsesList .request-summary {
     display: flex !important;
@@ -150,19 +149,27 @@
     display: none !important;
 }
 
-/* Desktop: Make Row 1 flexbox and move Button 1 to extreme right */
-#openRequestsList .request-card-left .request-summary:nth-of-type(1),
-#activeRequestsList .request-card-left .request-summary:nth-of-type(1) {
+/* Desktop: Force button to extreme right - COMPLETE */
+div#openRequestsList div.request-card-left div.request-summary:nth-of-type(1),
+div#activeRequestsList div.request-card-left div.request-summary:nth-of-type(1) {
     display: flex !important;
+    flex-direction: row !important;
     align-items: center !important;
-    gap: 10px !important;
+    justify-content: flex-start !important;
     width: 100% !important;
+    gap: 0 !important;
 }
 
-/* Button 1 - move to extreme right on desktop */
+div#openRequestsList div.request-card-left div.request-summary:nth-of-type(1) > button.btn-select-mobile,
+div#activeRequestsList div.request-card-left div.request-summary:nth-of-type(1) > button.btn-select-mobile {
+    margin-left: auto !important;
+    flex-shrink: 0 !important;
+    order: 999 !important;
+}
 #openRequestsList .request-card-left .request-summary:nth-of-type(1) .btn-select-mobile,
 #activeRequestsList .request-card-left .request-summary:nth-of-type(1) .btn-select-mobile {
     margin-left: auto !important;
+    flex-shrink: 0 !important;
 }
         @media (max-width: 480px) {
             .request-card.compact { 
@@ -751,28 +758,6 @@
 #myResponsesList .request-card-left .request-summary:nth-of-type(1) > span[style*="flex"] {
     display: none !important;
 }
-```
-
----
-
-## 🎯 KEY CHANGES:
-
-1. ✅ **`flex-wrap: nowrap`** - Prevents wrapping to next line
-2. ✅ **`width: 100%`** - Ensures full width is used
-3. ✅ **`flex-shrink: 1`** on status badge - Allows status to compress slightly if needed
-4. ✅ **`flex-shrink: 0`** on chat button - Chat button never compresses
-5. ✅ **`margin-left: auto`** on chat button - Pushes it to extreme right
-6. ✅ **`display: none`** on spacer span - Hides the unnecessary spacer
-
----
-
-## 📱 APPLY THIS UPDATE AND TEST ON MOBILE!
-
-After you update the mobile CSS:
-
-**Expected Result on Mobile:**
-```
-[✅ COMPLETED]                    [👁️ View Chat]
 
 /* Warranty badge - Row 2: Full width */
 #myResponsesList .request-card-left .request-summary:nth-of-type(2) {
@@ -843,28 +828,6 @@ After you update the mobile CSS:
     padding: 8px 12px !important;
     white-space: nowrap !important;
     font-size: 13px !important;
-}
-
-/* OPEN REQUESTS & ACTIVE REQUESTS - Mobile layout (mobile only) */
-#openRequestsList .request-card,
-#activeRequestsList .request-card {
-    padding: 14px !important;
-}
-
-#openRequestsList .request-card-main,
-#activeRequestsList .request-card-main {
-    display: block !important;
-}
-
-#openRequestsList .request-title-compact,
-#activeRequestsList .request-title-compact {
-    width: 100% !important;
-    margin-bottom: 12px !important;
-}
-
-#openRequestsList .request-card-left,
-#activeRequestsList .request-card-left {
-    display: block !important;
 }
 
 /* OPEN REQUESTS & ACTIVE REQUESTS - Mobile layout (mobile only) */
@@ -965,80 +928,7 @@ After you update the mobile CSS:
     white-space: nowrap !important;
     font-size: 13px !important;
 }
-```
 
----
-
-## 🎯 KEY CHANGES:
-
-1. ✅ **HTML**: Separated badges into individual `request-summary` divs
-2. ✅ **CSS**: Adjusted `nth-of-type` selectors to handle new structure
-3. ✅ **CSS**: Changed `margin-top: -40px` to `margin-top: -48px` to move button higher (prevents overlap)
-
----
-
-## 📱 EXPECTED RESULT:
-```
-[🔧 My washing machine...]                      ← Title
-
-[OPEN]                           [View Responses] ← Row 1: Status + Button
-[👥 2 Responses]                                  ← Row 2: Responses badge
-📍 sector 14, main market • 🕒 11/10/2025        ← Row 3: Location (no overlap)
-
-/* Status badge - stays on left */
-#openRequestsList .request-card-left .request-summary:nth-of-type(1) .status-badge,
-#activeRequestsList .request-card-left .request-summary:nth-of-type(1) .status-badge {
-    flex-shrink: 1 !important;
-    white-space: nowrap !important;
-}
-
-/* Info badges (responses count, etc) - inline with status */
-#openRequestsList .request-card-left .request-summary:nth-of-type(1) .info-badge,
-#activeRequestsList .request-card-left .request-summary:nth-of-type(1) .info-badge {
-    flex-shrink: 1 !important;
-}
-
-/* Second request-summary row (user info/location) */
-#openRequestsList .request-card-left .request-summary:nth-of-type(2),
-#activeRequestsList .request-card-left .request-summary:nth-of-type(2) {
-    display: block !important;
-    margin-bottom: 8px !important;
-}
-
-/* Action buttons - moves to Row 1, extreme right */
-#openRequestsList .request-card-right,
-#activeRequestsList .request-card-right {
-    display: block !important;
-    width: 100% !important;
-    margin-top: -40px !important;
-    text-align: right !important;
-}
-
-/* View Responses button - extreme right */
-#openRequestsList .btn-select,
-#activeRequestsList .btn-select {
-    margin: 0 !important;
-    padding: 8px 12px !important;
-    white-space: nowrap !important;
-    font-size: 13px !important;
-}
-
-/* Chat button with unread badge */
-#openRequestsList .chat-btn-wrapper,
-#activeRequestsList .chat-btn-wrapper {
-    display: inline-flex !important;
-    position: relative !important;
-    align-items: center !important;
-    margin-left: 8px !important;
-}
-
-#openRequestsList .btn-chat,
-#activeRequestsList .btn-chat {
-    margin: 0 !important;
-    padding: 8px 12px !important;
-    white-space: nowrap !important;
-    font-size: 13px !important;
-}
 (continue with the rest of STEP 4 CSS)
 		/* Dashboard logo mobile size */
 		.mobile-section-header {
@@ -3328,10 +3218,9 @@ html += `
                     <span class="request-title-text">${serviceIcon} ${req.title}</span>
                     <span class="request-chevron" id="chevron-${req.id}">▼</span>
                 </div>
-                <div class="request-summary">
+                <div class="request-summary" style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
     <span class="status-badge ${statusClass}">${statusText}</span>
-    <span style="flex: 1;"></span>
-    <button class="btn btn-select btn-select-mobile" onclick="viewResponses('${req.id}')">
+    <button class="btn btn-select btn-select-mobile" onclick="viewResponses('${req.id}')" style="margin-left: auto;">
         👁️ View Responses
     </button>
 </div>
@@ -3342,7 +3231,6 @@ ${warrantyBadge ? `<div class="request-summary">${warrantyBadge}</div>` : ''}
 </div>
                             </div>
                             <div class="request-card-right">
-    ${showResponses ? '<button class="btn btn-select action-btn-compact" onclick="chatOpenedFrom=\'dashboard\'; viewResponses(\'' + req.id + '\')">View Responses</button>' : ''}
     ${showChat ? `
     <div class="chat-btn-wrapper">
         <button class="btn btn-chat action-btn-compact" onclick="chatOpenedFrom='responses-modal'; closeResponsesModal(); openChat('${req.id}', '${req.selected_provider_id}')">💬 Chat</button>
