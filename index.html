@@ -659,15 +659,8 @@
 }
 
 #myResponsesList .request-card-main {
-    display: grid !important;
-    grid-template-columns: 1fr 80px !important;
-    grid-template-rows: auto auto !important;
-    gap: 0 12px !important;
-}
-
-#myResponsesList .request-card-left {
-    grid-column: 1 / -1 !important;
-    grid-row: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
 }
 
 #myResponsesList .request-title-compact {
@@ -675,19 +668,28 @@
     margin-bottom: 12px !important;
 }
 
-#myResponsesList .request-card-left .request-summary:first-of-type {
-    grid-column: 1 !important;
-    grid-row: 2 !important;
+/* Container for content below title */
+#myResponsesList .request-card-left {
+    display: block !important;
+    position: relative !important;
+    padding-right: 90px !important;
 }
 
-#myResponsesList .request-card-left .request-summary:last-of-type {
-    grid-column: 1 !important;
-    grid-row: 3 !important;
+/* All summary items stack vertically and stay within left space */
+#myResponsesList .request-card-left .request-summary {
+    display: block !important;
+    margin-bottom: 8px !important;
 }
 
+#myResponsesList .request-card-left .request-summary:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Chat button floats to the right */
 #myResponsesList .request-card-right {
-    grid-column: 2 !important;
-    grid-row: 2 / 4 !important;
+    position: absolute !important;
+    right: 14px !important;
+    top: 70px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
