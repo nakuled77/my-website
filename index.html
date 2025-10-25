@@ -659,37 +659,51 @@
 }
 
 #myResponsesList .request-card-main {
-    display: flex !important;
-    flex-direction: column !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
 }
 
 #myResponsesList .request-title-compact {
     width: 100% !important;
     margin-bottom: 12px !important;
+    grid-column: 1 !important;
 }
 
-/* Container for content below title */
+/* Wrapper for content below title */
+#myResponsesList .request-card-main > div:not(.request-title-compact) {
+    display: contents !important;
+}
+
 #myResponsesList .request-card-left {
-    display: block !important;
-    position: relative !important;
-    padding-right: 90px !important;
+    display: grid !important;
+    grid-template-columns: 1fr 85px !important;
+    gap: 8px 10px !important;
+    align-items: start !important;
 }
 
-/* All summary items stack vertically and stay within left space */
-#myResponsesList .request-card-left .request-summary {
-    display: block !important;
-    margin-bottom: 8px !important;
+/* Status badge - Row 1, Column 1 */
+#myResponsesList .request-card-left .request-summary:nth-of-type(1) {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
 }
 
-#myResponsesList .request-card-left .request-summary:last-child {
-    margin-bottom: 0 !important;
+/* Warranty badge - Row 2, Column 1 */
+#myResponsesList .request-card-left .request-summary:nth-of-type(2) {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
 }
 
-/* Chat button floats to the right */
+/* User info - Row 3, Column 1 */
+#myResponsesList .request-card-left .request-summary:nth-of-type(3) {
+    grid-column: 1 !important;
+    grid-row: 3 !important;
+}
+
+/* Chat button - Column 2, spans all 3 rows, vertically centered */
 #myResponsesList .request-card-right {
-    position: absolute !important;
-    right: 14px !important;
-    top: 70px !important;
+    grid-column: 2 !important;
+    grid-row: 1 / 4 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
