@@ -864,9 +864,10 @@ div#activeRequestsList div.request-card-left div.request-summary:nth-of-type(1) 
     display: flex !important;
     align-items: center !important;
     flex-wrap: nowrap !important;
-    gap: 10px !important;
+    gap: 0 !important;
     margin-bottom: 8px !important;
     width: 100% !important;
+    justify-content: space-between !important;
 }
 
 /* Status badge - stays on left */
@@ -3218,9 +3219,9 @@ html += `
                     <span class="request-title-text">${serviceIcon} ${req.title}</span>
                     <span class="request-chevron" id="chevron-${req.id}">▼</span>
                 </div>
-                <div class="request-summary" style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                <div class="request-summary" style="display: flex !important; justify-content: space-between !important; width: 100% !important; align-items: center !important;">
     <span class="status-badge ${statusClass}">${statusText}</span>
-    <button class="btn btn-select btn-select-mobile" onclick="viewResponses('${req.id}')" style="margin-left: auto;">
+    <button class="btn btn-select btn-select-mobile" onclick="viewResponses('${req.id}')" style="margin-left: auto !important; flex-shrink: 0 !important;">
         👁️ View Responses
     </button>
 </div>
