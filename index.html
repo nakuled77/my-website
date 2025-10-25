@@ -731,28 +731,29 @@ div#activeRequestsList div.request-card-left div.request-summary:nth-of-type(1) 
     display: block !important;
 }
 
-/* First request-summary - Row 1: Status + Chat button */
-#myResponsesList .request-card-left .request-summary:nth-of-type(1) {
+/* MY RESPONSES: Force chat button to extreme right - STRONGEST */
+div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) {
     display: flex !important;
+    flex-direction: row !important;
     align-items: center !important;
-    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
     gap: 0 !important;
     margin-bottom: 8px !important;
-    width: 100% !important;
-    justify-content: space-between !important;
 }
 
-/* Status badge - stays on the left, allows shrinking if needed */
-#myResponsesList .request-card-left .request-summary:nth-of-type(1) .status-badge {
+/* Status badge stays left */
+div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > span.status-badge {
     flex-shrink: 1 !important;
     white-space: nowrap !important;
 }
 
-/* Chat button wrapper - forced to extreme right, never shrinks */
-#myResponsesList .request-card-left .request-summary:nth-of-type(1) .chat-btn-wrapper,
-#myResponsesList .request-card-left .request-summary:nth-of-type(1) > .btn-chat {
+/* Chat button to extreme right - UNBREAKABLE */
+div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > div.chat-btn-wrapper,
+div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > button.btn-chat {
     margin-left: auto !important;
     flex-shrink: 0 !important;
+    order: 999 !important;
 }
 
 /* Remove the spacer span if it exists (it's not needed anymore) */
