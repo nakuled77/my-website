@@ -653,111 +653,45 @@
         align-items: center !important;
     }
     
-    /* MY RESPONSES - Mobile layout (mobile only) */
-    #myResponsesList .request-card {
-        padding: 14px !important;
-    }
-    
-    #myResponsesList .request-card-main {
-    display: block !important;
+   /* MY RESPONSES - Mobile layout (mobile only) */
+#myResponsesList .request-card {
+    padding: 14px !important;
+}
+
+#myResponsesList .request-card-main {
+    display: flex !important;
+    flex-wrap: wrap !important;
 }
 
 #myResponsesList .request-title-compact {
     width: 100% !important;
+    flex: 0 0 100% !important;
     margin-bottom: 12px !important;
 }
-    
-    #myResponsesList .request-card-left {
-    width: 100% !important;
-}
 
-#myResponsesList .request-card-main > .request-card-left {
-    display: inline-block !important;
-    vertical-align: top !important;
-    width: calc(100% - 90px) !important;
-}
-
-#myResponsesList .request-card-main > .request-card-right {
-    display: inline-block !important;
-    vertical-align: top !important;
-    width: 80px !important;
-    text-align: center !important;
-}
-    
-    #myResponsesList .request-title-compact {
-        width: 100% !important;
-        margin-bottom: 10px !important;
-        grid-column: 1 / -1 !important;
-    }
-    
-    #myResponsesList .request-summary:first-of-type {
-        grid-column: 1 !important;
-        grid-row: 2 !important;
-    }
-    
-    #myResponsesList .request-summary:last-of-type {
-        grid-column: 1 !important;
-        grid-row: 3 !important;
-    }
-    
-    #myResponsesList .request-card-right {
-        grid-column: 2 !important;
-        grid-row: 2 / 4 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-    
-    #myResponsesList .request-summary {
-        white-space: normal !important;
-        word-wrap: break-word !important;
-        overflow-wrap: break-word !important;
-    }
-    
-    #myResponsesList .btn-chat {
-        margin: 0 !important;
-        padding: 8px 12px !important;
-        white-space: nowrap !important;
-        font-size: 13px !important;
-    }
-    
-    #myResponsesList .chat-btn-wrapper {
-        display: flex !important;
-        align-items: center !important;
-    }
-	
-	#myResponsesList .request-card-left .request-summary {
-    display: block !important;
-    margin-bottom: 6px !important;
-    width: 100% !important;
-}
-
-#myResponsesList .request-card-left .request-summary:last-child {
-    margin-bottom: 0 !important;
-}
-
-	#myResponsesList .request-card-main {
-    display: flex !important;
-    flex-direction: column !important;
-}
-
-#myResponsesList .request-card-main > .request-card-left,
-#myResponsesList .request-card-main > .request-card-right {
-    display: inline-block !important;
-}
-
-#myResponsesList .request-card-main::after {
-    content: "" !important;
-    display: table !important;
-    clear: both !important;
+#myResponsesList .request-card-left {
+    flex: 1 !important;
+    min-width: 0 !important;
+    padding-right: 12px !important;
 }
 
 #myResponsesList .request-card-right {
-    float: right !important;
+    flex: 0 0 80px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    min-height: 80px !important;
+}
+
+#myResponsesList .btn-chat {
+    margin: 0 !important;
+    padding: 8px 12px !important;
+    white-space: nowrap !important;
+    font-size: 13px !important;
+}
+
+#myResponsesList .chat-btn-wrapper {
+    display: flex !important;
+    align-items: center !important;
 }
 		/* Dashboard logo mobile size */
 		.mobile-section-header {
