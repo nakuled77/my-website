@@ -906,9 +906,28 @@ After you update the mobile CSS:
 #activeRequestsList .request-card-right {
     display: block !important;
     width: 100% !important;
-    margin-top: -48px !important;
+    margin-top: -76px !important;
     text-align: right !important;
 }
+```
+
+---
+
+## 🎯 **WHAT CHANGED:**
+
+- ✅ Changed `margin-top: -48px` to `margin-top: -76px`
+- This pulls the "View Responses" button up to align with Row 1 (OPEN status)
+- The button will now be on the extreme right, aligned with the OPEN badge
+
+---
+
+## 📱 **EXPECTED RESULT:**
+```
+[🔧 My washing machine...]                      ← Title
+
+[OPEN]                           [View Responses] ← Row 1: Aligned!
+[👥 2 Responses]                                  ← Row 2
+📍 sector 14, main market • 🕒 11/10/2025        ← Row 3 (no overlap)
 
 /* View Responses button - extreme right */
 #openRequestsList .btn-select,
