@@ -647,29 +647,46 @@
             .provider-actions { flex-direction: column; }
             .provider-actions .btn { width: 100%; }
             .star { font-size: 40px; }
-		/* MY RESPONSES - Chat button on right center (mobile only) */
+		/* MY RESPONSES - Chat button fixed on right (mobile only) */
+    #myResponsesList .request-card {
+        padding: 16px !important;
+    }
+    
     #myResponsesList .request-card-main {
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        gap: 12px !important;
+        display: grid !important;
+        grid-template-columns: 1fr auto !important;
+        gap: 16px !important;
+        align-items: start !important;
     }
     
     #myResponsesList .request-card-left {
-        flex: 1 !important;
         min-width: 0 !important;
+        overflow: hidden !important;
+    }
+    
+    #myResponsesList .request-summary {
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
     }
     
     #myResponsesList .request-card-right {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        flex-shrink: 0 !important;
+        min-height: 100% !important;
+    }
+    
+    #myResponsesList .chat-btn-wrapper {
+        display: flex !important;
+        align-items: center !important;
     }
     
     #myResponsesList .btn-chat {
         margin: 0 !important;
+        padding: 10px 16px !important;
         white-space: nowrap !important;
+        font-size: 14px !important;
     }
 		/* Dashboard logo mobile size */
 		.mobile-section-header {
