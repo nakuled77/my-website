@@ -659,16 +659,30 @@
     }
     
     #myResponsesList .request-card-main {
-        display: grid !important;
-        grid-template-columns: 1fr 80px !important;
-        gap: 12px !important;
-        align-items: start !important;
-    }
+    display: block !important;
+}
+
+#myResponsesList .request-title-compact {
+    width: 100% !important;
+    margin-bottom: 12px !important;
+}
     
     #myResponsesList .request-card-left {
-        grid-column: 1 / -1 !important;
-        width: 100% !important;
-    }
+    width: 100% !important;
+}
+
+#myResponsesList .request-card-main > .request-card-left {
+    display: inline-block !important;
+    vertical-align: top !important;
+    width: calc(100% - 90px) !important;
+}
+
+#myResponsesList .request-card-main > .request-card-right {
+    display: inline-block !important;
+    vertical-align: top !important;
+    width: 80px !important;
+    text-align: center !important;
+}
     
     #myResponsesList .request-title-compact {
         width: 100% !important;
@@ -711,6 +725,40 @@
         display: flex !important;
         align-items: center !important;
     }
+	
+	#myResponsesList .request-card-left .request-summary {
+    display: block !important;
+    margin-bottom: 6px !important;
+    width: 100% !important;
+}
+
+#myResponsesList .request-card-left .request-summary:last-child {
+    margin-bottom: 0 !important;
+}
+
+	#myResponsesList .request-card-main {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+#myResponsesList .request-card-main > .request-card-left,
+#myResponsesList .request-card-main > .request-card-right {
+    display: inline-block !important;
+}
+
+#myResponsesList .request-card-main::after {
+    content: "" !important;
+    display: table !important;
+    clear: both !important;
+}
+
+#myResponsesList .request-card-right {
+    float: right !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 80px !important;
+}
 		/* Dashboard logo mobile size */
 		.mobile-section-header {
         display: block !important;
