@@ -646,56 +646,47 @@
             .provider-card { padding: 14px; }
             .provider-actions { flex-direction: column; }
             .provider-actions .btn { width: 100%; }
-            .star { font-size: 40px; }#myResponsesList .request-summary {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        gap: 8px !important;
-        align-items: center !important;
+            .star { font-size: 40px; }
+		/* MY RESPONSES - Chat button fixed on right (mobile only) */
+    #myResponsesList .request-card {
+        padding: 16px !important;
     }
     
-    /* MY RESPONSES - Mobile layout fixes */
     #myResponsesList .request-card-main {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 0 !important;
+        display: grid !important;
+        grid-template-columns: 1fr auto !important;
+        gap: 16px !important;
+        align-items: start !important;
     }
     
     #myResponsesList .request-card-left {
-        width: 100% !important;
+        min-width: 0 !important;
+        overflow: hidden !important;
     }
     
-    #myResponsesList .request-title-compact {
-        width: 100% !important;
-        margin-bottom: 12px !important;
-    }
-    
-    /* Content below title: split into left info + right button */
-    #myResponsesList .request-card-left > .request-summary:first-of-type {
-        display: block !important;
-        margin-bottom: 6px !important;
-    }
-    
-    #myResponsesList .request-card-left > .request-summary:last-of-type {
-        display: inline !important;
-        margin-right: 80px !important; /* Space for chat button */
-    }
-    
-    #myResponsesList .request-card-right {
-        position: absolute !important;
-        right: 16px !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
-        margin: 0 !important;
-    }
-    
-    #myResponsesList .request-card {
-        position: relative !important;
-    }
-    
-    /* Keep icons attached to values when wrapping */
     #myResponsesList .request-summary {
         white-space: normal !important;
         word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+    
+    #myResponsesList .request-card-right {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 100% !important;
+    }
+    
+    #myResponsesList .chat-btn-wrapper {
+        display: flex !important;
+        align-items: center !important;
+    }
+    
+    #myResponsesList .btn-chat {
+        margin: 0 !important;
+        padding: 10px 16px !important;
+        white-space: nowrap !important;
+        font-size: 14px !important;
     }
 		/* Dashboard logo mobile size */
 		.mobile-section-header {
@@ -4781,26 +4772,26 @@ const totalUnread = activeResponses.reduce((sum, d) => sum + (d.unreadCount || 0
         );
         
         html += `
-    <div class="request-card compact">
-        <div class="request-card-main">
-            <div class="request-card-left">
-                <div class="request-title-compact" onclick="toggleRequestDetails(event, 'resp-${req.id}')">
-                    <span class="urgency-bubble ${req.urgency}"></span>
-                    <span class="request-title-text">${icon} ${req.title}</span>
-                    <span class="request-chevron" id="chevron-resp-${req.id}">▼</span>
+            <div class="request-card compact">
+                <div class="request-card-main">
+                    <div class="request-card-left">
+                        <div class="request-title-compact" onclick="toggleRequestDetails(event, 'resp-${req.id}')">
+                            <span class="urgency-bubble ${req.urgency}"></span>
+                            <span class="request-title-text">${icon} ${req.title}</span>
+                            <span class="request-chevron" id="chevron-resp-${req.id}">▼</span>
+                        </div>
+                        <div class="request-summary">
+                            ${statusBadge}                                                                    
+                            ${warrantyBadge}
+                        </div>
+                        <div class="request-summary" style="margin-top: 6px; color: #999;">
+                            👤 ${data.seekerName} • 📍 ${distance} km • 🕒 ${timeAgo}
+                        </div>
+                    </div>
+                    <div class="request-card-right">
+                        ${chatButton}
+                    </div>
                 </div>
-                <div class="request-summary">
-                    ${statusBadge}                                                                    
-                    ${warrantyBadge}
-                </div>
-                <div class="request-summary" style="margin-top: 6px; color: #999;">
-                    👤 ${data.seekerName} • 📍 ${distance} km • 🕒 ${timeAgo}
-                </div>
-            </div>
-            <div class="request-card-right">
-                ${chatButton}
-            </div>
-        </div>
                 <div class="request-details" id="details-resp-${req.id}">
                     <div class="request-description"><strong>Description:</strong> ${req.description}</div>
                     <div class="request-location" style="margin-top: 8px;"><strong>Location:</strong> ${req.request_location_address}</div>
