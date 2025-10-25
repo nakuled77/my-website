@@ -3333,6 +3333,10 @@ html += `
                 </div>
                 <div class="request-summary">
     <span class="status-badge ${statusClass}">${statusText}</span>
+    <span style="flex: 1;"></span>
+    <button class="btn btn-select btn-select-mobile" onclick="viewResponses('${req.id}')">
+        👁️ View Responses
+    </button>
 </div>
 ${responsesBadge ? `<div class="request-summary">${responsesBadge}</div>` : ''}
 ${warrantyBadge ? `<div class="request-summary">${warrantyBadge}</div>` : ''}
