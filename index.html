@@ -5025,11 +5025,10 @@ const totalUnread = activeResponses.reduce((sum, d) => sum + (d.unreadCount || 0
                     <span class="request-title-text">${icon} ${req.title}</span>
                     <span class="request-chevron" id="chevron-resp-${req.id}">▼</span>
                 </div>
-                <div class="request-summary">
-                    ${statusBadge}
-                    <span style="flex: 1;"></span>
-                    ${chatButton}
-                </div>
+                <div class="request-summary" style="display: flex !important; justify-content: space-between !important; width: 100% !important; align-items: center !important;">
+    ${statusBadge}
+    ${chatButton}
+</div>
                 ${warrantyBadge ? `<div class="request-summary">${warrantyBadge}</div>` : ''}
                 <div class="request-summary" style="margin-top: 6px; color: #999;">
                     👤 ${data.seekerName} • 📍 ${distance} km • 🕒 ${timeAgo}
