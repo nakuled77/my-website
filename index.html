@@ -863,7 +863,7 @@ After you update the mobile CSS:
     display: block !important;
 }
 
-/* First request-summary - Row 1: Status badge ONLY */
+/* First request-summary - Row 1: Status badge + View Responses button */
 #openRequestsList .request-card-left .request-summary:nth-of-type(1),
 #activeRequestsList .request-card-left .request-summary:nth-of-type(1) {
     display: flex !important;
@@ -880,6 +880,45 @@ After you update the mobile CSS:
     flex-shrink: 1 !important;
     white-space: nowrap !important;
 }
+
+/* View Responses button - mobile version in Row 1 (extreme right) */
+#openRequestsList .request-card-left .request-summary:nth-of-type(1) .btn-select-mobile,
+#activeRequestsList .request-card-left .request-summary:nth-of-type(1) .btn-select-mobile {
+    margin-left: auto !important;
+    flex-shrink: 0 !important;
+    padding: 8px 12px !important;
+    white-space: nowrap !important;
+    font-size: 13px !important;
+}
+
+/* Hide desktop button on mobile */
+#openRequestsList .request-card-right .btn-select-desktop,
+#activeRequestsList .request-card-right .btn-select-desktop {
+    display: none !important;
+}
+```
+
+---
+
+## 🎯 KEY CHANGES:
+
+1. ✅ **Row 1 HTML**: Removed the spacer span, added `btn-select-mobile` button directly after status badge
+2. ✅ **Desktop Button**: Added `btn-select-desktop` class to distinguish it from mobile button
+3. ✅ **Mobile CSS**: Hide desktop button on mobile with `display: none`
+4. ✅ **Mobile CSS**: Use `margin-left: auto` on mobile button to push it to extreme right
+5. ✅ **Removed old CSS**: Deleted the `margin-top: -76px` approach that wasn't working
+
+---
+
+## 📱 APPLY BOTH UPDATES AND TEST!
+
+After applying:
+
+**Expected Result on Mobile:**
+```
+[OPEN]                           [👁️ View Responses]  ← Row 1: Button on extreme right
+[👥 2 Responses]                                       ← Row 2
+📍 sector 14, main market • 🕒 11/10/2025             ← Row 3: NO button here
 
 /* Second request-summary - Row 2: Responses badge (if exists) */
 #openRequestsList .request-card-left .request-summary:nth-of-type(2),
@@ -3333,10 +3372,7 @@ html += `
                 </div>
                 <div class="request-summary">
     <span class="status-badge ${statusClass}">${statusText}</span>
-    <span style="flex: 1;"></span>
-    <button class="btn btn-select btn-select-mobile" onclick="viewResponses('${req.id}')">
-        👁️ View Responses
-    </button>
+    ${showResponses ? `<button class="btn btn-select btn-select-mobile" onclick="chatOpenedFrom='dashboard'; viewResponses('${req.id}')">👁️ View Responses</button>` : ''}
 </div>
 ${responsesBadge ? `<div class="request-summary">${responsesBadge}</div>` : ''}
 ${warrantyBadge ? `<div class="request-summary">${warrantyBadge}</div>` : ''}
@@ -3345,7 +3381,7 @@ ${warrantyBadge ? `<div class="request-summary">${warrantyBadge}</div>` : ''}
 </div>
                             </div>
                             <div class="request-card-right">
-    ${showResponses ? '<button class="btn btn-select action-btn-compact" onclick="chatOpenedFrom=\'dashboard\'; viewResponses(\'' + req.id + '\')">View Responses</button>' : ''}
+    ${showResponses ? '<button class="btn btn-select action-btn-compact btn-select-desktop" onclick="chatOpenedFrom=\'dashboard\'; viewResponses(\'' + req.id + '\')">View Responses</button>' : ''}
     ${showChat ? `
     <div class="chat-btn-wrapper">
         <button class="btn btn-chat action-btn-compact" onclick="chatOpenedFrom='responses-modal'; closeResponsesModal(); openChat('${req.id}', '${req.selected_provider_id}')">💬 Chat</button>
