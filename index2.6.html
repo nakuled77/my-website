@@ -2086,42 +2086,44 @@ div#activeRequestsList div.request-card-left div.request-summary:nth-of-type(1) 
 }
         
         async function filterServiceDropdown() {
-    const serviceSelect = document.getElementById('serviceType');
-    
-    // If user is not a provider, show all services
-    if (!currentProfile.is_provider) {
-        return;
-    }
-    
-    try {
-        // Get provider's services
-        const { data: providerServices, error } = await supabase
-            .from('provider_services')
-            .select('service_id')
-            .eq('provider_id', currentProfile.user_id);
-        
-        if (error) {
-            console.error('Error fetching provider services:', error);
-            return;
-        }
-        
-        // Get list of services the provider already provides
-        const providedServices = providerServices ? providerServices.map(s => s.service_id) : [];
-        
-        // Get all options except the first one (Select Service)
-        const options = Array.from(serviceSelect.options).slice(1);
-        
-        // MOBILE FIX: Remove options instead of hiding them
-        options.forEach(option => {
-            if (providedServices.includes(option.value)) {
-                option.remove();  // Remove from DOM completely
+            const serviceSelect = document.getElementById('serviceType');
+            
+            // If user is not a provider, show all services
+            if (!currentProfile.is_provider) {
+                return;
             }
-        });
-        
-    } catch (error) {
-        console.error('Error filtering services:', error);
-    }
-}
+            
+            try {
+                // Get provider's services
+                const { data: providerServices, error } = await supabase
+                    .from('provider_services')
+                    .select('service_id')
+                    .eq('provider_id', currentProfile.user_id);
+                
+                if (error) {
+                    console.error('Error fetching provider services:', error);
+                    return;
+                }
+                
+                // Get list of services the provider already provides
+                const providedServices = providerServices ? providerServices.map(s => s.service_id) : [];
+                
+                // Get all options except the first one (Select Service)
+                const options = Array.from(serviceSelect.options).slice(1);
+                
+                // Hide options for services the provider already provides
+                options.forEach(option => {
+                    if (providedServices.includes(option.value)) {
+                        option.style.display = 'none';
+                    } else {
+                        option.style.display = '';
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error filtering services:', error);
+            }
+        }
         function backToDashboard() { 
     // Clear chat refresh interval
     if (chatRefreshInterval) {
