@@ -818,6 +818,109 @@ After you update the mobile CSS:
     white-space: nowrap !important;
     font-size: 13px !important;
 }
+
+/* OPEN REQUESTS & ACTIVE REQUESTS - Mobile layout (mobile only) */
+#openRequestsList .request-card,
+#activeRequestsList .request-card {
+    padding: 14px !important;
+}
+
+#openRequestsList .request-card-main,
+#activeRequestsList .request-card-main {
+    display: block !important;
+}
+
+#openRequestsList .request-title-compact,
+#activeRequestsList .request-title-compact {
+    width: 100% !important;
+    margin-bottom: 12px !important;
+}
+
+#openRequestsList .request-card-left,
+#activeRequestsList .request-card-left {
+    display: block !important;
+}
+
+/* First request-summary row (status + badges) */
+#openRequestsList .request-card-left .request-summary:nth-of-type(1),
+#activeRequestsList .request-card-left .request-summary:nth-of-type(1) {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+    margin-bottom: 8px !important;
+    width: 100% !important;
+}
+
+/* Status badge - stays on left */
+#openRequestsList .request-card-left .request-summary:nth-of-type(1) .status-badge,
+#activeRequestsList .request-card-left .request-summary:nth-of-type(1) .status-badge {
+    flex-shrink: 1 !important;
+    white-space: nowrap !important;
+}
+
+/* Info badges (responses count, etc) - inline with status */
+#openRequestsList .request-card-left .request-summary:nth-of-type(1) .info-badge,
+#activeRequestsList .request-card-left .request-summary:nth-of-type(1) .info-badge {
+    flex-shrink: 1 !important;
+}
+
+/* Second request-summary row (user info/location) */
+#openRequestsList .request-card-left .request-summary:nth-of-type(2),
+#activeRequestsList .request-card-left .request-summary:nth-of-type(2) {
+    display: block !important;
+    margin-bottom: 8px !important;
+}
+
+/* Action buttons - moves to Row 1, extreme right */
+#openRequestsList .request-card-right,
+#activeRequestsList .request-card-right {
+    display: block !important;
+    width: 100% !important;
+    margin-top: -40px !important;
+    text-align: right !important;
+}
+
+/* View Responses button - extreme right */
+#openRequestsList .btn-select,
+#activeRequestsList .btn-select {
+    margin: 0 !important;
+    padding: 8px 12px !important;
+    white-space: nowrap !important;
+    font-size: 13px !important;
+}
+
+/* Chat button with unread badge */
+#openRequestsList .chat-btn-wrapper,
+#activeRequestsList .chat-btn-wrapper {
+    display: inline-flex !important;
+    position: relative !important;
+    align-items: center !important;
+    margin-left: 8px !important;
+}
+
+#openRequestsList .btn-chat,
+#activeRequestsList .btn-chat {
+    margin: 0 !important;
+    padding: 8px 12px !important;
+    white-space: nowrap !important;
+    font-size: 13px !important;
+}
+```
+
+---
+
+## 📍 VISUAL GUIDE:
+```
+Line 107: }  ← End of #nearbyRequestsList .btn-respond
+
+Line 108: (blank line)
+
+Line 109: /* OPEN REQUESTS & ACTIVE REQUESTS - Mobile layout (mobile only) */
+Line 110: #openRequestsList .request-card,
+Line 111: #activeRequestsList .request-card {
+...
+(continue with the rest of STEP 4 CSS)
 		/* Dashboard logo mobile size */
 		.mobile-section-header {
         display: block !important;
