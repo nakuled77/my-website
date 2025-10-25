@@ -702,19 +702,51 @@
 #myResponsesList .request-card-left .request-summary:nth-of-type(1) {
     display: flex !important;
     align-items: center !important;
+    flex-wrap: nowrap !important;
     gap: 10px !important;
     margin-bottom: 8px !important;
+    width: 100% !important;
 }
 
-/* Force status badge to stay on the left */
+/* Status badge - stays on the left, allows shrinking if needed */
 #myResponsesList .request-card-left .request-summary:nth-of-type(1) .status-badge {
-    margin-right: auto !important;
+    flex-shrink: 1 !important;
+    white-space: nowrap !important;
 }
 
-/* Force chat button wrapper to stay on the right */
-#myResponsesList .request-card-left .request-summary:nth-of-type(1) .chat-btn-wrapper {
+/* Chat button wrapper - forced to extreme right, never shrinks */
+#myResponsesList .request-card-left .request-summary:nth-of-type(1) .chat-btn-wrapper,
+#myResponsesList .request-card-left .request-summary:nth-of-type(1) > .btn-chat {
     margin-left: auto !important;
+    flex-shrink: 0 !important;
 }
+
+/* Remove the spacer span if it exists (it's not needed anymore) */
+#myResponsesList .request-card-left .request-summary:nth-of-type(1) > span[style*="flex"] {
+    display: none !important;
+}
+```
+
+---
+
+## 🎯 KEY CHANGES:
+
+1. ✅ **`flex-wrap: nowrap`** - Prevents wrapping to next line
+2. ✅ **`width: 100%`** - Ensures full width is used
+3. ✅ **`flex-shrink: 1`** on status badge - Allows status to compress slightly if needed
+4. ✅ **`flex-shrink: 0`** on chat button - Chat button never compresses
+5. ✅ **`margin-left: auto`** on chat button - Pushes it to extreme right
+6. ✅ **`display: none`** on spacer span - Hides the unnecessary spacer
+
+---
+
+## 📱 APPLY THIS UPDATE AND TEST ON MOBILE!
+
+After you update the mobile CSS:
+
+**Expected Result on Mobile:**
+```
+[✅ COMPLETED]                    [👁️ View Chat]
 
 /* Warranty badge - Row 2: Full width */
 #myResponsesList .request-card-left .request-summary:nth-of-type(2) {
