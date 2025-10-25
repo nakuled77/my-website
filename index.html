@@ -143,6 +143,27 @@
     gap: 8px !important;
     align-items: center !important;
 }
+
+/* Hide Button 2 (desktop button in request-card-right) on BOTH desktop and mobile */
+#openRequestsList .request-card-right,
+#activeRequestsList .request-card-right {
+    display: none !important;
+}
+
+/* Desktop: Make Row 1 flexbox and move Button 1 to extreme right */
+#openRequestsList .request-card-left .request-summary:nth-of-type(1),
+#activeRequestsList .request-card-left .request-summary:nth-of-type(1) {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+}
+
+/* Button 1 - move to extreme right on desktop */
+#openRequestsList .request-card-left .request-summary:nth-of-type(1) .btn-select-mobile,
+#activeRequestsList .request-card-left .request-summary:nth-of-type(1) .btn-select-mobile {
+    margin-left: auto !important;
+}
         @media (max-width: 480px) {
             .request-card.compact { 
                 padding: 12px 14px; 
@@ -884,6 +905,13 @@ After you update the mobile CSS:
 #activeRequestsList .request-card-left .request-summary:nth-of-type(1) .status-badge {
     flex-shrink: 1 !important;
     white-space: nowrap !important;
+}
+
+/* Button 1 - move to extreme right on mobile */
+#openRequestsList .request-card-left .request-summary:nth-of-type(1) .btn-select-mobile,
+#activeRequestsList .request-card-left .request-summary:nth-of-type(1) .btn-select-mobile {
+    margin-left: auto !important;
+    flex-shrink: 0 !important;
 }
 
 /* Second request-summary - Row 2: Responses badge (if exists) */
