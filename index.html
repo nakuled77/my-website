@@ -682,44 +682,31 @@
     align-items: start !important;
 }
 
-/* Status badge - Row 1, Column 1 (ONLY status badge) */
+/* Status badge - Row 1, Column 1 */
 #myResponsesList .request-card-left .request-summary:nth-of-type(1) {
     grid-column: 1 !important;
     grid-row: 1 !important;
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    align-items: center !important;
 }
 
-/* Force status badge to stay alone in Row 1 */
-#myResponsesList .request-card-left .request-summary:nth-of-type(1) > * {
-    flex-shrink: 0 !important;
-}
-
-/* Warranty badge - Row 2, Column 1, spans full width */
+/* Warranty badge - Row 2, Column 1, spans both columns */
 #myResponsesList .request-card-left .request-summary:nth-of-type(2) {
     grid-column: 1 / -1 !important;
     grid-row: 2 !important;
-    display: block !important;
-    width: 100% !important;
 }
 
-/* User info - Row 3, Column 1, spans full width */
+/* User info - Row 3, Column 1, spans both columns */
 #myResponsesList .request-card-left .request-summary:nth-of-type(3) {
     grid-column: 1 / -1 !important;
     grid-row: 3 !important;
-    display: block !important;
-    width: 100% !important;
 }
 
-/* Chat button - Column 2, Row 1 only, aligned to top-right */
+/* Chat button - Column 2, Row 1 only, top-aligned */
 #myResponsesList .request-card-right {
     grid-column: 2 !important;
     grid-row: 1 !important;
     display: flex !important;
     align-items: flex-start !important;
     justify-content: flex-end !important;
-    padding-top: 2px !important;
 }
 
 #myResponsesList .btn-chat {
@@ -4826,9 +4813,9 @@ const totalUnread = activeResponses.reduce((sum, d) => sum + (d.unreadCount || 0
                     <span class="request-chevron" id="chevron-resp-${req.id}">▼</span>
                 </div>
                 <div class="request-summary">
-                    ${statusBadge}                                                                    
-                    ${warrantyBadge}
+                    ${statusBadge}
                 </div>
+                ${warrantyBadge ? `<div class="request-summary">${warrantyBadge}</div>` : ''}
                 <div class="request-summary" style="margin-top: 6px; color: #999;">
                     👤 ${data.seekerName} • 📍 ${distance} km • 🕒 ${timeAgo}
                 </div>
