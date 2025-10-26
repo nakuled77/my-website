@@ -492,22 +492,8 @@ div#activeRequestsList div.request-card-left div.request-summary:nth-of-type(1) 
         .suggestion-item:last-child { border-bottom: none; }
         .suggestion-item:hover { background: #f0f4ff; color: #667eea; }
         .suggestion-item.loading { text-align: center; color: #999; font-style: italic; }
-	.modal { 
-    display: none; 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    background: rgba(0,0,0,0.5); 
-    z-index: 99999; 
-    align-items: center; 
-    justify-content: center; 
-}
-.modal.active { 
-    display: flex !important; 
-    visibility: visible !important;
-}
+	.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
         .modal-content { background: white; border-radius: 20px; padding: 30px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .modal-title { font-size: 24px; font-weight: 600; color: #333; }
@@ -1128,285 +1114,6 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
             </form>
         </div>
 
-<!-- Terms & Conditions View -->
-<div id="termsView" class="hidden">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 20px 20px 0 20px;">
-        <h2 style="margin: 0; color: #667eea; font-size: 24px;">Terms & Conditions</h2>
-        <button class="btn btn-secondary" onclick="closeTermsView()" style="margin: 0;">← Back</button>
-    </div>
-    
-    <div style="padding: 0 20px 40px 20px; max-width: 900px; margin: 0 auto;">
-        <p style="color: #999; font-size: 14px; margin-bottom: 30px;">Last Updated: October 26, 2025</p>
-        
-        <div style="line-height: 1.8; color: #333;">
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">1. INTRODUCTION</h3>
-            <p>Welcome to HelpBuddy ("Platform", "Service", "we", "us", or "our"). HelpBuddy is operated by <strong>Surender Singh Grewal</strong>, based in Bhiwani, Haryana, India.</p>
-            <p>By accessing or using HelpBuddy, you agree to be bound by these Terms and Conditions ("Terms"). If you do not agree to these Terms, please do not use our Platform.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">2. DEFINITIONS</h3>
-            <p><strong>"User"</strong> means any person who accesses or uses the Platform.</p>
-            <p><strong>"Seeker"</strong> means a User who posts service requests.</p>
-            <p><strong>"Provider"</strong> means a User who responds to service requests and offers services.</p>
-            <p><strong>"Service Request"</strong> means a request for services posted by a Seeker on the Platform.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">3. PLATFORM ROLE AND LIMITATIONS</h3>
-            <p><strong>3.1 Intermediary Status:</strong> HelpBuddy is ONLY a connection platform. We:</p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>❌ Do NOT employ service providers</li>
-                <li>❌ Do NOT guarantee service quality, timeliness, or completion</li>
-                <li>❌ Do NOT handle payments between Seekers and Providers</li>
-                <li>❌ Do NOT verify credentials, licenses, or qualifications of Providers</li>
-                <li>❌ Do NOT perform background checks on Users</li>
-                <li>❌ Are NOT responsible for disputes between Users</li>
-            </ul>
-            
-            <p><strong>3.2 No Liability:</strong> We are not liable for any loss, damage, injury, or dispute arising from services arranged through our Platform. All transactions and interactions are solely between Seekers and Providers.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">4. USER RESPONSIBILITIES</h3>
-            <p><strong>4.1 For All Users:</strong></p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>✅ You must be at least 18 years old to use this Platform</li>
-                <li>✅ You must provide accurate and truthful information</li>
-                <li>✅ You are responsible for maintaining account security</li>
-                <li>✅ You must comply with all applicable laws and regulations</li>
-                <li>✅ You must not misuse the Platform for illegal activities</li>
-            </ul>
-            
-            <p><strong>4.2 For Seekers:</strong></p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>✅ YOU are responsible for verifying Provider credentials and qualifications</li>
-                <li>✅ YOU are responsible for negotiating prices and payment terms</li>
-                <li>✅ YOU are responsible for inspecting completed work</li>
-                <li>✅ YOU must resolve disputes directly with Providers</li>
-            </ul>
-            
-            <p><strong>4.3 For Providers:</strong></p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>✅ YOU confirm you are an independent contractor, NOT our employee</li>
-                <li>✅ YOU are responsible for your own insurance, licenses, and permits</li>
-                <li>✅ YOU are responsible for work quality and customer satisfaction</li>
-                <li>✅ YOU must honor any warranties you offer to Seekers</li>
-                <li>✅ YOU are responsible for your own taxes and legal compliance</li>
-            </ul>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">5. PAYMENT AND PRICING</h3>
-            <p><strong>5.1 Direct Payment:</strong> All payments are made directly between Seekers and Providers. HelpBuddy does NOT process, hold, or facilitate payments.</p>
-            <p><strong>5.2 Platform Usage:</strong> HelpBuddy is currently FREE to use for both Seekers and Providers. We reserve the right to introduce paid features in the future with advance notice.</p>
-            <p><strong>5.3 Pricing Disputes:</strong> Any disputes regarding pricing, payments, or refunds must be resolved directly between Seeker and Provider. We are not involved in payment disputes.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">6. PROHIBITED CONDUCT</h3>
-            <p>Users must NOT:</p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>❌ Post false, misleading, or fraudulent information</li>
-                <li>❌ Harass, threaten, or abuse other Users</li>
-                <li>❌ Share inappropriate or offensive content</li>
-                <li>❌ Attempt to bypass Platform features or security measures</li>
-                <li>❌ Use the Platform for any illegal activities</li>
-                <li>❌ Spam or send unsolicited commercial messages</li>
-                <li>❌ Create multiple accounts to manipulate the system</li>
-            </ul>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">7. CONTENT AND INTELLECTUAL PROPERTY</h3>
-            <p><strong>7.1 Your Content:</strong> You retain ownership of content you post (service requests, messages, reviews). By posting, you grant us a license to display and distribute your content on the Platform.</p>
-            <p><strong>7.2 Our Content:</strong> The HelpBuddy name, logo, design, and Platform features are our intellectual property. You may not copy, modify, or reproduce them without permission.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">8. PRIVACY AND DATA PROTECTION</h3>
-            <p>Your use of HelpBuddy is also governed by our Privacy Policy. By using the Platform, you consent to our collection and use of your data as described in the Privacy Policy.</p>
-            <p>We comply with the Information Technology Act, 2000 and related Indian data protection laws.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">9. ACCOUNT TERMINATION</h3>
-            <p><strong>9.1 By You:</strong> You may delete your account at any time through the Platform settings.</p>
-            <p><strong>9.2 By Us:</strong> We reserve the right to suspend or terminate your account if you:</p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>Violate these Terms</li>
-                <li>Engage in fraudulent or illegal activities</li>
-                <li>Receive multiple complaints from other Users</li>
-                <li>Abuse or misuse the Platform</li>
-            </ul>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">10. LIMITATION OF LIABILITY</h3>
-            <p><strong>IMPORTANT:</strong> To the maximum extent permitted by law:</p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>HelpBuddy provides the Platform "AS IS" without warranties of any kind</li>
-                <li>We are NOT liable for any damages arising from your use of the Platform</li>
-                <li>Our total liability to you shall not exceed ₹10,000 (Ten Thousand Rupees)</li>
-                <li>We are NOT liable for Provider conduct, service quality, or disputes</li>
-                <li>We are NOT liable for any property damage, injury, or financial loss</li>
-            </ul>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">11. DISPUTE RESOLUTION</h3>
-            <p><strong>11.1 User Disputes:</strong> Disputes between Seekers and Providers must be resolved directly between the parties. We may provide contact information but do not mediate disputes.</p>
-            <p><strong>11.2 Disputes with Platform:</strong> Any disputes with HelpBuddy shall be resolved through arbitration in Bhiwani, Haryana, India, in accordance with the Arbitration and Conciliation Act, 1996.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">12. GOVERNING LAW</h3>
-            <p>These Terms are governed by the laws of India. The courts of Bhiwani, Haryana shall have exclusive jurisdiction over any disputes.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">13. CHANGES TO TERMS</h3>
-            <p>We reserve the right to modify these Terms at any time. Changes will be posted on this page with an updated "Last Updated" date. Your continued use of the Platform after changes constitutes acceptance of the new Terms.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">14. CONTACT INFORMATION</h3>
-            <p>For questions or concerns about these Terms, contact us at:</p>
-            <p><strong>Email:</strong> helpbuddy.support@gmail.com</p>
-            <p><strong>Location:</strong> Bhiwani, Haryana, India</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">15. SEVERABILITY</h3>
-            <p>If any provision of these Terms is found to be invalid or unenforceable, the remaining provisions shall continue in full force and effect.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">16. ACKNOWLEDGMENT</h3>
-            <p>By using HelpBuddy, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.</p>
-            
-            <div style="background: #f0f4ff; padding: 20px; border-radius: 10px; margin-top: 40px; border-left: 4px solid #667eea;">
-                <p style="margin: 0; font-weight: 600; color: #333;">⚠️ IMPORTANT REMINDER:</p>
-                <p style="margin: 10px 0 0 0; color: #555;">HelpBuddy is a connection platform ONLY. We do not employ service providers, guarantee service quality, or handle payments. You are responsible for verifying credentials, negotiating terms, and resolving disputes directly with other users.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Privacy Policy View -->
-<div id="privacyView" class="hidden">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 20px 20px 0 20px;">
-        <h2 style="margin: 0; color: #667eea; font-size: 24px;">Privacy Policy</h2>
-        <button class="btn btn-secondary" onclick="closePrivacyView()" style="margin: 0;">← Back</button>
-    </div>
-    
-    <div style="padding: 0 20px 40px 20px; max-width: 900px; margin: 0 auto;">
-        <p style="color: #999; font-size: 14px; margin-bottom: 30px;">Last Updated: October 26, 2025</p>
-        
-        <div style="line-height: 1.8; color: #333;">
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">1. INTRODUCTION</h3>
-            <p>Welcome to HelpBuddy's Privacy Policy. This policy describes how <strong>Surender Singh Grewal</strong> ("we", "us", "our") collects, uses, stores, and protects your personal information when you use the HelpBuddy platform.</p>
-            <p>We are committed to protecting your privacy and handling your data in an open and transparent manner. This Privacy Policy complies with the Information Technology Act, 2000 and related Indian data protection laws.</p>
-            <p><strong>By using HelpBuddy, you consent to the data practices described in this policy.</strong></p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">2. INFORMATION WE COLLECT</h3>
-            <p><strong>2.1 Information You Provide Directly:</strong></p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>✅ <strong>Account Information:</strong> Name, email address, phone number, password</li>
-                <li>✅ <strong>Profile Information:</strong> Profile photo, address (house number, area, landmark, city, state, PIN code)</li>
-                <li>✅ <strong>Service Information:</strong> Services you provide (if you're a provider), service radius, service requests you post</li>
-                <li>✅ <strong>Communication Data:</strong> Messages, photos, and other content you share through our chat system</li>
-                <li>✅ <strong>Feedback:</strong> Ratings, reviews, and feedback you provide about other users or the platform</li>
-            </ul>
-            
-            <p><strong>2.2 Information Collected Automatically:</strong></p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>📍 <strong>Location Data:</strong> GPS coordinates derived from your address for matching you with nearby service requests</li>
-                <li>🕒 <strong>Usage Data:</strong> How you interact with the platform (timestamps, features used)</li>
-                <li>💻 <strong>Device Information:</strong> Browser type, device type, IP address</li>
-            </ul>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">3. HOW WE USE YOUR INFORMATION</h3>
-            <p>We use your information for the following purposes:</p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>✅ <strong>Platform Functionality:</strong> To create and manage your account, match seekers with providers, enable communication</li>
-                <li>✅ <strong>Service Delivery:</strong> To show your service requests to nearby providers, display your responses to seekers</li>
-                <li>✅ <strong>Communication:</strong> To send you notifications about responses, messages, and platform updates</li>
-                <li>✅ <strong>Safety & Security:</strong> To prevent fraud, abuse, and maintain platform integrity</li>
-                <li>✅ <strong>Improvement:</strong> To analyze usage patterns and improve our services</li>
-                <li>✅ <strong>Legal Compliance:</strong> To comply with legal obligations and enforce our Terms & Conditions</li>
-            </ul>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">4. HOW WE SHARE YOUR INFORMATION</h3>
-            <p><strong>4.1 With Other Users:</strong></p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>📋 <strong>Service Requests:</strong> Your name, general location (city/area), and request details are visible to providers in your area</li>
-                <li>👤 <strong>Provider Profiles:</strong> Your name, services offered, ratings, and general location are visible to seekers</li>
-                <li>🔒 <strong>Contact Information:</strong> Your phone number and full address are ONLY shared after BOTH parties explicitly approve contact sharing</li>
-                <li>💬 <strong>Chat Messages:</strong> Only visible to the parties involved in that specific conversation</li>
-            </ul>
-            
-            <p><strong>4.2 We Do NOT Sell Your Data:</strong></p>
-            <p>We do not sell, rent, or trade your personal information to third parties for marketing purposes.</p>
-            
-            <p><strong>4.3 Legal Requirements:</strong></p>
-            <p>We may disclose your information if required by law, court order, or government authority, or to protect our rights, safety, or property.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">5. DATA STORAGE AND SECURITY</h3>
-            <p><strong>5.1 Where We Store Your Data:</strong></p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>🗄️ Your data is stored securely on Supabase cloud servers</li>
-                <li>🌍 Data may be stored outside India but is protected by international security standards</li>
-                <li>📸 Profile photos are stored as Base64-encoded data in our database</li>
-            </ul>
-            
-            <p><strong>5.2 Security Measures:</strong></p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>🔐 Passwords are encrypted and never stored in plain text</li>
-                <li>🔒 Secure HTTPS connection for all data transmission</li>
-                <li>🛡️ Access controls to limit who can view your data</li>
-                <li>⚠️ However, no system is 100% secure. We cannot guarantee absolute security of your data</li>
-            </ul>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">6. DATA RETENTION</h3>
-            <p><strong>How Long We Keep Your Data:</strong></p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>✅ <strong>Active Accounts:</strong> We retain your data as long as your account is active</li>
-                <li>✅ <strong>Service History:</strong> Request history, chat logs, and ratings are retained for platform integrity and dispute resolution</li>
-                <li>✅ <strong>Deleted Accounts:</strong> When you delete your account, we remove your personal information within 90 days, except data required for legal compliance</li>
-            </ul>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">7. YOUR RIGHTS AND CHOICES</h3>
-            <p>You have the following rights regarding your data:</p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>👁️ <strong>Access:</strong> You can view and edit your profile information at any time</li>
-                <li>✏️ <strong>Correction:</strong> You can update incorrect information through your profile settings</li>
-                <li>🗑️ <strong>Deletion:</strong> You can delete your account at any time (contact us at helpbuddy.support@gmail.com)</li>
-                <li>🚫 <strong>Restriction:</strong> You can stop providing services or hide your profile from searches</li>
-                <li>📤 <strong>Data Portability:</strong> You can request a copy of your data by contacting us</li>
-            </ul>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">8. COOKIES AND TRACKING</h3>
-            <p><strong>8.1 What We Use:</strong></p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>🍪 We use browser storage (session storage) to keep you logged in</li>
-                <li>📊 We do NOT use third-party tracking cookies or analytics at this time</li>
-                <li>🔒 No advertising cookies or remarketing pixels</li>
-            </ul>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">9. CHILDREN'S PRIVACY</h3>
-            <p>HelpBuddy is NOT intended for users under 18 years of age. We do not knowingly collect information from children under 18. If we discover that a child under 18 has provided us with personal information, we will delete it immediately.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">10. THIRD-PARTY SERVICES</h3>
-            <p><strong>Services We Use:</strong></p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>🗄️ <strong>Supabase:</strong> For database and authentication (subject to their privacy policy)</li>
-                <li>🗺️ <strong>OpenStreetMap Nominatim:</strong> For geocoding addresses (subject to their terms)</li>
-            </ul>
-            <p>These third-party services have their own privacy policies. We encourage you to review them.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">11. CHANGES TO THIS PRIVACY POLICY</h3>
-            <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated "Last Updated" date. Significant changes will be notified through the platform or via email.</p>
-            <p><strong>Your continued use of HelpBuddy after changes constitutes acceptance of the updated policy.</strong></p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">12. LEGAL COMPLIANCE</h3>
-            <p>This Privacy Policy complies with:</p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
-                <li>📜 Information Technology Act, 2000</li>
-                <li>📜 Information Technology (Reasonable Security Practices and Procedures and Sensitive Personal Data or Information) Rules, 2011</li>
-                <li>📜 Other applicable Indian data protection laws</li>
-            </ul>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">13. CONTACT US</h3>
-            <p>If you have questions, concerns, or requests regarding your privacy or this policy, please contact us at:</p>
-            <p><strong>📧 Email:</strong> helpbuddy.support@gmail.com</p>
-            <p><strong>📍 Location:</strong> Bhiwani, Haryana, India</p>
-            <p><strong>👤 Data Controller:</strong> Surender Singh Grewal</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">14. GRIEVANCE OFFICER</h3>
-            <p>In accordance with the Information Technology Act, 2000, if you have any grievances related to privacy:</p>
-            <p><strong>Contact:</strong> Surender Singh Grewal</p>
-            <p><strong>Email:</strong> helpbuddy.support@gmail.com</p>
-            <p><strong>Response Time:</strong> We aim to respond to all privacy concerns within 30 days</p>
-            
-            <div style="background: #f0f4ff; padding: 20px; border-radius: 10px; margin-top: 40px; border-left: 4px solid #667eea;">
-                <p style="margin: 0; font-weight: 600; color: #333;">🔒 YOUR PRIVACY MATTERS</p>
-                <p style="margin: 10px 0 0 0; color: #555;">We are committed to protecting your privacy and being transparent about how we use your data. Your trust is important to us, and we work hard to maintain it.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
         <!-- Dashboard View -->
 <div id="dashboardView" class="hidden">
     <!-- Row 2: Create Request (LEFT) + User Profile (MIDDLE) + Profile Photo/Back (RIGHT) -->
@@ -1423,16 +1130,13 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
             <span>▼</span>
         </button>
         <div class="user-dropdown" id="userDropdown">
-    <div class="dropdown-item" onclick="showEditProfile(); toggleUserDropdown();">
-        👤 Profile
-    </div>
-    <div class="dropdown-item" onclick="openFeedbackModal(); toggleUserDropdown();">
-        💬 Send Feedback
-    </div>
-    <div class="dropdown-item" onclick="handleLogout()">
-        🚪 Logout
-    </div>
-</div>
+            <div class="dropdown-item" onclick="showEditProfile(); toggleUserDropdown();">
+                👤 Profile
+            </div>
+            <div class="dropdown-item" onclick="handleLogout()">
+                🚪 Logout
+            </div>
+        </div>
     </div>
     
     <!-- Profile Photo (LEFT) + Back Button (RIGHT) - for edit profile page -->
@@ -1643,15 +1347,109 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     </div>
     <div class="row">
         <div class="form-group">
-<label>City <span class="required">*</span></label>
-<input 
-    type="text" 
-    id="customCity" 
-    placeholder="Type to search city..."
-    autocomplete="off"
->
-<div id="customCitySuggestions" class="autocomplete-suggestions"></div>
-<div class="form-group">
+    <label>City <span class="required">*</span></label>
+    <select id="customCity">
+        <option value="">Select City</option>
+        <option value="Ahmedabad">Ahmedabad</option>
+        <option value="Bengaluru">Bengaluru</option>
+        <option value="Chennai">Chennai</option>
+        <option value="Delhi">Delhi</option>
+        <option value="Hyderabad">Hyderabad</option>
+        <option value="Kolkata">Kolkata</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Pune">Pune</option>
+        
+        <option value="Agra">Agra</option>
+        <option value="Ajmer">Ajmer</option>
+        <option value="Akola">Akola</option>
+        <option value="Aligarh">Aligarh</option>
+        <option value="Allahabad">Allahabad (Prayagraj)</option>
+        <option value="Amravati">Amravati</option>
+        <option value="Amritsar">Amritsar</option>
+        <option value="Asansol">Asansol</option>
+        <option value="Aurangabad">Aurangabad</option>
+        <option value="Bareilly">Bareilly</option>
+        <option value="Belagavi">Belagavi (Belgaum)</option>
+        <option value="Bhavnagar">Bhavnagar</option>
+        <option value="Bhilai">Bhilai</option>
+        <option value="Bhiwandi">Bhiwandi</option>
+        <option value="Bhopal">Bhopal</option>
+        <option value="Bhubaneswar">Bhubaneswar</option>
+        <option value="Bikaner">Bikaner</option>
+        <option value="Bilaspur">Bilaspur</option>
+        <option value="Bokaro Steel City">Bokaro Steel City</option>
+        <option value="Chandigarh">Chandigarh</option>
+        <option value="Coimbatore">Coimbatore</option>
+        <option value="Cuttack">Cuttack</option>
+        <option value="Dehradun">Dehradun</option>
+        <option value="Dhanbad">Dhanbad</option>
+        <option value="Dombivli">Dombivli</option>
+        <option value="Durgapur">Durgapur</option>
+        <option value="Faridabad">Faridabad</option>
+        <option value="Ghaziabad">Ghaziabad</option>
+        <option value="Gorakhpur">Gorakhpur</option>
+        <option value="Guntur">Guntur</option>
+        <option value="Gurgaon">Gurgaon (Gurugram)</option>
+        <option value="Guwahati">Guwahati</option>
+        <option value="Gwalior">Gwalior</option>
+        <option value="Hubballi–Dharwad">Hubballi–Dharwad</option>
+        <option value="Indore">Indore</option>
+        <option value="Jabalpur">Jabalpur</option>
+        <option value="Jaipur">Jaipur</option>
+        <option value="Jalandhar">Jalandhar</option>
+        <option value="Jammu">Jammu</option>
+        <option value="Jamshedpur">Jamshedpur</option>
+        <option value="Jamnagar">Jamnagar</option>
+        <option value="Jodhpur">Jodhpur</option>
+        <option value="Kakinada">Kakinada</option>
+        <option value="Kanpur">Kanpur</option>
+        <option value="Karnal">Karnal</option>
+        <option value="Kochi">Kochi</option>
+        <option value="Kolhapur">Kolhapur</option>
+        <option value="Kota">Kota</option>
+        <option value="Kozhikode">Kozhikode</option>
+        <option value="Kumbakonam">Kumbakonam</option>
+        <option value="Kurnool">Kurnool</option>
+        <option value="Ludhiana">Ludhiana</option>
+        <option value="Lucknow">Lucknow</option>
+        <option value="Madurai">Madurai</option>
+        <option value="Mangaluru">Mangaluru</option>
+        <option value="Meerut">Meerut</option>
+        <option value="Mohali">Mohali</option>
+        <option value="Moradabad">Moradabad</option>
+        <option value="Mysuru">Mysuru</option>
+        <option value="Nagpur">Nagpur</option>
+        <option value="Nanded">Nanded</option>
+        <option value="Nashik">Nashik</option>
+        <option value="Nellore">Nellore</option>
+        <option value="Noida">Noida</option>
+        <option value="Patna">Patna</option>
+        <option value="Pimpri-Chinchwad">Pimpri-Chinchwad</option>
+        <option value="Puducherry">Puducherry</option>
+        <option value="Raipur">Raipur</option>
+        <option value="Rajkot">Rajkot</option>
+        <option value="Ranchi">Ranchi</option>
+        <option value="Rourkela">Rourkela</option>
+        <option value="Saharanpur">Saharanpur</option>
+        <option value="Salem">Salem</option>
+        <option value="Shimla">Shimla</option>
+        <option value="Siliguri">Siliguri</option>
+        <option value="Solapur">Solapur</option>
+        <option value="Srinagar">Srinagar</option>
+        <option value="Surat">Surat</option>
+        <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+        <option value="Thrissur">Thrissur</option>
+        <option value="Tiruchirappalli">Tiruchirappalli</option>
+        <option value="Tirunelveli">Tirunelveli</option>
+        <option value="Ujjain">Ujjain</option>
+        <option value="Vadodara">Vadodara</option>
+        <option value="Varanasi">Varanasi</option>
+        <option value="Vasai-Virar">Vasai-Virar</option>
+        <option value="Vijayawada">Vijayawada</option>
+        <option value="Visakhapatnam">Visakhapatnam</option>
+        <option value="Warangal">Warangal</option>
+        </select>
+</div><div class="form-group">
     <label>State <span class="required">*</span></label>
     <select id="customState">
         <option value="">Select State/Union Territory</option>
@@ -1702,8 +1500,6 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
                 <button type="submit" class="btn btn-full" id="submitRequestBtn">Create Request</button>
             </form>
         </div>
-    </div> <!-- ✅ CLOSES createRequestView -->
-    
 <!-- Edit Request View -->
         <div id="editRequestView" class="hidden">
             <button class="btn btn-secondary" onclick="window.history.back()">← Back</button>
@@ -2085,56 +1881,6 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
             </div>
         </div>
 
-	
-
-	<!-- Feedback Modal -->
-<div id="feedbackModal" class="modal">
-    <div class="modal-content" style="max-width: 600px;">
-        <div class="modal-header">
-            <h2 class="modal-title">💬 Send Feedback</h2>
-            <button class="close-btn" onclick="closeFeedbackModal()">×</button>
-        </div>
-        <div style="padding: 20px;">
-            <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
-                Help us improve HelpBuddy! Share your suggestions, report bugs, or request new features. 
-                Your feedback helps us serve you better.
-            </p>
-            
-            <div class="form-group">
-                <label>Feedback Type <span class="required">*</span></label>
-                <select id="feedbackType" required>
-                    <option value="">Select Type</option>
-                    <option value="bug">🐛 Bug Report</option>
-                    <option value="feature">✨ Feature Request</option>
-                    <option value="improvement">🔧 Improvement Suggestion</option>
-                    <option value="complaint">😞 Complaint</option>
-                    <option value="praise">🎉 Appreciation</option>
-                    <option value="other">💭 Other</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Your Feedback <span class="required">*</span></label>
-                <textarea id="feedbackMessage" rows="6" maxlength="1000" required placeholder="Please describe your feedback in detail. Be specific so we can help you better."></textarea>
-                <div class="char-counter"><span id="feedbackCounter">0</span>/1000</div>
-            </div>
-            
-            <div class="form-group">
-                <label>Your Email</label>
-                <input type="email" id="feedbackEmail" placeholder="We'll reach out if we need more details" readonly>
-                <small style="color: #999; font-size: 12px;">Using your registered email</small>
-            </div>
-            
-            <div id="feedbackError" class="error hidden"></div>
-            <div id="feedbackSuccess" class="success hidden"></div>
-            
-            <button class="btn btn-full" onclick="submitFeedback()" id="submitFeedbackBtn">
-                📤 Send Feedback
-            </button>
-        </div>
-    </div>
-</div>
-
         <!-- Contact Details Modal -->
 <div id="contactDetailsModal" class="modal">
     <div class="modal-content" style="max-width: 500px;">
@@ -2333,22 +2079,9 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     document.getElementById('createRequestView').classList.remove('hidden'); 
     document.getElementById('createRequestView').style.display = 'block';
     
-    // ✅ Reset the form
     document.getElementById('createRequestForm').reset(); 
     document.getElementById('titleCounter').textContent = '0';
     document.getElementById('descCounter').textContent = '0';
-    
-    // ✅ CRITICAL FIX: Reset "Use different location" checkbox and hide custom fields
-    const differentLocationCheckbox = document.getElementById('differentLocation');
-    const customLocationFields = document.getElementById('customLocationFields');
-    
-    if (differentLocationCheckbox) {
-        differentLocationCheckbox.checked = false; // Uncheck the checkbox
-    }
-    
-    if (customLocationFields) {
-        customLocationFields.classList.add('hidden'); // Hide the custom location fields
-    }
     
     // Filter services based on provider's existing services
     await filterServiceDropdown();
@@ -2659,9 +2392,9 @@ function backFromChat() {
         }
 
         function toggleLocationFields() {
-    const checked = document.getElementById('differentLocation').checked;
-    document.getElementById('customLocationFields').classList.toggle('hidden', !checked);
-}
+            const checked = document.getElementById('differentLocation').checked;
+            document.getElementById('customLocationFields').classList.toggle('hidden', !checked);
+        }
 
         function validatePhoneInput(input) {
     const value = input.value;
@@ -6197,7 +5930,7 @@ function filterWorkOpportunities(filter) {
 	
 	
         // ========== AUTOCOMPLETE FUNCTIONS ==========
-	
+        
         // Debounce function to avoid too many API calls
         function debounce(func, wait) {
             let timeout;
@@ -6251,27 +5984,18 @@ function filterWorkOpportunities(filter) {
         
         // Setup city autocomplete
         function setupCityAutocomplete() {
-    // Setup for SIGNUP form (id="city")
-    const cityInput = document.getElementById('city');
-    if (cityInput && !cityInput.hasAttribute('data-autocomplete-setup')) {
-        setupCityAutocompleteForField(cityInput, 'citySuggestions', 'state');
-        cityInput.setAttribute('data-autocomplete-setup', 'true');
-    }
-    
-    // Setup for EDIT PROFILE form (id="editCity")
-    const editCityInput = document.getElementById('editCity');
-    if (editCityInput && !editCityInput.hasAttribute('data-autocomplete-setup')) {
-        setupCityAutocompleteForField(editCityInput, 'editCitySuggestions', 'editState');
-        editCityInput.setAttribute('data-autocomplete-setup', 'true');
-    }
-    
-    // Setup for CREATE REQUEST different location (id="customCity")
-    const customCityInput = document.getElementById('customCity');
-    if (customCityInput && !customCityInput.hasAttribute('data-autocomplete-setup')) {
-        setupCityAutocompleteForField(customCityInput, 'customCitySuggestions', 'customState');
-        customCityInput.setAttribute('data-autocomplete-setup', 'true');
-    }
-}
+            // Setup for SIGNUP form (id="city")
+            const cityInput = document.getElementById('city');
+            if (cityInput) {
+                setupCityAutocompleteForField(cityInput, 'citySuggestions', 'state');
+            }
+            
+            // Setup for EDIT PROFILE form (id="editCity")
+            const editCityInput = document.getElementById('editCity');
+            if (editCityInput) {
+                setupCityAutocompleteForField(editCityInput, 'editCitySuggestions', 'editState');
+            }
+        }
 
         // Generic setup for any city field
         function setupCityAutocompleteForField(inputElement, suggestionsId, stateFieldId) {
@@ -6611,164 +6335,6 @@ async function submitRating() {
     }
 }
 
-// ==================== FEEDBACK SYSTEM ====================
-
-// Open Feedback Modal
-function openFeedbackModal() {
-    // Close user dropdown menu first
-    const dropdown = document.getElementById('userDropdown');
-    if (dropdown) dropdown.classList.remove('active');
-    
-    console.log('🔵 Opening feedback modal...');
-    
-    const modal = document.getElementById('feedbackModal');
-    if (!modal) {
-        console.error('❌ Feedback modal not found');
-        return;
-    }
-    
-    const messageInput = document.getElementById('feedbackMessage');
-    const emailInput = document.getElementById('feedbackEmail');
-    const typeSelect = document.getElementById('feedbackType');
-    const errorDiv = document.getElementById('feedbackError');
-    const successDiv = document.getElementById('feedbackSuccess');
-    const counterSpan = document.getElementById('feedbackCounter');
-    
-    // Reset form
-    if (typeSelect) typeSelect.value = '';
-    if (messageInput) {
-        messageInput.value = '';
-        if (counterSpan) counterSpan.textContent = '0';
-    }
-    if (emailInput && currentProfile) {
-        emailInput.value = currentProfile.email || (currentUser ? currentUser.email : '');
-    }
-    if (errorDiv) errorDiv.classList.add('hidden');
-    if (successDiv) successDiv.classList.add('hidden');
-    
-    // NUCLEAR FIX: Use setAttribute to override ALL inline styles with !important
-modal.setAttribute('style', 'display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; min-width: 100vw !important; min-height: 100vh !important; max-width: 100vw !important; max-height: 100vh !important; z-index: 999999 !important; visibility: visible !important; opacity: 1 !important; background: rgba(0,0,0,0.5) !important; pointer-events: auto !important; align-items: center !important; justify-content: center !important;');
-modal.classList.add('active');
-    
-    console.log('✅ Feedback modal opened');
-    console.log('Has active class:', modal.classList.contains('active'));
-    console.log('Display style:', window.getComputedStyle(modal).display);
-}
-
-// Close Feedback Modal
-function closeFeedbackModal() {
-    const modal = document.getElementById('feedbackModal');
-    if (modal) {
-        modal.classList.remove('active');
-        modal.setAttribute('style', 'display: none; position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 999999 !important;');
-    }
-}
-
-// Submit Feedback
-async function submitFeedback() {
-    const type = document.getElementById('feedbackType').value;
-    const message = document.getElementById('feedbackMessage').value.trim();
-    const email = document.getElementById('feedbackEmail').value;
-    const errorDiv = document.getElementById('feedbackError');
-    const successDiv = document.getElementById('feedbackSuccess');
-    const submitBtn = document.getElementById('submitFeedbackBtn');
-    
-    // Hide previous messages
-    errorDiv.classList.add('hidden');
-    successDiv.classList.add('hidden');
-    
-    // Validation
-    if (!type) {
-        errorDiv.textContent = '⚠️ Please select feedback type';
-        errorDiv.classList.remove('hidden');
-        return;
-    }
-    
-    if (!message || message.length < 10) {
-        errorDiv.textContent = '⚠️ Please provide at least 10 characters of feedback';
-        errorDiv.classList.remove('hidden');
-        return;
-    }
-    
-    // Disable button
-    submitBtn.disabled = true;
-    submitBtn.textContent = '📤 Sending...';
-    
-    try {
-        // Insert feedback into Supabase
-        const { error } = await supabase
-            .from('feedback')
-            .insert([{
-                user_id: currentUser.id,
-                user_name: currentProfile.name,
-                user_email: email,
-                feedback_type: type,
-                message: message,
-                status: 'new'
-            }]);
-        
-        if (error) throw error;
-        
-        // Success message
-        successDiv.textContent = '✅ Thank you! Your feedback has been submitted successfully. We appreciate your input!';
-        successDiv.classList.remove('hidden');
-        
-        // Reset form
-        document.getElementById('feedbackType').value = '';
-        document.getElementById('feedbackMessage').value = '';
-        document.getElementById('feedbackCounter').textContent = '0';
-        
-        // Close modal after 3 seconds
-        setTimeout(() => {
-            closeFeedbackModal();
-        }, 3000);
-        
-    } catch (error) {
-        errorDiv.textContent = '❌ Error submitting feedback: ' + error.message;
-        errorDiv.classList.remove('hidden');
-    } finally {
-        // Re-enable button
-        submitBtn.disabled = false;
-        submitBtn.textContent = '📤 Send Feedback';
-    }
-}
-
-// Character counter for feedback message
-document.addEventListener('DOMContentLoaded', () => {
-    const feedbackInput = document.getElementById('feedbackMessage');
-    if (feedbackInput) {
-        feedbackInput.addEventListener('input', (e) => {
-            const counter = document.getElementById('feedbackCounter');
-            if (counter) {
-                counter.textContent = e.target.value.length;
-            }
-        });
-    }
-});
-
-// Close feedback modal when clicking outside
-document.addEventListener('click', function(event) {
-    const modal = document.getElementById('feedbackModal');
-    const modalContent = modal?.querySelector('.modal-content');
-    
-    if (modal && modal.classList.contains('active')) {
-        // Check if click is on the modal background (not on modal-content or inside it)
-        if (event.target === modal) {
-            closeFeedbackModal();
-        }
-    }
-});
-
-// Close feedback modal on ESC key
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        const modal = document.getElementById('feedbackModal');
-        if (modal && modal.classList.contains('active')) {
-            closeFeedbackModal();
-        }
-    }
-});
-
        // Toggle Send Button based on text input
         function toggleSendButton() {
             const input = document.getElementById('chatMessageInput');
@@ -6795,116 +6361,6 @@ document.addEventListener('keydown', function(event) {
             document.getElementById('photoInput').click();
         }
 
-// Show Terms & Conditions
-function showTerms() {
-    hideAllViews();
-    const termsView = document.getElementById('termsView');
-    if (termsView) {
-        termsView.classList.remove('hidden');
-        termsView.style.display = 'block';
-        termsView.style.visibility = 'visible';
-    }
-}
-
-// Close Terms & Conditions
-function closeTermsView() {
-    const termsView = document.getElementById('termsView');
-    if (termsView) {
-        termsView.classList.add('hidden');
-        termsView.style.display = 'none';
-    }
-    
-    // Go back to where user came from
-    const loginView = document.getElementById('loginView');
-    const signupView = document.getElementById('signupView');
-    
-    // Check which view was previously visible
-    if (loginView && !loginView.classList.contains('hidden')) {
-        showLogin();
-    } else if (signupView && !signupView.classList.contains('hidden')) {
-        showSignup();
-    } else {
-        showLogin(); // Default to login
-    }
-}
-
-// Show Privacy Policy
-function showPrivacy() {
-    hideAllViews();
-    const privacyView = document.getElementById('privacyView');
-    if (privacyView) {
-        privacyView.classList.remove('hidden');
-        privacyView.style.display = 'block';
-        privacyView.style.visibility = 'visible';
-    }
-}
-
-// Close Privacy Policy
-function closePrivacyView() {
-    const privacyView = document.getElementById('privacyView');
-    if (privacyView) {
-        privacyView.classList.add('hidden');
-        privacyView.style.display = 'none';
-    }
-    
-    // If user is logged in, go to dashboard
-    if (currentUser && currentProfile) {
-        showDashboard();
-    } else {
-        // If not logged in, go to login
-        showLogin();
-    }
-}
-
 </script>
-
-<!-- Feedback Modal -->
-<div id="feedbackModal" class="modal" style="display: none; position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 999999 !important; pointer-events: none !important;">
-    <div class="modal-content" style="max-width: 600px;">
-        <div class="modal-header">
-            <h2 class="modal-title">💬 Send Feedback</h2>
-            <button class="close-btn" onclick="closeFeedbackModal()">×</button>
-        </div>
-        <div style="padding: 20px;">
-            <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
-                Help us improve HelpBuddy! Share your suggestions, report bugs, or request new features. 
-                Your feedback helps us serve you better.
-            </p>
-            
-            <div class="form-group">
-                <label>Feedback Type <span class="required">*</span></label>
-                <select id="feedbackType" required>
-                    <option value="">Select Type</option>
-                    <option value="bug">🐛 Bug Report</option>
-                    <option value="feature">✨ Feature Request</option>
-                    <option value="improvement">🔧 Improvement Suggestion</option>
-                    <option value="complaint">😞 Complaint</option>
-                    <option value="praise">🎉 Appreciation</option>
-                    <option value="other">💭 Other</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Your Feedback <span class="required">*</span></label>
-                <textarea id="feedbackMessage" rows="6" maxlength="1000" required placeholder="Please describe your feedback in detail. Be specific so we can help you better."></textarea>
-                <div class="char-counter"><span id="feedbackCounter">0</span>/1000</div>
-            </div>
-            
-            <div class="form-group">
-                <label>Your Email</label>
-                <input type="email" id="feedbackEmail" placeholder="We'll reach out if we need more details" readonly>
-                <small style="color: #999; font-size: 12px;">Using your registered email</small>
-            </div>
-            
-            <div id="feedbackError" class="error hidden"></div>
-            <div id="feedbackSuccess" class="success hidden"></div>
-            
-            <button class="btn btn-full" onclick="submitFeedback()" id="submitFeedbackBtn">
-                📤 Send Feedback
-            </button>
-        </div>
-    </div>
-</div>
-
 </body>
 </html>
