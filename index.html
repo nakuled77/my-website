@@ -6845,34 +6845,78 @@ document.addEventListener('keydown', function(event) {
 
 // Show Terms & Conditions
 function showTerms() {
+    console.log('🔵 Opening Terms & Conditions...');
+    
+    // Hide all main views first
     hideAllViews();
+    
+    // ✅ CRITICAL FIX: Explicitly hide ALL other views
+    const loadingView = document.getElementById('loadingView');
+    const loginView = document.getElementById('loginView');
+    const signupView = document.getElementById('signupView');
+    const privacyView = document.getElementById('privacyView');
+    
+    if (loadingView) {
+        loadingView.classList.add('hidden');
+        loadingView.style.display = 'none';
+    }
+    if (loginView) {
+        loginView.classList.add('hidden');
+        loginView.style.display = 'none';
+    }
+    if (signupView) {
+        signupView.classList.add('hidden');
+        signupView.style.display = 'none';
+    }
+    if (privacyView) {
+        privacyView.classList.add('hidden');
+        privacyView.style.display = 'none';
+    }
+    
+    // Show Terms & Conditions
     const termsView = document.getElementById('termsView');
     if (termsView) {
         termsView.classList.remove('hidden');
         termsView.style.display = 'block';
         termsView.style.visibility = 'visible';
     }
+    
+    console.log('✅ Terms & Conditions should now be visible (full-screen)');
 }
 
 // Close Terms & Conditions
 function closeTermsView() {
+    console.log('🔵 Closing Terms & Conditions...');
+    
     const termsView = document.getElementById('termsView');
     if (termsView) {
         termsView.classList.add('hidden');
         termsView.style.display = 'none';
     }
     
-    // Go back to where user came from
-    const loginView = document.getElementById('loginView');
-    const signupView = document.getElementById('signupView');
+    // ✅ CRITICAL FIX: Hide loading view when closing
+    const loadingView = document.getElementById('loadingView');
+    if (loadingView) {
+        loadingView.classList.add('hidden');
+        loadingView.style.display = 'none';
+    }
     
-    // Check which view was previously visible
-    if (loginView && !loginView.classList.contains('hidden')) {
-        showLogin();
-    } else if (signupView && !signupView.classList.contains('hidden')) {
-        showSignup();
+    // Check if user is logged in or not
+    if (currentUser && currentProfile) {
+        // User is logged in - go back to dashboard
+        console.log('✅ User logged in - showing dashboard');
+        showDashboard();
     } else {
-        showLogin(); // Default to login
+        // User not logged in - go back to login
+        console.log('✅ User not logged in - showing login');
+        
+        // ✅ Explicitly show login view
+        const loginView = document.getElementById('loginView');
+        if (loginView) {
+            loginView.classList.remove('hidden');
+            loginView.style.display = 'block';
+            loginView.style.visibility = 'visible';
+        }
     }
 }
 
