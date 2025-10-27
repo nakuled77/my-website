@@ -2235,25 +2235,14 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
 
         window.addEventListener('DOMContentLoaded', async () => {
     console.log('Step 3: DOMContentLoaded fired');
-    
-    // FIRST: Check if user is returning from email verification
-    const isVerifying = await handleEmailVerification();
-    if (isVerifying) {
-        console.log('✅ Email verification handled');
-        return; // Stop here, verification handler takes over
-    }
-    
-    // THEN: Check if user is already logged in
     const { data: { user } } = await supabase.auth.getUser();
     console.log('Step 4: Checked user:', user);
-    
     if (user) { 
         currentUser = user; 
         await loadProfile(); 
     } else { 
         showLogin(); 
     }
-    
     setupCharCounters();
     setupCityAutocomplete();
 });
@@ -3027,23 +3016,7 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
 
         const { data: authData, error: authError } = await supabase.auth.signUp({
     email: formData.email,
-    password: formData.password,
-    options: {
-        emailRedirectTo: `${window.location.origin}/verify-callback`,
-        data: {
-            name: formData.name,
-            phone: formData.phone,
-            house_number: formData.house_number,
-            area_name: formData.area_name,
-            landmark: formData.landmark,
-            city: formData.city,
-            state: formData.state,
-            pin_code: formData.pin_code,
-            is_provider: formData.is_provider,
-            services: formData.services || [],        // ✅ ADD THIS LINE
-            radius: formData.radius || 10             // ✅ ADD THIS LINE
-        }
-    }
+    password: formData.password
 });
 
 if (authError) throw authError;
@@ -3068,8 +3041,63 @@ if (!session) {
     throw new Error('Session not created. Please try again.');
 }
 
-        // Profile will be created after email verification
-console.log('✅ Signup successful, profile will be created after email verification');
+        const { error: profileError } = await supabase.from('profiles').insert([{
+            user_id: authData.user.id,
+            name: formData.name,
+            phone: formData.phone,
+            house_number: formData.house_number,
+            area_name: formData.area_name,
+            landmark: formData.landmark,
+            city: formData.city,
+            state: formData.state,
+            pin_code: formData.pin_code,
+            latitude: coords.lat,
+            longitude: coords.lng,
+            is_provider: formData.is_provider
+        }]);
+
+        if (profileError) throw profileError;
+
+        // If user is a provider, save their services
+        if (formData.is_provider) {
+            const radius = parseInt(document.getElementById('signupRadius').value);
+            const selectedServices = [];
+            
+            const serviceCheckboxes = [
+                'service_electrician',
+                'service_plumber',
+                'service_ac_repair',
+                'service_carpenter',
+                'service_painter',
+                'service_cleaner'
+            ];
+            
+            serviceCheckboxes.forEach(checkboxId => {
+                const checkbox = document.getElementById(checkboxId);
+                if (checkbox && checkbox.checked) {
+                    selectedServices.push({
+                        provider_id: authData.user.id,
+                        service_id: checkbox.value,
+                        service_radius: radius
+                    });
+                }
+            });
+            
+            if (selectedServices.length > 0) {
+                const { error: servicesError } = await supabase
+                    .from('provider_services')
+                    .insert(selectedServices);
+                
+                if (servicesError) throw servicesError;
+            }
+            
+            const { error: updateError } = await supabase
+                .from('profiles')
+                .update({ radius_km: radius })
+                .eq('user_id', authData.user.id);
+            
+            if (updateError) throw updateError;
+        }
 
         // ✅ FIX 3: Check email verification status
         if (authData.user && !authData.user.email_confirmed_at) {
@@ -3193,130 +3221,6 @@ console.log('✅ Signup successful, profile will be created after email verifica
         window.isLoadingProfile = false;  // Reset flag on error too
         alert('Error loading profile: ' + error.message);
         showLogin();
-    }
-}
-
-// Handle email verification callback
-async function handleEmailVerification() {
-    console.log('🔵 Checking for email verification...');
-    
-    // Check if we're on the verify-callback page
-    if (!window.location.pathname.includes('verify-callback')) {
-        return false;
-    }
-    
-    console.log('✅ On verify-callback page, processing...');
-    showLoading();
-    
-    try {
-        // Get the current session (Supabase auto-logs in verified users)
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        
-        if (sessionError) throw sessionError;
-        
-        if (!session) {
-            throw new Error('No session found after verification');
-        }
-        
-        console.log('✅ Session found:', session.user.id);
-        
-        // Check if profile already exists
-        const { data: existingProfile } = await supabase
-            .from('profiles')
-            .select('user_id')
-            .eq('user_id', session.user.id)
-            .single();
-        
-        if (existingProfile) {
-            // Profile already exists, just login
-            console.log('✅ Profile exists, logging in...');
-            currentUser = session.user;
-            await loadProfile();
-            
-            // Clean URL and show dashboard
-            window.history.replaceState({}, document.title, '/');
-            alert('✅ Email verified! Welcome back to HelpBuddy.');
-            return true;
-        }
-        
-        // Profile doesn't exist, create it now
-        console.log('📝 Creating profile...');
-        
-        // Get user metadata (we stored it during signup)
-        const metadata = session.user.user_metadata;
-        
-        if (!metadata || !metadata.name) {
-            throw new Error('User data not found. Please sign up again.');
-        }
-        
-        // Geocode address
-        const coords = await getCoordinates({
-            house_number: metadata.house_number,
-            area_name: metadata.area_name,
-            landmark: metadata.landmark,
-            city: metadata.city,
-            state: metadata.state,
-            pin_code: metadata.pin_code
-        });
-        
-        // Create profile
-        const { error: profileError } = await supabase.from('profiles').insert([{
-            user_id: session.user.id,
-            name: metadata.name,
-            phone: metadata.phone,
-            house_number: metadata.house_number,
-            area_name: metadata.area_name,
-            landmark: metadata.landmark,
-            city: metadata.city,
-            state: metadata.state,
-            pin_code: metadata.pin_code,
-            latitude: coords.lat,
-            longitude: coords.lng,
-            is_provider: metadata.is_provider || false
-        }]);
-        
-        if (profileError) throw profileError;
-        
-        // If provider, create services
-        if (metadata.is_provider && metadata.services) {
-            const radius = metadata.radius || 10;
-            const serviceData = metadata.services.map(serviceId => ({
-                provider_id: session.user.id,
-                service_id: serviceId,
-                service_radius: radius
-            }));
-            
-            const { error: servicesError } = await supabase
-                .from('provider_services')
-                .insert(serviceData);
-            
-            if (servicesError) console.error('Services error:', servicesError);
-            
-            // Update profile with radius
-            await supabase
-                .from('profiles')
-                .update({ radius_km: radius })
-                .eq('user_id', session.user.id);
-        }
-        
-        console.log('✅ Profile created successfully!');
-        
-        // Login the user
-        currentUser = session.user;
-        await loadProfile();
-        
-        // Clean URL and show dashboard
-        window.history.replaceState({}, document.title, '/');
-        alert('✅ Email verified and account created! Welcome to HelpBuddy.');
-        
-        return true;
-        
-    } catch (error) {
-        console.error('❌ Verification error:', error);
-        alert('❌ Error completing verification: ' + error.message + '\n\nPlease try logging in manually.');
-        window.history.replaceState({}, document.title, '/');
-        showLogin();
-        return false;
     }
 }
 
