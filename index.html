@@ -17,7 +17,10 @@
         .user-button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); }
         .user-dropdown { position: absolute; top: 100%; right: 0; margin-top: 10px; background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); min-width: 180px; display: none; z-index: 1000; overflow: hidden; }
         .user-dropdown.active { display: block; animation: dropdownSlide 0.2s ease-out; }
-        
+        /* Auto-uppercase for address fields */
+.uppercase-input {
+    text-transform: uppercase;
+}
         @media (max-width: 480px) {
             .dashboard-header { margin-bottom: 15px; padding-bottom: 12px; }
             .header-left { gap: 10px; }
@@ -1023,20 +1026,20 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
                 <h3>📍 Address Details</h3>
                 <div class="form-group">
                     <label>House Number</label>
-                    <input type="text" id="houseNumber">
+                    <input type="text" id="houseNumber" class="uppercase-input">
                 </div>
                 <div class="form-group">
                     <label>Area Name <span class="required">*</span></label>
-                    <input type="text" id="areaName" required>
+                    <input type="text" id="areaName" required class="uppercase-input">
                 </div>
                 <div class="form-group">
                     <label>Landmark</label>
-                    <input type="text" id="landmark">
+                    <input type="text" id="landmark" class="uppercase-input">
                 </div>
                 <div class="row">
                     <div class="form-group">
     <label>City <span class="required">*</span></label>
-    <input type="text" id="city" placeholder="Type your city name..." required autocomplete="off">
+    <input type="text" id="city" placeholder="Type your city name..." required autocomplete="off" class="uppercase-input">
     <div id="citySuggestions" class="autocomplete-suggestions"></div>
 </div>
                     <div class="form-group">
@@ -1136,6 +1139,18 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
                         </div>
                     </div>
                 </div>
+
+		<!-- ✅ Terms & Conditions Checkbox - ADD THIS -->
+<div class="checkbox-group" style="margin-top: 30px; margin-bottom: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+    <input type="checkbox" id="acceptTerms" required style="width: 20px !important; height: 20px !important; margin: 0 10px 0 0 !important; cursor: pointer !important; flex-shrink: 0 !important;">
+    <label for="acceptTerms" style="margin: 0 !important; cursor: pointer !important; flex: 1 !important; line-height: 1.6 !important; color: #856404; font-weight: 500;">
+        I agree to the 
+        <a href="#" onclick="showTerms(); return false;" style="color: #667eea; text-decoration: underline; font-weight: 700;">Terms & Conditions</a>
+        and 
+        <a href="#" onclick="showPrivacy(); return false;" style="color: #667eea; text-decoration: underline; font-weight: 700;">Privacy Policy</a>
+        <span class="required">*</span>
+    </label>
+</div>
                 
                 <button type="submit" class="btn btn-full">Sign Up</button>
                 <button type="button" class="btn btn-secondary btn-full" onclick="showLogin()">Back to Login</button>
@@ -1657,10 +1672,16 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
                     </div>
                 </div>
                 <h3>📍 Service Location</h3>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="differentLocation" onchange="toggleLocationFields()">
-                    <label for="differentLocation" style="margin: 0;">Use different location for this service</label>
-                </div>
+                <div class="checkbox-group" style="margin-top: 20px; margin-bottom: 20px; display: flex !important; align-items: center !important; gap: 10px !important;">
+    <input type="checkbox" id="acceptTerms" required style="width: 20px !important; height: 20px !important; margin: 0 !important; cursor: pointer !important; flex-shrink: 0 !important;">
+    <label for="acceptTerms" style="margin: 0 !important; cursor: pointer !important; flex: 1 !important; line-height: 1.5 !important;">
+        I agree to the 
+        <a href="#" onclick="showTerms(); return false;" style="color: #667eea; text-decoration: none; font-weight: 600;">Terms & Conditions</a>
+        and 
+        <a href="#" onclick="showPrivacy(); return false;" style="color: #667eea; text-decoration: none; font-weight: 600;">Privacy Policy</a>
+        <span class="required">*</span>
+    </label>
+</div>
                 <div id="customLocationFields" class="hidden">
     <div class="form-group">
         <label>Area Name <span class="required">*</span></label>
@@ -2953,20 +2974,26 @@ async function toggleProviderStatus() {
         // Signup
 document.getElementById('signupForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    
     const errorDiv = document.getElementById('signupError');
     const infoDiv = document.getElementById('signupInfo');
-    
+    const submitBtn = document.querySelector('#signupForm button[type="submit"]'); // ✅ FIX 1: Correct button selector
+
     errorDiv.classList.add('hidden');
     infoDiv.classList.add('hidden');
-    
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Creating Account...';
+
     try {
-	// Validate phone number before proceeding
+        // Validate phone number before proceeding
         const phoneInput = document.getElementById('signupPhone');
         if (!validatePhoneInput(phoneInput)) {
             errorDiv.textContent = 'Please enter a valid phone number';
             errorDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Sign Up';
             return;
-        }	
+        }
 
         const formData = {
             email: document.getElementById('signupEmail').value.trim(),
@@ -2982,20 +3009,37 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             is_provider: document.getElementById('isProvider').checked
         };
 
-        infoDiv.textContent = '📍 Finding your location...';        infoDiv.classList.remove('hidden');
-
+        // ✅ FIX 2: Show loading in CENTER with full-screen overlay
+        showLoading(); // This centers the loading message
+        
         const coords = await getCoordinates(formData);
 
-        infoDiv.textContent = '🔐 Creating your account...';
-
         const { data: authData, error: authError } = await supabase.auth.signUp({
-            email: formData.email,
-            password: formData.password
-        });
+    email: formData.email,
+    password: formData.password
+});
 
-        if (authError) throw authError;
+if (authError) throw authError;
 
-        infoDiv.textContent = '💾 Saving your profile...';
+// ✅ CRITICAL FIX: Wait for session to be properly set
+await new Promise(resolve => setTimeout(resolve, 500));
+
+// ✅ Check if email confirmation is required
+if (authData.user && !authData.user.email_confirmed_at) {
+    // Email verification is enabled - show success message
+    alert('✅ Account created successfully!\n\n📧 Please check your email (including spam folder) and click the verification link to activate your account.\n\nYou can close this page now.');
+    
+    // Clear form and go back to login
+    document.getElementById('signupForm').reset();
+    showLogin();
+    return;
+}
+
+// If email is already confirmed (or confirmation disabled), proceed normally
+const { data: { session } } = await supabase.auth.getSession();
+if (!session) {
+    throw new Error('Session not created. Please try again.');
+}
 
         const { error: profileError } = await supabase.from('profiles').insert([{
             user_id: authData.user.id,
@@ -3016,12 +3060,9 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
 
         // If user is a provider, save their services
         if (formData.is_provider) {
-            infoDiv.textContent = '🔧 Saving provider services...';
-            
             const radius = parseInt(document.getElementById('signupRadius').value);
             const selectedServices = [];
             
-            // Check which services are selected
             const serviceCheckboxes = [
                 'service_electrician',
                 'service_plumber',
@@ -3050,7 +3091,6 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
                 if (servicesError) throw servicesError;
             }
             
-            // Update profile with radius
             const { error: updateError } = await supabase
                 .from('profiles')
                 .update({ radius_km: radius })
@@ -3059,11 +3099,40 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             if (updateError) throw updateError;
         }
 
+        // ✅ FIX 3: Check email verification status
+        if (authData.user && !authData.user.email_confirmed_at) {
+            // Email verification is enabled - show success message
+            hideAllViews(); // ✅ Hide signup form completely
+            const signupView = document.getElementById('signupView');
+            if (signupView) {
+                signupView.classList.add('hidden');
+                signupView.style.display = 'none';
+            }
+            
+            alert('✅ Account created successfully!\n\n📧 Please check your email (including spam folder) and click the verification link to activate your account.\n\nYou can close this page now.');
+            
+            // Clear form and go back to login
+            document.getElementById('signupForm').reset();
+            showLogin();
+            return;
+        }
+        
+        // If email is already confirmed (shouldn't happen with verification ON, but just in case)
         currentUser = authData.user;
         await loadProfile();
-    } catch (error) {        errorDiv.textContent = error.message;
+        
+    } catch (error) {
+        hideAllViews(); // ✅ Hide loading
+        const signupView = document.getElementById('signupView');
+        if (signupView) {
+            signupView.classList.remove('hidden');
+            signupView.style.display = 'block';
+        }
+        
+        errorDiv.textContent = error.message;
         errorDiv.classList.remove('hidden');
-        infoDiv.classList.add('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign Up';
     }
 });
 
