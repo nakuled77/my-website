@@ -980,20 +980,6 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
             <a href="#" onclick="alert('Password reset feature coming soon!'); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Forgot Password?</a>
         </div>
     </form>
-<!-- Footer for Login Page -->
-    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; font-size: 12px; color: #666;">
-        <div style="margin-bottom: 10px;">
-            <a href="#" onclick="showTerms(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">📜 Terms & Conditions</a>
-            <span style="margin: 0 8px; color: #ccc;">|</span>
-            <a href="#" onclick="showPrivacy(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">🔒 Privacy Policy</a>
-        </div>
-        <div style="margin-bottom: 8px; color: #888;">
-            📧 Contact: <a href="mailto:helpbuddy.assist@gmail.com" style="color: #667eea; text-decoration: none;">helpbuddy.assist@gmail.com</a>
-        </div>
-        <div style="color: #999;">
-            © 2025 HelpBuddy - Surender Singh Grewal
-        </div>
-    </div>
 </div>
 
         <!-- Signup View -->
@@ -1140,21 +1126,6 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
                 <button type="submit" class="btn btn-full">Sign Up</button>
                 <button type="button" class="btn btn-secondary btn-full" onclick="showLogin()">Back to Login</button>
             </form>
-            
-            <!-- Footer for Signup Page -->
-            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; font-size: 12px; color: #666;">
-                <div style="margin-bottom: 10px;">
-                    <a href="#" onclick="showTerms(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">📜 Terms & Conditions</a>
-                    <span style="margin: 0 8px; color: #ccc;">|</span>
-                    <a href="#" onclick="showPrivacy(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">🔒 Privacy Policy</a>
-                </div>
-                <div style="margin-bottom: 8px; color: #888;">
-                    📧 Contact: <a href="mailto:helpbuddy.assist@gmail.com" style="color: #667eea; text-decoration: none;">helpbuddy.assist@gmail.com</a>
-                </div>
-                <div style="color: #999;">
-                    © 2025 HelpBuddy - Surender Singh Grewal
-                </div>
-            </div>
         </div>
 
 <!-- Terms & Conditions View -->
@@ -2246,33 +2217,14 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
 }
 
         function showLogin() { 
-    console.log('🔵 Showing login page...');
-    
     hideAllViews(); 
-    
-    // ✅ CRITICAL FIX: Explicitly hide signup view
-    const signupView = document.getElementById('signupView');
-    if (signupView) {
-        signupView.classList.add('hidden');
-        signupView.style.display = 'none';
-    }
-    
-    // ✅ Hide loading view
-    const loadingView = document.getElementById('loadingView');
-    if (loadingView) {
-        loadingView.classList.add('hidden');
-        loadingView.style.display = 'none';
-    }
-    
-    // ✅ Show login view
     const loginView = document.getElementById('loginView');
     if (loginView) {
         loginView.classList.remove('hidden');
         loginView.style.display = 'block';
         loginView.style.visibility = 'visible';
+        console.log('✅ Login view now visible');
     }
-    
-    console.log('✅ Login view now visible');
 }
         function showSignup() { 
     hideAllViews(); 
@@ -6878,111 +6830,29 @@ function closeTermsView() {
 
 // Show Privacy Policy
 function showPrivacy() {
-    console.log('🔵 Opening Privacy Policy...');
-    
-    // Hide all main views first
     hideAllViews();
-    
-    // ✅ CRITICAL FIX: Explicitly hide ALL other views
-    const loadingView = document.getElementById('loadingView');
-    const loginView = document.getElementById('loginView');
-    const signupView = document.getElementById('signupView');
-    const termsView = document.getElementById('termsView');
-    
-    if (loadingView) {
-        loadingView.classList.add('hidden');
-        loadingView.style.display = 'none';
-    }
-    if (loginView) {
-        loginView.classList.add('hidden');
-        loginView.style.display = 'none';
-    }
-    if (signupView) {
-        signupView.classList.add('hidden');
-        signupView.style.display = 'none';
-    }
-    if (termsView) {
-        termsView.classList.add('hidden');
-        termsView.style.display = 'none';
-    }
-    
-    // Hide dashboard UI elements (but keep dashboardView container)
-    const seekerSection = document.getElementById('seekerSection');
-    const providerSection = document.getElementById('providerSection');
-    const createRequestBtn = document.getElementById('createRequestBtn');
-    const userMenu = document.querySelector('.user-menu');
-    const appLogo = document.getElementById('appLogo');
-    
-    if (seekerSection) seekerSection.style.display = 'none';
-    if (providerSection) providerSection.style.display = 'none';
-    if (createRequestBtn) createRequestBtn.style.display = 'none';
-    if (userMenu) userMenu.style.display = 'none';
-    if (appLogo) appLogo.style.display = 'none';
-    
-    // Keep dashboardView visible (because privacyView is inside it)
-    const dashboardView = document.getElementById('dashboardView');
-    if (dashboardView) {
-        dashboardView.classList.remove('hidden');
-        dashboardView.style.display = 'block';
-        dashboardView.style.visibility = 'visible';
-    }
-    
-    // Show Privacy Policy
     const privacyView = document.getElementById('privacyView');
     if (privacyView) {
         privacyView.classList.remove('hidden');
         privacyView.style.display = 'block';
         privacyView.style.visibility = 'visible';
     }
-    
-    console.log('✅ Privacy Policy should now be visible (full-screen)');
 }
 
 // Close Privacy Policy
 function closePrivacyView() {
-    console.log('🔵 Closing Privacy Policy...');
-    
     const privacyView = document.getElementById('privacyView');
     if (privacyView) {
         privacyView.classList.add('hidden');
         privacyView.style.display = 'none';
     }
     
-    // ✅ CRITICAL FIX: Hide loading view when closing
-    const loadingView = document.getElementById('loadingView');
-    if (loadingView) {
-        loadingView.classList.add('hidden');
-        loadingView.style.display = 'none';
-    }
-    
-    // If user is logged in, restore dashboard
+    // If user is logged in, go to dashboard
     if (currentUser && currentProfile) {
-        console.log('✅ User logged in - showing dashboard');
-        
-        // Show dashboard UI elements again
-        const seekerSection = document.getElementById('seekerSection');
-        const providerSection = document.getElementById('providerSection');
-        const createRequestBtn = document.getElementById('createRequestBtn');
-        const userMenu = document.querySelector('.user-menu');
-        
-        if (seekerSection) seekerSection.style.display = 'block';
-        if (providerSection && currentProfile.is_provider) providerSection.style.display = 'block';
-        if (createRequestBtn) createRequestBtn.style.display = 'block';
-        if (userMenu) userMenu.style.display = 'flex';
-        
-        // Show dashboard (which will handle the rest)
         showDashboard();
     } else {
         // If not logged in, go to login
-        console.log('✅ User not logged in - showing login');
-        
-        // ✅ Explicitly show login view
-        const loginView = document.getElementById('loginView');
-        if (loginView) {
-            loginView.classList.remove('hidden');
-            loginView.style.display = 'block';
-            loginView.style.visibility = 'visible';
-        }
+        showLogin();
     }
 }
 
