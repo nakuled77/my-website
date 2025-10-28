@@ -3077,7 +3077,7 @@ console.log('✅ STEP 4 COMPLETE: Auth user created, profile will be created nex
         infoDiv.textContent = '💾 Saving your profile...';
         
         const { error: profileError } = await supabase.from('profiles').insert([{
-            user_id: session.user.id,
+            user_id: authData.user.id,
             name: formData.name,
             phone: formData.phone,
             house_number: formData.house_number,
@@ -3132,18 +3132,26 @@ console.log('✅ STEP 4 COMPLETE: Auth user created, profile will be created nex
 
         console.log('✅ ✅ ✅ SIGNUP COMPLETE! Logging out...');
         
-        // ✅ STEP 5: Show success and logout (force email verification)
-        await supabase.auth.signOut(); // Logout immediately
+        // ✅ Logout user immediately (force email verification)
+        await supabase.auth.signOut();
         
-        hideAllViews();
-        document.getElementById('signupView').classList.remove('hidden');
+        // ✅ Hide signup view
+        const signupView = document.getElementById('signupView');
+        if (signupView) {
+            signupView.classList.add('hidden');
+            signupView.style.display = 'none';
+        }
         
+        // ✅ Hide info message
         infoDiv.classList.add('hidden');
         
-        alert('✅ Account created successfully!\n\n📧 Please check your email (including spam folder) and click the verification link to activate your account.\n\n⚠️ You must verify your email before logging in.');
+        // ✅ Show success alert
+        alert('✅ Account created successfully!\n\n📧 Please check your email inbox (and spam folder) for the verification link.\n\n⚠️ You MUST verify your email before you can login.');
         
-        // Clear form and go to login
+        // ✅ Clear form
         document.getElementById('signupForm').reset();
+        
+        // ✅ Go to login page
         showLogin();
         
     } catch (error) {
