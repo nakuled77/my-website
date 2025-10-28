@@ -3255,105 +3255,63 @@ async function handleEmailVerification() {
         
         console.log('✅ Session found:', session.user.id);
         
-        // Check if profile already exists
-        const { data: existingProfile } = await supabase
+        // ✅ NEW: Check if profile exists (it should, because we created it during signup)
+        const { data: existingProfile, error: profileError } = await supabase
             .from('profiles')
-            .select('user_id')
+            .select('email_verified')
             .eq('user_id', session.user.id)
             .maybeSingle();
         
-        if (existingProfile) {
-            // Profile exists, just login
-            console.log('✅ Profile exists, logging in...');
-            currentUser = session.user;
-            await loadProfile();
-            
-            // Show success message
-            alert('✅ Email verified successfully! Welcome back to HelpBuddy.');
-            
-            // Clean URL
-            window.history.replaceState({}, document.title, '/');
-            return true;
+        if (profileError) {
+            console.error('❌ Profile fetch error:', profileError);
+            throw new Error('Error loading profile: ' + profileError.message);
         }
         
-        // Profile doesn't exist, create it now
-        console.log('📝 Creating profile...');
-        
-        // Get user metadata (we stored it during signup)
-        const metadata = session.user.user_metadata;
-        
-        if (!metadata || !metadata.name) {
-            throw new Error('User data not found. Please sign up again.');
+        if (!existingProfile) {
+            // Profile doesn't exist - something went wrong during signup
+            throw new Error('Profile not found. Please contact support or try signing up again.');
         }
         
-        // Geocode address
-        const coords = await getCoordinates({
-            house_number: metadata.house_number,
-            area_name: metadata.area_name,
-            landmark: metadata.landmark,
-            city: metadata.city,
-            state: metadata.state,
-            pin_code: metadata.pin_code
-        });
+        // ✅ Profile exists - just update email_verified flag
+        console.log('📝 Updating email_verified flag...');
         
-        // Create profile
-        const { error: profileError } = await supabase.from('profiles').insert([{
-            user_id: session.user.id,
-            name: metadata.name,
-            phone: metadata.phone,
-            house_number: metadata.house_number,
-            area_name: metadata.area_name,
-            landmark: metadata.landmark,
-            city: metadata.city,
-            state: metadata.state,
-            pin_code: metadata.pin_code,
-            latitude: coords.lat,
-            longitude: coords.lng,
-            is_provider: metadata.is_provider || false
-        }]);
+        const { error: updateError } = await supabase
+            .from('profiles')
+            .update({ email_verified: true })
+            .eq('user_id', session.user.id);
         
-        if (profileError) throw profileError;
-        
-        // If provider, create services
-        if (metadata.is_provider && metadata.services && metadata.services.length > 0) {
-            const radius = metadata.radius || 10;
-            const serviceData = metadata.services.map(serviceId => ({
-                provider_id: session.user.id,
-                service_id: serviceId,
-                service_radius: radius
-            }));
-            
-            const { error: servicesError } = await supabase
-                .from('provider_services')
-                .insert(serviceData);
-            
-            if (servicesError) console.error('Services error:', servicesError);
-            
-            // Update profile with radius
-            await supabase
-                .from('profiles')
-                .update({ radius_km: radius })
-                .eq('user_id', session.user.id);
+        if (updateError) {
+            console.error('❌ Update error:', updateError);
+            throw new Error('Error updating profile: ' + updateError.message);
         }
         
-        console.log('✅ Profile created successfully!');
+        console.log('✅ Email verified successfully!');
         
-        // Login the user
-        currentUser = session.user;
-        await loadProfile();
-        
-        // Show success message
-        alert('✅ Email verified and account created successfully! Welcome to HelpBuddy.');
+        // Logout the user (they should login manually after verification)
+        await supabase.auth.signOut();
         
         // Clean URL
         window.history.replaceState({}, document.title, '/');
+        
+        // Show success message
+        alert('✅ Email verified successfully!\n\n🎉 Your account is now active.\n\n👉 Please login to access HelpBuddy.');
+        
+        // Redirect to login page
+        showLogin();
+        
         return true;
         
     } catch (error) {
         console.error('❌ Verification error:', error);
-        alert('❌ Error completing verification: ' + error.message + '\n\nPlease try logging in manually.');
+        
+        // Clean URL
         window.history.replaceState({}, document.title, '/');
+        
+        // Show error and redirect to login
+        alert('❌ Error verifying email: ' + error.message + '\n\nPlease try logging in. If the problem persists, contact support.');
+        
         showLogin();
+        
         return false;
     }
 }
