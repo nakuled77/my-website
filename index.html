@@ -2996,6 +2996,8 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
     submitBtn.textContent = 'Creating Account...';
 
     try {
+        console.log('🔵 STEP 0: Form submission started');
+        
         // Validate phone number before proceeding
         const phoneInput = document.getElementById('signupPhone');
         if (!validatePhoneInput(phoneInput)) {
@@ -3019,16 +3021,22 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             pin_code: document.getElementById('pinCode').value.trim(),
             is_provider: document.getElementById('isProvider').checked
         };
+        
+        console.log('🔵 STEP 1: Form data collected:', formData);
 
         // ✅ STEP 1: Get coordinates (with retry on failure)
         showLoading();
         infoDiv.textContent = '📍 Locating your address...';
         infoDiv.classList.remove('hidden');
         
+        console.log('🔵 STEP 2: Starting geocoding...');
+        
         let coords;
         try {
             coords = await getCoordinates(formData);
+            console.log('✅ STEP 2 COMPLETE: Coordinates obtained:', coords);
         } catch (error) {
+            console.error('❌ STEP 2 FAILED: Geocoding error:', error);
             // Geocoding failed - show clear error
             hideAllViews();
             document.getElementById('signupView').classList.remove('hidden');
@@ -3040,6 +3048,8 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             return; // Stop signup
         }
         
+        console.log('🔵 STEP 3: Calling Supabase signUp...');
+        
         // ✅ STEP 2: Create auth user
         infoDiv.textContent = '👤 Creating your account...';
         
@@ -3050,16 +3060,29 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
                 emailRedirectTo: `${window.location.origin}`
             }
         });
+        
+        console.log('✅ STEP 3 COMPLETE: Supabase signUp response:', authData, authError);
 
-        if (authError) throw authError;
+        if (authError) {
+            console.error('❌ STEP 3 FAILED: Auth error:', authError);
+            throw authError;
+        }
+        
+        console.log('🔵 STEP 4: Waiting for session...');
 
         // ✅ Wait for session to be set
         await new Promise(resolve => setTimeout(resolve, 500));
 
         const { data: { session } } = await supabase.auth.getSession();
+        
+        console.log('✅ STEP 4 COMPLETE: Session check result:', session);
+        
         if (!session) {
+            console.error('❌ STEP 4 FAILED: No session found');
             throw new Error('Session not created. Please try again.');
         }
+        
+        console.log('🔵 STEP 5: Creating profile...');
 
         // ✅ STEP 3: Create profile immediately (NEW!)
         infoDiv.textContent = '💾 Saving your profile...';
@@ -3080,7 +3103,14 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             email_verified: false  // ✅ Not verified yet
         }]);
         
-        if (profileError) throw profileError;
+        console.log('✅ STEP 5 COMPLETE: Profile creation result:', profileError);
+        
+        if (profileError) {
+            console.error('❌ STEP 5 FAILED: Profile error:', profileError);
+            throw profileError;
+        }
+
+        console.log('🔵 STEP 6: Adding provider services (if applicable)...');
 
         // ✅ STEP 4: If provider, create services
         if (formData.is_provider) {
@@ -3101,14 +3131,17 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
                     service_radius: radius
                 }));
                 
-                await supabase.from('provider_services').insert(serviceData);
+                const { error: serviceError } = await supabase.from('provider_services').insert(serviceData);
+                console.log('✅ STEP 6 COMPLETE: Provider services added:', serviceError);
                 
                 // Update profile with radius
                 await supabase.from('profiles').update({ radius_km: radius }).eq('user_id', session.user.id);
             }
+        } else {
+            console.log('✅ STEP 6 SKIPPED: Not a provider');
         }
 
-        console.log('✅ Profile created successfully!');
+        console.log('✅ ✅ ✅ SIGNUP COMPLETE! Logging out...');
         
         // ✅ STEP 5: Show success and logout (force email verification)
         await supabase.auth.signOut(); // Logout immediately
@@ -3125,6 +3158,7 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
         showLogin();
         
     } catch (error) {
+        console.error('❌ ❌ ❌ SIGNUP FAILED:', error);
         hideAllViews();
         document.getElementById('signupView').classList.remove('hidden');
         errorDiv.textContent = error.message;
