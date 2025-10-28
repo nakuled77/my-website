@@ -3083,8 +3083,12 @@ console.log('🔵 STEP 5: Creating profile (WHILE LOGGED IN)...');
 // ✅ STEP 5: Create profile WHILE USER IS STILL LOGGED IN
 infoDiv.textContent = '💾 Saving your profile...';
 
+// Calculate verification link expiry time (48 hours from now)
+const expiryTime = new Date();
+expiryTime.setHours(expiryTime.getHours() + 48);
+
 const { error: profileError } = await supabase.from('profiles').insert([{
-    user_id: authData.user.id,  // ← Use authData instead of session
+    user_id: authData.user.id,
     name: formData.name,
     phone: formData.phone,
     house_number: formData.house_number,
@@ -3096,7 +3100,9 @@ const { error: profileError } = await supabase.from('profiles').insert([{
     latitude: coords.lat,
     longitude: coords.lng,
     is_provider: formData.is_provider,
-    
+    email_verified: false,  // ← NEW: Mark as unverified
+    verification_link_expires_at: expiryTime.toISOString(),  // ← NEW: Set 48-hour expiry
+    last_verification_email_sent_at: new Date().toISOString()  // ← NEW: Track email send time
 }]);
 
 console.log('✅ STEP 5 COMPLETE: Profile creation result:', profileError);
