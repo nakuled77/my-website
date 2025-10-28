@@ -3068,19 +3068,8 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             throw authError;
         }
         
-        console.log('🔵 STEP 4: Waiting for session...');
-
-        // ✅ Wait for session to be set
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        console.log('✅ STEP 4 COMPLETE: Session check result:', session);
-        
-        if (!session) {
-            console.error('❌ STEP 4 FAILED: No session found');
-            throw new Error('Session not created. Please try again.');
-        }
+        console.log('🔵 STEP 4: Skipping session check (email verification required)');
+console.log('✅ STEP 4 COMPLETE: Auth user created, profile will be created next');
         
         console.log('🔵 STEP 5: Creating profile...');
 
