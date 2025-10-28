@@ -3029,7 +3029,7 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
     email: formData.email,
     password: formData.password,
     options: {
-        emailRedirectTo: `${window.location.origin}`,  // ← REMOVED /verify-callback
+        emailRedirectTo: `${window.location.origin}/verify-callback`,
         data: {
             name: formData.name,
             phone: formData.phone,
@@ -3040,8 +3040,8 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             state: formData.state,
             pin_code: formData.pin_code,
             is_provider: formData.is_provider,
-            services: formData.services || [],
-            radius: formData.radius || 10
+            services: formData.services || [],        // ✅ ADD THIS LINE
+            radius: formData.radius || 10             // ✅ ADD THIS LINE
         }
     }
 });
