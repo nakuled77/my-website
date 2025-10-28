@@ -3089,7 +3089,7 @@ console.log('✅ STEP 4 COMPLETE: Auth user created, profile will be created nex
             latitude: coords.lat,
             longitude: coords.lng,
             is_provider: formData.is_provider,
-            email_verified: false  // ✅ Not verified yet
+            
         }]);
         
         console.log('✅ STEP 5 COMPLETE: Profile creation result:', profileError);
@@ -3411,15 +3411,7 @@ async function handleEmailVerification() {
         // ✅ Profile exists - just update email_verified flag
         console.log('📝 Updating email_verified flag...');
         
-        const { error: updateError } = await supabase
-            .from('profiles')
-            .update({ email_verified: true })
-            .eq('user_id', session.user.id);
         
-        if (updateError) {
-            console.error('❌ Update error:', updateError);
-            throw new Error('Error updating profile: ' + updateError.message);
-        }
         
         console.log('✅ Email verified successfully!');
         
