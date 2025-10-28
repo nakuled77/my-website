@@ -3068,21 +3068,15 @@ if (authError) {
     throw authError;
 }
 
-// ✅ NEW: Check if session exists (user should be auto-logged in after signup)
-console.log('🔵 STEP 4: Checking session...');
-const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+// ✅ STEP 4: Use authData.user (no session needed during signup)
+console.log('🔵 STEP 4: Using auth user from signup response...');
 
-if (sessionError) {
-    console.error('❌ STEP 4 FAILED: Session error:', sessionError);
-    throw sessionError;
+if (!authData || !authData.user || !authData.user.id) {
+    console.error('❌ STEP 4 FAILED: No user data in signup response');
+    throw new Error('Signup failed. No user data returned.');
 }
 
-if (!session) {
-    console.error('❌ STEP 4 FAILED: No session found after signup');
-    throw new Error('No session found. Please try again.');
-}
-
-console.log('✅ STEP 4 COMPLETE: Session obtained:', session.user.id);
+console.log('✅ STEP 4 COMPLETE: Auth user ID obtained:', authData.user.id);
 
 console.log('🔵 STEP 5: Creating profile (WHILE LOGGED IN)...');
 
@@ -3090,7 +3084,7 @@ console.log('🔵 STEP 5: Creating profile (WHILE LOGGED IN)...');
 infoDiv.textContent = '💾 Saving your profile...';
 
 const { error: profileError } = await supabase.from('profiles').insert([{
-    user_id: session.user.id,  // ← Use session.user.id instead of authData.user.id
+    user_id: authData.user.id,  // ← Use authData instead of session
     name: formData.name,
     phone: formData.phone,
     house_number: formData.house_number,
