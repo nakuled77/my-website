@@ -2988,7 +2988,7 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
     
     const errorDiv = document.getElementById('signupError');
     const infoDiv = document.getElementById('signupInfo');
-    const submitBtn = document.querySelector('#signupForm button[type="submit"]'); // ✅ FIX 1: Correct button selector
+    const submitBtn = document.querySelector('#signupForm button[type="submit"]');
 
     errorDiv.classList.add('hidden');
     infoDiv.classList.add('hidden');
@@ -3020,17 +3020,52 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             is_provider: document.getElementById('isProvider').checked
         };
 
-        // ✅ FIX 2: Show loading in CENTER with full-screen overlay
-        showLoading(); // This centers the loading message
+        // ✅ STEP 1: Get coordinates (with retry on failure)
+        showLoading();
+        infoDiv.textContent = '📍 Locating your address...';
+        infoDiv.classList.remove('hidden');
         
-        const coords = await getCoordinates(formData);
-
+        let coords;
+        try {
+            coords = await getCoordinates(formData);
+        } catch (error) {
+            // Geocoding failed - show clear error
+            hideAllViews();
+            document.getElementById('signupView').classList.remove('hidden');
+            errorDiv.textContent = '❌ ' + error.message + '\n\nPlease retry signup with a valid address or allow GPS access.';
+            errorDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Sign Up';
+            infoDiv.classList.add('hidden');
+            return; // Stop signup
+        }
+        
+        // ✅ STEP 2: Create auth user
+        infoDiv.textContent = '👤 Creating your account...';
+        
         const { data: authData, error: authError } = await supabase.auth.signUp({
-    email: formData.email,
-    password: formData.password,
-    options: {
-        emailRedirectTo: `${window.location.origin}`,  // ← REMOVED /verify-callback
-        data: {
+            email: formData.email,
+            password: formData.password,
+            options: {
+                emailRedirectTo: `${window.location.origin}`
+            }
+        });
+
+        if (authError) throw authError;
+
+        // ✅ Wait for session to be set
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+            throw new Error('Session not created. Please try again.');
+        }
+
+        // ✅ STEP 3: Create profile immediately (NEW!)
+        infoDiv.textContent = '💾 Saving your profile...';
+        
+        const { error: profileError } = await supabase.from('profiles').insert([{
+            user_id: session.user.id,
             name: formData.name,
             phone: formData.phone,
             house_number: formData.house_number,
@@ -3039,72 +3074,64 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             city: formData.city,
             state: formData.state,
             pin_code: formData.pin_code,
+            latitude: coords.lat,
+            longitude: coords.lng,
             is_provider: formData.is_provider,
-            services: formData.services || [],
-            radius: formData.radius || 10
-        }
-    }
-});
-
-if (authError) throw authError;
-
-// ✅ CRITICAL FIX: Wait for session to be properly set
-await new Promise(resolve => setTimeout(resolve, 500));
-
-// ✅ Check if email confirmation is required
-if (authData.user && !authData.user.email_confirmed_at) {
-    // Email verification is enabled - show success message
-    alert('✅ Account created successfully!\n\n📧 Please check your email (including spam folder) and click the verification link to activate your account.\n\nYou can close this page now.');
-    
-    // Clear form and go back to login
-    document.getElementById('signupForm').reset();
-    showLogin();
-    return;
-}
-
-// If email is already confirmed (or confirmation disabled), proceed normally
-const { data: { session } } = await supabase.auth.getSession();
-if (!session) {
-    throw new Error('Session not created. Please try again.');
-}
-
-        // Profile will be created after email verification
-console.log('✅ Signup successful, profile will be created after email verification');
-
-        // ✅ FIX 3: Check email verification status
-        if (authData.user && !authData.user.email_confirmed_at) {
-            // Email verification is enabled - show success message
-            hideAllViews(); // ✅ Hide signup form completely
-            const signupView = document.getElementById('signupView');
-            if (signupView) {
-                signupView.classList.add('hidden');
-                signupView.style.display = 'none';
-            }
-            
-            alert('✅ Account created successfully!\n\n📧 Please check your email (including spam folder) and click the verification link to activate your account.\n\nYou can close this page now.');
-            
-            // Clear form and go back to login
-            document.getElementById('signupForm').reset();
-            showLogin();
-            return;
-        }
+            email_verified: false  // ✅ Not verified yet
+        }]);
         
-        // If email is already confirmed (shouldn't happen with verification ON, but just in case)
-        currentUser = authData.user;
-        await loadProfile();
+        if (profileError) throw profileError;
+
+        // ✅ STEP 4: If provider, create services
+        if (formData.is_provider) {
+            const services = [];
+            if (document.getElementById('service_electrician').checked) services.push('electrician');
+            if (document.getElementById('service_plumber').checked) services.push('plumber');
+            if (document.getElementById('service_ac_repair').checked) services.push('ac_repair');
+            if (document.getElementById('service_carpenter').checked) services.push('carpenter');
+            if (document.getElementById('service_painter').checked) services.push('painter');
+            if (document.getElementById('service_cleaner').checked) services.push('cleaner');
+            
+            if (services.length > 0) {
+                const radius = parseInt(document.getElementById('signupRadius').value) || 10;
+                
+                const serviceData = services.map(serviceId => ({
+                    provider_id: session.user.id,
+                    service_id: serviceId,
+                    service_radius: radius
+                }));
+                
+                await supabase.from('provider_services').insert(serviceData);
+                
+                // Update profile with radius
+                await supabase.from('profiles').update({ radius_km: radius }).eq('user_id', session.user.id);
+            }
+        }
+
+        console.log('✅ Profile created successfully!');
+        
+        // ✅ STEP 5: Show success and logout (force email verification)
+        await supabase.auth.signOut(); // Logout immediately
+        
+        hideAllViews();
+        document.getElementById('signupView').classList.remove('hidden');
+        
+        infoDiv.classList.add('hidden');
+        
+        alert('✅ Account created successfully!\n\n📧 Please check your email (including spam folder) and click the verification link to activate your account.\n\n⚠️ You must verify your email before logging in.');
+        
+        // Clear form and go to login
+        document.getElementById('signupForm').reset();
+        showLogin();
         
     } catch (error) {
-        hideAllViews(); // ✅ Hide loading
-        const signupView = document.getElementById('signupView');
-        if (signupView) {
-            signupView.classList.remove('hidden');
-            signupView.style.display = 'block';
-        }
-        
+        hideAllViews();
+        document.getElementById('signupView').classList.remove('hidden');
         errorDiv.textContent = error.message;
         errorDiv.classList.remove('hidden');
         submitBtn.disabled = false;
         submitBtn.textContent = 'Sign Up';
+        infoDiv.classList.add('hidden');
     }
 });
 
