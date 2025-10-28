@@ -3147,31 +3147,136 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
                 `${formData.area_name}, ${formData.city}, ${formData.state}, India`
             ];
 
-            for (let address of strategies.filter(Boolean)) {
-                try {
-                    const coords = await geocodeAddress(address);
-                    if (coords) return coords;
-                } catch (error) {
-                    console.log('Geocoding failed for:', address);
-                }
-            }
+            // Try all geocoding strategies with detailed logging
+for (let address of strategies.filter(Boolean)) {
+    try {
+        console.log('🔍 Trying to geocode:', address);
+        const coords = await geocodeAddress(address);
+        if (coords) {
+            console.log('✅ Geocoding success:', coords);
+            return coords;
+        }
+    } catch (error) {
+        console.log('❌ Geocoding failed for:', address, error);
+    }
+}
 
-            const userConfirmed = confirm('📍 Unable to find location from address. Allow GPS access?');
-            if (!userConfirmed) throw new Error('Unable to locate address. Please try again or allow location access.');
+// All geocoding strategies failed - show helpful message
+console.log('⚠️ All geocoding strategies failed. Requesting GPS...');
+
+            // Mobile-friendly GPS request
+return new Promise((resolve, reject) => {
+    // Try to get GPS location
+    if (!navigator.geolocation) {
+        reject(new Error('🚫 GPS not supported on your device. Please enter a more specific address (e.g., include landmark) and try again.'));
+        return;
+    }
+    
+    // Show a user-friendly alert (works better on mobile than confirm)
+    alert('📍 LOCATION REQUIRED\n\nWe could not find your address on the map.\n\nOn the next screen:\n• Click "Allow" to share your GPS location\n• This is needed to match you with nearby service providers\n\nNote: Your exact location is never shared publicly.');
+    
+    // Request GPS location
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            console.log('✅ GPS location obtained:', position.coords);
+            resolve({ 
+                lat: position.coords.latitude, 
+                lng: position.coords.longitude 
+            });
+        },
+        (error) => {
+            console.error('❌ GPS error:', error);
             
-            return await getBrowserLocation();
+            let errorMessage = '❌ LOCATION ACCESS DENIED\n\n';
+            
+            if (error.code === 1) {
+                // User denied permission
+                errorMessage += '🚫 You denied location access.\n\n';
+                errorMessage += '📝 Please either:\n';
+                errorMessage += '1. Allow location access and retry\n';
+                errorMessage += '2. Enter a more specific address with landmark\n';
+                errorMessage += '3. Try again with correct address\n\n';
+                errorMessage += 'Example: 36 A, RAM CHOWK, NEAR CITY HOSPITAL, BHIWANI, HARYANA, 127021';
+            } else if (error.code === 2) {
+                // Position unavailable
+                errorMessage += '📍 GPS signal not available.\n\n';
+                errorMessage += 'Please enter a more specific address with landmark and try again.';
+            } else if (error.code === 3) {
+                // Timeout
+                errorMessage += '⏰ GPS timeout.\n\n';
+                errorMessage += 'Please retry or enter a more specific address.';
+            }
+            
+            reject(new Error(errorMessage));
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 15000, // 15 seconds timeout
+            maximumAge: 0
+        }
+    );
+});
         }
 
-        async function geocodeAddress(address) {
-            const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1&countrycodes=in`;
-            const response = await fetch(url, { headers: { 'User-Agent': 'HelpBuddy/1.0' } });
-            const data = await response.json();
-            
-            if (data && data.length > 0) {
-                return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
-            }
-            return null;
+        // Geocode using OpenStreetMap (Nominatim)
+async function geocodeWithOpenStreetMap(address) {
+    try {
+        console.log('🔵 Trying OpenStreetMap:', address);
+        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1&countrycodes=in`;
+        const response = await fetch(url, { headers: { 'User-Agent': 'HelpBuddy/1.0' } });
+        const data = await response.json();
+        
+        if (data && data.length > 0) {
+            console.log('✅ OpenStreetMap SUCCESS:', data[0]);
+            return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
         }
+        console.log('⚠️ OpenStreetMap: No results found');
+        return null;
+    } catch (error) {
+        console.error('❌ OpenStreetMap error:', error);
+        return null;
+    }
+}
+
+// Geocode using OpenCage API
+async function geocodeWithOpenCage(address) {
+    try {
+        console.log('🔵 Trying OpenCage:', address);
+        // You'll need to get a FREE API key from https://opencagedata.com/api
+        const apiKey = 'c227c2331da94f6b862df0a4f4149920'; // ← Replace with your key
+        
+        const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}&countrycode=in&limit=1`;
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.results && data.results.length > 0) {
+            console.log('✅ OpenCage SUCCESS:', data.results[0]);
+            return { 
+                lat: data.results[0].geometry.lat, 
+                lng: data.results[0].geometry.lng 
+            };
+        }
+        console.log('⚠️ OpenCage: No results found');
+        return null;
+    } catch (error) {
+        console.error('❌ OpenCage error:', error);
+        return null;
+    }
+}
+
+// Master geocoding function with fallback
+async function geocodeAddress(address) {
+    // Try OpenStreetMap first (free, no limit)
+    let coords = await geocodeWithOpenStreetMap(address);
+    if (coords) return coords;
+    
+    // Try OpenCage if OpenStreetMap fails (free 2,500/day)
+    coords = await geocodeWithOpenCage(address);
+    if (coords) return coords;
+    
+    // Both failed
+    return null;
+}
 
         function getBrowserLocation() {
             return new Promise((resolve, reject) => {
