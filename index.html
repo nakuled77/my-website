@@ -3200,12 +3200,20 @@ console.log('✅ Signup successful, profile will be created after email verifica
 async function handleEmailVerification() {
     console.log('🔵 Checking for email verification...');
     
-    // Check if we're on the verify-callback page
-    if (!window.location.pathname.includes('verify-callback')) {
+    // Check URL for verification tokens
+    const urlParams = new URLSearchParams(window.location.search);
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    
+    // Get token from either query params or hash
+    const token = urlParams.get('token') || hashParams.get('access_token');
+    const type = urlParams.get('type') || hashParams.get('type');
+    
+    // If no token, not a verification callback
+    if (!token || type !== 'signup') {
         return false;
     }
     
-    console.log('✅ On verify-callback page, processing...');
+    console.log('✅ Verification token found, processing...');
     showLoading();
     
     try {
@@ -3225,17 +3233,19 @@ async function handleEmailVerification() {
             .from('profiles')
             .select('user_id')
             .eq('user_id', session.user.id)
-            .single();
+            .maybeSingle();
         
         if (existingProfile) {
-            // Profile already exists, just login
+            // Profile exists, just login
             console.log('✅ Profile exists, logging in...');
             currentUser = session.user;
             await loadProfile();
             
-            // Clean URL and show dashboard
+            // Show success message
+            alert('✅ Email verified successfully! Welcome back to HelpBuddy.');
+            
+            // Clean URL
             window.history.replaceState({}, document.title, '/');
-            alert('✅ Email verified! Welcome back to HelpBuddy.');
             return true;
         }
         
@@ -3278,7 +3288,7 @@ async function handleEmailVerification() {
         if (profileError) throw profileError;
         
         // If provider, create services
-        if (metadata.is_provider && metadata.services) {
+        if (metadata.is_provider && metadata.services && metadata.services.length > 0) {
             const radius = metadata.radius || 10;
             const serviceData = metadata.services.map(serviceId => ({
                 provider_id: session.user.id,
@@ -3305,10 +3315,11 @@ async function handleEmailVerification() {
         currentUser = session.user;
         await loadProfile();
         
-        // Clean URL and show dashboard
-        window.history.replaceState({}, document.title, '/');
-        alert('✅ Email verified and account created! Welcome to HelpBuddy.');
+        // Show success message
+        alert('✅ Email verified and account created successfully! Welcome to HelpBuddy.');
         
+        // Clean URL
+        window.history.replaceState({}, document.title, '/');
         return true;
         
     } catch (error) {
