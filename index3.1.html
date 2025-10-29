@@ -974,18 +974,13 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         </div>
         <div class="form-group">
             <label>Password <span class="required">*</span></label>
-            <div style="position: relative;">
-                <input type="password" id="loginPassword" required style="padding-right: 45px;">
-                <button type="button" onclick="togglePasswordVisibility('loginPassword', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 20px; color: #667eea;">👁️</button>
-            </div>
+            <input type="password" id="loginPassword" required>
         </div>
         <button type="submit" class="btn btn-full">Login</button>
         <div style="text-align: center; margin-top: 20px; font-size: 14px;">
             <a href="#" onclick="showSignup(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Sign up for new user registration</a>
             <span style="margin: 0 10px; color: #ccc;">|</span>
-            <a href="#" onclick="openForgotPasswordModal(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Forgot Password?</a>
-            <span style="margin: 0 10px; color: #ccc;">|</span>
-            <a href="#" onclick="openLoginHelpModal(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Need Help?</a>
+            <a href="#" onclick="alert('Password reset feature coming soon!'); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Forgot Password?</a>
         </div>
     </form>
 <!-- Footer for Login Page -->
@@ -1026,10 +1021,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
 </div>
                 <div class="form-group">
                     <label>Password <span class="required">*</span></label>
-                    <div style="position: relative;">
-                        <input type="password" id="signupPassword" minlength="6" required style="padding-right: 45px;">
-                        <button type="button" onclick="togglePasswordVisibility('signupPassword', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 20px; color: #667eea;">👁️</button>
-                    </div>
+                    <input type="password" id="signupPassword" minlength="6" required>
                 </div>
                 <h3>📍 Address Details</h3>
                 <div class="form-group">
@@ -1681,9 +1673,9 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
                 </div>
                 <h3>📍 Service Location</h3>
                 <div class="checkbox-group" style="margin-top: 20px; margin-bottom: 20px; display: flex !important; align-items: center !important; gap: 10px !important;">
-    <input type="checkbox" id="acceptTermsRequest" required style="width: 20px !important; height: 20px !important; margin: 0 !important; cursor: pointer !important; flex-shrink: 0 !important;">
-    <label for="acceptTermsRequest" style="margin: 0 !important; cursor: pointer !important; flex: 1 !important; line-height: 1.5 !important;">
-        I agree to the
+    <input type="checkbox" id="acceptTerms" required style="width: 20px !important; height: 20px !important; margin: 0 !important; cursor: pointer !important; flex-shrink: 0 !important;">
+    <label for="acceptTerms" style="margin: 0 !important; cursor: pointer !important; flex: 1 !important; line-height: 1.5 !important;">
+        I agree to the 
         <a href="#" onclick="showTerms(); return false;" style="color: #667eea; text-decoration: none; font-weight: 600;">Terms & Conditions</a>
         and 
         <a href="#" onclick="showPrivacy(); return false;" style="color: #667eea; text-decoration: none; font-weight: 600;">Privacy Policy</a>
@@ -2215,84 +2207,6 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
             <p>Loading...</p>
         </div>
     </div>
-
-<!-- Login Help Modal -->
-<div id="loginHelpModal" class="modal">
-    <div class="modal-content" style="max-width: 600px;">
-        <div class="modal-header">
-            <h2 class="modal-title">❓ Need Help?</h2>
-            <button class="close-btn" onclick="closeLoginHelpModal()">×</button>
-        </div>
-        <div style="padding: 20px;">
-            <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
-                Having trouble logging in or signing up? Let us know and we'll help you out!
-            </p>
-            
-            <div class="form-group">
-                <label>Issue Type <span class="required">*</span></label>
-                <select id="loginHelpType" required>
-                    <option value="">Select Issue</option>
-                    <option value="verification_email">Didn't receive verification email</option>
-                    <option value="login_failed">Can't login / Wrong password</option>
-                    <option value="signup_error">Error during signup</option>
-                    <option value="account_locked">Account locked or disabled</option>
-                    <option value="other">Other issue</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Your Email <span class="required">*</span></label>
-                <input type="email" id="loginHelpEmail" required placeholder="Enter your email address">
-            </div>
-            
-            <div class="form-group">
-                <label>Describe Your Problem <span class="required">*</span></label>
-                <textarea id="loginHelpMessage" rows="5" maxlength="1000" required placeholder="Please describe the issue you're facing..."></textarea>
-                <div class="char-counter"><span id="loginHelpCounter">0</span>/1000</div>
-            </div>
-            
-            <div id="loginHelpError" class="error hidden"></div>
-            <div id="loginHelpSuccess" class="success hidden"></div>
-            
-            <button class="btn btn-full" onclick="submitLoginHelp()" id="submitLoginHelpBtn">
-                📤 Send Help Request
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Forgot Password Modal -->
-<div id="forgotPasswordModal" class="modal">
-    <div class="modal-content" style="max-width: 500px;">
-        <div class="modal-header">
-            <h2 class="modal-title">🔑 Reset Password</h2>
-            <button class="close-btn" onclick="closeForgotPasswordModal()">×</button>
-        </div>
-        <div style="padding: 20px;">
-            <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
-                Enter your email address and we'll send you a link to reset your password.
-            </p>
-            
-            <div class="form-group">
-                <label>Email Address <span class="required">*</span></label>
-                <input type="email" id="forgotPasswordEmail" required placeholder="Enter your registered email">
-            </div>
-            
-            <div id="forgotPasswordError" class="error hidden"></div>
-            <div id="forgotPasswordSuccess" class="success hidden"></div>
-            
-            <button class="btn btn-full" onclick="sendPasswordResetEmail()" id="sendResetBtn">
-                📧 Send Reset Link
-            </button>
-            
-            <div style="text-align: center; margin-top: 15px;">
-                <a href="#" onclick="closeForgotPasswordModal(); return false;" style="color: #667eea; text-decoration: none; font-size: 14px;">
-                    ← Back to Login
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
 
     <script>
         const SUPABASE_URL = 'https://nzhivzzzcanniejzqvsc.supabase.co';
@@ -3557,8 +3471,6 @@ async function handleEmailVerification() {
     if (profile.profile_photo) {
         headerPhoto.src = profile.profile_photo;
         headerPhoto.style.display = 'block';
-        headerPhoto.style.cursor = 'pointer';
-        headerPhoto.onclick = () => openImagePreview(profile.profile_photo);
         headerPhotoPlaceholder.style.display = 'none';
     } else {
         headerPhoto.style.display = 'none';
@@ -4143,11 +4055,8 @@ async function openChat(requestId, providerId) {
 
         // Update profile photo
         if (partnerProfile.profile_photo) {
-            const chatPhoto = document.getElementById('chatPartnerPhoto');
-            chatPhoto.src = partnerProfile.profile_photo;
-            chatPhoto.style.display = 'block';
-            chatPhoto.style.cursor = 'pointer';
-            chatPhoto.onclick = () => openImagePreview(partnerProfile.profile_photo);
+            document.getElementById('chatPartnerPhoto').src = partnerProfile.profile_photo;
+            document.getElementById('chatPartnerPhoto').style.display = 'block';
             document.getElementById('chatPartnerPhotoPlaceholder').style.display = 'none';
         } else {
             document.getElementById('chatPartnerPhoto').style.display = 'none';
@@ -4455,7 +4364,7 @@ async function loadChatMessages() {
 // Open Image Preview (Full Screen)
 function openImagePreview(imageUrl) {
     const modal = document.createElement('div');
-    modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999999; display: flex; align-items: center; justify-content: center; cursor: pointer;';
+    modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; display: flex; align-items: center; justify-content: center; cursor: pointer;';
     
     modal.innerHTML = `
         <img src="${imageUrl}" style="max-width: 90%; max-height: 90%; border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);">
@@ -5241,7 +5150,7 @@ async function rejectCompletion() {
                                    `${Math.floor(diffMinutes/1440)} days ago`;
                     
                    const photoHTML = provider.profile_photo 
-    ? `<img src="${provider.profile_photo}" onclick="event.stopPropagation(); openImagePreview('${provider.profile_photo}')" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 3px solid #667eea; margin-bottom: 12px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'" title="Click to view full size">`
+    ? `<img src="${provider.profile_photo}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 3px solid #667eea; margin-bottom: 12px;">`
     : `<div style="width: 60px; height: 60px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 12px;">👤</div>`;
 
 // Check if this provider is selected
@@ -5272,19 +5181,15 @@ async function rejectCompletion() {
                         `;
                     }
                     
-                   html += `
-                        <div class="provider-card" style="display: flex; gap: 15px; align-items: flex-start; padding: 16px;">
-        <div style="flex-shrink: 0;">${photoHTML}</div>
-        <div style="flex: 1; min-width: 0;">
-            <div class="provider-name" style="margin-bottom: 8px;">
-                ${provider.name}${isSelected ? ' <span style="color: #667eea; font-weight: bold;">✓ SELECTED</span>' : ''}
-                <span style="margin-left: 10px; font-size: 14px; font-weight: 600; color: #667eea;">${ratingDisplay}</span>
-            </div>
-            <div class="provider-info" style="margin-bottom: 4px;">📍 Distance: ${distance} km away</div>
-            <div class="provider-info" style="margin-bottom: 12px;">🕒 Responded: ${timeAgo}</div>
-            <div class="provider-actions" style="display: flex; gap: 8px; flex-wrap: wrap;">
-                ${actionButtons}
-            </div>
+                    html += `
+                        <div class="provider-card">
+        <div style="text-align: center;">${photoHTML}</div>
+        <div class="provider-name">${provider.name}${isSelected ? ' <span style="color: #667eea; font-weight: bold;">✓ SELECTED</span>' : ''}</div>
+        <div class="provider-info">📍 Distance: ${distance} km away</div>
+        <div class="provider-info">🕒 Responded: ${timeAgo}</div>
+        <div class="rating-display">${ratingDisplay}</div>
+        <div class="provider-actions">
+            ${actionButtons}
         </div>
     </div>
 `;
@@ -7088,11 +6993,6 @@ function openFeedbackModal() {
     if (emailInput && currentProfile) {
         emailInput.value = currentProfile.email || (currentUser ? currentUser.email : '');
     }
-    // Also populate the modal's email field
-    const emailInputModal = document.getElementById('feedbackEmailModal');
-    if (emailInputModal && currentProfile) {
-        emailInputModal.value = currentProfile.email || (currentUser ? currentUser.email : '');
-    }
     if (errorDiv) errorDiv.classList.add('hidden');
     if (successDiv) successDiv.classList.add('hidden');
     
@@ -7244,262 +7144,6 @@ document.addEventListener('keydown', function(event) {
         function showAttachmentOptions() {
             document.getElementById('photoInput').click();
         }
-
-        // Toggle Password Visibility
-        function togglePasswordVisibility(inputId, button) {
-            const input = document.getElementById(inputId);
-            if (!input) return;
-            
-            if (input.type === 'password') {
-                input.type = 'text';
-                button.textContent = '🙈'; // Change to "hide" icon
-            } else {
-                input.type = 'password';
-                button.textContent = '👁️'; // Change back to "show" icon
-            }
-        }
-
-// ==================== LOGIN HELP SYSTEM ====================
-
-// Open Login Help Modal
-function openLoginHelpModal() {
-    console.log('🔵 Opening login help modal...');
-    
-    const modal = document.getElementById('loginHelpModal');
-    if (!modal) {
-        console.error('❌ Login help modal not found');
-        return;
-    }
-    
-    const typeSelect = document.getElementById('loginHelpType');
-    const emailInput = document.getElementById('loginHelpEmail');
-    const messageInput = document.getElementById('loginHelpMessage');
-    const errorDiv = document.getElementById('loginHelpError');
-    const successDiv = document.getElementById('loginHelpSuccess');
-    const counterSpan = document.getElementById('loginHelpCounter');
-    
-    // Reset form
-    if (typeSelect) typeSelect.value = '';
-    if (emailInput) emailInput.value = '';
-    if (messageInput) {
-        messageInput.value = '';
-        if (counterSpan) counterSpan.textContent = '0';
-    }
-    if (errorDiv) errorDiv.classList.add('hidden');
-    if (successDiv) successDiv.classList.add('hidden');
-    
-    // Show modal
-    modal.setAttribute('style', 'display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 999999 !important; visibility: visible !important; opacity: 1 !important; background: rgba(0,0,0,0.5) !important; align-items: center !important; justify-content: center !important;');
-    modal.classList.add('active');
-    
-    console.log('✅ Login help modal opened');
-}
-
-// Close Login Help Modal
-function closeLoginHelpModal() {
-    const modal = document.getElementById('loginHelpModal');
-    if (modal) {
-        modal.classList.remove('active');
-        modal.setAttribute('style', 'display: none;');
-    }
-}
-
-// Submit Login Help Request
-async function submitLoginHelp() {
-    const type = document.getElementById('loginHelpType').value;
-    const email = document.getElementById('loginHelpEmail').value.trim();
-    const message = document.getElementById('loginHelpMessage').value.trim();
-    const errorDiv = document.getElementById('loginHelpError');
-    const successDiv = document.getElementById('loginHelpSuccess');
-    const submitBtn = document.getElementById('submitLoginHelpBtn');
-    
-    // Hide previous messages
-    errorDiv.classList.add('hidden');
-    successDiv.classList.add('hidden');
-    
-    // Validation
-    if (!type) {
-        errorDiv.textContent = '⚠️ Please select issue type';
-        errorDiv.classList.remove('hidden');
-        return;
-    }
-    
-    if (!email || !email.includes('@')) {
-        errorDiv.textContent = '⚠️ Please enter a valid email address';
-        errorDiv.classList.remove('hidden');
-        return;
-    }
-    
-    if (!message || message.length < 10) {
-        errorDiv.textContent = '⚠️ Please describe your problem (at least 10 characters)';
-        errorDiv.classList.remove('hidden');
-        return;
-    }
-    
-    // Disable button
-    submitBtn.disabled = true;
-    submitBtn.textContent = '📤 Sending...';
-    
-    try {
-        // Insert help request into Supabase
-        const { error } = await supabase
-            .from('login_help_requests')
-            .insert([{
-                user_email: email,
-                issue_type: type,
-                message: message,
-                status: 'new'
-            }]);
-        
-        if (error) throw error;
-        
-        // Success message
-        successDiv.textContent = '✅ Help request sent! We\'ll contact you at ' + email + ' soon.';
-        successDiv.classList.remove('hidden');
-        
-        // Reset form
-        document.getElementById('loginHelpType').value = '';
-        document.getElementById('loginHelpEmail').value = '';
-        document.getElementById('loginHelpMessage').value = '';
-        document.getElementById('loginHelpCounter').textContent = '0';
-        
-        // Close modal after 3 seconds
-        setTimeout(() => {
-            closeLoginHelpModal();
-        }, 3000);
-        
-    } catch (error) {
-        errorDiv.textContent = '❌ Error: ' + error.message;
-        errorDiv.classList.remove('hidden');
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = '📤 Send Help Request';
-    }
-}
-
-// Character counter for login help message
-document.addEventListener('DOMContentLoaded', () => {
-    const loginHelpInput = document.getElementById('loginHelpMessage');
-    if (loginHelpInput) {
-        loginHelpInput.addEventListener('input', (e) => {
-            const counter = document.getElementById('loginHelpCounter');
-            if (counter) {
-                counter.textContent = e.target.value.length;
-            }
-        });
-    }
-});
-
-// Close modal when clicking outside
-document.addEventListener('click', function(event) {
-    const modal = document.getElementById('loginHelpModal');
-    const modalContent = modal?.querySelector('.modal-content');
-    
-    if (modal && modal.classList.contains('active')) {
-        if (event.target === modal) {
-            closeLoginHelpModal();
-        }}
-});
-
-// ==================== FORGOT PASSWORD SYSTEM ====================
-
-// Open Forgot Password Modal
-function openForgotPasswordModal() {
-    console.log('🔵 Opening forgot password modal...');
-    
-    const modal = document.getElementById('forgotPasswordModal');
-    if (!modal) {
-        console.error('❌ Forgot password modal not found');
-        return;
-    }
-    
-    const emailInput = document.getElementById('forgotPasswordEmail');
-    const errorDiv = document.getElementById('forgotPasswordError');
-    const successDiv = document.getElementById('forgotPasswordSuccess');
-    
-    // Reset form
-    if (emailInput) emailInput.value = '';
-    if (errorDiv) errorDiv.classList.add('hidden');
-    if (successDiv) successDiv.classList.add('hidden');
-    
-    // Show modal
-    modal.setAttribute('style', 'display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 999999 !important; visibility: visible !important; opacity: 1 !important; background: rgba(0,0,0,0.5) !important; align-items: center !important; justify-content: center !important;');
-    modal.classList.add('active');
-    
-    console.log('✅ Forgot password modal opened');
-}
-
-// Close Forgot Password Modal
-function closeForgotPasswordModal() {
-    const modal = document.getElementById('forgotPasswordModal');
-    if (modal) {
-        modal.classList.remove('active');
-        modal.setAttribute('style', 'display: none;');
-    }
-}
-
-// Send Password Reset Email
-async function sendPasswordResetEmail() {
-    const email = document.getElementById('forgotPasswordEmail').value.trim();
-    const errorDiv = document.getElementById('forgotPasswordError');
-    const successDiv = document.getElementById('forgotPasswordSuccess');
-    const sendBtn = document.getElementById('sendResetBtn');
-    
-    // Hide previous messages
-    errorDiv.classList.add('hidden');
-    successDiv.classList.add('hidden');
-    
-    // Validation
-    if (!email || !email.includes('@')) {
-        errorDiv.textContent = '⚠️ Please enter a valid email address';
-        errorDiv.classList.remove('hidden');
-        return;
-    }
-    
-    // Disable button
-    sendBtn.disabled = true;
-    sendBtn.textContent = '📧 Sending...';
-    
-    try {
-        // Send password reset email via Supabase
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: `${window.location.origin}/reset-password`
-        });
-        
-        if (error) throw error;
-        
-        // Success message
-        successDiv.textContent = '✅ Password reset link sent! Please check your email (including spam folder).';
-        successDiv.classList.remove('hidden');
-        
-        // Clear input
-        document.getElementById('forgotPasswordEmail').value = '';
-        
-        // Close modal after 5 seconds
-        setTimeout(() => {
-            closeForgotPasswordModal();
-        }, 5000);
-        
-    } catch (error) {
-        errorDiv.textContent = '❌ Error: ' + error.message;
-        errorDiv.classList.remove('hidden');
-    } finally {
-        sendBtn.disabled = false;
-        sendBtn.textContent = '📧 Send Reset Link';
-    }
-}
-
-// Close modal when clicking outside
-document.addEventListener('click', function(event) {
-    const modal = document.getElementById('forgotPasswordModal');
-    const modalContent = modal?.querySelector('.modal-content');
-    
-    if (modal && modal.classList.contains('active')) {
-        if (event.target === modal) {
-            closeForgotPasswordModal();
-        }
-    }
-});
 
 // Show Terms & Conditions
 function showTerms() {
@@ -7722,9 +7366,9 @@ function closePrivacyView() {
                 <div class="char-counter"><span id="feedbackCounter">0</span>/1000</div>
             </div>
             
-           <div class="form-group">
+            <div class="form-group">
                 <label>Your Email</label>
-                <input type="email" id="feedbackEmailModal" placeholder="We'll reach out if we need more details" readonly>
+                <input type="email" id="feedbackEmail" placeholder="We'll reach out if we need more details" readonly>
                 <small style="color: #999; font-size: 12px;">Using your registered email</small>
             </div>
             
