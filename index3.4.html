@@ -1624,16 +1624,6 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
             </div>
         </div>
     </button>
-	<button class="sub-tab" onclick="filterActiveRequests('pending_completion')">
-    <span>Pending Completion</span>
-    <div class="sub-tab-badges">
-        <span class="count-badge" id="pendingCompletionCount">0</span>
-        <div class="badge-container hidden" id="pendingCompletionUnread" style="display: none;">
-            <div class="chat-bubble-icon"></div>
-            <span class="unread-badge">0</span>
-        </div>
-    </div>
-</button>
     <button class="sub-tab" onclick="filterActiveRequests('completed')">
         <span>Completed</span>
         <div class="sub-tab-badges">
@@ -2233,10 +2223,12 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         <!-- Contact Details Modal -->
 <div id="contactDetailsModal" class="modal">
     <div class="modal-content" style="max-width: 500px;">
-        <div style="display: flex; justify-content: flex-end; padding: 15px 15px 0 15px;">
-            <button onclick="closeContactDetailsModal()" style="background: none; border: none; color: #dc3545; font-size: 36px; font-weight: bold; cursor: pointer; line-height: 1; padding: 0;">×</button>
-        </div>
-        <div id="contactDetailsModalContent" style="padding: 0 20px 20px 20px;">
+        <div class="modal-header">
+    <button class="btn btn-secondary" onclick="closeResponsesModalAndGoBack()" style="padding: 8px 16px; font-size: 14px; margin-right: 10px;">← Back</button>
+    <h2 class="modal-title" style="flex: 1;">👥 Providers Who Responded</h2>
+    <button class="close-btn" onclick="closeResponsesModal()">×</button>
+</div>
+        <div id="contactDetailsModalContent" style="padding: 20px 0;">
             <!-- Contact details will be loaded here -->
         </div>
     </div>
@@ -3030,124 +3022,6 @@ async function toggleProviderStatus() {
     }
 }
 
-// Approve completion from chat message button
-async function approveCompletionFromChat(messageIndex) {
-    if (!confirm('✅ Accept work completion?\n\nThis will mark the request as completed and you can rate the provider.')) return;
-    
-    try {
-        // Get existing chat messages
-        const { data: existingChat } = await supabase
-            .from('chats')
-            .select('messages')
-            .eq('request_id', currentChatData.requestId)
-            .eq('provider_id', currentChatData.providerId)
-            .single();
-        
-        let messages = existingChat?.messages || [];
-        
-        // Update the completion request message status
-        if (messages[messageIndex]) {
-            messages[messageIndex].completion_request_status = 'approved';
-        }
-        
-        // Update request status to completed
-        const { error: updateError } = await supabase
-            .from('requests')
-            .update({ status: 'completed' })
-            .eq('id', currentChatData.requestId);
-        
-        if (updateError) throw updateError;
-        
-        // Add system message
-        messages.push({
-            sender_id: currentUser.id,
-            sender_name: currentProfile.name,
-            message: '✅ Work completion accepted by customer. Request is now completed!',
-            message_type: 'system',
-            timestamp: new Date().toISOString()
-        });
-        
-        // Update chat
-        await supabase
-            .from('chats')
-            .update({ messages: messages })
-            .eq('request_id', currentChatData.requestId)
-            .eq('provider_id', currentChatData.providerId);
-        
-        // Update chat status display
-        document.getElementById('chatRequestStatus').textContent = 'COMPLETED';
-        currentChatData.requestStatus = 'completed';
-        
-        await loadChatMessages();
-        
-        // Open rating modal
-        alert('✅ Work completion accepted! Please rate the provider.');
-        openRatingModal(currentChatData.requestId, currentChatData.providerId, currentChatData.partnerName);
-        
-    } catch (error) {
-        alert('❌ Error: ' + error.message);
-    }
-}
-
-// Reject completion from chat message button
-async function rejectCompletionFromChat(messageIndex) {
-    const reason = prompt('❌ Reject work completion?\n\nPlease provide a reason for rejection (the provider will see this):');
-    
-    if (!reason || reason.trim() === '') return;
-    
-    try {
-        // Get existing chat messages
-        const { data: existingChat } = await supabase
-            .from('chats')
-            .select('messages')
-            .eq('request_id', currentChatData.requestId)
-            .eq('provider_id', currentChatData.providerId)
-            .single();
-        
-        let messages = existingChat?.messages || [];
-        
-        // Update the completion request message status
-        if (messages[messageIndex]) {
-            messages[messageIndex].completion_request_status = 'declined';
-        }
-        
-        // Update request status back to in_progress
-        const { error: updateError } = await supabase
-            .from('requests')
-            .update({ status: 'in_progress' })
-            .eq('id', currentChatData.requestId);
-        
-        if (updateError) throw updateError;
-        
-        // Add system message with rejection reason
-        messages.push({
-            sender_id: currentUser.id,
-            sender_name: currentProfile.name,
-            message: `❌ Work completion rejected by customer.\n\nReason: ${reason.trim()}\n\nPlease continue working to resolve the issues.`,
-            message_type: 'system',
-            timestamp: new Date().toISOString()
-        });
-        
-        // Update chat
-        await supabase
-            .from('chats')
-            .update({ messages: messages })
-            .eq('request_id', currentChatData.requestId)
-            .eq('provider_id', currentChatData.providerId);
-        
-        // Update chat status display
-        document.getElementById('chatRequestStatus').textContent = 'IN PROGRESS';
-        currentChatData.requestStatus = 'in_progress';
-        
-        await loadChatMessages();
-        
-        alert('❌ Completion rejected. The provider can see your feedback and will continue working.');
-        
-    } catch (error) {
-        alert('❌ Error: ' + error.message);
-    }
-}
-
         // Login
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -3751,31 +3625,33 @@ async function displayUserRequests(requests) {
     }
 
             // Count statistics
-const respondedRequests = [];
-const pendingRequests = [];
-const responseCountMap = {};
-let newMessagesTotal = 0;
-let respondedUnreadCount = 0;
-let pendingUnreadCount = 0;
-let completedUnreadCount = 0;
+            const respondedRequests = [];
+            const pendingRequests = [];
+            const responseCountMap = {};
+            let newMessagesTotal = 0;
+            let respondedUnreadCount = 0;
+            let pendingUnreadCount = 0;
+            let completedUnreadCount = 0;
 
-// Check for responses and new messages
-for (let req of requests) {
-    if (req.status === 'open') {  // ✅ ONLY count open requests as "responded"
-        const { data: responses } = await supabase
-            .from('request_responses')
-            .select('id')
-            .eq('request_id', req.id);
+            // Check for responses and new messages
+            for (let req of requests) {
+                if (req.status === 'open') {
+                    const { data: responses } = await supabase
+                        .from('request_responses')
+                        .select('id')
+                        .eq('request_id', req.id);
                     
                     const responseCount = responses ? responses.length : 0;
                     responseCountMap[req.id] = responseCount;
                     
                     if (responseCount > 0) {
-            respondedRequests.push(req.id);
-        }
-    } else if (req.status === 'pending_completion') {  // ✅ SKIP in_progress - it has its own tab
-        pendingRequests.push(req.id);
-    } else if (req.status === 'completed') {
+                        respondedRequests.push(req.id);
+                    }
+                } else if (req.status === 'in_progress') {
+                    respondedRequests.push(req.id);
+                } else if (req.status === 'pending_completion') {
+                    pendingRequests.push(req.id);
+                } else if (req.status === 'completed') {
                     respondedRequests.push(req.id);
                 }
                 
@@ -3814,16 +3690,8 @@ const unread = chat.messages.filter(m =>
                         .single();
                     
                     if (chat && chat.messages) {
-    // Get last viewed time for seeker
-    const lastViewedAt = chat.seeker_last_viewed_at;
-    
-    // Count only messages AFTER last viewed time
-    const unread = chat.messages.filter(m => 
-        m.sender_id !== currentUser.id &&
-        (!lastViewedAt || new Date(m.timestamp) > new Date(lastViewedAt))
-    ).length;
-    
-    newMessagesTotal += unread;
+                        const unread = chat.messages.filter(m => m.sender_id !== currentUser.id).length;
+                        newMessagesTotal += unread;
                         pendingUnreadCount += unread;
                     }
                 }
@@ -3831,14 +3699,8 @@ const unread = chat.messages.filter(m =>
 
             // Update section badges
             const completedRequests = requests.filter(r => r.status === 'completed');
-const pendingCompletionRequests = requests.filter(r => r.status === 'pending_completion');  // ✅ NEW LINE
-const activeResponses = requests.filter(r => 
-    respondedRequests.includes(r.id) && 
-    r.status !== 'completed' && 
-    r.status !== 'pending_completion' && 
-    (r.status === 'open' || r.status === 'in_progress')
-);
-const openWithoutResponse = requests.filter(r => !respondedRequests.includes(r.id) && !pendingRequests.includes(r.id) && r.status === 'open');
+            const activeResponses = requests.filter(r => respondedRequests.includes(r.id) && r.status !== 'completed' && r.status !== 'pending_completion');
+            const openWithoutResponse = requests.filter(r => !respondedRequests.includes(r.id) && !pendingRequests.includes(r.id) && r.status === 'open');
             
             // Update section badges with null checks
 const openRequestsTotalEl = document.getElementById('openRequestsTotal');
@@ -3850,7 +3712,7 @@ const completedCountEl = document.getElementById('completedCount');
 // Calculate counts for each category
 const openCount = openWithoutResponse.length;
 const respondedCount = activeResponses.length;
-const inProgressCount = requests.filter(r => r.status === 'in_progress').length;
+const inProgressCount = pendingRequests.length;
 const completedCount = completedRequests.length;
 
 // Update Open Requests heading (just open count)
@@ -3863,11 +3725,6 @@ if (activeRequestsTotalEl) activeRequestsTotalEl.textContent = activeTotal;
 // Update individual tab counts
 if (respondedCountEl) respondedCountEl.textContent = respondedCount;
 if (inProgressCountEl) inProgressCountEl.textContent = inProgressCount;
-
-// Add pending completion count
-const pendingCompletionCountEl = document.getElementById('pendingCompletionCount');
-if (pendingCompletionCountEl) pendingCompletionCountEl.textContent = pendingCompletionRequests.length;  // ✅ FIXED
-
 if (completedCountEl) completedCountEl.textContent = completedCount;
 
 // Update Active Requests heading unread badge - ONLY show if there are unread messages
@@ -3962,9 +3819,6 @@ if (currentRequestFilter === 'open') {
 } else if (currentRequestFilter === 'responded') {
     filteredRequests = activeResponses;
 } else if (currentRequestFilter === 'in_progress') {
-    filteredRequests = requests.filter(r => r.status === 'in_progress');
-} else if (currentRequestFilter === 'pending_completion') {
-    filteredRequests = pendingCompletionRequests;  // ✅ FIXED - use the correct array
     filteredRequests = requests.filter(r => pendingRequests.includes(r.id));
 } else if (currentRequestFilter === 'completed') {
     filteredRequests = completedRequests;
@@ -4027,14 +3881,7 @@ if (currentRequestFilter === 'open') {
     .single();
                     
                     if (chat && chat.messages) {
-                        // Get last viewed time for seeker
-                        const lastViewedAt = chat.seeker_last_viewed_at;
-                        
-                        // Count only messages AFTER last viewed time
-                        newMessagesCount = chat.messages.filter(m => 
-                            m.sender_id !== currentUser.id &&
-                            (!lastViewedAt || new Date(m.timestamp) > new Date(lastViewedAt))
-                        ).length;
+                        newMessagesCount = chat.messages.filter(m => m.sender_id !== currentUser.id).length;
                     }
                 }
 
@@ -4061,17 +3908,9 @@ html += `
                 </div>
                 <div class="request-summary" style="display: flex !important; justify-content: space-between !important; width: 100% !important; align-items: center !important;">
     <span class="status-badge ${statusClass}">${statusText}</span>
-    ${showResponses ? `
-        <button class="btn btn-select btn-select-mobile" onclick="viewResponses('${req.id}')" style="margin-left: auto !important; flex-shrink: 0 !important;">
-            👁️ View Responses
-        </button>
-    ` : ''}
-    ${showChat ? `
-        <div class="chat-btn-wrapper" style="margin-left: auto !important;">
-            <button class="btn btn-chat" onclick="openChat('${req.id}', '${req.selected_provider_id}')">💬 Chat</button>
-            ${newMessagesCount > 0 ? `<span class="chat-unread-badge">${newMessagesCount}</span>` : ''}
-        </div>
-    ` : ''}
+    <button class="btn btn-select btn-select-mobile" onclick="viewResponses('${req.id}')" style="margin-left: auto !important; flex-shrink: 0 !important;">
+        👁️ View Responses
+    </button>
 </div>
 ${responsesBadge ? `<div class="request-summary">${responsesBadge}</div>` : ''}
 ${warrantyBadge ? `<div class="request-summary">${warrantyBadge}</div>` : ''}
@@ -4089,7 +3928,7 @@ ${warrantyBadge ? `<div class="request-summary">${warrantyBadge}</div>` : ''}
     ${reactivateButton}
 </div>
                         </div>
-                        <div class="request-details" id="details-${req.id}">
+                        <div class="request-details" id="details-resp-${req.id}">
                             <div class="request-description"><strong>Description:</strong> ${req.description}</div>
                             <div class="request-location" style="margin-top: 8px;"><strong>Full Address:</strong> ${req.request_location_address}</div>
                             <div class="request-meta" style="margin-top: 8px;">
@@ -4109,8 +3948,7 @@ ${warrantyBadge ? `<div class="request-summary">${warrantyBadge}</div>` : ''}
             
             if (container) {
                 container.innerHTML = html;
-            } 
-	else {
+            } else {
                 console.error('Container still null after rendering. Filter:', currentRequestFilter);
             }
         }
@@ -4147,7 +3985,7 @@ function toggleRequestDetails(event, requestId) {
 }
 
         // Open Chat
-async function openChat(requestId, providerId, isReadOnly = false) {
+async function openChat(requestId, providerId) {
     try {
         if (!currentUser || !currentProfile) {
             alert('Session expired. Please login again.');
@@ -4353,13 +4191,10 @@ async function openChat(requestId, providerId, isReadOnly = false) {
 
         if (latestRequest) {
             if (currentChatData.isProvider && 
-    (latestRequest.status === 'in_progress' || latestRequest.status === 'pending_completion') &&  // ✅ ALSO CHECK pending_completion
-    latestRequest.selected_provider_id === currentProfile.user_id) {
-    // ✅ Only show button if status is EXACTLY 'in_progress' (not pending)
-    if (latestRequest.status === 'in_progress' && markCompleteBtn) {
-        markCompleteBtn.style.display = 'inline-block';
-    }
-}
+                latestRequest.status === 'in_progress' && 
+                latestRequest.selected_provider_id === currentProfile.user_id) {
+                if (markCompleteBtn) markCompleteBtn.style.display = 'inline-block';
+            }
             
             if (!currentChatData.isProvider && latestRequest.status === 'pending_completion') {
                 if (acceptBtn) acceptBtn.style.display = 'inline-block';
@@ -4367,7 +4202,7 @@ async function openChat(requestId, providerId, isReadOnly = false) {
             }
         }
 
-        // Handle read-only mode for non-selected providers OR missed opportunities
+        // Handle read-only mode for non-selected providers
         const isNonSelectedProvider = currentChatData.isProvider && 
                                       latestRequest && 
                                       (latestRequest.status === 'in_progress' || 
@@ -4375,7 +4210,7 @@ async function openChat(requestId, providerId, isReadOnly = false) {
                                        latestRequest.status === 'pending_completion') && 
                                       latestRequest.selected_provider_id !== currentProfile.user_id;
         
-        if (isNonSelectedProvider || isReadOnly) {
+        if (isNonSelectedProvider) {
             console.log('⚠️ Read-only mode enabled (non-selected provider)');
             const messageInput = document.getElementById('chatMessageInput');
             const sendBtn = document.querySelector('.chat-input-wrapper .btn-send');
@@ -4535,42 +4370,6 @@ async function loadChatMessages() {
                     </div>
                 `;
             } 
-
-	// Handle completion request messages
-else if (msg.message_type === 'completion_request') {
-    const status = msg.completion_request_status || 'pending';
-    const isSent = msg.sender_id === currentUser.id;
-    let cardClass = 'contact-request-card';
-    let statusHTML = '';
-    
-    if (status === 'approved') {
-        cardClass += ' contact-status-approved';
-        statusHTML = '<p style="margin-top: 10px; font-weight: 600;">✅ Work completion accepted by customer</p>';
-    } else if (status === 'declined') {
-        cardClass += ' contact-status-declined';
-        statusHTML = '<p style="margin-top: 10px; font-weight: 600;">❌ Completion rejected - work continues</p>';
-    } else if (!isSent && status === 'pending') {
-        // SEEKER viewing - show Accept/Reject buttons
-        statusHTML = `
-            <div class="contact-approval-buttons">
-                <button class="btn-approve" onclick="approveCompletionFromChat(${index})">✅ Accept Completion</button>
-                <button class="btn-decline" onclick="rejectCompletionFromChat(${index})">❌ Reject & Continue Work</button>
-            </div>
-        `;
-    } else if (isSent && status === 'pending') {
-        // PROVIDER viewing - show waiting message
-        statusHTML = '<p style="margin-top: 10px; color: #856404; font-size: 12px;">⏳ Waiting for customer approval...</p>';
-    }
-    
-    html += `
-        <div class="${cardClass}" style="margin: 15px 0;">
-            <div class="contact-request-title">✅ Work Completion Request</div>
-            <p style="font-size: 13px; color: #555;">From: ${msg.sender_name}</p>
-            <p style="font-size: 13px; color: #555; margin-top: 5px;">${msg.message}</p>
-            ${statusHTML}
-        </div>
-    `;
-}
             // Handle system messages
             else if (msg.message_type === 'system') {
                 html += `
@@ -5691,8 +5490,8 @@ function closeProfileModal() {
                 .single();
             
             if (!chat || !chat.messages) return { requestId: response.request_id, hasMessages: false, unreadCount: 0 };
-
-// Get last viewed time for provider
+            
+            // Get last viewed time for provider
 const lastViewedAt = chat.provider_last_viewed_at;
 
 // Count only messages AFTER last viewed time
@@ -5769,7 +5568,7 @@ async function displayProviderResponses(activeResponses) {
         return;
     }
     
-    // NEW LOGIC: Separate into 4 categories (ADDED PENDING COMPLETION)
+    // NEW LOGIC: Separate into 4 categories
     const activeNegotiating = activeResponses.filter(r => 
         r.request.status === 'open' // Still negotiating, not selected yet
     );
@@ -5777,11 +5576,6 @@ async function displayProviderResponses(activeResponses) {
     const inProgress = activeResponses.filter(r => 
         r.request.status === 'in_progress' && 
         !r.request.warranty_end_date // In progress but NOT reactivated
-    );
-    
-    const pendingCompletion = activeResponses.filter(r => 
-        r.request.status === 'pending_completion' && 
-        r.request.selected_provider_id === currentProfile.user_id // ← ADDED: Only show if this provider is selected
     );
     
     const reactivated = activeResponses.filter(r => 
@@ -5793,7 +5587,7 @@ async function displayProviderResponses(activeResponses) {
         r.request.status === 'completed'
     );
     
-    // NEW: Add sub-tabs for Active, In Progress, Pending Completion, Reactivated, Completed
+    // NEW: Add sub-tabs for Active, In Progress, Reactivated, Completed
     let tabsHTML = '<div class="sub-tabs" style="margin-bottom: 20px;">';
     
     // Tab 1: Active (Negotiating)
@@ -5806,17 +5600,12 @@ async function displayProviderResponses(activeResponses) {
         tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'in_progress' ? 'active' : ''}" onclick="filterResponses('in_progress')">⚙️ In Progress <span class="count-badge">${inProgress.length}</span></button>`;
     }
     
-    // ← 🆕 NEW TAB 3: Pending Completion
-    if (pendingCompletion.length > 0) {
-        tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'pending_completion' ? 'active' : ''}" onclick="filterResponses('pending_completion')">⏳ Pending Completion <span class="count-badge">${pendingCompletion.length}</span></button>`;
-    }
-    
-    // Tab 4: Reactivated
+    // Tab 3: Reactivated
     if (reactivated.length > 0) {
         tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'reactivated' ? 'active' : ''}" onclick="filterResponses('reactivated')">🔁 Reactivated <span class="count-badge">${reactivated.length}</span></button>`;
     }
     
-    // Tab 5: Completed
+    // Tab 4: Completed
     if (completedResponses.length > 0) {
         tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'completed' ? 'active' : ''}" onclick="filterResponses('completed')">✅ Completed <span class="count-badge">${completedResponses.length}</span></button>`;
     }
@@ -5830,8 +5619,6 @@ async function displayProviderResponses(activeResponses) {
         responsesData = activeNegotiating;
     } else if (currentResponseFilter === 'in_progress') {
         responsesData = inProgress;
-    } else if (currentResponseFilter === 'pending_completion') {  // ← 🆕 NEW FILTER
-        responsesData = pendingCompletion;
     } else if (currentResponseFilter === 'reactivated') {
         responsesData = reactivated;
     } else if (currentResponseFilter === 'completed') {
@@ -5849,9 +5636,6 @@ async function displayProviderResponses(activeResponses) {
         } else if (currentResponseFilter === 'in_progress') {
             emptyIcon = '⚙️';
             emptyText = 'in progress requests';
-        } else if (currentResponseFilter === 'pending_completion') {  // ← 🆕 NEW EMPTY STATE
-            emptyIcon = '⏳';
-            emptyText = 'pending completion requests';
         } else if (currentResponseFilter === 'reactivated') {
             emptyIcon = '🔁';
             emptyText = 'reactivated requests';
@@ -5870,7 +5654,7 @@ async function displayProviderResponses(activeResponses) {
     }
     
     // Count unread messages from ALL active responses (not just in progress)
-    const totalUnread = activeResponses.reduce((sum, d) => sum + (d.unreadCount || 0), 0);
+const totalUnread = activeResponses.reduce((sum, d) => sum + (d.unreadCount || 0), 0);
     
     // Update section badges - show total unread count with chat bubble icon
     const myResponsesNewEl = document.getElementById('myResponsesNew');
@@ -5911,7 +5695,7 @@ async function displayProviderResponses(activeResponses) {
             if (req.status === 'completed') {
                 statusBadge = '<span class="status-badge status-completed">✅ COMPLETED</span>';
                 chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">👁️ View Chat</button>${unreadBadgeHTML}</div>`;
-            } else if (req.status === 'pending_completion' && req.selected_provider_id === currentProfile.user_id) {  // ← 🆕 UPDATED STATUS DISPLAY
+            } else if (req.status === 'pending_completion' && req.selected_provider_id === currentProfile.user_id) {
                 statusBadge = '<span class="status-badge" style="background: #fff3cd; color: #856404;">⏳ PENDING APPROVAL</span>';
                 chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">💬 Chat</button>${unreadBadgeHTML}</div>`;
             } else if (req.status === 'in_progress' && req.selected_provider_id === currentProfile.user_id) {
@@ -5923,17 +5707,8 @@ async function displayProviderResponses(activeResponses) {
             }
         }
         
-        // ← 🆕 NEW: Show warranty period for pending_completion requests
-        let warrantyBadge = '';
-        if (req.status === 'pending_completion' && req.warranty_period !== null && req.warranty_period !== undefined) {
-            if (req.warranty_period === 0) {
-                warrantyBadge = `<span class="info-badge" style="background: #6c757d;">🛡️ No warranty offered</span>`;
-            } else {
-                warrantyBadge = `<span class="info-badge" style="background: #17a2b8;">🛡️ ${req.warranty_period} day${req.warranty_period > 1 ? 's' : ''} warranty offered</span>`;
-            }
-        }
-        
         // Calculate remaining warranty if completed
+        let warrantyBadge = '';
         if (req.status === 'completed' && req.warranty_end_date) {
             // Only show warranty if this provider is the SELECTED provider who did the work
             if (req.selected_provider_id === currentProfile.user_id) {
@@ -6203,10 +5978,10 @@ tabsContainer.innerHTML = tabsHTML;
         const newBadge = ((new Date() - new Date(req.created_at)) / (1000 * 60 * 60)) < 2 ? '<span class="info-badge">🆕 NEW</span>' : '';
         
         html += `
-    <div class="request-card compact">
-        <div class="request-card-main">
-            <div class="request-card-left">
-                <div class="request-title-compact" onclick="toggleRequestDetails(event, 'nearby-${req.id}')">
+            <div class="request-card compact">
+                <div class="request-card-main">
+                    <div class="request-card-left">
+                        <div class="request-title-compact" onclick="toggleRequestDetails(event, 'nearby-${req.id}')">
     <span class="urgency-bubble ${req.urgency}"></span>
     <span class="request-title-text">${icon} ${req.title}</span>
     <span class="request-chevron" id="chevron-nearby-${req.id}">▼</span>
@@ -6220,10 +5995,7 @@ tabsContainer.innerHTML = tabsHTML;
                         </div>
                     </div>
                     <div class="request-card-right">
-    ${window.currentWorkFilter === 'missed' 
-        ? `<button class="btn btn-respond action-btn-compact" style="background: #6c757d;" onclick="openChat('${req.id}', '${currentProfile.user_id}', true)">👁️ View Chat</button>`
-        : `<button class="btn btn-respond action-btn-compact" onclick="respondToRequest('${req.id}')">Respond</button>`
-    }
+    <button class="btn btn-respond action-btn-compact" onclick="respondToRequest('${req.id}')">Respond</button>
 </div>
                 </div>
                 <div class="request-details" id="details-nearby-${req.id}">
@@ -6599,15 +6371,10 @@ document.getElementById('editProfileForm').addEventListener('submit', async (e) 
         
         // Check if address changed
         const addressChanged = 
-            formData.house_number !== currentProfile.house_number ||
             formData.area_name !== currentProfile.area_name ||
-            formData.landmark !== currentProfile.landmark ||
             formData.city !== currentProfile.city ||
             formData.state !== currentProfile.state ||
             formData.pin_code !== currentProfile.pin_code;
-        
-        // TEMPORARY DEBUG - REMOVE AFTER TESTING
-        alert('Address Changed: ' + addressChanged + '\n\nOld City: ' + currentProfile.city + '\nNew City: ' + formData.city);
         
         if (addressChanged) {
             infoDiv.textContent = '📍 Updating location...';
@@ -6616,9 +6383,6 @@ document.getElementById('editProfileForm').addEventListener('submit', async (e) 
             const coords = await getCoordinates(formData);
             formData.latitude = coords.lat;
             formData.longitude = coords.lng;
-            
-            // TEMPORARY DEBUG - REMOVE AFTER TESTING
-            alert('✅ NEW LAT/LONG CAPTURED:\nLatitude: ' + coords.lat + '\nLongitude: ' + coords.lng);
         }
         
         infoDiv.textContent = '💾 Saving profile...';
@@ -6793,19 +6557,11 @@ function filterActiveRequests(filter) {
         });
     }
     
-    // Add active class to clicked tab OR default to 'responded' tab
+    // Add active class to clicked tab
     if (event && event.target) {
         const clickedButton = event.target.closest('.sub-tab');
         if (clickedButton) {
             clickedButton.classList.add('active');
-        }
-    } else {
-        // ✅ NEW: If no event (default load), highlight the 'responded' tab
-        const respondedTab = Array.from(allTabs).find(tab => 
-            tab.textContent.includes('Responded') || tab.getAttribute('onclick')?.includes("'responded'")
-        );
-        if (respondedTab) {
-            respondedTab.classList.add('active');
         }
     }
     
