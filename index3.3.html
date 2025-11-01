@@ -41,7 +41,7 @@
         textarea { resize: vertical; min-height: 100px; }
         input:focus, select:focus, textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
         .btn { padding: 14px 24px; background: #128C7E; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-	.btn:hover { background: #0d6b5f; transform: translateY(-1px); box-shadow: 0 2px 8px rgba(18, 140, 126, 0.3); }
+        .btn:hover { background: #0d6b5f; transform: translateY(-1px); box-shadow: 0 2px 8px rgba(18, 140, 126, 0.3); }
         .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; background: #95a5a6; }
         .btn-full { width: 100%; }
         .btn-secondary { background: #34495e; margin-left: 10px; }
@@ -88,63 +88,7 @@
         }
         .error { background: #fee; border: 1px solid #fcc; color: #c33; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
         .success { background: #efe; border: 1px solid #cfc; color: #3c3; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
-        /* Success Popup Overlay */
-.success-popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 9999999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-}
-
-.success-popup-overlay.active {
-    display: flex;
-}
-
-.success-popup-content {
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    text-align: center;
-    max-width: 400px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    animation: popupSlideIn 0.3s ease-out;
-}
-
-@keyframes popupSlideIn {
-    from {
-        opacity: 0;
-        transform: scale(0.8) translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-}
-
-.success-popup-icon {
-    font-size: 64px;
-    margin-bottom: 20px;
-}
-
-.success-popup-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #28a745;
-    margin-bottom: 15px;
-}
-
-.success-popup-message {
-    font-size: 16px;
-    color: #555;
-    line-height: 1.6;
-}
-	.info { background: #e3f2fd; border: 1px solid #90caf9; color: #1976d2; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
+        .info { background: #e3f2fd; border: 1px solid #90caf9; color: #1976d2; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
         .hidden { display: none; }
         .profile-info { background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: left; }
         .profile-info p { margin-bottom: 10px; color: #555; }
@@ -540,10 +484,7 @@ div#activeRequestsList div.request-card-left div.request-summary:nth-of-type(1) 
     border: 2px solid white;
     z-index: 10;
 }
-	.two-column { 
-    display: block; /* Changed from 'grid' to 'block' */
-    margin-top: 30px; 
-}
+	.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px; }
         .loading { text-align: center; padding: 40px; color: #667eea; }
         .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #667eea; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 10px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -1037,12 +978,10 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         </div>
         <button type="submit" class="btn btn-full">Login</button>
         <div style="text-align: center; margin-top: 20px; font-size: 14px;">
-    <a href="#" onclick="showSignup(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Sign up for new user registration</a>
-    <span style="margin: 0 10px; color: #ccc;">|</span>
-    <a href="#" onclick="alert('Password reset feature coming soon!'); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Forgot Password?</a>
-    <span style="margin: 0 10px; color: #ccc;">|</span>
-    <a href="#" onclick="openGetHelpModal(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Get Help</a>
-</div>
+            <a href="#" onclick="showSignup(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Sign up for new user registration</a>
+            <span style="margin: 0 10px; color: #ccc;">|</span>
+            <a href="#" onclick="alert('Password reset feature coming soon!'); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Forgot Password?</a>
+        </div>
     </form>
 <!-- Footer for Login Page -->
     <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; font-size: 12px; color: #666;">
@@ -1052,7 +991,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
             <a href="#" onclick="showPrivacy(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">🔒 Privacy Policy</a>
         </div>
         <div style="margin-bottom: 8px; color: #888;">
-            📧 Contact: <a href="mailto:helpbuddy.assist@gmail.com" style="color: #667eea; text-decoration: underline; cursor: pointer; font-weight: 500;">helpbuddy.assist@gmail.com</a>
+            📧 Contact: <a href="mailto:helpbuddy.assist@gmail.com" style="color: #667eea; text-decoration: none;">helpbuddy.assist@gmail.com</a>
         </div>
         <div style="color: #999;">
             © 2025 HelpBuddy - Surender Singh Grewal
@@ -1225,7 +1164,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
                     <a href="#" onclick="showPrivacy(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">🔒 Privacy Policy</a>
                 </div>
                 <div style="margin-bottom: 8px; color: #888;">
-                    📧 Contact: <a href="mailto:helpbuddy.assist@gmail.com" style="color: #667eea; text-decoration: underline; cursor: pointer; font-weight: 500;">helpbuddy.assist@gmail.com</a>
+                    📧 Contact: <a href="mailto:helpbuddy.assist@gmail.com" style="color: #667eea; text-decoration: none;">helpbuddy.assist@gmail.com</a>
                 </div>
                 <div style="color: #999;">
                     © 2025 HelpBuddy - Surender Singh Grewal
@@ -1516,16 +1455,8 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
 <div id="dashboardView" class="hidden">
     <!-- Row 2: Create Request (LEFT) + User Profile (MIDDLE) + Profile Photo/Back (RIGHT) -->
 <div id="dashboardHeader" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 0 20px;">
-    <!-- LEFT: Toggle Button + Create Request Button -->
-    <div style="display: flex; align-items: center; gap: 15px;">
-        <button id="modeToggleBtn" class="btn" onclick="toggleDashboardMode()" style="margin: 0; display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-            <span id="modeToggleIcon">🔧</span>
-            <span id="modeToggleText">Provider</span>
-            <span style="opacity: 0.7;">↔️</span>
-        </button>
-        
-        <button class="btn" onclick="showCreateRequestForm()" id="createRequestBtn" style="margin: 0;">+ Create Request</button>
-    </div>
+    <!-- LEFT: Create Request Button -->
+    <button class="btn" onclick="showCreateRequestForm()" id="createRequestBtn" style="margin: 0;">+ Create Request</button>
     
     <!-- MIDDLE: User Profile (for dashboard) -->
     <div class="user-menu" style="display: flex; align-items: center; gap: 12px;">
@@ -2104,8 +2035,9 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
 <div id="responsesModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2 class="modal-title" style="flex: 1; text-align: left;">👥 Providers Who Responded</h2>
-            <button class="close-btn" onclick="closeResponsesModal()" style="color: #dc3545; font-weight: bold;">×</button>
+            <button class="btn btn-secondary" onclick="closeResponsesModalAndGoBack()" style="padding: 8px 16px; font-size: 14px; margin-right: auto;">← Back to Dashboard</button>
+            <h2 class="modal-title" style="flex: 1; text-align: center;">👥 Providers Who Responded</h2>
+            <button class="close-btn" onclick="closeResponsesModal()">×</button>
         </div>
         <div id="responsesList"></div>
     </div>
@@ -2250,7 +2182,6 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         
         let currentUser = null;
         let currentProfile = null;
-	let currentDashboardMode = null;
 	console.log('Step 1: JavaScript loaded');
         console.log('Step 2: Supabase client created');
         let selectedResponseRequest = null;
@@ -2364,15 +2295,6 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     console.log('Step 8: Calling showDashboard');
     
     hideAllViews(); 
-
-// Initialize dashboard mode
-    if (!currentDashboardMode) {
-        currentDashboardMode = sessionStorage.getItem('dashboardMode');
-        if (!currentDashboardMode) {
-            currentDashboardMode = currentProfile.is_provider ? 'provider' : 'seeker';
-            sessionStorage.setItem('dashboardMode', currentDashboardMode);
-        }
-    }
     
     // ✅ EXPLICITLY hide create request view
     const createRequestView = document.getElementById('createRequestView');
@@ -2422,31 +2344,12 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     
     if (userButton) userButton.style.display = 'flex';
     
-    // Show/hide sections based on mode
+    // ✅ Show dashboard content sections
     const seekerSection = document.getElementById('seekerSection');
     const providerSection = document.getElementById('providerSection');
-    const modeToggleBtn = document.getElementById('modeToggleBtn');
     
-    if (currentDashboardMode === 'provider') {
-        if (providerSection) providerSection.style.display = 'block';
-        if (seekerSection) seekerSection.style.display = 'none';
-        if (createRequestBtn) createRequestBtn.style.display = 'none';
-        document.getElementById('modeToggleIcon').textContent = '🔧';
-        document.getElementById('modeToggleText').textContent = 'Provider';
-    } else {
-        if (seekerSection) seekerSection.style.display = 'block';
-        if (providerSection) providerSection.style.display = 'none';
-        if (createRequestBtn) createRequestBtn.style.display = 'block';
-        if (modeToggleBtn && currentProfile.is_provider) {
-            document.getElementById('modeToggleIcon').textContent = '🙋';
-            document.getElementById('modeToggleText').textContent = 'Seeker';
-        }
-    }
-    
-    // Show/hide toggle button based on provider status
-    if (modeToggleBtn) {
-        modeToggleBtn.style.display = currentProfile.is_provider ? 'flex' : 'none';
-    }
+    if (seekerSection) seekerSection.style.display = 'block';
+    if (providerSection && currentProfile?.is_provider) providerSection.style.display = 'block';
     
     // Clear chat refresh interval
     if (chatRefreshInterval) {
@@ -2457,12 +2360,6 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     loadDashboardData(); 
     
     console.log('✅ Dashboard should now be visible');
-}
-
-function toggleDashboardMode() {
-    currentDashboardMode = currentDashboardMode === 'provider' ? 'seeker' : 'provider';
-    sessionStorage.setItem('dashboardMode', currentDashboardMode);
-    showDashboard();
 }
         function showLoading() { hideAllViews(); document.getElementById('loadingView').classList.remove('hidden'); }
         async function showCreateRequestForm() { 
@@ -5182,29 +5079,6 @@ async function rejectCompletion() {
                     document.getElementById('responsesModal').classList.add('active');
                     return;
                 }
-
-	// ✅ SORT PROVIDERS BY RATING (HIGHEST FIRST)
-        // First, fetch provider profiles with ratings for all responses
-        const providerIds = responses.map(r => r.provider_id);
-        const { data: providersData, error: provError } = await supabase
-            .from('profiles')
-            .select('user_id, average_rating, total_ratings')
-            .in('user_id', providerIds);
-        
-        if (provError) throw provError;
-        
-        // Create a map of provider ratings
-        const ratingMap = {};
-        (providersData || []).forEach(p => {
-            ratingMap[p.user_id] = p.average_rating || 0;
-        });
-        
-        // Sort responses by provider rating (highest first)
-        responses.sort((a, b) => {
-            const ratingA = ratingMap[a.provider_id] || 0;
-            const ratingB = ratingMap[b.provider_id] || 0;
-            return ratingB - ratingA; // Descending order
-        });
                 
                 let html = '';
                 
@@ -5275,20 +5149,13 @@ async function rejectCompletion() {
                     }
                     
                     html += `
-    <div class="provider-card">
-        <div style="display: flex; align-items: flex-start; gap: 15px;">
-            <div style="flex-shrink: 0;">${photoHTML}</div>
-            <div style="flex: 1; min-width: 0;">
-                <div class="provider-name" style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                    <span>${provider.name}</span>
-                    <span class="rating-display" style="margin: 0; font-size: 13px;">${ratingDisplay}</span>
-                    ${isSelected ? '<span style="color: #667eea; font-weight: bold; font-size: 12px;">✓ SELECTED</span>' : ''}
-                </div>
-                <div class="provider-info">📍 ${distance} km away</div>
-                <div class="provider-info">🕒 ${timeAgo}</div>
-            </div>
-        </div>
-        <div class="provider-actions" style="margin-top: 12px;">
+                        <div class="provider-card">
+        <div style="text-align: center;">${photoHTML}</div>
+        <div class="provider-name">${provider.name}${isSelected ? ' <span style="color: #667eea; font-weight: bold;">✓ SELECTED</span>' : ''}</div>
+        <div class="provider-info">📍 Distance: ${distance} km away</div>
+        <div class="provider-info">🕒 Responded: ${timeAgo}</div>
+        <div class="rating-display">${ratingDisplay}</div>
+        <div class="provider-actions">
             ${actionButtons}
         </div>
     </div>
@@ -6459,7 +6326,6 @@ showDashboard();
             await supabase.auth.signOut();
             currentUser = null;
             currentProfile = null;
-	sessionStorage.removeItem('dashboardMode');
             location.reload();
         }
 
@@ -7160,16 +7026,18 @@ async function submitFeedback() {
         
         if (error) throw error;
         
-        // Show success popup
-        showSuccessPopup('We will contact you at <strong>' + email + '</strong> soon.');
+        // Success message
+        successDiv.textContent = '✅ Thank you! Your feedback has been submitted successfully. We appreciate your input!';
+        successDiv.classList.remove('hidden');
         
         // Reset form
-        resetHelpForm();
+        document.getElementById('feedbackType').value = '';
+        document.getElementById('feedbackMessage').value = '';
+        document.getElementById('feedbackCounter').textContent = '0';
         
-        // Close modal and popup after 3 seconds
+        // Close modal after 3 seconds
         setTimeout(() => {
-            closeGetHelpModal();
-            hideSuccessPopup();
+            closeFeedbackModal();
         }, 3000);
         
     } catch (error) {
@@ -7218,314 +7086,6 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-// ==================== GET HELP MODAL FUNCTIONS ====================
-
-// FAQ Data
-const faqData = [
-    {
-        icon: '❌',
-        title: "Can't Login",
-        solution: "Make sure your email and password are correct. Password is case-sensitive. If you recently signed up, check if you've verified your email address."
-    },
-    {
-        icon: '📧',
-        title: "Email Verification Not Received",
-        solution: "Check your spam/junk folder. The verification email is sent from HelpBuddy. If you still don't see it, try signing up again or contact support."
-    },
-    {
-        icon: '🔑',
-        title: "Forgot Password",
-        solution: "Click on 'Forgot Password?' link on the login page. Enter your registered email to receive password reset instructions."
-    },
-    {
-        icon: '🐌',
-        title: "Page Loading Slowly",
-        solution: "Try refreshing the page (Ctrl+R or Cmd+R). Clear your browser cache and cookies. Check your internet connection. Try using a different browser."
-    },
-    {
-        icon: '📱',
-        title: "Account Issues",
-        solution: "If your account is locked or suspended, contact support with your registered email. For profile update issues, try logging out and logging back in."
-    },
-    {
-        icon: '🔒',
-        title: "Email Already Registered",
-        solution: "This email is already in use. Try logging in instead. If you forgot your password, use the 'Forgot Password?' option. If someone else used your email, contact support immediately."
-    }
-];
-
-// Open Get Help Modal
-function openGetHelpModal() {
-    console.log('🔵 Opening Get Help modal...');
-    
-    const modal = document.getElementById('getHelpModal');
-    if (!modal) {
-        console.error('❌ Get Help modal not found');
-        return;
-    }
-    
-    // Reset to FAQ screen
-    showGetHelpFaq();
-    
-    // Build FAQ list
-    buildFaqList();
-    
-    // Reset form
-    resetHelpForm();
-    
-    // Show modal
-    modal.classList.add('active');
-    
-    console.log('✅ Get Help modal opened');
-}
-
-// Close Get Help Modal
-function closeGetHelpModal() {
-    const modal = document.getElementById('getHelpModal');
-    if (modal) {
-        modal.classList.remove('active');
-    }
-}
-
-// Show FAQ Screen
-function showGetHelpFaq() {
-    document.getElementById('getHelpFaqScreen').classList.remove('hidden');
-    document.getElementById('getHelpFormScreen').classList.add('hidden');
-}
-
-// Show Contact Support Form
-function showContactSupportForm() {
-    document.getElementById('getHelpFaqScreen').classList.add('hidden');
-    document.getElementById('getHelpFormScreen').classList.remove('hidden');
-    
-    // Pre-fill email if user is logged in
-    const emailInput = document.getElementById('helpEmail');
-    if (currentUser && currentProfile) {
-        emailInput.value = currentProfile.email || currentUser.email || '';
-        emailInput.readOnly = true;
-    } else {
-        emailInput.value = '';
-        emailInput.readOnly = false;
-    }
-}
-
-// Build FAQ List
-function buildFaqList() {
-    const container = document.getElementById('faqList');
-    if (!container) return;
-    
-    let html = '';
-    faqData.forEach((faq, index) => {
-        html += `
-            <div class="faq-item" style="background: #f8f9fa; padding: 16px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid #667eea;">
-                <div class="faq-header" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; cursor: pointer;" onclick="toggleFaqItem(${index})">
-                    <span style="font-size: 24px;">${faq.icon}</span>
-                    <strong style="color: #333; flex: 1;">${faq.title}</strong>
-                    <span class="faq-chevron" id="faq-chevron-${index}" style="color: #667eea; font-weight: bold;">▼</span>
-                </div>
-                <div class="faq-solution" id="faq-solution-${index}" style="display: none; color: #555; line-height: 1.6; padding-left: 34px; margin-top: 8px;">
-                    ${faq.solution}
-                </div>
-            </div>
-        `;
-    });
-    
-    container.innerHTML = html;
-}
-
-// Toggle FAQ Item
-function toggleFaqItem(index) {
-    const solution = document.getElementById('faq-solution-' + index);
-    const chevron = document.getElementById('faq-chevron-' + index);
-    
-    if (solution.style.display === 'none') {
-        solution.style.display = 'block';
-        chevron.textContent = '▲';
-    } else {
-        solution.style.display = 'none';
-        chevron.textContent = '▼';
-    }
-}
-
-// Reset Help Form
-function resetHelpForm() {
-    const issueType = document.getElementById('helpIssueType');
-    const message = document.getElementById('helpMessage');
-    const email = document.getElementById('helpEmail');
-    const counter = document.getElementById('helpMessageCounter');
-    const errorDiv = document.getElementById('helpError');
-    const successDiv = document.getElementById('helpSuccess');
-    
-    if (issueType) issueType.value = '';
-    if (message) {
-        message.value = '';
-        if (counter) counter.textContent = '0';
-    }
-    if (email) email.value = '';
-    if (errorDiv) errorDiv.classList.add('hidden');
-    if (successDiv) successDiv.classList.add('hidden');
-}
-
-// Character counter for help message
-document.addEventListener('DOMContentLoaded', () => {
-    const helpMessageInput = document.getElementById('helpMessage');
-    if (helpMessageInput) {
-        helpMessageInput.addEventListener('input', (e) => {
-            const counter = document.getElementById('helpMessageCounter');
-            if (counter) {
-                counter.textContent = e.target.value.length;
-            }
-        });
-    }
-});
-
-// Submit Help Request
-async function submitHelpRequest() {
-    const issueType = document.getElementById('helpIssueType').value;
-    const message = document.getElementById('helpMessage').value.trim();
-    const email = document.getElementById('helpEmail').value.trim();
-    const errorDiv = document.getElementById('helpError');
-    const successDiv = document.getElementById('helpSuccess');
-    const submitBtn = document.getElementById('submitHelpBtn');
-    
-    // Hide previous messages
-    if (errorDiv) errorDiv.classList.add('hidden');
-    if (successDiv) successDiv.classList.add('hidden');
-    
-    // Validation
-    if (!issueType) {
-        if (errorDiv) {
-            errorDiv.textContent = '⚠️ Please select an issue type';
-            errorDiv.classList.remove('hidden');
-        }
-        return;
-    }
-    
-    if (!message || message.length < 10) {
-        if (errorDiv) {
-            errorDiv.textContent = '⚠️ Please describe your problem (at least 10 characters)';
-            errorDiv.classList.remove('hidden');
-        }
-        return;
-    }
-    
-    if (!email) {
-        if (errorDiv) {
-            errorDiv.textContent = '⚠️ Please provide your email address';
-            errorDiv.classList.remove('hidden');
-        }
-        return;
-    }
-    
-    // Email validation regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        if (errorDiv) {
-            errorDiv.textContent = '⚠️ Please enter a valid email address';
-            errorDiv.classList.remove('hidden');
-        }
-        return;
-    }
-    
-    // Disable button
-    if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = '📤 Sending...';
-    }
-    
-    try {
-        console.log('🔵 Submitting help request to Supabase...');
-        
-        // Insert help request into Supabase
-        const { error } = await supabase
-            .from('login_help_requests')
-            .insert([{
-                user_email: email,
-                issue_type: issueType,
-                message: message,
-                status: 'new'
-            }]);
-        
-        if (error) {
-            console.error('❌ Supabase error:', error);
-            throw error;
-        }
-        
-        console.log('✅ Help request submitted successfully!');
-        
-        // Show success popup
-        console.log('🔵 Calling showSuccessPopup...');
-        showSuccessPopup('We will contact you at <strong>' + email + '</strong> soon.');
-        
-        // Reset form
-        resetHelpForm();
-        
-        // Close modal and popup after 3 seconds
-        setTimeout(() => {
-            console.log('🔵 Closing modal and popup...');
-            closeGetHelpModal();
-            hideSuccessPopup();
-        }, 3000);
-        
-    } catch (error) {
-        console.error('❌ Error submitting help request:', error);
-        if (errorDiv) {
-            errorDiv.textContent = '❌ Error submitting request: ' + error.message;
-            errorDiv.classList.remove('hidden');
-        }
-    } finally {
-        // Re-enable button
-        if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = '📤 Send Help Request';
-        }
-    }
-}
-
-// Close modal when clicking outside
-document.addEventListener('click', function(event) {
-    const modal = document.getElementById('getHelpModal');
-    const modalContent = modal?.querySelector('.modal-content');
-    
-    if (modal && modal.classList.contains('active')) {
-        if (event.target === modal) {
-            closeGetHelpModal();
-        }
-    }
-});
-
-// Close modal on ESC key
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        const modal = document.getElementById('getHelpModal');
-        if (modal && modal.classList.contains('active')) {
-            closeGetHelpModal();
-        }
-    }
-});
-
-// Show Success Popup
-function showSuccessPopup(message) {
-    const popup = document.getElementById('successPopup');
-    const messageEl = document.getElementById('successPopupMessage');
-    
-    if (messageEl) {
-        messageEl.innerHTML = message;
-    }
-    
-    if (popup) {
-        popup.classList.add('active');
-    }
-}
-
-// Hide Success Popup
-function hideSuccessPopup() {
-    const popup = document.getElementById('successPopup');
-    if (popup) {
-        popup.classList.remove('active');
-    }
-}
-
        // Toggle Send Button based on text input
         function toggleSendButton() {
             const input = document.getElementById('chatMessageInput');
@@ -7564,9 +7124,6 @@ function showTerms() {
     const loginView = document.getElementById('loginView');
     const signupView = document.getElementById('signupView');
     const privacyView = document.getElementById('privacyView');
-	const editProfileView = document.getElementById('editProfileView');
-const createRequestView = document.getElementById('createRequestView');
-const chatView = document.getElementById('chatView');
     
     if (loadingView) {
         loadingView.classList.add('hidden');
@@ -7584,18 +7141,6 @@ const chatView = document.getElementById('chatView');
         privacyView.classList.add('hidden');
         privacyView.style.display = 'none';
     }
-	if (editProfileView) {
-    editProfileView.classList.add('hidden');
-    editProfileView.style.display = 'none';
-}
-if (createRequestView) {
-    createRequestView.classList.add('hidden');
-    createRequestView.style.display = 'none';
-}
-if (chatView) {
-    chatView.classList.add('hidden');
-    chatView.style.display = 'none';
-}
     
     // Show Terms & Conditions
     const termsView = document.getElementById('termsView');
@@ -7651,14 +7196,11 @@ function showPrivacy() {
     // Hide all main views first
     hideAllViews();
     
-    // ✅ CRITICAL FIX: Explicitly hide ALL other views INCLUDING EDIT PROFILE
+    // ✅ CRITICAL FIX: Explicitly hide ALL other views
     const loadingView = document.getElementById('loadingView');
     const loginView = document.getElementById('loginView');
     const signupView = document.getElementById('signupView');
     const termsView = document.getElementById('termsView');
-    const editProfileView = document.getElementById('editProfileView'); // ← 🆕 ADDED
-    const createRequestView = document.getElementById('createRequestView'); // ← 🆕 ADDED
-    const chatView = document.getElementById('chatView'); // ← 🆕 ADDED
     
     if (loadingView) {
         loadingView.classList.add('hidden');
@@ -7675,21 +7217,6 @@ function showPrivacy() {
     if (termsView) {
         termsView.classList.add('hidden');
         termsView.style.display = 'none';
-    }
-    // ← 🆕 HIDE EDIT PROFILE VIEW
-    if (editProfileView) {
-        editProfileView.classList.add('hidden');
-        editProfileView.style.display = 'none';
-    }
-    // ← 🆕 HIDE CREATE REQUEST VIEW
-    if (createRequestView) {
-        createRequestView.classList.add('hidden');
-        createRequestView.style.display = 'none';
-    }
-    // ← 🆕 HIDE CHAT VIEW
-    if (chatView) {
-        chatView.classList.add('hidden');
-        chatView.style.display = 'none';
     }
     
     // Hide dashboard UI elements (but keep dashboardView container)
@@ -7818,85 +7345,6 @@ function closePrivacyView() {
             <button class="btn btn-full" onclick="submitFeedback()" id="submitFeedbackBtn">
                 📤 Send Feedback
             </button>
-        </div>
-    </div>
-</div>
-
-<!-- Get Help Modal -->
-<div id="getHelpModal" class="modal">
-    <div class="modal-content" style="max-width: 600px;">
-        <div class="modal-header">
-            <h2 class="modal-title">❓ Get Help</h2>
-            <button class="close-btn" onclick="closeGetHelpModal()">×</button>
-        </div>
-        
-        <!-- FAQ Screen (shown by default) -->
-        <div id="getHelpFaqScreen" style="padding: 20px;">
-            <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
-                Find answers to common problems below. If you don't find what you're looking for, you can contact our support team.
-            </p>
-            
-            <div id="faqList">
-                <!-- FAQ items will be inserted here by JavaScript -->
-            </div>
-            
-            <button class="btn btn-full" onclick="showContactSupportForm()" style="margin-top: 20px;">
-                📧 Still need help? Contact Support
-            </button>
-        </div>
-        
-        <!-- Contact Support Form (hidden by default) -->
-        <div id="getHelpFormScreen" class="hidden" style="padding: 20px;">
-            <button class="btn btn-secondary" onclick="showGetHelpFaq()" style="margin-bottom: 20px;">
-                ← Back to FAQ
-            </button>
-            
-            <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
-                Describe your problem below and we'll get back to you as soon as possible.
-            </p>
-            
-            <div class="form-group">
-                <label>Issue Type <span class="required">*</span></label>
-                <select id="helpIssueType" required>
-                    <option value="">Select Issue Type</option>
-                    <option value="cant_login">❌ Can't Login</option>
-                    <option value="email_verification">📧 Email Verification Not Received</option>
-                    <option value="forgot_password">🔑 Forgot Password</option>
-                    <option value="page_loading">🐌 Page Loading Slowly</option>
-                    <option value="account_issues">📱 Account Issues</option>
-                    <option value="email_registered">🔒 Email Already Registered</option>
-                    <option value="other">💭 Other</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Describe Your Problem <span class="required">*</span></label>
-                <textarea id="helpMessage" rows="6" maxlength="1000" required placeholder="Please describe your problem in detail..."></textarea>
-                <div class="char-counter"><span id="helpMessageCounter">0</span>/1000</div>
-            </div>
-            
-            <div class="form-group">
-                <label>Your Email <span class="required">*</span></label>
-                <input type="email" id="helpEmail" required placeholder="your.email@example.com">
-            </div>
-            
-            <div id="helpError" class="error hidden"></div>
-            <div id="helpSuccess" class="success hidden"></div>
-            
-            <button class="btn btn-full" onclick="submitHelpRequest()" id="submitHelpBtn">
-                📤 Send Help Request
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Success Popup -->
-<div id="successPopup" class="success-popup-overlay">
-    <div class="success-popup-content">
-        <div class="success-popup-icon">✅</div>
-        <div class="success-popup-title">Request Sent Successfully!</div>
-        <div class="success-popup-message" id="successPopupMessage">
-            We've received your help request and will contact you soon.
         </div>
     </div>
 </div>
