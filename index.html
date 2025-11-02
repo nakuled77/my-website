@@ -4077,8 +4077,12 @@ html += `
     ` : ''}
 </div>
 ${responsesBadge ? `<div class="request-summary">${responsesBadge}</div>` : ''}
-${warrantyBadge ? `<div class="request-summary" style="display: block !important; margin-bottom: 8px !important;">${warrantyBadge}</div>` : ''}
-${reactivateButton ? `<div class="request-summary" style="display: block !important; margin-top: 8px !important;">${reactivateButton}</div>` : ''}
+${warrantyBadge || reactivateButton ? `
+<div class="request-summary" style="display: flex !important; justify-content: space-between !important; align-items: center !important; width: 100% !important; margin-top: 8px !important;">
+    ${warrantyBadge ? `<span>${warrantyBadge}</span>` : '<span></span>'}
+    ${reactivateButton ? `<span style="margin-left: auto !important;">${reactivateButton}</span>` : ''}
+</div>
+` : ''}
 <div class="request-summary" style="margin-top: 6px; color: #999;">
     📍 ${req.request_location_address.split(',').slice(0, 2).join(',')} • 🕒 ${timeAgo}
 </div>
