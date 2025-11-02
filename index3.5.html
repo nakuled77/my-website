@@ -3984,10 +3984,7 @@ if (currentRequestFilter === 'open') {
 
             for (let req of filteredRequests) {
                 const serviceIcon = SERVICE_ICONS[req.service_category] || '🔧';
-                const isReactivated = req.status === 'in_progress' && req.warranty_end_date;
-                
-		const reactivatedBadge = isReactivated ? '<span style="color: #dc3545; font-weight: 700; font-size: 11px; margin-left: 6px; background: #fee; padding: 2px 8px; border-radius: 4px;">REACTIVATED</span>' : '';
-		const statusClass = `status-${req.status.replace('_', '-')}`;
+                const statusClass = `status-${req.status.replace('_', '-')}`;
                 let statusText = req.status.replace('_', ' ').toUpperCase();
                 const timeAgo = getTimeAgo(new Date(req.created_at));
 
@@ -4059,7 +4056,7 @@ html += `
             <div class="request-card-left">
                 <div class="request-title-compact" onclick="toggleRequestDetails(event, '${req.id}')">
                     <span class="urgency-bubble ${req.urgency}"></span>
-                    <span class="request-title-text">${serviceIcon} ${req.title}${reactivatedBadge}</span>
+                    <span class="request-title-text">${serviceIcon} ${req.title}</span>
                     <span class="request-chevron" id="chevron-${req.id}">▼</span>
                 </div>
                 <div class="request-summary" style="display: flex !important; justify-content: space-between !important; width: 100% !important; align-items: center !important;">
@@ -4075,7 +4072,6 @@ html += `
             ${newMessagesCount > 0 ? `<span class="chat-unread-badge">${newMessagesCount}</span>` : ''}
         </div>
     ` : ''}
-	 ${reactivateButton ? `<span style="margin-left: 8px;">${reactivateButton.replace('btn-select', 'btn-select" style="background: #dc3545; color: white;')}</span>` : ''}
 </div>
 ${responsesBadge ? `<div class="request-summary">${responsesBadge}</div>` : ''}
 ${warrantyBadge ? `<div class="request-summary">${warrantyBadge}</div>` : ''}
@@ -4459,7 +4455,7 @@ console.log('✅ ✅ ✅ CHAT VIEW NOW VISIBLE ✅ ✅ ✅');
         // Start auto-refresh
         console.log('🔵 Step 12: Starting auto-refresh...');
         if (chatRefreshInterval) clearInterval(chatRefreshInterval);
-        chatRefreshInterval = setInterval(loadChatMessages, 5000);
+        chatRefreshInterval = setInterval(loadChatMessages, 10000);
         console.log('✅ Auto-refresh started');
         
         console.log('🎉 🎉 🎉 CHAT OPENED SUCCESSFULLY 🎉 🎉 🎉');
@@ -5773,116 +5769,59 @@ async function displayProviderResponses(activeResponses) {
         return;
     }
     
-    // NEW LOGIC: Separate into 4 categories (MERGED REACTIVATED INTO IN PROGRESS)
-const activeNegotiating = activeResponses.filter(r => 
-    r.request.status === 'open' // Still negotiating, not selected yet
-);
-
-// ✅ MERGED: In Progress now includes BOTH normal + reactivated
-const inProgress = activeResponses.filter(r => 
-    r.request.status === 'in_progress' // ALL in_progress (both normal + reactivated)
-);
-
-const pendingCompletion = activeResponses.filter(r => 
-    r.request.status === 'pending_completion' && 
-    r.request.selected_provider_id === currentProfile.user_id
-);
-
-const completedResponses = activeResponses.filter(r => 
-    r.request.status === 'completed'
-);
+    // NEW LOGIC: Separate into 4 categories (ADDED PENDING COMPLETION)
+    const activeNegotiating = activeResponses.filter(r => 
+        r.request.status === 'open' // Still negotiating, not selected yet
+    );
     
-    // Calculate unread counts for each category
-const activeUnread = activeNegotiating.reduce((sum, r) => sum + (r.unreadCount || 0), 0);
-const inProgressUnread = inProgress.reduce((sum, r) => sum + (r.unreadCount || 0), 0);
-const pendingCompletionUnread = pendingCompletion.reduce((sum, r) => sum + (r.unreadCount || 0), 0);
-const completedUnread = completedResponses.reduce((sum, r) => sum + (r.unreadCount || 0), 0);
-
-// NEW: Add sub-tabs for Active, In Progress, Pending Completion, Reactivated, Completed
-let tabsHTML = '<div class="sub-tabs" style="margin-bottom: 20px;">';
-
-// Tab 1: Active (Negotiating)
-if (activeNegotiating.length > 0) {
-    const unreadBadge = activeUnread > 0 ? `
-        <div class="badge-container">
-            <div class="chat-bubble-icon"></div>
-            <span class="unread-badge">${activeUnread}</span>
-        </div>
-    ` : '';
+    const inProgress = activeResponses.filter(r => 
+        r.request.status === 'in_progress' && 
+        !r.request.warranty_end_date // In progress but NOT reactivated
+    );
     
-    tabsHTML += `
-        <button class="sub-tab ${currentResponseFilter === 'active' ? 'active' : ''}" onclick="filterResponses('active')">
-            <span>🔄 Active</span>
-            <div class="sub-tab-badges">
-                <span class="count-badge">${activeNegotiating.length}</span>
-                ${unreadBadge}
-            </div>
-        </button>
-    `;
-}
-
-// Tab 2: In Progress
-if (inProgress.length > 0) {
-    const unreadBadge = inProgressUnread > 0 ? `
-        <div class="badge-container">
-            <div class="chat-bubble-icon"></div>
-            <span class="unread-badge">${inProgressUnread}</span>
-        </div>
-    ` : '';
+    const pendingCompletion = activeResponses.filter(r => 
+        r.request.status === 'pending_completion' && 
+        r.request.selected_provider_id === currentProfile.user_id // ← ADDED: Only show if this provider is selected
+    );
     
-    tabsHTML += `
-        <button class="sub-tab ${currentResponseFilter === 'in_progress' ? 'active' : ''}" onclick="filterResponses('in_progress')">
-            <span>⚙️ In Progress</span>
-            <div class="sub-tab-badges">
-                <span class="count-badge">${inProgress.length}</span>
-                ${unreadBadge}
-            </div>
-        </button>
-    `;
-}
-
-// Tab 3: Pending Completion
-if (pendingCompletion.length > 0) {
-    const unreadBadge = pendingCompletionUnread > 0 ? `
-        <div class="badge-container">
-            <div class="chat-bubble-icon"></div>
-            <span class="unread-badge">${pendingCompletionUnread}</span>
-        </div>
-    ` : '';
+    const reactivated = activeResponses.filter(r => 
+        r.request.status === 'in_progress' && 
+        r.request.warranty_end_date // In progress AND was completed before (has warranty date)
+    );
     
-    tabsHTML += `
-        <button class="sub-tab ${currentResponseFilter === 'pending_completion' ? 'active' : ''}" onclick="filterResponses('pending_completion')">
-            <span>⏳ Pending Completion</span>
-            <div class="sub-tab-badges">
-                <span class="count-badge">${pendingCompletion.length}</span>
-                ${unreadBadge}
-            </div>
-        </button>
-    `;
-}
-
-
-// Tab 5: Completed
-if (completedResponses.length > 0) {
-    const unreadBadge = completedUnread > 0 ? `
-        <div class="badge-container">
-            <div class="chat-bubble-icon"></div>
-            <span class="unread-badge">${completedUnread}</span>
-        </div>
-    ` : '';
+    const completedResponses = activeResponses.filter(r => 
+        r.request.status === 'completed'
+    );
     
-    tabsHTML += `
-        <button class="sub-tab ${currentResponseFilter === 'completed' ? 'active' : ''}" onclick="filterResponses('completed')">
-            <span>✅ Completed</span>
-            <div class="sub-tab-badges">
-                <span class="count-badge">${completedResponses.length}</span>
-                ${unreadBadge}
-            </div>
-        </button>
-    `;
-}
-
-tabsHTML += '</div>';
+    // NEW: Add sub-tabs for Active, In Progress, Pending Completion, Reactivated, Completed
+    let tabsHTML = '<div class="sub-tabs" style="margin-bottom: 20px;">';
+    
+    // Tab 1: Active (Negotiating)
+    if (activeNegotiating.length > 0) {
+        tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'active' ? 'active' : ''}" onclick="filterResponses('active')">🔄 Active <span class="count-badge">${activeNegotiating.length}</span></button>`;
+    }
+    
+    // Tab 2: In Progress
+    if (inProgress.length > 0) {
+        tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'in_progress' ? 'active' : ''}" onclick="filterResponses('in_progress')">⚙️ In Progress <span class="count-badge">${inProgress.length}</span></button>`;
+    }
+    
+    // ← 🆕 NEW TAB 3: Pending Completion
+    if (pendingCompletion.length > 0) {
+        tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'pending_completion' ? 'active' : ''}" onclick="filterResponses('pending_completion')">⏳ Pending Completion <span class="count-badge">${pendingCompletion.length}</span></button>`;
+    }
+    
+    // Tab 4: Reactivated
+    if (reactivated.length > 0) {
+        tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'reactivated' ? 'active' : ''}" onclick="filterResponses('reactivated')">🔁 Reactivated <span class="count-badge">${reactivated.length}</span></button>`;
+    }
+    
+    // Tab 5: Completed
+    if (completedResponses.length > 0) {
+        tabsHTML += `<button class="sub-tab ${currentResponseFilter === 'completed' ? 'active' : ''}" onclick="filterResponses('completed')">✅ Completed <span class="count-badge">${completedResponses.length}</span></button>`;
+    }
+    
+    tabsHTML += '</div>';
     
     // NEW: Determine which data to show based on filter
     let responsesData = activeNegotiating; // Default to Active
@@ -5958,11 +5897,7 @@ tabsHTML += '</div>';
         const icon = SERVICE_ICONS[req.service_category] || '🔧';
         const timeAgo = getTimeAgo(new Date(data.created_at));
         
-        // ✅ ADD THESE TWO LINES HERE:
-        const isReactivated = req.status === 'in_progress' && req.warranty_end_date;
-        const reactivatedBadge = isReactivated ? '<span style="color: #dc3545; font-weight: 700; font-size: 11px; margin-left: 6px; background: #fee; padding: 2px 8px; border-radius: 4px;">REACTIVATED</span>' : '';
-
-	// Determine status
+        // Determine status
         let statusBadge = '';
         let chatButton = '';
 
@@ -6029,7 +5964,7 @@ tabsHTML += '</div>';
             <div class="request-card-left">
                 <div class="request-title-compact" onclick="toggleRequestDetails(event, 'resp-${req.id}')">
                     <span class="urgency-bubble ${req.urgency}"></span>
-                    <span class="request-title-text">${icon} ${req.title}${reactivatedBadge}</span>
+                    <span class="request-title-text">${icon} ${req.title}</span>
                     <span class="request-chevron" id="chevron-resp-${req.id}">▼</span>
                 </div>
                 <div class="request-summary" style="display: flex !important; justify-content: space-between !important; width: 100% !important; align-items: center !important;">
@@ -6396,6 +6331,8 @@ respondBtn.disabled = false;
                     .from('requests')
                     .update({
                         status: 'in_progress',
+                        warranty_period: null,
+                        warranty_end_date: null
                     })
                     .eq('id', requestId);
                 
