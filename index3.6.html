@@ -4075,10 +4075,10 @@ html += `
             ${newMessagesCount > 0 ? `<span class="chat-unread-badge">${newMessagesCount}</span>` : ''}
         </div>
     ` : ''}
+	 ${reactivateButton ? `<span style="margin-left: 8px;">${reactivateButton.replace('btn-select', 'btn-select" style="background: #dc3545; color: white;')}</span>` : ''}
 </div>
 ${responsesBadge ? `<div class="request-summary">${responsesBadge}</div>` : ''}
-${warrantyBadge ? `<div class="request-summary" style="display: block !important; margin-bottom: 8px !important;">${warrantyBadge}</div>` : ''}
-${reactivateButton ? `<div class="request-summary" style="display: block !important; margin-top: 8px !important;">${reactivateButton}</div>` : ''}
+${warrantyBadge ? `<div class="request-summary">${warrantyBadge}</div>` : ''}
 <div class="request-summary" style="margin-top: 6px; color: #999;">
     📍 ${req.request_location_address.split(',').slice(0, 2).join(',')} • 🕒 ${timeAgo}
 </div>
