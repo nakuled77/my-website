@@ -3730,13 +3730,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 alert('✅ Password reset successful! Please login with your new password.');
                 
-                // ✅ CRITICAL FIX: Hide password reset view explicitly
-                const passwordResetView = document.getElementById('passwordResetView');
-                if (passwordResetView) {
-                    passwordResetView.classList.add('hidden');
-                    passwordResetView.style.display = 'none';
-                }
-                
                 // Logout and redirect to login
                 await supabase.auth.signOut();
                 showLogin();
@@ -3751,6 +3744,62 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Password Reset Form Submission
+document.addEventListener('DOMContentLoaded', () => {
+    const passwordResetForm = document.getElementById('passwordResetForm');
+    if (passwordResetForm) {
+        passwordResetForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const errorDiv = document.getElementById('passwordResetError');
+            const infoDiv = document.getElementById('passwordResetInfo');
+            const submitBtn = document.getElementById('resetPasswordBtn');
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
+            
+            // Hide previous messages
+            errorDiv.classList.add('hidden');
+            infoDiv.classList.add('hidden');
+            
+            // Validation
+            if (newPassword.length < 6) {
+                errorDiv.textContent = '❌ Password must be at least 6 characters';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                errorDiv.textContent = '❌ Passwords do not match';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+            
+            // Disable button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Resetting...';
+            
+            try {
+                const { error } = await supabase.auth.updateUser({
+                    password: newPassword
+                });
+                
+                if (error) throw error;
+                
+                alert('✅ Password reset successful! Please login with your new password.');
+                
+                // Logout and redirect to login
+                await supabase.auth.signOut();
+                showLogin();
+                
+            } catch (error) {
+                errorDiv.textContent = '❌ Error: ' + error.message;
+                errorDiv.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🔒 Reset Password';
+            }
+        });
+    }
+});
 
 // Handle email verification callback
 async function handleEmailVerification() {
