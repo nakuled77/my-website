@@ -3624,16 +3624,28 @@ async function geocodeAddress(address) {
 async function handlePasswordReset() {
     console.log('🔵 Checking for password reset token...');
     
-    const urlParams = new URLSearchParams(window.location.search);
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     
-    const token = urlParams.get('token') || hashParams.get('access_token');
-    const type = urlParams.get('type') || hashParams.get('type');
+    const token = hashParams.get('access_token');
+    const type = hashParams.get('type');
+    const error = hashParams.get('error');
+    
+    // Check for error first
+    if (error) {
+        console.log('❌ Password reset error:', error);
+        alert('❌ Password reset link is invalid or expired. Please request a new one.');
+        showLogin();
+        window.history.replaceState({}, document.title, '/');
+        return false;
+    }
     
     // Check if this is a password reset callback
     if (!token || type !== 'recovery') {
+        console.log('⚠️ Not a password reset - token:', token, 'type:', type);
         return false;
     }
+    
+    console.log('✅ Password reset token found, showing reset form...');
     
     console.log('✅ Password reset token found, showing reset form...');
     
