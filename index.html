@@ -2336,7 +2336,14 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     const isVerifying = await handleEmailVerification();
     if (isVerifying) {
         console.log('✅ Email verification handled');
-        return; // Stop here, verification handler takes over
+        return;
+    }
+    
+    // ⭐ NEW: Check if user is resetting password
+    const isResettingPassword = await handlePasswordReset();
+    if (isResettingPassword) {
+        console.log('✅ Password reset handled');
+        return;
     }
     
     // THEN: Check if user is already logged in
@@ -3624,28 +3631,16 @@ async function geocodeAddress(address) {
 async function handlePasswordReset() {
     console.log('🔵 Checking for password reset token...');
     
+    const urlParams = new URLSearchParams(window.location.search);
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     
-    const token = hashParams.get('access_token');
-    const type = hashParams.get('type');
-    const error = hashParams.get('error');
-    
-    // Check for error first
-    if (error) {
-        console.log('❌ Password reset error:', error);
-        alert('❌ Password reset link is invalid or expired. Please request a new one.');
-        showLogin();
-        window.history.replaceState({}, document.title, '/');
-        return false;
-    }
+    const token = urlParams.get('token') || hashParams.get('access_token');
+    const type = urlParams.get('type') || hashParams.get('type');
     
     // Check if this is a password reset callback
     if (!token || type !== 'recovery') {
-        console.log('⚠️ Not a password reset - token:', token, 'type:', type);
         return false;
     }
-    
-    console.log('✅ Password reset token found, showing reset form...');
     
     console.log('✅ Password reset token found, showing reset form...');
     
