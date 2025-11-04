@@ -7830,7 +7830,7 @@ async function sendPasswordResetLink() {
 submitBtn.textContent = 'Sending...';
 
 const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${window.location.origin}/#password-reset`
+    redirectTo: `${window.location.origin}`
 });
 
 if (resetError) throw resetError;
