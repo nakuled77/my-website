@@ -1039,7 +1039,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         <div style="text-align: center; margin-top: 20px; font-size: 14px;">
     <a href="#" onclick="showSignup(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Sign up for new user registration</a>
     <span style="margin: 0 10px; color: #ccc;">|</span>
-    <a href="#" onclick="openForgotPasswordModal(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Forgot Password?</a>
+    <a href="#" onclick="alert('Password reset feature coming soon!'); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Forgot Password?</a>
     <span style="margin: 0 10px; color: #ccc;">|</span>
     <a href="#" onclick="openGetHelpModal(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">Get Help</a>
 </div>
@@ -1580,25 +1580,11 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
                 </div>
             </button>
             <div class="section-content" id="openRequestsContent">
-        <div class="section-inner">
-            <div class="sub-tabs">
-                <button class="sub-tab active" onclick="filterMyRequests('no_response')">
-                    <span>No Response</span>
-                    <div class="sub-tab-badges">
-                        <span class="count-badge" id="noResponseCount">0</span>
-                    </div>
-                </button>
-                <button class="sub-tab" onclick="filterMyRequests('negotiating')">
-                    <span>Negotiating</span>
-                    <div class="sub-tab-badges">
-                        <span class="count-badge" id="negotiatingCount">0</span>
-                    </div>
-                </button>
+                <div class="section-inner">
+                    <div id="openRequestsList"></div>
+                </div>
             </div>
-            <div id="openRequestsList"></div>
         </div>
-    </div>
-</div>
 
         <!-- SECTION 2: ACTIVE REQUESTS -->
 <div class="collapsible-section">
@@ -1616,10 +1602,20 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     </div>
 </button>
             <div class="section-content" id="activeRequestsContent">
-    <div class="section-inner">
-        <div class="sub-tabs">
-            <button class="sub-tab active" onclick="filterActiveRequests('in_progress')">
-                <span>In Progress</span>
+                <div class="section-inner">
+                    <div class="sub-tabs">
+    <button class="sub-tab active" onclick="filterActiveRequests('responded')">
+        <span>Responded</span>
+        <div class="sub-tab-badges">
+            <span class="count-badge" id="respondedCount">0</span>
+            <div class="badge-container hidden" id="respondedUnread" style="display: none;">
+                <div class="chat-bubble-icon"></div>
+                <span class="unread-badge">0</span>
+            </div>
+        </div>
+    </button>
+    <button class="sub-tab" onclick="filterActiveRequests('in_progress')">
+        <span>In Progress</span>
         <div class="sub-tab-badges">
             <span class="count-badge" id="inProgressCount">0</span>
             <div class="badge-container hidden" id="inProgressUnread" style="display: none;">
@@ -1661,34 +1657,12 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     <div class="mobile-section-header" style="background: linear-gradient(135deg, #34A853 0%, #128C7E 100%); color: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 20px; font-weight: 700; font-size: 16px; text-align: center; display: none;">
         🔧 PROVIDER SECTION
     </div>
-
-<!-- SECTION 1: OPEN REQUESTS (Provider) -->
-<div class="collapsible-section">
-    <button class="section-toggle" onclick="toggleSection('providerOpenRequests')">
-        <div class="section-toggle-left">
-            <span>📋 OPEN REQUESTS</span>
-            <span class="count-badge" id="providerOpenRequestsTotal">0</span>
-            <div class="badge-container hidden" id="providerOpenRequestsUnread" style="display: none;">
-                <div class="chat-bubble-icon"></div>
-                <span class="unread-badge">0</span>
-            </div>
-        </div>
-        <div class="section-toggle-right">
-            <span class="toggle-icon" id="providerOpenRequestsIcon">▼</span>
-        </div>
-    </button>
-    <div class="section-content" id="providerOpenRequestsContent">
-        <div class="section-inner">
-            <div id="providerOpenRequestsList"></div>
-        </div>
-    </div>
-</div>
     
     <div class="collapsible-section">
-    <button class="section-toggle" onclick="toggleSection('myResponses')">
-        <div class="section-toggle-left">
-            <span>🔄 ACTIVE REQUESTS</span>
-            <span class="count-badge" id="myResponsesTotal">0</span>
+        <button class="section-toggle" onclick="toggleSection('myResponses')">
+    <div class="section-toggle-left">
+        <span>💬 MY RESPONSES</span>
+        <span class="count-badge" id="myResponsesTotal">0</span>
         <div class="badge-container hidden" id="myResponsesNew" style="display: none;">
             <div class="chat-bubble-icon"></div>
             <span class="unread-badge">0</span>
@@ -3705,7 +3679,6 @@ async function handleEmailVerification() {
     if (currentProfile.is_provider) {
         document.getElementById('providerSection').classList.remove('hidden');
         loadProviderResponses();
-	loadProviderOpenRequests();
         loadNearbyRequests();
     }
     
@@ -3724,10 +3697,10 @@ async function handleEmailVerification() {
 
         if (error) throw error;
 
-        // Ensure filter is set to 'no_response' on initial load
-if (!currentRequestFilter || currentRequestFilter === '') {
-    currentRequestFilter = 'no_response';
-}
+        // Ensure filter is set to 'open' on initial load
+        if (!currentRequestFilter || currentRequestFilter === '') {
+            currentRequestFilter = 'open';
+        }
 
         await displayUserRequests(data || []);
                 
@@ -3741,12 +3714,12 @@ if (!currentRequestFilter || currentRequestFilter === '') {
 
 async function displayUserRequests(requests) {
     // Determine which container to use based on current filter
-let container;
-if (currentRequestFilter === 'open' || currentRequestFilter === 'no_response' || currentRequestFilter === 'negotiating') {
-    container = document.getElementById('openRequestsList');
-} else {
-    container = document.getElementById('activeRequestsList');
-}
+    let container;
+    if (currentRequestFilter === 'open') {
+        container = document.getElementById('openRequestsList');
+    } else {
+        container = document.getElementById('activeRequestsList');
+    }
 
     if (!container) {
         console.error('Container not found for filter:', currentRequestFilter);
@@ -3859,9 +3832,11 @@ const unread = chat.messages.filter(m =>
             // Update section badges
             const completedRequests = requests.filter(r => r.status === 'completed');
 const pendingCompletionRequests = requests.filter(r => r.status === 'pending_completion');  // ✅ NEW LINE
-const negotiatingRequests = requests.filter(r => 
+const activeResponses = requests.filter(r => 
     respondedRequests.includes(r.id) && 
-    r.status === 'open'
+    r.status !== 'completed' && 
+    r.status !== 'pending_completion' && 
+    (r.status === 'open' || r.status === 'in_progress')
 );
 const openWithoutResponse = requests.filter(r => !respondedRequests.includes(r.id) && !pendingRequests.includes(r.id) && r.status === 'open');
             
@@ -3874,25 +3849,19 @@ const completedCountEl = document.getElementById('completedCount');
 
 // Calculate counts for each category
 const openCount = openWithoutResponse.length;
-const negotiatingCount = negotiatingRequests.length;
+const respondedCount = activeResponses.length;
 const inProgressCount = requests.filter(r => r.status === 'in_progress').length;
 const completedCount = completedRequests.length;
 
-// Update No Response and Negotiating counts
-const noResponseCountEl = document.getElementById('noResponseCount');
-const negotiatingCountEl = document.getElementById('negotiatingCount');
-if (noResponseCountEl) noResponseCountEl.textContent = openCount;
-if (negotiatingCountEl) negotiatingCountEl.textContent = negotiatingCount;
+// Update Open Requests heading (just open count)
+if (openRequestsTotalEl) openRequestsTotalEl.textContent = openCount;
 
-// Update Open Requests heading (no response + negotiating)
-const openTotal = openCount + negotiatingCount;
-if (openRequestsTotalEl) openRequestsTotalEl.textContent = openTotal;
-
-// Update Active Requests heading (in progress + pending completion + completed)
-const activeTotal = inProgressCount + pendingCompletionRequests.length + completedCount;
+// Update Active Requests heading (sum of responded + in progress + completed)
+const activeTotal = respondedCount + inProgressCount + completedCount;
 if (activeRequestsTotalEl) activeRequestsTotalEl.textContent = activeTotal;
 
-// Update individual tab counts (NO MORE respondedCountEl)
+// Update individual tab counts
+if (respondedCountEl) respondedCountEl.textContent = respondedCount;
 if (inProgressCountEl) inProgressCountEl.textContent = inProgressCount;
 
 // Add pending completion count
@@ -3934,6 +3903,24 @@ try {
     console.log('Badge update error (main):', error);
 }
 
+// Update individual tab unread badges
+try {
+    const respondedUnreadBadge = document.getElementById('respondedUnread');
+    if (respondedUnreadBadge) {
+        const badge = respondedUnreadBadge.querySelector('.unread-badge');
+        if (respondedUnreadCount > 0) {
+            if (badge) badge.textContent = respondedUnreadCount;
+            respondedUnreadBadge.classList.remove('hidden');
+            respondedUnreadBadge.style.display = 'inline-flex';
+        } else {
+            respondedUnreadBadge.classList.add('hidden');
+            respondedUnreadBadge.style.display = 'none';
+        }
+    }
+} catch (error) {
+    console.log('Badge update error (responded):', error);
+}
+
 try {
     const inProgressUnreadBadge = document.getElementById('inProgressUnread');
     if (inProgressUnreadBadge) {
@@ -3970,10 +3957,10 @@ try {
 
             // Filter requests based on current filter
 let filteredRequests = requests;
-if (currentRequestFilter === 'open' || currentRequestFilter === 'no_response') {
+if (currentRequestFilter === 'open') {
     filteredRequests = openWithoutResponse;
-} else if (currentRequestFilter === 'negotiating') {
-    filteredRequests = negotiatingRequests;
+} else if (currentRequestFilter === 'responded') {
+    filteredRequests = activeResponses;
 } else if (currentRequestFilter === 'in_progress') {
     filteredRequests = requests.filter(r => r.status === 'in_progress');
 } else if (currentRequestFilter === 'pending_completion') {
@@ -4059,7 +4046,7 @@ if (currentRequestFilter === 'open' || currentRequestFilter === 'no_response') {
                     const warrantyEndDate = new Date(req.warranty_end_date);
                     const today = new Date();
                     if (warrantyEndDate > today) {
-                        reactivateButton = `<button class="btn btn-select action-btn-compact" onclick="reactivateRequest('${req.id}')" style="background: #dc3545 !important;">🔄 Reactivate</button>`;
+                        reactivateButton = `<button class="btn btn-select action-btn-compact" onclick="reactivateRequest('${req.id}')">🔄 Reactivate</button>`;
                     }
                 }
                                 
@@ -5660,65 +5647,6 @@ function closeProfileModal() {
     document.getElementById('profileModal').classList.remove('active');
 }
 
-async function displayProviderOpenRequests(data) {
-    const container = document.getElementById('providerOpenRequestsList');
-    
-    if (!data || data.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-state-icon">📋</div>
-                <div class="empty-state-text">No open requests yet</div>
-            </div>
-        `;
-        return;
-    }
-    
-    let html = '';
-    
-    for (let item of data) {
-        const req = item.request;
-        if (!req) continue;
-        
-        const icon = SERVICE_ICONS[req.service_category] || '🔧';
-        const timeAgo = getTimeAgo(new Date(item.created_at));
-        const distance = calculateDistance(
-            currentProfile.latitude,
-            currentProfile.longitude,
-            req.request_latitude,
-            req.request_longitude
-        );
-        
-        const chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">💬 Chat</button></div>`;
-        
-        html += `
-            <div class="request-card compact">
-                <div class="request-card-main">
-                    <div class="request-card-left">
-                        <div class="request-title-compact" onclick="toggleRequestDetails(event, 'open-${req.id}')">
-                            <span class="urgency-bubble ${req.urgency}"></span>
-                            <span class="request-title-text">${icon} ${req.title}</span>
-                            <span class="request-chevron" id="chevron-open-${req.id}">▼</span>
-                        </div>
-                        <div class="request-summary" style="display: flex !important; justify-content: space-between !important; width: 100% !important; align-items: center !important;">
-                            <span class="status-badge status-open">⏳ PENDING</span>
-                            ${chatButton}
-                        </div>
-                        <div class="request-summary" style="margin-top: 6px; color: #999;">
-                            👤 ${item.seekerName} • 📍 ${distance} km • 🕒 ${timeAgo}
-                        </div>
-                    </div>
-                </div>
-                <div class="request-details" id="details-open-${req.id}">
-                    <div class="request-description"><strong>Description:</strong> ${req.description}</div>
-                    <div class="request-location" style="margin-top: 8px;"><strong>Location:</strong> ${req.request_location_address}</div>
-                </div>
-            </div>
-        `;
-    }
-    
-    container.innerHTML = html;
-}
-
 // Load Provider Responses
         async function loadProviderResponses() {
     try {
@@ -5877,6 +5805,26 @@ const completedUnread = completedResponses.reduce((sum, r) => sum + (r.unreadCou
 // NEW: Add sub-tabs for Active, In Progress, Pending Completion, Reactivated, Completed
 let tabsHTML = '<div class="sub-tabs" style="margin-bottom: 20px;">';
 
+// Tab 1: Active (Negotiating)
+if (activeNegotiating.length > 0) {
+    const unreadBadge = activeUnread > 0 ? `
+        <div class="badge-container">
+            <div class="chat-bubble-icon"></div>
+            <span class="unread-badge">${activeUnread}</span>
+        </div>
+    ` : '';
+    
+    tabsHTML += `
+        <button class="sub-tab ${currentResponseFilter === 'active' ? 'active' : ''}" onclick="filterResponses('active')">
+            <span>🔄 Active</span>
+            <div class="sub-tab-badges">
+                <span class="count-badge">${activeNegotiating.length}</span>
+                ${unreadBadge}
+            </div>
+        </button>
+    `;
+}
+
 // Tab 2: In Progress
 if (inProgress.length > 0) {
     const unreadBadge = inProgressUnread > 0 ? `
@@ -5941,10 +5889,12 @@ if (completedResponses.length > 0) {
 tabsHTML += '</div>';
     
     // NEW: Determine which data to show based on filter
-let responsesData = inProgress; // Default to In Progress (no more Active tab)
-
-if (currentResponseFilter === 'in_progress') {
-    responsesData = inProgress;
+    let responsesData = activeNegotiating; // Default to Active
+    
+    if (currentResponseFilter === 'active') {
+        responsesData = activeNegotiating;
+    } else if (currentResponseFilter === 'in_progress') {
+        responsesData = inProgress;
     } else if (currentResponseFilter === 'pending_completion') {  // ← 🆕 NEW FILTER
         responsesData = pendingCompletion;
     } else if (currentResponseFilter === 'reactivated') {
@@ -5955,10 +5905,13 @@ if (currentResponseFilter === 'in_progress') {
     
     // NEW: If filtered data is empty, show empty state
     if (!responsesData || responsesData.length === 0) {
-    let emptyIcon = '⚙️';
-    let emptyText = 'in progress requests';
-    
-    if (currentResponseFilter === 'in_progress') {
+        let emptyIcon = '💬';
+        let emptyText = 'active responses';
+        
+        if (currentResponseFilter === 'active') {
+            emptyIcon = '🔄';
+            emptyText = 'active negotiating requests';
+        } else if (currentResponseFilter === 'in_progress') {
             emptyIcon = '⚙️';
             emptyText = 'in progress requests';
         } else if (currentResponseFilter === 'pending_completion') {  // ← 🆕 NEW EMPTY STATE
@@ -6814,9 +6767,8 @@ showDashboard();
         }
 
 // Collapsible Section Management
-        let currentRequestFilter = 'no_response'; // Default for OPEN REQUESTS
-let currentActiveRequestsFilter = 'in_progress'; // NEW: Default for ACTIVE REQUESTS
-let currentUrgencyFilter = 'all';
+        let currentRequestFilter = 'open'; // Default to 'open' tab
+        let currentUrgencyFilter = 'all';
 	
 	// User dropdown toggle
 function toggleUserDropdown() {
@@ -6842,7 +6794,7 @@ document.addEventListener('click', function(event) {
             const isCurrentlyExpanded = content.classList.contains('expanded');
             
             // List of all collapsible sections
-const allSections = ['openRequests', 'activeRequests', 'myResponses', 'availableWork', 'providerOpenRequests'];
+            const allSections = ['openRequests', 'activeRequests', 'myResponses', 'availableWork'];
             
             // Close ALL sections first (accordion behavior)
             allSections.forEach(section => {
@@ -6865,12 +6817,12 @@ const allSections = ['openRequests', 'activeRequests', 'myResponses', 'available
                 }
                 
                 // FIX: Auto-load content for Active Requests section
-if (sectionId === 'activeRequests') {
-    // Trigger the default In Progress tab
-    setTimeout(() => {
-        filterActiveRequests('in_progress');
-    }, 100);
-}
+                if (sectionId === 'activeRequests') {
+                    // Trigger the default selected tab (Responded)
+                    setTimeout(() => {
+                        filterActiveRequests('responded');
+                    }, 100);
+                }
             }
         }
 
@@ -6892,10 +6844,6 @@ if (sectionId === 'activeRequests') {
             clickedButton.classList.add('active');
         }
     }
-
-if (!currentRequestFilter || currentRequestFilter === 'responded') {
-    currentRequestFilter = 'in_progress';
-}
     
     // Reload and filter requests
     loadUserRequests();
@@ -6919,12 +6867,12 @@ function filterActiveRequests(filter) {
             clickedButton.classList.add('active');
         }
     } else {
-        // ✅ NEW: If no event (default load), highlight the 'in_progress' tab
-        const inProgressTab = Array.from(allTabs).find(tab => 
-            tab.textContent.includes('In Progress') || tab.getAttribute('onclick')?.includes("'in_progress'")
+        // ✅ NEW: If no event (default load), highlight the 'responded' tab
+        const respondedTab = Array.from(allTabs).find(tab => 
+            tab.textContent.includes('Responded') || tab.getAttribute('onclick')?.includes("'responded'")
         );
-        if (inProgressTab) {
-            inProgressTab.classList.add('active');
+        if (respondedTab) {
+            respondedTab.classList.add('active');
         }
     }
     
@@ -7650,90 +7598,6 @@ function closeGetHelpModal() {
     }
 }
 
-// Open Forgot Password Modal
-function openForgotPasswordModal() {
-    const modal = document.getElementById('forgotPasswordModal');
-    const emailInput = document.getElementById('forgotPasswordEmail');
-    const errorDiv = document.getElementById('forgotPasswordError');
-    const successDiv = document.getElementById('forgotPasswordSuccess');
-    
-    // Reset form
-    if (emailInput) emailInput.value = '';
-    if (errorDiv) errorDiv.classList.add('hidden');
-    if (successDiv) successDiv.classList.add('hidden');
-    
-    // Show modal
-    if (modal) {
-        modal.classList.add('active');
-    }
-}
-
-// Close Forgot Password Modal
-function closeForgotPasswordModal() {
-    const modal = document.getElementById('forgotPasswordModal');
-    if (modal) {
-        modal.classList.remove('active');
-    }
-}
-
-// Send Password Reset Link
-async function sendPasswordResetLink() {
-    const emailInput = document.getElementById('forgotPasswordEmail');
-    const errorDiv = document.getElementById('forgotPasswordError');
-    const successDiv = document.getElementById('forgotPasswordSuccess');
-    const submitBtn = document.getElementById('sendResetLinkBtn');
-    
-    const email = emailInput.value.trim();
-    
-    // Hide previous messages
-    errorDiv.classList.add('hidden');
-    successDiv.classList.add('hidden');
-    
-    // Validation
-    if (!email) {
-        errorDiv.textContent = '⚠️ Please enter your email address';
-        errorDiv.classList.remove('hidden');
-        return;
-    }
-    
-    // Email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        errorDiv.textContent = '⚠️ Please enter a valid email address';
-        errorDiv.classList.remove('hidden');
-        return;
-    }
-    
-    // Disable button
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Checking...';
-    
-    try {
-        // Send reset link (Supabase handles non-existent emails silently)
-submitBtn.textContent = 'Sending...';
-
-const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${window.location.origin}`
-});
-
-if (resetError) throw resetError;
-
-// Success message (shown even if email doesn't exist - security feature)
-successDiv.textContent = '✅ If this email is registered, a password reset link has been sent. Please check your inbox (and spam folder).';
-successDiv.classList.remove('hidden');
-emailInput.value = '';
-        
-        
-        
-    } catch (error) {
-        errorDiv.textContent = '❌ Error: ' + error.message;
-        errorDiv.classList.remove('hidden');
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = '📧 Send Reset Link';
-    }
-}
-
 // Show FAQ Screen
 function showGetHelpFaq() {
     document.getElementById('getHelpFaqScreen').classList.remove('hidden');
@@ -8219,78 +8083,6 @@ function closePrivacyView() {
     }
 }
 
-// Load Provider's Open Requests (Negotiating)
-async function loadProviderOpenRequests() {
-    try {
-        const { data: responses, error: respError } = await supabase
-            .from('request_responses')
-            .select('*')
-            .eq('provider_id', currentProfile.user_id)
-            .order('created_at', { ascending: false });
-        
-        if (respError) throw respError;
-        
-        if (!responses || responses.length === 0) {
-            document.getElementById('providerOpenRequestsList').innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">📋</div>
-                    <div class="empty-state-text">No open requests yet</div>
-                </div>
-            `;
-            document.getElementById('providerOpenRequestsTotal').textContent = '0';
-            return;
-        }
-        
-        const requestIds = responses.map(r => r.request_id);
-        const { data: requests, error: reqError } = await supabase
-            .from('requests')
-            .select('*')
-            .in('id', requestIds);
-        
-        if (reqError) throw reqError;
-        
-        // Filter only OPEN status (negotiating)
-        const openRequests = requests.filter(r => r.status === 'open');
-        
-        document.getElementById('providerOpenRequestsTotal').textContent = openRequests.length;
-        
-        if (openRequests.length === 0) {
-            document.getElementById('providerOpenRequestsList').innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">📋</div>
-                    <div class="empty-state-text">No open requests yet</div>
-                </div>
-            `;
-            return;
-        }
-        
-        // Get seeker profiles and chat info
-        const userIds = openRequests.map(r => r.user_id);
-        const { data: seekers } = await supabase
-            .from('profiles')
-            .select('user_id, name')
-            .in('user_id', userIds);
-
-        const combinedData = responses
-            .filter(response => openRequests.find(r => r.id === response.request_id))
-            .map(response => {
-                const request = openRequests.find(r => r.id === response.request_id);
-                const seeker = seekers?.find(s => s.user_id === request.user_id);
-                return {
-                    ...response,
-                    request: request,
-                    seekerName: seeker?.name || 'Unknown',
-                    unreadCount: 0
-                };
-            });
-
-        await displayProviderOpenRequests(combinedData);
-        
-    } catch (error) {
-        console.error('Error loading provider open requests:', error);
-    }
-}
-
 </script>
 
 <!-- Feedback Modal -->
@@ -8416,37 +8208,6 @@ async function loadProviderOpenRequests() {
         <div class="success-popup-title">Request Sent Successfully!</div>
         <div class="success-popup-message" id="successPopupMessage">
             We've received your help request and will contact you soon.
-        </div>
-    </div>
-</div>
-
-<!-- Forgot Password Modal -->
-<div id="forgotPasswordModal" class="modal">
-    <div class="modal-content" style="max-width: 500px;">
-        <div class="modal-header">
-            <h2 class="modal-title">🔑 Reset Password</h2>
-            <button class="close-btn" onclick="closeForgotPasswordModal()">×</button>
-        </div>
-        <div style="padding: 20px;">
-            <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
-                Enter your registered email address and we'll send you a link to reset your password.
-            </p>
-            
-            <div class="form-group">
-                <label>Email Address <span class="required">*</span></label>
-                <input type="email" id="forgotPasswordEmail" required placeholder="your.email@example.com" autocomplete="email">
-            </div>
-            
-            <div id="forgotPasswordError" class="error hidden"></div>
-            <div id="forgotPasswordSuccess" class="success hidden"></div>
-            
-            <button class="btn btn-full" onclick="sendPasswordResetLink()" id="sendResetLinkBtn">
-                📧 Send Reset Link
-            </button>
-            
-            <div style="text-align: center; margin-top: 15px;">
-                <a href="#" onclick="closeForgotPasswordModal(); return false;" style="color: #667eea; text-decoration: none; font-size: 14px;">← Back to Login</a>
-            </div>
         </div>
     </div>
 </div>
