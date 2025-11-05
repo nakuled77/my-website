@@ -147,20 +147,6 @@
 }
 	.info { background: #e3f2fd; border: 1px solid #90caf9; color: #1976d2; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
         .hidden { display: none; }
-	/* Chat View Overlay */
-#chatView {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10000;
-    background: white;
-}
-#chatView.hidden {
-    display: none;
-}
-
 	.hidden-for-unregistered { display: none !important; }
         .profile-info { background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: left; }
         .profile-info p { margin-bottom: 10px; color: #555; }
@@ -2009,12 +1995,6 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
             <div id="editPhoneError" style="color: #dc3545; font-size: 12px; margin-top: 5px; display: none;">Enter correct number</div>
         </div>
 
-	        <div class="form-group">
-            <label>Email ID</label>
-            <input type="email" id="editEmail" readonly style="background-color: #f5f5f5; cursor: not-allowed;">
-        </div>
-
-
         <h3>📍 Address Details</h3>
         <div class="form-group">
             <label>House Number</label>
@@ -2724,25 +2704,23 @@ function smartBack() {
         createRequestView.style.display = 'none';
     }
     
-    // Restore header controls hidden by chat
-const userMenu = document.querySelector('.user-menu');
-const modeToggleBtn = document.getElementById('modeToggleBtn');
-const createRequestBtn = document.getElementById('createRequestBtn');
-
-if (userMenu) userMenu.style.display = 'flex';
-if (modeToggleBtn) modeToggleBtn.style.display = currentProfile.is_provider ? 'flex' : 'none';
-if (createRequestBtn && currentDashboardMode === 'seeker') createRequestBtn.style.display = 'block';
-
-// Navigate back based on origin
-if (chatOpenedFrom === 'responses-modal') {
-    closeResponsesModal();
-    viewResponses(currentChatData.requestId);
-    chatOpenedFrom = null;
-} else {
-    showDashboard();
-    chatOpenedFrom = null;
-}
-
+    // Show dashboard sections again
+    const seekerSection = document.getElementById('seekerSection');
+    const providerSection = document.getElementById('providerSection');
+    const createRequestBtn = document.getElementById('createRequestBtn');
+    
+    if (seekerSection) seekerSection.style.display = 'block';
+    if (providerSection && currentProfile.is_provider) providerSection.style.display = 'block';
+    if (createRequestBtn) createRequestBtn.style.display = 'inline-block';
+    
+    if (chatOpenedFrom === 'responses-modal') {
+        closeResponsesModal();
+        viewResponses(currentChatData.requestId);
+        chatOpenedFrom = null;
+    } else {
+        showDashboard();
+        chatOpenedFrom = null;
+    }
 }
 
 async function showEditProfile() {
@@ -2754,10 +2732,6 @@ async function showEditProfile() {
     if (appLogo) appLogo.style.display = 'none';
     if (dashboardLogo) dashboardLogo.style.display = 'none';
     if (createRequestBtn) createRequestBtn.style.display = 'none';
-
-    const modeToggleBtn = document.getElementById('modeToggleBtn');
-if (modeToggleBtn) modeToggleBtn.style.display = 'none';
-
     
     // Hide small profile photo and username dropdown
     const headerUserPhoto = document.getElementById('headerUserPhoto');
@@ -2789,8 +2763,6 @@ if (headerProfilePhotoLargePlaceholder) headerProfilePhotoLargePlaceholder.style
     if (createRequestBtn) createRequestBtn.style.display = 'none';
     
     // Show edit profile view
-    document.getElementById('editEmail').value = currentUser.email || '';
-
     const editView = document.getElementById('editProfileView');
     if (editView) {
         editView.classList.remove('hidden');
@@ -3625,7 +3597,7 @@ async function geocodeWithOpenCage(address) {
         // You'll need to get a FREE API key from https://opencagedata.com/api
         const apiKey = 'c227c2331da94f6b862df0a4f4149920'; // ← Replace with your key
         
-        const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}&countrycode=in&limit=1&language=en`;
+        const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}&countrycode=in&limit=1`;
         const response = await fetch(url);
         const data = await response.json();
         
@@ -4389,9 +4361,11 @@ async function openChat(requestId, providerId, isReadOnly = false) {
             return;
         }
         
+        console.log('🔵 Step 1: Opening chat for request:', requestId, 'provider:', providerId);
         showLoading();
         
         // Load request details
+        console.log('🔵 Step 2: Fetching request details...');
         const { data: request, error: reqError } = await supabase
             .from('requests')
             .select('*')
@@ -4402,9 +4376,10 @@ async function openChat(requestId, providerId, isReadOnly = false) {
             console.error('❌ Request fetch error:', reqError);
             throw reqError;
         }
+        console.log('✅ Step 2 Complete: Request loaded:', request);
         
         // CHECK IF CHAT EXISTS - if not, create it
-
+        console.log('🔵 Step 3: Checking if chat exists...');
         const { data: existingChat, error: chatCheckError } = await supabase
             .from('chats')
             .select('id')
@@ -4414,6 +4389,7 @@ async function openChat(requestId, providerId, isReadOnly = false) {
 
         // If no chat exists, create one
         if (!existingChat) {
+            console.log('⚠️ Chat does not exist, creating new chat...');
             const { error: createError } = await supabase
                 .from('chats')
                 .insert([{
@@ -4425,17 +4401,20 @@ async function openChat(requestId, providerId, isReadOnly = false) {
             if (createError) {
                 console.error('❌ Error creating chat:', createError);
             } else {
+                console.log('✅ Chat created successfully');
             }
         } else {
+            console.log('✅ Chat already exists');
         }
         
         // CRITICAL FIX: Determine partner ID based on who is viewing
+        console.log('🔵 Step 4: Determining partner (current user:', currentProfile.user_id, 'request owner:', request.user_id, ')');
         let partnerId;
         let partnerProfile;
         
         // If current user is the SEEKER (request owner)
         if (currentProfile.user_id === request.user_id) {
-            
+            console.log('👤 Current user is SEEKER, fetching PROVIDER profile...');
             // Partner is the PROVIDER
             partnerId = providerId;
             
@@ -4460,10 +4439,11 @@ async function openChat(requestId, providerId, isReadOnly = false) {
             }
             
             partnerProfile = providerData;
+            console.log('✅ Provider profile loaded:', partnerProfile.name);
         } 
         // If current user is the PROVIDER
         else {
-            
+            console.log('👤 Current user is PROVIDER, fetching SEEKER profile...');
             // Partner is the SEEKER (request owner)
             partnerId = request.user_id;
             
@@ -4488,11 +4468,13 @@ async function openChat(requestId, providerId, isReadOnly = false) {
             }
             
             partnerProfile = seekerData;
+            console.log('✅ Seeker profile loaded:', partnerProfile.name);
         }
         
         // Determine chat source
         const chatSource = (currentProfile.user_id === providerId) ? 'myResponses' : 'myRequests';
         
+        console.log('🔵 Step 5: Setting up chat data...');
         currentChatData = {
             requestId: requestId,
             providerId: providerId,
@@ -4502,8 +4484,10 @@ async function openChat(requestId, providerId, isReadOnly = false) {
             requestStatus: request.status,
             chatSource: chatSource
         };
+        console.log('✅ Chat data ready:', currentChatData);
         
         // Update chat header (while still showing loading)
+        console.log('🔵 Step 6: Updating chat UI elements...');
         document.getElementById('chatPartnerName').textContent = partnerProfile.name;
         document.getElementById('chatRequestStatus').textContent = request.status.replace('_', ' ').toUpperCase();
 
@@ -4516,10 +4500,15 @@ async function openChat(requestId, providerId, isReadOnly = false) {
             document.getElementById('chatPartnerPhoto').style.display = 'none';
             document.getElementById('chatPartnerPhotoPlaceholder').style.display = 'flex';
         }
+        console.log('✅ Chat UI elements updated');
         
         // Load messages BEFORE showing chat view
+        console.log('🔵 Step 7: Loading chat messages...');
         await loadChatMessages();
+        console.log('✅ Chat messages loaded');
+
         // Mark chat as viewed
+        console.log('🔵 Step 8: Marking chat as viewed...');
         try {
             const viewedField = currentChatData.isProvider ? 'provider_last_viewed_at' : 'seeker_last_viewed_at';
             
@@ -4532,12 +4521,14 @@ async function openChat(requestId, providerId, isReadOnly = false) {
             if (viewError) {
                 console.error('⚠️ Error marking chat as viewed:', viewError);
             } else {
+                console.log('✅ Chat marked as viewed');
             }
         } catch (error) {
             console.error('⚠️ Error updating last viewed timestamp:', error);
         }
 
         // Check contact sharing status and button visibility
+        console.log('🔵 Step 9: Checking contact sharing status...');
         const { data: chatData } = await supabase
             .from('chats')
             .select('messages')
@@ -4549,6 +4540,9 @@ async function openChat(requestId, providerId, isReadOnly = false) {
             m.message_type === 'contact_request' && 
             m.contact_request_status === 'approved'
         );
+        console.log('Contact sharing approved:', contactAlreadyApproved);
+
+        console.log('🔵 Step 10: Setting up action buttons...');
         const { data: latestRequest } = await supabase
             .from('requests')
             .select('status, selected_provider_id')
@@ -4621,8 +4615,10 @@ async function openChat(requestId, providerId, isReadOnly = false) {
                 messageInput.style.cursor = 'text';
             }
         }
+        console.log('✅ Action buttons configured');
         
         // ⭐ CRITICAL FIX: Show chat view ONLY AFTER everything is loaded
+console.log('🔵 Step 11: Showing chat view...');
 
 // Hide all main views EXCEPT dashboardView (because chatView is inside it)
 const viewsToHide = ['loginView', 'signupView', 'createRequestView', 
@@ -4635,17 +4631,15 @@ viewsToHide.forEach(viewId => {
     }
 });
 
-// Hide only header controls (keep dashboard sections visible in background)
+// Hide dashboard sections (seeker/provider sections)
+const seekerSection = document.getElementById('seekerSection');
+const providerSection = document.getElementById('providerSection');
 const createRequestBtn = document.getElementById('createRequestBtn');
 const userMenu = document.querySelector('.user-menu');
-const modeToggleBtn = document.getElementById('modeToggleBtn');
 
+if (seekerSection) seekerSection.style.display = 'none';
+if (providerSection) providerSection.style.display = 'none';
 if (createRequestBtn) createRequestBtn.style.display = 'none';
-if (userMenu) userMenu.style.display = 'none';
-if (modeToggleBtn) modeToggleBtn.style.display = 'none';
-if (modeToggleBtn) modeToggleBtn.style.display = 'none'; // Hide toggle button when chat is open
-
-
 
 // Keep dashboardView visible (parent container)
 const dashboardView = document.getElementById('dashboardView');
@@ -4661,11 +4655,16 @@ if (chatView) {
     chatView.style.display = 'block';
     chatView.style.visibility = 'visible';
 }
+
+console.log('✅ ✅ ✅ CHAT VIEW NOW VISIBLE ✅ ✅ ✅');
         
         // Start auto-refresh
         console.log('🔵 Step 12: Starting auto-refresh...');
         if (chatRefreshInterval) clearInterval(chatRefreshInterval);
         chatRefreshInterval = setInterval(loadChatMessages, 5000);
+        console.log('✅ Auto-refresh started');
+        
+        console.log('🎉 🎉 🎉 CHAT OPENED SUCCESSFULLY 🎉 🎉 🎉');
         
     } catch (error) {
         console.error('❌ ❌ ❌ ERROR OPENING CHAT:', error);
@@ -6008,7 +6007,7 @@ const combinedData = responses.map(response => {
 await displayProviderResponses(combinedData);
 
 // Update total badge (only active responses, excluding missed)
-//document.getElementById('myResponsesTotal').textContent = combinedData.length;
+document.getElementById('myResponsesTotal').textContent = combinedData.length;
         
     } catch (error) {
         console.error('Error loading provider responses:', error);
@@ -6060,13 +6059,11 @@ const inProgressUnread = inProgress.reduce((sum, r) => sum + (r.unreadCount || 0
 const pendingCompletionUnread = pendingCompletion.reduce((sum, r) => sum + (r.unreadCount || 0), 0);
 const completedUnread = completedResponses.reduce((sum, r) => sum + (r.unreadCount || 0), 0);
 
-document.getElementById('myResponsesTotal').textContent = inProgress.length + pendingCompletion.length + completedResponses.length;
-
 // NEW: Add sub-tabs for Active, In Progress, Pending Completion, Reactivated, Completed
 let tabsHTML = '<div class="sub-tabs" style="margin-bottom: 20px;">';
 
 // Tab 2: In Progress
-if (true || inProgress.length > 0) {  // Always show
+if (inProgress.length > 0) {
     const unreadBadge = inProgressUnread > 0 ? `
         <div class="badge-container">
             <div class="chat-bubble-icon"></div>
@@ -6086,7 +6083,7 @@ if (true || inProgress.length > 0) {  // Always show
 }
 
 // Tab 3: Pending Completion
-if (true || pendingCompletion.length > 0) {
+if (pendingCompletion.length > 0) {
     const unreadBadge = pendingCompletionUnread > 0 ? `
         <div class="badge-container">
             <div class="chat-bubble-icon"></div>
@@ -6107,7 +6104,7 @@ if (true || pendingCompletion.length > 0) {
 
 
 // Tab 5: Completed
-if (true || completedResponses.length > 0) {
+if (completedResponses.length > 0) {
     const unreadBadge = completedUnread > 0 ? `
         <div class="badge-container">
             <div class="chat-bubble-icon"></div>
@@ -6296,17 +6293,8 @@ if (currentResponseFilter === 'in_progress') {
 }
 
         // Load Nearby Requests (Provider View)
-// Load Nearby Requests (Provider View) - WITH DEBUG LOGS
 async function loadNearbyRequests() {
     try {
-        console.log('🔵 ========== LOAD NEARBY REQUESTS DEBUG ==========');
-        console.log('🔵 Current Provider ID:', currentProfile.user_id);
-        console.log('🔵 Provider Name:', currentProfile.name);
-        console.log('🔵 Provider Coordinates:', {
-            lat: currentProfile.latitude,
-            lng: currentProfile.longitude
-        });
-        
         // Step 1: Get all open requests
         const { data: allRequests, error: reqError } = await supabase
             .from('requests')
@@ -6314,17 +6302,6 @@ async function loadNearbyRequests() {
             .eq('status', 'open');
         
         if (reqError) throw reqError;
-        
-        console.log('🔵 Total OPEN requests in database:', allRequests?.length || 0);
-        if (allRequests && allRequests.length > 0) {
-            console.log('🔵 All open requests:', allRequests.map(r => ({
-                id: r.id,
-                title: r.title,
-                service: r.service_category,
-                location: { lat: r.request_latitude, lng: r.request_longitude },
-                address: r.request_location_address
-            })));
-        }
 
         // Step 2: Get provider's responses to filter them out
         const { data: myResponses, error: respError } = await supabase
@@ -6335,50 +6312,13 @@ async function loadNearbyRequests() {
         if (respError) throw respError;
         
         const respondedIds = new Set((myResponses || []).map(r => r.request_id));
-        console.log('🔵 Requests I already responded to:', Array.from(respondedIds));
 
         const nearby = [];
         
-        // Step 3: Get provider's services
-        const { data: providerServices, error: servError } = await supabase
-            .from('provider_services')
-            .select('*')
-            .eq('provider_id', currentProfile.user_id);
-        
-        if (servError) throw servError;
-        
-        console.log('🔵 My Services:', providerServices?.map(s => ({
-            service: s.service_id,
-            radius: s.service_radius
-        })) || 'NONE');
-        
-        if (!providerServices || providerServices.length === 0) {
-            console.log('❌ PROBLEM: Provider has NO services registered!');
-            document.getElementById('nearbyRequestsList').innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">⚠️</div>
-                    <div class="empty-state-text">You haven't added any services yet. Please update your profile to add services.</div>
-                </div>
-            `;
-            document.getElementById('availableWorkTotal').textContent = '0';
-            return;
-        }
-        
-        // Step 4: Filter requests
+        // Step 3: Filter requests
         for (let req of allRequests || []) {
-            console.log('🔵 --- Checking Request:', req.title);
-            
             // Skip if already responded
-            if (respondedIds.has(req.id)) {
-                console.log('⏭️ SKIP: Already responded to this request');
-                continue;
-            }
-            
-            // Check if request has valid coordinates
-            if (!req.request_latitude || !req.request_longitude) {
-                console.log('❌ SKIP: Request has invalid coordinates');
-                continue;
-            }
+            if (respondedIds.has(req.id)) continue;
             
             // Calculate distance
             const distance = calculateDistance(
@@ -6388,36 +6328,28 @@ async function loadNearbyRequests() {
                 req.request_longitude
             );
             
-            console.log('📏 Distance:', distance, 'km');
-            
             // Check if provider offers this service
-            const matchingService = providerServices.find(s => s.service_id === req.service_category);
+            const { data: providerServices } = await supabase
+                .from('provider_services')
+                .select('*')
+                .eq('provider_id', currentProfile.user_id)
+                .eq('service_id', req.service_category);
+
+            if (!providerServices || providerServices.length === 0) continue;
             
-            if (!matchingService) {
-                console.log('❌ SKIP: Provider does NOT offer service:', req.service_category);
-                continue;
-            }
-            
-            console.log('✅ Provider offers this service:', req.service_category);
-            console.log('📍 Service radius:', matchingService.service_radius, 'km');
+            const serviceRadius = providerServices[0].service_radius;
             
             // Check if within service radius
-            if (distance <= matchingService.service_radius) {
-                console.log('✅ MATCH! Request is within radius:', distance, 'km <=', matchingService.service_radius, 'km');
+            if (distance <= serviceRadius) {
                 nearby.push({
                     ...req,
                     distance: distance,
-                    serviceRadius: matchingService.service_radius
+                    serviceRadius: serviceRadius
                 });
-            } else {
-                console.log('❌ SKIP: Request is OUTSIDE radius:', distance, 'km >', matchingService.service_radius, 'km');
             }
         }
 
-        console.log('🔵 Total matching requests:', nearby.length);
-        console.log('🔵 ========== END DEBUG ==========');
-
-        // Continue with rest of function (missed opportunities, etc.)
+        // Step 4: Get missed opportunities
         const { data: allRespondedRequests, error: allReqError } = await supabase
             .from('requests')
             .select('*')
@@ -6446,7 +6378,7 @@ async function loadNearbyRequests() {
             }
         }
 
-        // Update badges
+        // Step 5: Update badges
         const availableCount = nearby.length;
         const totalElement = document.getElementById('availableWorkTotal');
         const newElement = document.getElementById('availableWorkNew');
@@ -6477,10 +6409,11 @@ async function loadNearbyRequests() {
             }
         }
 
+        // Step 6: CALL the display function (not define it)
         displayNearbyRequests(nearby, missedOpportunities);
         
     } catch (error) {
-        console.error('❌ Error loading nearby requests:', error);
+        console.error('Error loading nearby requests:', error);
     }
 }
 
@@ -6662,49 +6595,23 @@ respondBtn.disabled = false;
         }
 
         // Cancel Request
-async function cancelRequest(requestId) {
-    if (!confirm('⚠️ Are you sure you want to cancel this request?\n\n🗑️ This will permanently delete the request and remove it from all providers.')) return;
-    
-    try {
-        // Step 1: Delete all chat messages for this request
-        const { error: chatError } = await supabase
-            .from('chats')
-            .delete()
-            .eq('request_id', requestId);
-        
-        if (chatError) console.error('Error deleting chats:', chatError);
-        
-        // Step 2: Delete all provider responses
-        const { error: responseError } = await supabase
-            .from('request_responses')
-            .delete()
-            .eq('request_id', requestId);
-        
-        if (responseError) console.error('Error deleting responses:', responseError);
-        
-        // Step 3: Delete all ratings for this request
-        const { error: ratingError } = await supabase
-            .from('ratings')
-            .delete()
-            .eq('request_id', requestId);
-        
-        if (ratingError) console.error('Error deleting ratings:', ratingError);
-        
-        // Step 4: Finally delete the request itself
-        const { error: requestError } = await supabase
-            .from('requests')
-            .delete()
-            .eq('id', requestId);
-        
-        if (requestError) throw requestError;
-        
-        alert('✅ Request cancelled successfully and removed from all providers');
-        loadUserRequests();
-        
-    } catch (error) {
-        alert('Error cancelling request: ' + error.message);
-    }
-}
+        async function cancelRequest(requestId) {
+            if (!confirm('⚠️ Are you sure you want to cancel this request?')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('requests')
+                    .delete()
+                    .eq('id', requestId);
+                
+                if (error) throw error;
+                
+                alert('✅ Request cancelled successfully');
+                loadUserRequests();
+            } catch (error) {
+                alert('Error cancelling request: ' + error.message);
+            }
+        }
 
 // Reactivate Request (during warranty period)
         async function reactivateRequest(requestId) {
@@ -6998,7 +6905,9 @@ document.getElementById('editProfileForm').addEventListener('submit', async (e) 
             formData.state !== currentProfile.state ||
             formData.pin_code !== currentProfile.pin_code;
         
-
+        // TEMPORARY DEBUG - REMOVE AFTER TESTING
+        alert('Address Changed: ' + addressChanged + '\n\nOld City: ' + currentProfile.city + '\nNew City: ' + formData.city);
+        
         if (addressChanged) {
             infoDiv.textContent = '📍 Updating location...';
             infoDiv.classList.remove('hidden');
@@ -7007,6 +6916,8 @@ document.getElementById('editProfileForm').addEventListener('submit', async (e) 
             formData.latitude = coords.lat;
             formData.longitude = coords.lng;
             
+            // TEMPORARY DEBUG - REMOVE AFTER TESTING
+            alert('✅ NEW LAT/LONG CAPTURED:\nLatitude: ' + coords.lat + '\nLongitude: ' + coords.lng);
         }
         
         infoDiv.textContent = '💾 Saving profile...';
@@ -7313,41 +7224,35 @@ function filterWorkOpportunities(filter) {
 
         // Fetch city suggestions from Nominatim
         async function getCitySuggestions(query) {
-    if (query.length < 2) return [];
-    
-    try {
-        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)},India&format=json&limit=8&addressdetails=1&accept-language=en`;
+            if (query.length < 2) return [];
+            
+            try {
+                const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)},India&format=json&limit=8&addressdetails=1`;
                 const response = await fetch(url, {
                     headers: { 'User-Agent': 'HelpBuddy/1.0' }
                 });
                 const data = await response.json();
                 
                 // Extract unique city names
-const cities = [];
-const seen = new Set();
-
-// Regex to detect Hindi/Devanagari characters
-const hindiRegex = /[\u0900-\u097F]/;
-
-data.forEach(item => {
-    const city = item.address?.city || 
-                item.address?.town || 
-                item.address?.village || 
-                item.address?.municipality;
-    
-    const state = item.address?.state || '';
-    
-    // Filter out any results with Hindi characters
-    if (city && !seen.has(city.toLowerCase()) && !hindiRegex.test(city) && !hindiRegex.test(state)) {
-        seen.add(city.toLowerCase());
-        cities.push({
-            name: city,
-            state: state
-        });
-    }
-});
-
-return cities;
+                const cities = [];
+                const seen = new Set();
+                
+                data.forEach(item => {
+                    const city = item.address?.city || 
+                                item.address?.town || 
+                                item.address?.village || 
+                                item.address?.municipality;
+                    
+                    if (city && !seen.has(city.toLowerCase())) {
+                        seen.add(city.toLowerCase());
+                        cities.push({
+                            name: city,
+                            state: item.address?.state || ''
+                        });
+                    }
+                });
+                
+                return cities;
             } catch (error) {
                 console.error('Error fetching city suggestions:', error);
                 return [];
