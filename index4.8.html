@@ -2148,8 +2148,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     </div>
     
     <!-- RIGHT: Contact Details Symbol (only visible when activated) -->
-<button id="contactDetailsHeaderBtn" onclick="openContactDetailsModal()" style="display: none; background: none; border: none; color: #ff3333 !important; padding: 4px; font-size: 24px; cursor: pointer; line-height: 1; margin: 0; transform: rotate(135deg);">📞</button>
-
+<button id="contactDetailsHeaderBtn" onclick="openContactDetailsModal()" style="display: none; background: none; border: none; color: #ff3333; padding: 4px; font-size: 24px; cursor: pointer; line-height: 1; margin: 0; transform: rotate(-45deg);">📞</button>
 
 </div>
 
@@ -7692,17 +7691,15 @@ async function submitRating() {
     try {
         const review = document.getElementById('ratingReview').value.trim();
         
-const { error } = await supabase
-    .from('ratings')
-    .insert([{
-        request_id: currentRatingData.requestId,
-        seeker_id: currentUser.id,
-        provider_id: currentRatingData.providerId,
-        rating: selectedRating,
-        review: review || null,
-        created_at: new Date().toISOString()  // ✅ Add this line
-    }]);
-
+        const { error } = await supabase
+            .from('ratings')
+            .insert([{
+                request_id: currentRatingData.requestId,
+                seeker_id: currentUser.id,
+                provider_id: currentRatingData.providerId,
+                rating: selectedRating,
+                review: review || null
+            }]);
         
         if (error) throw error;
         
