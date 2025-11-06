@@ -1024,15 +1024,14 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     font-size: 13px !important;
 }
 
-/* Dashboard logo mobile size */
-.mobile-section-header {
-    display: block !important;
-}	
-#dashboardView > div:first-child { 
-    padding: 10px 0 8px 0 !important; 
-    margin-bottom: 12px !important; 
+(continue with the rest of STEP 4 CSS)
+		/* Dashboard logo mobile size */
+		.mobile-section-header {
+        display: block !important;
+    }	
+    #dashboardView > div:first-child { padding: 10px 0 8px 0 !important; margin-bottom: 12px !important; }
 }
-}
+        }
     </style>
 </head>
 <body>
@@ -2485,107 +2484,6 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         console.log('✅ Signup view now visible');
     }
 }
-
-
-// ✅ Resend verification email function
-async function resendVerificationEmail() {
-    try {
-        console.log('📧 Resending verification email...');
-        
-        // Get current session
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        
-        if (sessionError || !session) {
-            console.error('❌ No active session:', sessionError);
-            alert('❌ Please login first');
-            return;
-        }
-
-        // Disable button and show loading state
-        const resendBtn = event.target;
-        resendBtn.disabled = true;
-        resendBtn.textContent = 'Sending...';
-
-        // Resend verification email using Supabase auth.resend()
-        const { error } = await supabase.auth.resend({
-            type: 'signup',
-            email: session.user.email,
-            options: {
-                emailRedirectTo: `${window.location.origin}/`
-            }
-        });
-
-        if (error) {
-            throw error;
-        }
-
-        alert('✅ Verification email sent!\n\nPlease check your inbox and spam folder.');
-        console.log('✅ Verification email sent successfully');
-
-    } catch (error) {
-        console.error('❌ Error resending verification email:', error);
-        alert('❌ Failed to send verification email: ' + error.message);
-    } finally {
-        // Re-enable button
-        const resendBtn = event.target;
-        if (resendBtn) {
-            resendBtn.disabled = false;
-            resendBtn.textContent = '📧 Resend Email';
-        }
-    }
-}
-
-
-// ✅ Function to resend verification email
-async function resendVerificationEmail() {
-    try {
-        console.log('📧 Resending verification email...');
-        
-        // Show loading state
-        const resendBtn = event.target;
-        const originalText = resendBtn.textContent;
-        resendBtn.disabled = true;
-        resendBtn.textContent = '⏳ Sending...';
-        
-        // Get current session
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (!session) {
-            alert('❌ Please login first');
-            return;
-        }
-        
-        // Use Supabase's built-in resend function
-        const { error } = await supabase.auth.resend({
-            type: 'signup',
-            email: session.user.email,
-            options: {
-                emailRedirectTo: `${window.location.origin}/`
-            }
-        });
-        
-        if (error) {
-            console.error('❌ Error sending verification email:', error);
-            alert('❌ Failed to send verification email: ' + error.message);
-            resendBtn.disabled = false;
-            resendBtn.textContent = originalText;
-            return;
-        }
-        
-        console.log('✅ Verification email sent successfully');
-        alert('✅ Verification email sent!\n\nPlease check your inbox and spam folder.');
-        
-        // Reset button
-        resendBtn.disabled = false;
-        resendBtn.textContent = originalText;
-        
-    } catch (error) {
-        console.error('❌ Error in resendVerificationEmail:', error);
-        alert('❌ Failed to send email: ' + error.message);
-    }
-}
-
-
         function showDashboard() { 
     console.log('Step 8: Calling showDashboard');
     
@@ -2620,44 +2518,7 @@ async function resendVerificationEmail() {
         loadingView.classList.add('hidden');
         loadingView.style.display = 'none';
     }
-
-// ✅ NEW: Check email verification status and show banner if needed
-if (currentProfile && !currentProfile.email_verified) {
-    // Create verification banner if it doesn't exist
-    let verificationBanner = document.getElementById('verificationBanner');
-    if (!verificationBanner) {
-        verificationBanner = document.createElement('div');
-        verificationBanner.id = 'verificationBanner';
-        verificationBanner.style.cssText = 'background: #fff3cd; border: 2px solid #ffc107; border-radius: 10px; padding: 15px 20px; margin: 0 20px 20px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;';
-        verificationBanner.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
-                <span style="font-size: 24px;">⚠️</span>
-                <div>
-                    <div style="font-weight: 600; color: #856404; margin-bottom: 4px;">Email Verification Required</div>
-                    <div style="font-size: 14px; color: #856404;">Please verify your email to create requests and respond to work opportunities. Check your inbox.</div>
-                </div>
-            </div>
-            <button onclick="resendVerificationEmail()" style="background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap;">📧 Resend Email</button>
-        `;
-        
-        // Insert banner at the top of dashboard
-        const dashboardView = document.getElementById('dashboardView');
-        const dashboardHeader = document.getElementById('dashboardHeader');
-        if (dashboardView && dashboardHeader) {
-            dashboardView.insertBefore(verificationBanner, dashboardHeader);
-        }
-    } else {
-        // Banner exists, make sure it's visible
-        verificationBanner.style.display = 'flex';
-    }
-} else if (currentProfile && currentProfile.email_verified) {
-    // User is verified - remove banner if it exists
-    const verificationBanner = document.getElementById('verificationBanner');
-    if (verificationBanner) {
-        verificationBanner.style.display = 'none';
-    }
-}
-
+    
     // ✅ Show dashboard elements
     const appLogo = document.getElementById('appLogo');
     const createRequestBtn = document.getElementById('createRequestBtn');
@@ -2666,29 +2527,6 @@ if (currentProfile && !currentProfile.email_verified) {
     if (appLogo) appLogo.style.display = 'none';
     if (createRequestBtn) createRequestBtn.style.display = 'block';
     if (userMenu) userMenu.style.display = 'flex';
-    
-    // ✅ Step 3: Disable Create Request button if email not verified
-    if (createRequestBtn && currentProfile && !currentProfile.email_verified) {
-        // Disable button visually
-        createRequestBtn.style.opacity = '0.5';
-        createRequestBtn.style.cursor = 'not-allowed';
-        createRequestBtn.style.pointerEvents = 'none';
-        
-        // Wrap in a container that will catch clicks
-        const btnWrapper = document.createElement('div');
-        btnWrapper.style.position = 'relative';
-        btnWrapper.style.display = 'inline-block';
-        
-        createRequestBtn.parentNode.insertBefore(btnWrapper, createRequestBtn);
-        btnWrapper.appendChild(createRequestBtn);
-        
-        // Add click interceptor on wrapper
-        btnWrapper.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            alert('⚠️ Please verify your email address before creating service requests.\n\nCheck your inbox for the verification email.');
-        });
-    }
     
     // ✅ Show user profile photo and username
     const headerUserPhoto = document.getElementById('headerUserPhoto');
@@ -3643,30 +3481,29 @@ if (profileError) {
             console.log('✅ STEP 6 SKIPPED: Not a provider');
         }
 
-        console.log('✅ ✅ ✅ SIGNUP COMPLETE! Staying logged in with restricted view...');
-
-// ✅ Set current user (stay logged in)
-currentUser = authData.user;
-
-// ✅ Hide signup view
-const signupView = document.getElementById('signupView');
-if (signupView) {
-    signupView.classList.add('hidden');
-    signupView.style.display = 'none';
-}
-
-// ✅ Hide info message
-infoDiv.classList.add('hidden');
-
-// ✅ Show success message
-alert('✅ Account created successfully!\n\n📧 A verification email has been sent to your inbox.\n\n⚠️ Please verify your email to create requests and respond to work opportunities.');
-
-// ✅ Clear form
-document.getElementById('signupForm').reset();
-
-// ✅ Load profile and show restricted dashboard
-await loadProfile();
-
+        console.log('✅ ✅ ✅ SIGNUP COMPLETE! Logging out...');
+        
+        // ✅ Logout user immediately (force email verification)
+        await supabase.auth.signOut();
+        
+        // ✅ Hide signup view
+        const signupView = document.getElementById('signupView');
+        if (signupView) {
+            signupView.classList.add('hidden');
+            signupView.style.display = 'none';
+        }
+        
+        // ✅ Hide info message
+        infoDiv.classList.add('hidden');
+        
+        // ✅ Show success alert
+        alert('✅ Account created successfully!\n\n📧 Please check your email inbox (and spam folder) for the verification link.\n\n⚠️ You MUST verify your email before you can login.');
+        
+        // ✅ Clear form
+        document.getElementById('signupForm').reset();
+        
+        // ✅ Go to login page
+        showLogin();
         
     } catch (error) {
         console.error('❌ ❌ ❌ SIGNUP FAILED:', error);
@@ -4021,22 +3858,12 @@ async function handleEmailVerification() {
             throw new Error('Profile not found. Please contact support or try signing up again.');
         }
         
-// ✅ Profile exists - just update email_verified flag
-console.log('📝 Updating email_verified flag...');
-
-// Update the email_verified flag in profiles table
-const { error: updateError } = await supabase
-    .from('profiles')
-    .update({ email_verified: true })
-    .eq('user_id', session.user.id);
-
-if (updateError) {
-    console.error('❌ Error updating email_verified:', updateError);
-    throw new Error('Failed to update verification status: ' + updateError.message);
-}
-
-console.log('✅ Email verified successfully!');
-
+        // ✅ Profile exists - just update email_verified flag
+        console.log('📝 Updating email_verified flag...');
+        
+        
+        
+        console.log('✅ Email verified successfully!');
         
         // Logout the user (they should login manually after verification)
         await supabase.auth.signOut();
