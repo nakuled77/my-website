@@ -6769,10 +6769,7 @@ tabsContainer.innerHTML = tabsHTML;
                     <div class="request-card-right">
     ${window.currentWorkFilter === 'missed' 
         ? `<button class="btn btn-respond action-btn-compact" style="background: #6c757d;" onclick="openChat('${req.id}', '${currentProfile.user_id}', true)">👁️ View Chat</button>`
-        : (currentProfile.email_verified 
-            ? `<button class="btn btn-respond action-btn-compact" onclick="respondToRequest('${req.id}')">Respond</button>`
-            : `<button class="btn btn-respond action-btn-compact" style="background: #6c757d; opacity: 0.6; cursor: not-allowed;" onclick="alert('⚠️ Please verify your email before responding to requests.\\n\\n📧 Check your inbox for the verification email.')">🔒 Verify Email</button>`
-          )
+        : `<button class="btn btn-respond action-btn-compact" onclick="respondToRequest('${req.id}')">Respond</button>`
     }
 </div>
                 </div>
@@ -6795,14 +6792,6 @@ tabsContainer.innerHTML = tabsHTML;
             const respondBtn = event.target;
             respondBtn.disabled = true;
             respondBtn.textContent = 'Checking...';
-            
-            // ✅ CRITICAL FIX: Check if email is verified FIRST
-            if (!currentProfile || !currentProfile.email_verified) {
-                alert('⚠️ Please verify your email before responding to requests.\n\n📧 Check your inbox for the verification email.\n\n💡 Tip: Check spam folder if you don\'t see it.');
-                respondBtn.disabled = false;
-                respondBtn.textContent = 'Respond';
-                return;
-            }
             
             try {
                 const { data: existingResponse, error: checkError } = await supabase
@@ -7074,11 +7063,6 @@ async function cancelRequest(requestId) {
             submitBtn.textContent = 'Creating...';
 
             try {
-                // ✅ CRITICAL FIX: Check if email is verified BEFORE processing
-                if (!currentProfile || !currentProfile.email_verified) {
-                    throw new Error('⚠️ Please verify your email before creating requests.\n\n📧 Check your inbox for the verification email.');
-                }
-                
                 const serviceType = document.getElementById('serviceType').value;
                 const title = document.getElementById('requestTitle').value.trim();
                 const description = document.getElementById('requestDescription').value.trim();
