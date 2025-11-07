@@ -3612,6 +3612,25 @@ if (profileError) {
     throw profileError;
 }
 
+if (profileError) throw profileError;
+
+// 🆕 STEP 6: EXPLICITLY SEND VERIFICATION EMAIL
+console.log('📧 Sending verification email...');
+const { error: emailError } = await supabase.auth.resend({
+    type: 'signup',
+    email: formData.email,
+    options: {
+        emailRedirectTo: `${window.location.origin}/`
+    }
+});
+
+if (emailError) {
+    console.error('⚠️ Email send failed:', emailError);
+    // Don't throw error - user is already created, just show message
+} else {
+    console.log('✅ Verification email sent successfully');
+}
+
         console.log('🔵 STEP 6: Adding provider services (if applicable)...');
 
         // ✅ STEP 4: If provider, create services
