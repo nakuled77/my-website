@@ -3,22 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- PWA Metadata -->
-<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover'>
-<meta name='description' content='HelpBuddy - Connect with local service providers in your area'>
-<meta name='theme-color' content='#667eea'>
-<meta name='apple-mobile-web-app-capable' content='yes'>
-<meta name='apple-mobile-web-app-status-bar-style' content='black-translucent'>
-<meta name='apple-mobile-web-app-title' content='HelpBuddy'>
-<meta name='mobile-web-app-capable' content='yes'>
-
-<!-- Icons for iOS -->
-<link rel="apple-touch-icon" href="/public/icon-180x180.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/public/icon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/public/icon-16x16.png">
-
-<!-- Manifest -->
-<link rel="manifest" href="/manifest.json">
     <title>HelpBuddy - Service Marketplace</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
     <style>
@@ -2433,100 +2417,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     
     setupCharCounters();
     setupCityAutocomplete();
-
-// Initialize PWA
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then(registration => {
-        console.log('✅ PWA Ready');
-        if ('Notification' in window && Notification.permission === 'default') {
-            setTimeout(() => showNotificationPrompt(), 2000);
-        }
-    });
-}
 });
-
-// ====== PWA NOTIFICATION FUNCTIONS (Add after line 2446) ======
-
-// Show notification permission prompt
-function showNotificationPrompt() {
-    if ('Notification' in window && Notification.permission === 'default') {
-        const promptDiv = document.createElement('div');
-        promptDiv.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-            z-index: 10000;
-            max-width: 90%;
-            text-align: center;
-            animation: slideUp 0.3s ease-out;
-        `;
-        promptDiv.innerHTML = `
-            <div style="margin-bottom: 15px; font-size: 16px; font-weight: 600;">
-                🔔 Enable Notifications
-            </div>
-            <div style="margin-bottom: 15px; font-size: 14px; opacity: 0.9;">
-                Get instant alerts for new requests and messages
-            </div>
-            <div style="display: flex; gap: 10px; justify-content: center;">
-                <button onclick="requestNotificationPermission(); this.closest('div').parentElement.remove();" 
-                    style="background: white; color: #667eea; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
-                    ✅ Enable
-                </button>
-                <button onclick="this.closest('div').parentElement.remove();" 
-                    style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
-                    ❌ Not Now
-                </button>
-            </div>
-        `;
-        document.body.appendChild(promptDiv);
-    }
-}
-
-// Request notification permission
-async function requestNotificationPermission() {
-    try {
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-            console.log('✅ Notification permission granted');
-            showTestNotification();
-        }
-    } catch (error) {
-        console.error('❌ Error requesting notification permission:', error);
-    }
-}
-
-// Show test notification
-function showTestNotification() {
-    if ('Notification' in window && Notification.permission === 'granted') {
-        navigator.serviceWorker.ready.then(registration => {
-            registration.showNotification('🎉 HelpBuddy Notifications Enabled!', {
-                body: 'You will now receive instant alerts for new requests and messages',
-                icon: '/public/icon-192x192.png',
-                badge: '/public/icon-96x96.png',
-                tag: 'welcome-notification',
-                requireInteraction: false
-            });
-        });
-    }
-}
-
-// Set app badge count
-function setAppBadge(count) {
-    if ('setAppBadge' in navigator) {
-        if (count > 0) {
-            navigator.setAppBadge(count);
-        } else {
-            navigator.clearAppBadge();
-        }
-    }
-}
-
 
         function hideAllViews() {
     const viewIds = [
@@ -9079,46 +8970,5 @@ async function loadProviderOpenRequests() {
     </div>
 </div>
 
-<script>
-(function() {
-    if ('serviceWorker' in navigator) {
-        // Wait for DOM to be ready first
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', registerServiceWorker);
-        } else {
-            // DOM is already ready, register immediately
-            registerServiceWorker();
-        }
-        
-        async function registerServiceWorker() {
-            try {
-                console.log('🔵 Starting service worker registration...');
-                
-                // Unregister any existing service workers first
-                const registrations = await navigator.serviceWorker.getRegistrations();
-                for (let registration of registrations) {
-                    await registration.unregister();
-                    console.log('Unregistered old SW:', registration.scope);
-                }
-
-                // Register new service worker
-                const registration = await navigator.serviceWorker.register('/service-worker.js', {
-                    scope: '/'
-                });
-                console.log('✅ SW registered successfully:', registration.scope);
-
-                // Wait for the service worker to be ready
-                await navigator.serviceWorker.ready;
-                console.log('✅ SW is ready and active');
-
-            } catch (error) {
-                console.error('❌ SW registration failed:', error);
-            }
-        }
-    } else {
-        console.warn('⚠️ Service Workers not supported in this browser');
-    }
-})();
-</script>
 </body>
 </html>

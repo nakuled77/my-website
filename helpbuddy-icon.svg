@@ -1,0 +1,30 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Solid background circle -->
+  <circle cx="100" cy="100" r="100" fill="#667eea"/>
+  
+  <!-- Wrench and Spanner (basic service tools) -->
+  <!-- Left Wrench -->
+  <g transform="translate(60, 100) rotate(-35)">
+    <!-- Handle -->
+    <rect x="-8" y="-35" width="16" height="50" rx="8" fill="white"/>
+    <!-- Head (adjustable part) -->
+    <circle cx="0" cy="20" r="14" fill="white"/>
+    <circle cx="0" cy="20" r="9" fill="#667eea"/>
+  </g>
+  
+  <!-- Right Wrench -->
+  <g transform="translate(140, 100) rotate(35)">
+    <!-- Handle -->
+    <rect x="-8" y="-35" width="16" height="50" rx="8" fill="white"/>
+    <!-- Head (adjustable part) -->
+    <circle cx="0" cy="20" r="14" fill="white"/>
+    <circle cx="0" cy="20" r="9" fill="#667eea"/>
+  </g>
+  
+  <!-- Center circle (connection point) -->
+  <circle cx="100" cy="100" r="12" fill="white"/>
+  <circle cx="100" cy="100" r="8" fill="#667eea"/>
+  
+  <!-- Small location pin dot below (indicates "find near you") -->
+  <circle cx="100" cy="155" r="5" fill="white"/>
+</svg>
