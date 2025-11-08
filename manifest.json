@@ -10,25 +10,25 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "./public/android-icon-192x192.png",
+      "src": "/android-icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "./public/ms-icon-310x310.png",
+      "src": "/ms-icon-310x310.png",
       "sizes": "310x310",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "./public/android-icon-144x144.png",
+      "src": "/android-icon-144x144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./public/apple-icon-180x180.png",
+      "src": "/apple-icon-180x180.png",
       "sizes": "180x180",
       "type": "image/png"
     }
