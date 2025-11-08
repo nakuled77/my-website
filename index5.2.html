@@ -21,11 +21,6 @@
 <link rel="manifest" href="/manifest.json">
     <title>HelpBuddy - Service Marketplace</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
-    
-    <!-- Firebase SDK (Modular) -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
-	
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
@@ -2387,23 +2382,6 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56aGl2enp6Y2FubmllanpxdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NTcxMDEsImV4cCI6MjA3NTIzMzEwMX0.ex0z4DZF38IKc57l6V3X-DofTi6ZZUfPVFrajo1cBRY';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
-	// ===== FIREBASE CONFIGURATION =====
-const firebaseConfig = {
-    apiKey: "AIzaSyA84umO1nKufa-NmR40ifM1TP0ccx7SSp8",
-    authDomain: "helpbuddy-app.firebaseapp.com",
-    projectId: "helpbuddy-app",
-    storageBucket: "helpbuddy-app.firebasestorage.app",
-    messagingSenderId: "207546481980",
-    appId: "1:207546481980:web:9cfa7d2cade0b263b93239"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
-
-// VAPID Public Key
-const VAPID_KEY = "BMa6undK3HLXi03SeSYqBJr7cxriaNCJQSHOUxU0_ya9sdB2j3RUitnXsWajQadGiCXikpMvnitSdd2JiMvw2Y";	
-
         let currentUser = null;
         let currentProfile = null;
 	let currentDashboardMode = null;
@@ -2427,9 +2405,6 @@ const VAPID_KEY = "BMa6undK3HLXi03SeSYqBJr7cxriaNCJQSHOUxU0_ya9sdB2j3RUitnXsWajQ
 
         window.addEventListener('DOMContentLoaded', async () => {
     console.log('Step 3: DOMContentLoaded fired');
-
-	// ===== FIREBASE: Initialize Push Notifications =====
-await initializePushNotifications();
     
     // FIRST: Check if user is returning from email verification
     const isVerifying = await handleEmailVerification();
@@ -2470,152 +2445,87 @@ if ('serviceWorker' in navigator) {
 }
 });
 
-// ====== FIREBASE CLOUD MESSAGING FUNCTIONS ======
-
-// Initialize Push Notifications
-async function initializePushNotifications() {
-    try {
-        console.log('🔵 Initializing Firebase Cloud Messaging...');
-        
-        // Check if notifications are supported
-        if (!('Notification' in window)) {
-            console.warn('⚠️ This browser does not support notifications');
-            return;
-        }
-        
-        // Check if messaging is supported
-        if (!firebase.messaging.isSupported()) {
-            console.warn('⚠️ Firebase Messaging not supported in this browser');
-            return;
-        }
-        
-        console.log('✅ Firebase initialized successfully');
-        
-    } catch (error) {
-        console.error('❌ Error initializing Firebase:', error);
-    }
-}
-
-// Request Notification Permission and Get FCM Token
-async function requestNotificationPermissionAndGetToken() {
-    try {
-        console.log('🔵 Requesting notification permission...');
-        
-        // Request permission
-        const permission = await Notification.requestPermission();
-        
-        if (permission !== 'granted') {
-            console.log('❌ Notification permission denied');
-            return null;
-        }
-        
-        console.log('✅ Notification permission granted');
-        
-        // Get FCM token
-        const token = await messaging.getToken({
-            vapidKey: VAPID_KEY
-        });
-        
-        if (!token) {
-            console.error('❌ Failed to get FCM token');
-            return null;
-        }
-        
-        console.log('✅ FCM Token obtained:', token.substring(0, 20) + '...');
-        
-        // Save token to Supabase
-        await saveFCMTokenToDatabase(token);
-        
-        return token;
-        
-    } catch (error) {
-        console.error('❌ Error getting FCM token:', error);
-        return null;
-    }
-}
-
-// Save FCM Token to Supabase
-async function saveFCMTokenToDatabase(token) {
-    try {
-        if (!currentUser || !currentProfile) {
-            console.log('⚠️ User not logged in, skipping token save');
-            return;
-        }
-        
-        console.log('🔵 Saving FCM token to database...');
-        
-        // Check if token already exists
-        const { data: existing } = await supabase
-            .from('fcm_tokens')
-            .select('id')
-            .eq('user_id', currentUser.id)
-            .eq('fcm_token', token)
-            .maybeSingle();
-        
-        if (existing) {
-            console.log('✅ Token already exists in database');
-            return;
-        }
-        
-        // Insert new token
-        const { error } = await supabase
-            .from('fcm_tokens')
-            .insert([{
-                user_id: currentUser.id,
-                fcm_token: token
-            }]);
-        
-        if (error) throw error;
-        
-        console.log('✅ FCM token saved to database');
-        
-    } catch (error) {
-        console.error('❌ Error saving FCM token:', error);
-    }
-}
-
-// Enable Notifications (called when user clicks "Enable" button)
-async function enableNotifications() {
-    try {
-        const token = await requestNotificationPermissionAndGetToken();
-        
-        if (token) {
-            alert('✅ Notifications enabled successfully!');
-        } else {
-            alert('❌ Failed to enable notifications. Please try again.');
-        }
-        
-    } catch (error) {
-        console.error('❌ Error enabling notifications:', error);
-        alert('❌ Error enabling notifications: ' + error.message);
-    }
-}
-
-// ===== HANDLE FOREGROUND MESSAGES =====
-// Listen for foreground messages (when app is open)
-messaging.onMessage((payload) => {
-    console.log('🔔 Foreground notification received:', payload);
-    
-    const { notification, data } = payload;
-    
-    // Show browser notification
-    if (notification) {
-        new Notification(notification.title, {
-            body: notification.body,
-            icon: '/public/icon-192x192.png',
-            badge: '/public/icon-96x96.png',
-            tag: data?.request_id || 'helpbuddy-notification',
-            data: data
-        });
-    }
-    
-    // Reload dashboard if user is on dashboard
-    if (currentUser && currentProfile) {
-        loadDashboardData();
-    }
-});
+// ====== PWA NOTIFICATION FUNCTIONS (Add after line 2446) ======
 
 // Show notification permission prompt
+function showNotificationPrompt() {
+    if ('Notification' in window && Notification.permission === 'default') {
+        const promptDiv = document.createElement('div');
+        promptDiv.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            z-index: 10000;
+            max-width: 90%;
+            text-align: center;
+            animation: slideUp 0.3s ease-out;
+        `;
+        promptDiv.innerHTML = `
+            <div style="margin-bottom: 15px; font-size: 16px; font-weight: 600;">
+                🔔 Enable Notifications
+            </div>
+            <div style="margin-bottom: 15px; font-size: 14px; opacity: 0.9;">
+                Get instant alerts for new requests and messages
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button onclick="requestNotificationPermission(); this.closest('div').parentElement.remove();" 
+                    style="background: white; color: #667eea; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    ✅ Enable
+                </button>
+                <button onclick="this.closest('div').parentElement.remove();" 
+                    style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    ❌ Not Now
+                </button>
+            </div>
+        `;
+        document.body.appendChild(promptDiv);
+    }
+}
+
+// Request notification permission
+async function requestNotificationPermission() {
+    try {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            console.log('✅ Notification permission granted');
+            showTestNotification();
+        }
+    } catch (error) {
+        console.error('❌ Error requesting notification permission:', error);
+    }
+}
+
+// Show test notification
+function showTestNotification() {
+    if ('Notification' in window && Notification.permission === 'granted') {
+        navigator.serviceWorker.ready.then(registration => {
+            registration.showNotification('🎉 HelpBuddy Notifications Enabled!', {
+                body: 'You will now receive instant alerts for new requests and messages',
+                icon: '/public/icon-192x192.png',
+                badge: '/public/icon-96x96.png',
+                tag: 'welcome-notification',
+                requireInteraction: false
+            });
+        });
+    }
+}
+
+// Set app badge count
+function setAppBadge(count) {
+    if ('setAppBadge' in navigator) {
+        if (count > 0) {
+            navigator.setAppBadge(count);
+        } else {
+            navigator.clearAppBadge();
+        }
+    }
+}
 
 
         function hideAllViews() {
@@ -4068,13 +3978,6 @@ async function geocodeAddress(address) {
         console.log('Step 7: Profile loaded:', currentProfile);
         displayProfile(data);
         console.log('Step 8: Calling showDashboard');
-
-	// ===== REQUEST FCM TOKEN AFTER LOGIN =====
-if ('Notification' in window && Notification.permission === 'granted') {
-    console.log('🔵 User already granted notification permission, getting FCM token...');
-    await requestNotificationPermissionAndGetToken();
-}
-	
         showDashboard();
         
         window.isLoadingProfile = false;  // Reset flag
