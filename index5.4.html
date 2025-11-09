@@ -591,24 +591,22 @@ div#activeRequestsList div.request-card-left div.request-summary:nth-of-type(1) 
         .suggestion-item:last-child { border-bottom: none; }
         .suggestion-item:hover { background: #f0f4ff; color: #667eea; }
         .suggestion-item.loading { text-align: center; color: #999; font-style: italic; }
-	.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
+	.modal { 
+    display: none; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.5); 
+    z-index: 99999; 
+    align-items: center; 
+    justify-content: center; 
 }
-
-.modal.active,
-.modal[style*="display: flex"] {
-    display: flex !important;
+.modal.active { 
+    display: flex !important; 
+    visibility: visible !important;
 }
-
         .modal-content { background: white; border-radius: 20px; padding: 30px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .modal-title { font-size: 24px; font-weight: 600; color: #333; }
@@ -1672,19 +1670,14 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         <!-- SECTION 1: OPEN REQUESTS -->
         <div class="collapsible-section">
             <button class="section-toggle" onclick="toggleSection('openRequests')">
-    <div class="section-toggle-left">
-        <span>📋 OPEN REQUESTS</span>
-        <span class="count-badge" id="openRequestsTotal">0</span>
-        <span class="new-badge hidden" id="openRequestsNewBadge" style="display: none;">🆕 0</span>
-        <div class="badge-container" id="openRequestsUnreadBadge" style="display: none;">
-            <div class="chat-bubble-icon"></div>
-            <span class="unread-badge" id="openRequestsUnreadCount">0</span>
-        </div>
-    </div>
-    <div class="section-toggle-right">
-        <span class="toggle-icon" id="openRequestsIcon">▼</span>
-    </div>
-</button>
+                <div class="section-toggle-left">
+                    <span>📋 OPEN REQUESTS</span>
+                    <span class="count-badge" id="openRequestsTotal">0</span>
+                </div>
+                <div class="section-toggle-right">
+                    <span class="toggle-icon" id="openRequestsIcon">▼</span>
+                </div>
+            </button>
             <div class="section-content" id="openRequestsContent">
         <div class="section-inner">
             <div class="sub-tabs">
@@ -1694,17 +1687,12 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
                         <span class="count-badge" id="noResponseCount">0</span>
                     </div>
                 </button>
-<button class="sub-tab" onclick="filterMyRequests('negotiating')">
-    <span>Negotiating</span>
-    <div class="sub-tab-badges">
-        <span class="count-badge" id="negotiatingCount">0</span>
-        <span class="new-badge hidden" id="negotiatingNewResponsesBadge" style="display: none;">🆕 0</span>
-        <div class="badge-container" id="negotiatingUnreadBadge" style="display: none;">
-            <div class="chat-bubble-icon"></div>
-            <span class="unread-badge" id="negotiatingUnreadCount">0</span>
-        </div>
-    </div>
-</button>
+                <button class="sub-tab" onclick="filterMyRequests('negotiating')">
+                    <span>Negotiating</span>
+                    <div class="sub-tab-badges">
+                        <span class="count-badge" id="negotiatingCount">0</span>
+                    </div>
+                </button>
             </div>
             <div id="openRequestsList"></div>
         </div>
@@ -2629,50 +2617,6 @@ messaging.onMessage((payload) => {
 });
 
 // Show notification permission prompt
-function showNotificationPrompt() {
-    // Check if already granted or denied
-    if (Notification.permission === 'granted') {
-        console.log('✅ Notifications already enabled');
-        // Auto-enable if already granted
-        requestNotificationPermissionAndGetToken();
-        return;
-    }
-    
-    if (Notification.permission === 'denied') {
-        console.log('⚠️ Notifications denied by user');
-        return;
-    }
-    
-    // Show modal
-    const modal = document.getElementById('notificationPromptModal');
-    if (modal) {
-        modal.style.display = 'flex';
-        console.log('🔔 Notification prompt shown');
-    }
-}
-
-// Accept notifications (called when user clicks Enable)
-async function acceptNotifications() {
-    console.log('🔵 User clicked Enable Notifications');
-    closeNotificationPrompt();
-    
-    const token = await requestNotificationPermissionAndGetToken();
-    
-    if (token) {
-        alert('✅ Notifications enabled! You will now receive updates.');
-    } else {
-        alert('❌ Could not enable notifications. Please check your browser settings.');
-    }
-}
-
-// Close notification prompt
-function closeNotificationPrompt() {
-    const modal = document.getElementById('notificationPromptModal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
-}
-
 
 
         function hideAllViews() {
@@ -4574,9 +4518,7 @@ let newMessagesTotal = 0;
 let respondedUnreadCount = 0;
 let pendingUnreadCount = 0;
 let completedUnreadCount = 0;
-// ✅ STEP 3: Calculate new responses and unread messages for negotiating requests
-let totalNewResponses = 0;
-let totalUnreadMessages = 0;
+
 // Check for responses and new messages
 for (let req of requests) {
     if (req.status === 'open') {  // ✅ ONLY count open requests as "responded"
@@ -4590,43 +4532,7 @@ for (let req of requests) {
                     
                     if (responseCount > 0) {
             respondedRequests.push(req.id);
-            
-            // ✅ STEP 3: Calculate NEW responses since last viewed
-            if (req.responses_last_viewed_at) {
-                // Get responses received AFTER last viewed timestamp
-                const { data: newResponses } = await supabase
-                    .from('request_responses')
-                    .select('id')
-                    .eq('request_id', req.id)
-                    .gt('created_at', req.responses_last_viewed_at);
-                
-                const newResponseCount = newResponses ? newResponses.length : 0;
-                totalNewResponses += newResponseCount;
-            } else {
-                // Never viewed responses before, count ALL responses as new
-                totalNewResponses += responseCount;
-            }
-            
-            // ✅ Count unread messages in pre-selection chats
-            const { data: preChats } = await supabase
-                .from('chats')
-                .select('messages, seeker_last_viewed_at')
-                .eq('request_id', req.id);
-            
-            if (preChats && preChats.length > 0) {
-                preChats.forEach(chat => {
-                    if (chat.messages) {
-                        const lastViewedAt = chat.seeker_last_viewed_at;
-                        const unread = chat.messages.filter(m => 
-                            m.sender_id !== currentUser.id &&
-                            (!lastViewedAt || new Date(m.timestamp) > new Date(lastViewedAt))
-                        ).length;
-                        totalUnreadMessages += unread;
-                    }
-                });
-            }
         }
-        
     } else if (req.status === 'pending_completion') {  // ✅ SKIP in_progress - it has its own tab
         pendingRequests.push(req.id);
     } else if (req.status === 'completed') {
@@ -4711,85 +4617,9 @@ const negotiatingCountEl = document.getElementById('negotiatingCount');
 if (noResponseCountEl) noResponseCountEl.textContent = openCount;
 if (negotiatingCountEl) negotiatingCountEl.textContent = negotiatingCount;
 
-// ✅ STEP 4: Update Negotiating tab badges (total count + new responses + unread messages)
-// Update total negotiating requests count
-if (negotiatingCountEl) {
-    negotiatingCountEl.textContent = negotiatingCount;
-}
-
-// Update NEW responses badge (show only if there are new responses)
-const negotiatingNewResponsesBadgeEl = document.getElementById('negotiatingNewResponsesBadge');
-if (negotiatingNewResponsesBadgeEl) {
-    if (totalNewResponses > 0) {
-        negotiatingNewResponsesBadgeEl.textContent = '🆕 ' + totalNewResponses;
-        negotiatingNewResponsesBadgeEl.style.display = 'inline-block';
-        negotiatingNewResponsesBadgeEl.classList.remove('hidden');
-    } else {
-        negotiatingNewResponsesBadgeEl.style.display = 'none';
-        negotiatingNewResponsesBadgeEl.classList.add('hidden');
-    }
-}
-
-// Update unread messages badge (show only if there are unread messages)
-const negotiatingUnreadBadgeEl = document.getElementById('negotiatingUnreadBadge');
-const negotiatingUnreadCountEl = document.getElementById('negotiatingUnreadCount');
-
-if (negotiatingUnreadBadgeEl && negotiatingUnreadCountEl) {
-    if (totalUnreadMessages > 0) {
-        negotiatingUnreadCountEl.textContent = totalUnreadMessages;
-        negotiatingUnreadBadgeEl.style.display = 'inline-flex';
-    } else {
-        negotiatingUnreadBadgeEl.style.display = 'none';
-    }
-}
-
 // Update Open Requests heading (no response + negotiating)
 const openTotal = openCount + negotiatingCount;
 if (openRequestsTotalEl) openRequestsTotalEl.textContent = openTotal;
-
-
-// ✅ STEP 5: Update Open Requests main tab badges (new responses + unread messages)
-// Update NEW responses badge on main tab
-const openRequestsNewBadgeEl = document.getElementById('openRequestsNewBadge');
-if (openRequestsNewBadgeEl) {
-    if (totalNewResponses > 0) {
-        openRequestsNewBadgeEl.textContent = '🆕 ' + totalNewResponses;
-        openRequestsNewBadgeEl.style.display = 'inline-block';
-        openRequestsNewBadgeEl.classList.remove('hidden');
-    } else {
-        openRequestsNewBadgeEl.style.display = 'none';
-        openRequestsNewBadgeEl.classList.add('hidden');
-    }
-}
-
-// Update unread messages badge on main tab
-const openRequestsUnreadBadgeEl = document.getElementById('openRequestsUnreadBadge');
-const openRequestsUnreadCountEl = document.getElementById('openRequestsUnreadCount');
-
-if (openRequestsUnreadBadgeEl && openRequestsUnreadCountEl) {
-    if (totalUnreadMessages > 0) {
-        openRequestsUnreadCountEl.textContent = totalUnreadMessages;
-        openRequestsUnreadBadgeEl.style.display = 'inline-flex';
-    } else {
-        openRequestsUnreadBadgeEl.style.display = 'none';
-    }
-}
-
-// ✅ STEP 5: Update Open Requests toggle icon only (badges are on left side)
-// Find the section toggle button for Open Requests
-const openRequestsToggle = document.querySelector('button[onclick*="toggleSection(\'openRequests\')"] .section-toggle-right');
-if (openRequestsToggle) {
-    // Clear existing content first
-    openRequestsToggle.innerHTML = '';
-    
-    // Only add the toggle icon (no duplicate badges)
-    const toggleIcon = document.createElement('span');
-    toggleIcon.className = 'toggle-icon';
-    toggleIcon.id = 'openRequestsIcon';
-    toggleIcon.textContent = '▼';
-    openRequestsToggle.appendChild(toggleIcon);
-}
-
 
 // Update Active Requests heading (in progress + pending completion + completed)
 const activeTotal = inProgressCount + pendingCompletionRequests.length + completedCount;
@@ -4978,7 +4808,7 @@ html += `
                     <span class="request-title-text">${serviceIcon} ${req.title}${reactivatedBadge}</span>
                     <span class="request-chevron" id="chevron-${req.id}">▼</span>
                 </div>
-      <div class="request-summary" style="display: flex !important; justify-content: space-between !important; width: 100% !important; align-items: center !important;">
+                <div class="request-summary" style="display: flex !important; justify-content: space-between !important; width: 100% !important; align-items: center !important;">
     <span class="status-badge ${statusClass}">${statusText}</span>
     ${showResponses ? `
         <button class="btn btn-select btn-select-mobile" onclick="viewResponses('${req.id}')" style="margin-left: auto !important; flex-shrink: 0 !important;">
@@ -6259,25 +6089,15 @@ async function rejectCompletion() {
 
         // View Responses
         async function viewResponses(requestId) {
-    selectedResponseRequest = requestId;
-    
-    try {
-        // ✅ STEP 2: Update responses_last_viewed_at timestamp
-        const { error: updateError } = await supabase
-            .from('requests')
-            .update({ responses_last_viewed_at: new Date().toISOString() })
-            .eq('id', requestId);
-        
-        if (updateError) {
-            console.error('Error updating responses_last_viewed_at:', updateError);
-        }
-        
-        const { data: responses, error } = await supabase
-            .from('request_responses')
-            .select('*, provider_id')
-            .eq('request_id', requestId);
-        
-        if (error) throw error;
+            selectedResponseRequest = requestId;
+            
+            try {
+                const { data: responses, error } = await supabase
+                    .from('request_responses')
+                    .select('*, provider_id')
+                    .eq('request_id', requestId);
+                
+                if (error) throw error;
                 
                 if (!responses || responses.length === 0) {
                     document.getElementById('responsesList').innerHTML = `
@@ -9533,31 +9353,5 @@ async function loadProviderOpenRequests() {
     }
 })();
 </script>
-
-<!-- Notification Permission Modal -->
-<div id="notificationPromptModal" class="modal" style="display: none;">
-    <div class="modal-content" style="max-width: 500px;">
-        <div class="modal-header">
-            <h2 class="modal-title">🔔 Enable Notifications</h2>
-            <button class="close-btn" onclick="closeNotificationPrompt()">×</button>
-        </div>
-        <div style="padding: 30px; text-align: center;">
-            <div style="font-size: 64px; margin-bottom: 20px;">📲</div>
-            <h3 style="color: #333; margin-bottom: 15px;">Stay Updated!</h3>
-            <p style="color: #666; line-height: 1.6; margin-bottom: 25px;">
-                Get instant notifications when service providers respond to your requests or when new work opportunities are available.
-            </p>
-            <div style="display: flex; gap: 10px; justify-content: center;">
-                <button class="btn" onclick="acceptNotifications()" style="background: #128C7E;">
-                    ✅ Enable Notifications
-                </button>
-                <button class="btn btn-secondary" onclick="closeNotificationPrompt()">
-                    Maybe Later
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
 </body>
 </html>
