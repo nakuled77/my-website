@@ -2402,8 +2402,7 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 // VAPID Public Key
-const VAPID_KEY = "BMa6undK3HLXl033eSYqB_ir7cxnaNCJQSHOUxUO_ya9sdB2j3RUIitnXsWajOadGlCxklpMvnItSdd2JlMvv2Y";
-	
+const VAPID_KEY = "BMa6undK3HLXi03SeSYqBJr7cxriaNCJQSHOUxU0_ya9sdB2j3RUitnXsWajQadGiCXikpMvnitSdd2JiMvw2Y";	
 
         let currentUser = null;
         let currentProfile = null;
@@ -2959,9 +2958,6 @@ if (userButton) {
     }
     
     loadDashboardData(); 
-
-    // ✅ NEW: Start Realtime subscriptions
-    setupRealtimeSubscriptions();
     
     console.log('✅ Dashboard should now be visible');
 }
@@ -4315,135 +4311,6 @@ console.log('✅ Email verified successfully!');
     
     document.getElementById('seekerSection').classList.remove('hidden');
     loadUserRequests();
-}
-
-// ===== SUPABASE REALTIME SUBSCRIPTIONS =====
-let realtimeChannel = null;
-
-async function setupRealtimeSubscriptions() {
-    try {
-        console.log('🔵 Setting up Realtime subscriptions...');
-        
-        // Unsubscribe from existing channel if any
-        if (realtimeChannel) {
-            await supabase.removeChannel(realtimeChannel);
-            console.log('Removed old Realtime channel');
-        }
-        
-        // Create new channel
-        realtimeChannel = supabase.channel('dashboard-changes');
-        
-        // SUBSCRIPTION 1: Listen for changes in REQUESTS table
-        realtimeChannel.on(
-            'postgres_changes',
-            {
-                event: '*', // Listen to INSERT, UPDATE, DELETE
-                schema: 'public',
-                table: 'requests'
-            },
-            (payload) => {
-                console.log('📋 Request change detected:', payload);
-                handleRequestChange(payload);
-            }
-        );
-        
-        // SUBSCRIPTION 2: Listen for changes in REQUEST_RESPONSES table
-        realtimeChannel.on(
-            'postgres_changes',
-            {
-                event: '*',
-                schema: 'public',
-                table: 'request_responses'
-            },
-            (payload) => {
-                console.log('💬 Response change detected:', payload);
-                handleResponseChange(payload);
-            }
-        );
-        
-        // SUBSCRIPTION 3: Listen for changes in CHATS table
-        realtimeChannel.on(
-            'postgres_changes',
-            {
-                event: '*',
-                schema: 'public',
-                table: 'chats'
-            },
-            (payload) => {
-                console.log('💬 Chat change detected:', payload);
-                handleChatChange(payload);
-            }
-        );
-        
-        // Subscribe to the channel
-        realtimeChannel.subscribe((status) => {
-            if (status === 'SUBSCRIBED') {
-                console.log('✅ Realtime subscriptions active!');
-            } else if (status === 'CHANNEL_ERROR') {
-                console.error('❌ Realtime subscription error');
-            } else if (status === 'TIMED_OUT') {
-                console.error('⏰ Realtime subscription timed out');
-            }
-        });
-        
-        console.log('✅ Realtime subscriptions setup complete');
-        
-    } catch (error) {
-        console.error('❌ Error setting up Realtime:', error);
-    }
-}
-
-// Handle request changes
-function handleRequestChange(payload) {
-    const { eventType, new: newRecord, old: oldRecord } = payload;
-    
-    // If user is on dashboard, reload relevant sections
-    const isDashboardVisible = !document.getElementById('dashboardView').classList.contains('hidden');
-    if (!isDashboardVisible) return;
-    
-    console.log('🔄 Refreshing dashboard due to request change...');
-    
-    // Reload dashboard data
-    loadDashboardData();
-}
-
-// Handle response changes
-function handleResponseChange(payload) {
-    const { eventType, new: newRecord } = payload;
-    
-    // Only refresh if user is on dashboard
-    const isDashboardVisible = !document.getElementById('dashboardView').classList.contains('hidden');
-    if (!isDashboardVisible) return;
-    
-    console.log('🔄 Refreshing dashboard due to response change...');
-    
-    // Reload dashboard data
-    loadDashboardData();
-}
-
-// Handle chat changes
-function handleChatChange(payload) {
-    const { eventType, new: newRecord } = payload;
-    
-    // Only refresh if user is on dashboard (not in chat view)
-    const isDashboardVisible = !document.getElementById('dashboardView').classList.contains('hidden');
-    const isChatOpen = currentChatData !== null;
-    
-    if (!isDashboardVisible || isChatOpen) return;
-    
-    console.log('🔄 Refreshing dashboard due to chat change...');
-    
-    // Reload dashboard data to update unread badges
-    loadDashboardData();
-}
-
-// Cleanup function to unsubscribe when user logs out
-function cleanupRealtimeSubscriptions() {
-    if (realtimeChannel) {
-        supabase.removeChannel(realtimeChannel);
-        realtimeChannel = null;
-        console.log('🧹 Realtime subscriptions cleaned up');
-    }
 }
 
         // Load User Requests (Seeker View)
@@ -7608,21 +7475,18 @@ showDashboard();
 
         // Logout
         async function handleLogout() {
-    if (!confirm('Are you sure you want to logout?')) return;
-    
-    if (chatRefreshInterval) {
-        clearInterval(chatRefreshInterval);
-    }
-    
-    // ✅ NEW: Cleanup Realtime subscriptions
-    cleanupRealtimeSubscriptions();
-    
-    await supabase.auth.signOut();
-    currentUser = null;
-    currentProfile = null;
-    sessionStorage.removeItem('dashboardMode');
-    location.reload();
-}
+            if (!confirm('Are you sure you want to logout?')) return;
+            
+            if (chatRefreshInterval) {
+                clearInterval(chatRefreshInterval);
+            }
+            
+            await supabase.auth.signOut();
+            currentUser = null;
+            currentProfile = null;
+	sessionStorage.removeItem('dashboardMode');
+            location.reload();
+        }
 
 // Collapsible Section Management
         let currentRequestFilter = 'no_response'; // Default for OPEN REQUESTS

@@ -1,6 +1,6 @@
 // ==================== SERVICE WORKER FOR PWA ====================
 // ✅ FIXED: All paths now match actual file locations
-const CACHE_NAME = 'helpbuddy-v1.0.1';
+const CACHE_NAME = 'helpbuddy-v1.0.2';
 
 const STATIC_ASSETS = [
     '/',
