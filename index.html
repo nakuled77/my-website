@@ -2524,10 +2524,16 @@ async function requestNotificationPermissionAndGetToken() {
         
         console.log('✅ Notification permission granted');
         
-        // Get FCM token
-        const token = await messaging.getToken({
-            vapidKey: VAPID_KEY
-        });
+        // Wait for service worker to be ready
+const swRegistration = await navigator.serviceWorker.ready;
+console.log('🔵 Service worker ready, getting FCM token...');
+
+// Get FCM token with service worker registration
+const token = await messaging.getToken({
+    vapidKey: VAPID_KEY,
+    serviceWorkerRegistration: swRegistration
+});
+
         
         if (!token) {
             console.error('❌ Failed to get FCM token');
