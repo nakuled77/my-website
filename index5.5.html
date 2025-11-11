@@ -79,44 +79,6 @@
     display: inline-block;
 }
 
-/* Password Toggle Eye Icon */
-.password-field-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.password-field-wrapper input {
-    padding-right: 45px; /* Make space for the eye icon */
-}
-
-.password-toggle-icon {
-    position: absolute;
-    right: 12px;
-    cursor: pointer;
-    font-size: 20px;
-    user-select: none;
-    color: #666;
-    transition: color 0.2s;
-    z-index: 10;
-}
-
-.password-toggle-icon:hover {
-    color: #667eea;
-}
-
-.password-toggle-icon:active {
-    transform: scale(0.95);
-}
-
-/* Mobile responsive */
-@media (max-width: 480px) {
-    .password-toggle-icon {
-        font-size: 18px;
-        right: 10px;
-    }
-}
-
 .chat-unread-badge {
     position: absolute;
     top: -6px;
@@ -1111,10 +1073,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         </div>
         <div class="form-group">
             <label>Password <span class="required">*</span></label>
-            <div class="password-field-wrapper">
-    <input type="password" id="loginPassword" required>
-    <span class="password-toggle-icon" onclick="togglePasswordVisibility('loginPassword', this)">👁️‍🗨️</span>
-</div>
+            <input type="password" id="loginPassword" required>
         </div>
         <button type="submit" class="btn btn-full">Login</button>
         <div style="text-align: center; margin-top: 20px; font-size: 14px;">
@@ -1163,10 +1122,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
 </div>
                 <div class="form-group">
                     <label>Password <span class="required">*</span></label>
-                    <div class="password-field-wrapper">
-    <input type="password" id="signupPassword" minlength="6" required>
-    <span class="password-toggle-icon" onclick="togglePasswordVisibility('signupPassword', this)">👁️‍🗨️</span>
-</div>
+                    <input type="password" id="signupPassword" minlength="6" required>
                 </div>
                 <h3>📍 Address Details</h3>
                 <div class="form-group">
@@ -1326,18 +1282,12 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     <form id="passwordResetForm">
         <div class="form-group">
             <label>New Password <span class="required">*</span></label>
-            <div class="password-field-wrapper">
-    <input type="password" id="newPassword" required minlength="6" placeholder="Enter new password (min 6 characters)">
-    <span class="password-toggle-icon" onclick="togglePasswordVisibility('newPassword', this)">👁️‍🗨️</span>
-</div>
+            <input type="password" id="newPassword" required minlength="6" placeholder="Enter new password (min 6 characters)">
         </div>
         
         <div class="form-group">
             <label>Confirm New Password <span class="required">*</span></label>
-            <div class="password-field-wrapper">
-    <input type="password" id="confirmNewPassword" required minlength="6" placeholder="Re-enter new password">
-    <span class="password-toggle-icon" onclick="togglePasswordVisibility('confirmNewPassword', this)">👁️‍🗨️</span>
-</div>
+            <input type="password" id="confirmNewPassword" required minlength="6" placeholder="Re-enter new password">
         </div>
         
         <button type="submit" class="btn btn-full" id="resetPasswordBtn">🔒 Reset Password</button>
@@ -2451,7 +2401,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         
 	// ===== FIREBASE CONFIGURATION =====
 const firebaseConfig = {
-    apiKey: "AIzaSyA84umO1nKUfa-NmR40ifMlTP0ccx7SSp8",
+    apiKey: "AIzaSyA84umO1nKufa-NmR40ifM1TP0ccx7SSp8",
     authDomain: "helpbuddy-app.firebaseapp.com",
     projectId: "helpbuddy-app",
     storageBucket: "helpbuddy-app.firebasestorage.app",
@@ -8149,22 +8099,6 @@ return cities;
     if (customCityInput && !customCityInput.hasAttribute('data-autocomplete-setup')) {
         setupCityAutocompleteForField(customCityInput, 'customCitySuggestions', 'customState');
         customCityInput.setAttribute('data-autocomplete-setup', 'true');
-    }
-}
-
-
-// Password Toggle Visibility Function
-function togglePasswordVisibility(inputId, iconElement) {
-    const input = document.getElementById(inputId);
-    
-    if (!input) return;
-    
-    if (input.type === 'password') {
-        input.type = 'text';
-        iconElement.textContent = '👁️'; // Open eye (password visible)
-    } else {
-        input.type = 'password';
-        iconElement.textContent = '👁️‍🗨️'; // Closed eye (password hidden)
     }
 }
 

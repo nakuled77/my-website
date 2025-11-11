@@ -3,7 +3,7 @@ importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-comp
 
 // Firebase config
 firebase.initializeApp({
-    apiKey: "AIzaSyA84umO1nKufa-NmR40ifM1TP0ccx7SSp8",
+    apiKey: "AIzaSyA84umO1nKUfa-NmR40ifMlTP0ccx7SSp8",
     authDomain: "helpbuddy-app.firebaseapp.com",
     projectId: "helpbuddy-app",
     storageBucket: "helpbuddy-app.firebasestorage.app",
