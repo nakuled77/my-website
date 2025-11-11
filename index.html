@@ -2488,39 +2488,69 @@ const VAPID_KEY = "BMa6undK3HLXl033eSYqB_ir7cxnaNCJQSHOUxUO_ya9sdB2j3RUIitnXsWaj
             cleaner: '🧹'
         };
 
-        window.addEventListener('DOMContentLoaded', async () => {
+window.addEventListener('DOMContentLoaded', async () => {
     console.log('Step 3: DOMContentLoaded fired');
 
-	// ===== FIREBASE: Initialize Push Notifications =====
-await initializePushNotifications();
+    // ✅ Check if we should skip auto-login (after signup)
+    const skipAutoLogin = sessionStorage.getItem('skipAutoLogin');
+    if (skipAutoLogin === 'true') {
+        console.log('⏭️ Skipping auto-login (user just signed up)');
+        sessionStorage.removeItem('skipAutoLogin');
+        showLogin();
+        return;
+    }
     
-    // FIRST: Check if user is returning from email verification
+    // ✅ Check if user is returning from email verification
     const isVerifying = await handleEmailVerification();
     if (isVerifying) {
         console.log('✅ Email verification handled');
         return;
     }
     
-    // ⭐ NEW: Check if user is resetting password
+    // ✅ Check if user is resetting password
     const isResettingPassword = await handlePasswordReset();
     if (isResettingPassword) {
         console.log('✅ Password reset handled');
         return;
     }
     
-    // THEN: Check if user is already logged in
-    const { data: { user } } = await supabase.auth.getUser();
-    console.log('Step 4: Checked user:', user);
+    // ✅ CRITICAL CHANGE: Use onAuthStateChange ONLY (remove getUser call)
+    supabase.auth.onAuthStateChange(async (event, session) => {
+        console.log('Auth state changed:', event);
+        
+        const user = session?.user;
+        
+        // No user - show login
+        if (!user) {
+            console.log('No user - showing login');
+            showLogin();
+            return;
+        }
+        
+        // ✅ Check if email is verified
+        const verified = Boolean(user.email_confirmed_at || user.confirmed_at);
+        
+        if (!verified) {
+            console.log('⚠️ Email not verified - logging out');
+            await supabase.auth.signOut();
+            alert('⚠️ Please verify your email before logging in.\n\nCheck your inbox for the verification link.');
+            showLogin();
+            return;
+        }
+        
+        // ✅ Email verified - safe to load profile
+        console.log('✅ Email verified - loading profile');
+        currentUser = user;
+        await loadProfile();
+    });
     
-    if (user) { 
-        currentUser = user; 
-        await loadProfile(); 
-    } else { 
-        showLogin(); 
-    }
+    // ✅ Remove this entire block - no immediate getUser/loadProfile
+    // const { data: { user } } = await supabase.auth.getUser();
+    // if (user) { ... await loadProfile(); }
     
     setupCharCounters();
     setupCityAutocomplete();
+});
 
 // Initialize PWA
 if ('serviceWorker' in navigator) {
@@ -2531,7 +2561,7 @@ if ('serviceWorker' in navigator) {
         }
     });
 }
-});
+
 
 // ====== FIREBASE CLOUD MESSAGING FUNCTIONS ======
 
@@ -3964,10 +3994,24 @@ console.log('✅ Verification email sent automatically by Supabase');
             console.log('✅ STEP 6 SKIPPED: Not a provider');
         }
 
-        console.log('✅ ✅ ✅ SIGNUP COMPLETE! Staying logged in with restricted view...');
+console.log('✅ ✅ ✅ SIGNUP COMPLETE! Logging out user...');
 
-// ✅ Set current user (stay logged in)
-currentUser = authData.user;
+// ✅ STEP 1: Logout the user immediately
+await supabase.auth.signOut();
+
+// ✅ STEP 2: Wait longer for logout to complete
+await new Promise(resolve => setTimeout(resolve, 1000));
+
+// ✅ STEP 3: Clear any cached session data
+sessionStorage.clear();
+localStorage.clear();
+
+// ✅ STEP 4: Set a flag to prevent auto-login
+sessionStorage.setItem('skipAutoLogin', 'true');
+
+// ✅ STEP 5: Clear current user
+currentUser = null;
+currentProfile = null;
 
 // ✅ Hide signup view
 const signupView = document.getElementById('signupView');
@@ -3980,13 +4024,14 @@ if (signupView) {
 infoDiv.classList.add('hidden');
 
 // ✅ Show success message
-alert('✅ Account created successfully!\n\n📧 A verification email has been sent to your inbox.\n\n⚠️ Please verify your email to create requests and respond to work opportunities.');
+alert('✅ Account created successfully!\n\n📧 A verification email has been sent to your inbox.\n\n⚠️ Please verify your email before logging in.\n\n💡 Check your spam folder if you don\'t see the email.');
 
 // ✅ Clear form
 document.getElementById('signupForm').reset();
 
-// ✅ Load profile and show restricted dashboard
-await loadProfile();
+// ✅ Redirect to login page
+showLogin();
+
 
         
     } catch (error) {
@@ -4177,7 +4222,15 @@ async function geocodeAddress(address) {
     showLoading();
     try {
         console.log('Step 6: Fetching profile for user:', currentUser.id);
-        const { data, error } = await supabase.from('profiles').select('*').eq('user_id', currentUser.id).single();
+        const { data, error } = await supabase.from('profiles').select('*').eq('user_id', currentUser.id).maybeSingle();
+if (error) throw error;
+
+// Check if profile exists
+if (!data) {
+    throw new Error('Profile not found. Please complete signup or contact support.');
+}
+
+
         if (error) throw error;
         
         currentProfile = data;
