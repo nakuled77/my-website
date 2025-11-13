@@ -9028,15 +9028,15 @@ async function submitHelpRequest() {
     try {
         console.log('🔵 Submitting help request to Supabase...');
         
-        // Insert help request into Supabase
+        // Insert help request into Supabase - FIXED FORMAT
         const { error } = await supabase
             .from('login_help_requests')
-            .insert([{
+            .insert({
                 user_email: email,
                 issue_type: issueType,
                 message: message,
                 status: 'new'
-            }]);
+            });
         
         if (error) {
             console.error('❌ Supabase error:', error);
@@ -9046,7 +9046,6 @@ async function submitHelpRequest() {
         console.log('✅ Help request submitted successfully!');
         
         // Show success popup
-        console.log('🔵 Calling showSuccessPopup...');
         showSuccessPopup('We will contact you at <strong>' + email + '</strong> soon.');
         
         // Reset form
@@ -9054,7 +9053,6 @@ async function submitHelpRequest() {
         
         // Close modal and popup after 3 seconds
         setTimeout(() => {
-            console.log('🔵 Closing modal and popup...');
             closeGetHelpModal();
             hideSuccessPopup();
         }, 3000);
