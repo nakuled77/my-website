@@ -814,39 +814,46 @@ div#activeRequestsList div.request-card-left div.request-summary:nth-of-type(1) 
 
         /* Mobile Responsive */
         @media (max-width: 768px) { 
-            body { padding: 0; background: white; }
-            .container { border-radius: 0; padding: 12px; box-shadow: none; }
-            
-            /* Edit Profile - Back Button Alignment on Mobile */
-            #editProfileView > div:nth-child(1) {
-                padding: 20px 12px 0 12px !important;
-            }
-            
-            #editProfileView > div:nth-child(1) > div:last-child {
-                margin-right: 0 !important;
-                align-self: flex-end !important;
-                margin-left: auto !important;
-                max-width: fit-content !important;
-            }
-            
-            /* Edit Profile - Mobile Layout Fix */
-            #editProfileView > div:nth-child(2) > div:first-child {
-                flex-direction: column !important;
-                align-items: center !important;
-            }
-            
-            #editProfileView #currentProfilePhoto,
-            #editProfileView #noProfilePhoto {
-                width: 100px !important;
-                height: 100px !important;
-                font-size: 40px !important;
-            }
-            
-            #editProfileView > div:nth-child(2) > div:first-child > div:nth-child(2) {
-                width: 100% !important;
-                min-width: 100% !important;
-                margin-left: 0 !important;
-            }
+    body { padding: 0; background: white; }
+    .container { border-radius: 0; padding: 12px; box-shadow: none; }
+    
+    /* Edit Profile - Mobile Layout Fix */
+    /* Keep photo and MY PERFORMANCE side by side */
+    #editProfileView > div:nth-child(2) > div:first-child {
+        flex-direction: row !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+        justify-content: space-between !important;
+    }
+    
+    /* Reduce profile photo size */
+    #editProfileView #currentProfilePhoto,
+    #editProfileView #noProfilePhoto {
+        width: 85px !important;
+        height: 85px !important;
+        font-size: 36px !important;
+        flex-shrink: 0 !important;
+    }
+    
+    /* Reduce MY PERFORMANCE box size and font */
+    #editProfileView > div:nth-child(2) > div:first-child > div:nth-child(2) {
+        width: auto !important;
+        min-width: 0 !important;
+        margin-left: 0 !important;
+        padding: 12px !important;
+        flex: 1 !important;
+    }
+    
+    /* Reduce font sizes inside MY PERFORMANCE box */
+    #editProfileView > div:nth-child(2) > div:first-child > div:nth-child(2) h4 {
+        font-size: 13px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    #editProfileView > div:nth-child(2) > div:first-child > div:nth-child(2) p {
+        font-size: 12px !important;
+        margin: 6px 0 !important;
+    }
 	    h1 { font-size: 1.8em; display: block; margin-bottom: 20px; }
             .logo-container { font-size: 18px; }
             .dashboard-header { margin-bottom: 20px; padding-bottom: 15px; }
