@@ -2059,21 +2059,10 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
             <h2 style="margin: 0 0 15px 0; color: #667eea; font-size: 24px;">Edit Profile</h2>
             <h3 style="margin: 0 0 20px 0; color: #333; font-size: 18px;">👤 Personal Information</h3>
             
-           <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 30px; margin-bottom: 20px;">
-    <!-- LEFT: Profile Photo -->
-    <div style="flex-shrink: 0;">
-        <img id="currentProfilePhoto" src="" alt="Profile" style="width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 4px solid #667eea; display: none;">
-        <div id="noProfilePhoto" style="width: 160px; height: 160px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 64px; color: #999;">👤</div>
-    </div>
-    
-    <!-- RIGHT: MY PERFORMANCE Box -->
-    <div style="background: #f0f4ff; padding: 20px; border-radius: 12px; border: 2px solid #d0d9ff; flex-shrink: 0; min-width: 300px; margin-left: auto;">
-        <h4 style="margin: 0 0 15px 0; color: #667eea; font-size: 16px; font-weight: 700;">📊 MY PERFORMANCE</h4>
-        <p style="margin: 8px 0; color: #333; font-size: 14px; font-weight: 600;" id="myRatingText">⭐ Rating: Loading...</p>
-        <p style="margin: 8px 0; color: #333; font-size: 14px; font-weight: 600;" id="myWarrantyText">🛡️ Warranty: Loading...</p>
-        <p style="margin: 8px 0; color: #333; font-size: 14px; font-weight: 600;" id="myCompletedText">✅ Loading...</p>
-    </div>
-</div>
+            <div style="margin-top: 10px;">
+                <img id="currentProfilePhoto" src="" alt="Profile" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #667eea; display: none;">
+                <div id="noProfilePhoto" style="width: 120px; height: 120px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #999;">👤</div>
+            </div>
         </div>
         
         <!-- Right: Back Button -->
@@ -3329,45 +3318,6 @@ if (headerProfilePhotoLargePlaceholder) headerProfilePhotoLargePlaceholder.style
     document.getElementById('editPinCode').value = currentProfile.pin_code || '';
     document.getElementById('editRadius').value = currentProfile.radius_km || 10;
     
-	// Calculate stats for display
-const rating = currentProfile.average_rating || 0;
-const totalRatings = currentProfile.total_ratings || 0;
-const warrantyReceived = currentProfile.warranty_requests_received || 0;
-const warrantyHonored = currentProfile.warranty_requests_honored || 0;
-
-// Count completed requests
-const { data: completedRequests, error: countError } = await supabase
-    .from('requests')
-    .select('id', { count: 'exact', head: true })
-    .eq('selected_provider_id', currentProfile.user_id)
-    .eq('status', 'completed');
-
-const completedCount = completedRequests ? completedRequests.length : 0;
-
-// Build stats HTML
-let ratingHTML = 'No ratings yet';
-if (rating > 0 && totalRatings > 0) {
-    const stars = '⭐'.repeat(Math.round(rating));
-    ratingHTML = `${stars} ${rating}/5 (${totalRatings})`;
-}
-
-let warrantyHTML = 'No warranty history';
-if (warrantyReceived > 0) {
-    const rate = Math.round((warrantyHonored / warrantyReceived) * 100);
-    let badgeColor = '#28a745';
-    let badgeIcon = '🛡️';
-    
-    if (rate < 50) {
-        badgeColor = '#dc3545';
-        badgeIcon = '⚠️';
-    } else if (rate < 80) {
-        badgeColor = '#ffc107';
-        badgeIcon = '🛡️';
-    }
-    
-    warrantyHTML = `<span style="background: ${badgeColor}; color: white; padding: 4px 10px; border-radius: 12px; font-weight: 600;">${badgeIcon} ${rate}% (${warrantyHonored}/${warrantyReceived})</span>`;
-}
-
     // Display current profile photo
     if (currentProfile.profile_photo) {
         document.getElementById('currentProfilePhoto').src = currentProfile.profile_photo;
@@ -3377,41 +3327,6 @@ if (warrantyReceived > 0) {
         document.getElementById('currentProfilePhoto').style.display = 'none';
         document.getElementById('noProfilePhoto').style.display = 'flex';
     }
-
-
-
-// Calculate MY PERFORMANCE stats for display
-const myRating = currentProfile.average_rating || 0;
-const myTotalRatings = currentProfile.total_ratings || 0;
-const myWarrantyReceived = currentProfile.warranty_requests_received || 0;
-const myWarrantyHonored = currentProfile.warranty_requests_honored || 0;
-
-// Count completed requests
-const { data: myCompleted } = await supabase
-    .from('requests')
-    .select('id')
-    .eq('selected_provider_id', currentProfile.user_id)
-    .eq('status', 'completed');
-
-const myCompletedCount = myCompleted ? myCompleted.length : 0;
-
-// Build display strings
-const myRatingHTML = (myRating > 0 && myTotalRatings > 0) 
-    ? '⭐'.repeat(Math.round(myRating)) + ' ' + myRating + '/5 (' + myTotalRatings + ')' 
-    : 'No ratings yet';
-
-let myWarrantyHTML = 'No warranty history';
-if (myWarrantyReceived > 0) {
-    const rate = Math.round((myWarrantyHonored / myWarrantyReceived) * 100);
-    const color = rate >= 80 ? '#28a745' : (rate >= 50 ? '#ffc107' : '#dc3545');
-    const icon = rate >= 50 ? '🛡️' : '⚠️';
-    myWarrantyHTML = '<span style="background: ' + color + '; color: white; padding: 4px 10px; border-radius: 12px; font-weight: 600;">' + icon + ' ' + rate + '% (' + myWarrantyHonored + '/' + myWarrantyReceived + ')</span>';
-}
-
-// Update MY PERFORMANCE display
-document.getElementById('myRatingText').innerHTML = '⭐ Rating: ' + myRatingHTML;
-document.getElementById('myWarrantyText').innerHTML = '🛡️ Warranty: ' + myWarrantyHTML;
-document.getElementById('myCompletedText').innerHTML = '✅ ' + myCompletedCount + ' Completed Request' + (myCompletedCount !== 1 ? 's' : '');
     
     // Update provider button
     setTimeout(() => {
@@ -4131,166 +4046,88 @@ showLogin();
     }
 });
 
-// Calculate string similarity (Levenshtein distance)
-function calculateSimilarity(str1, str2) {
-    str1 = str1.toLowerCase().trim();
-    str2 = str2.toLowerCase().trim();
-    
-    if (str1 === str2) return 100;
-    
-    const len1 = str1.length;
-    const len2 = str2.length;
-    const matrix = [];
-    
-    for (let i = 0; i <= len1; i++) {
-        matrix[i] = [i];
-    }
-    for (let j = 0; j <= len2; j++) {
-        matrix[0][j] = j;
-    }
-    
-    for (let i = 1; i <= len1; i++) {
-        for (let j = 1; j <= len2; j++) {
-            const cost = str1[i - 1] === str2[j - 1] ? 0 : 1;
-            matrix[i][j] = Math.min(
-                matrix[i - 1][j] + 1,
-                matrix[i][j - 1] + 1,
-                matrix[i - 1][j - 1] + cost
-            );
-        }
-    }
-    
-    const maxLen = Math.max(len1, len2);
-    const similarity = ((maxLen - matrix[len1][len2]) / maxLen) * 100;
-    return Math.round(similarity);
-}
-
         // Geocoding
         async function getCoordinates(formData) {
-    const strategies = [
-        formData.house_number 
-            ? `${formData.house_number}, ${formData.area_name}, ${formData.landmark || ''}, ${formData.city}, ${formData.state}, India`.replace(/,\s*,/g, ',')
-            : null,
-        formData.landmark
-            ? `${formData.area_name}, ${formData.landmark}, ${formData.city}, ${formData.state}, India`
-            : null,
-        `${formData.area_name}, ${formData.city}, ${formData.state}, India`
-    ];
+            const strategies = [
+                formData.house_number 
+                    ? `${formData.house_number}, ${formData.area_name}, ${formData.landmark || ''}, ${formData.city}, ${formData.state}, India`.replace(/,\s*,/g, ',')
+                    : null,
+                formData.landmark
+                    ? `${formData.area_name}, ${formData.landmark}, ${formData.city}, ${formData.state}, India`
+                    : null,
+                `${formData.area_name}, ${formData.city}, ${formData.state}, India`
+            ];
 
-    // Try all geocoding strategies with validation
-    for (let address of strategies.filter(Boolean)) {
-        try {
-            console.log('🔍 Trying to geocode:', address);
-            const result = await geocodeAddress(address, formData.area_name);
-            
-            if (result.matchType === 'exact') {
-                console.log('✅ Exact match found!');
-                return result.coords;
-            }
-            
-            if (result.matchType === 'fuzzy') {
-                console.log('⚠️ Fuzzy match found, asking user...');
-                return await showFuzzyMatchPopup(result.coords, result.foundName);
-            }
-        } catch (error) {
-            console.log('❌ Geocoding failed for:', address, error);
+            // Try all geocoding strategies with detailed logging
+for (let address of strategies.filter(Boolean)) {
+    try {
+        console.log('🔍 Trying to geocode:', address);
+        const coords = await geocodeAddress(address);
+        if (coords) {
+            console.log('✅ Geocoding success:', coords);
+            return coords;
         }
+    } catch (error) {
+        console.log('❌ Geocoding failed for:', address, error);
     }
+}
 
-    // All geocoding strategies failed - show helpful message
-    console.log('⚠️ All geocoding strategies failed. Requesting GPS...');
+// All geocoding strategies failed - show helpful message
+console.log('⚠️ All geocoding strategies failed. Requesting GPS...');
+
+            // Mobile-friendly GPS request
+return new Promise((resolve, reject) => {
+    // Try to get GPS location
+    if (!navigator.geolocation) {
+        reject(new Error('🚫 GPS not supported on your device. Please enter a more specific address (e.g., include landmark) and try again.'));
+        return;
+    }
     
-    // Mobile-friendly GPS request
-    return new Promise((resolve, reject) => {
-        if (!navigator.geolocation) {
-            reject(new Error('🚫 GPS not supported. Please enter a more specific address.'));
-            return;
+    // Show a user-friendly alert (works better on mobile than confirm)
+    alert('📍 LOCATION REQUIRED\n\nWe could not find your address on the map.\n\nOn the next screen:\n• Click "Allow" to share your GPS location\n• This is needed to match you with nearby service providers\n\nNote: Your exact location is never shared publicly.');
+    
+    // Request GPS location
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            console.log('✅ GPS location obtained:', position.coords);
+            resolve({ 
+                lat: position.coords.latitude, 
+                lng: position.coords.longitude 
+            });
+        },
+        (error) => {
+            console.error('❌ GPS error:', error);
+            
+            let errorMessage = '❌ LOCATION ACCESS DENIED\n\n';
+            
+            if (error.code === 1) {
+                // User denied permission
+                errorMessage += '🚫 You denied location access.\n\n';
+                errorMessage += '📝 Please either:\n';
+                errorMessage += '1. Allow location access and retry\n';
+                errorMessage += '2. Enter a more specific address with landmark\n';
+                errorMessage += '3. Try again with correct address\n\n';
+                errorMessage += 'Example: 36 A, RAM CHOWK, NEAR CITY HOSPITAL, BHIWANI, HARYANA, 127021';
+            } else if (error.code === 2) {
+                // Position unavailable
+                errorMessage += '📍 GPS signal not available.\n\n';
+                errorMessage += 'Please enter a more specific address with landmark and try again.';
+            } else if (error.code === 3) {
+                // Timeout
+                errorMessage += '⏰ GPS timeout.\n\n';
+                errorMessage += 'Please retry or enter a more specific address.';
+            }
+            
+            reject(new Error(errorMessage));
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 15000, // 15 seconds timeout
+            maximumAge: 0
         }
-        
-        alert('📍 LOCATION REQUIRED\n\nArea not found on map.\n\nOn the next screen:\n• Click "Allow" to share GPS\n• This helps match you with nearby providers');
-        
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                console.log('✅ GPS location obtained:', position.coords);
-                resolve({ 
-                    lat: position.coords.latitude, 
-                    lng: position.coords.longitude 
-                });
-            },
-            (error) => {
-                console.error('❌ GPS error:', error);
-                let errorMessage = '❌ LOCATION ACCESS DENIED\n\n';
-                
-                if (error.code === 1) {
-                    errorMessage += '🚫 You denied location access.\n\n';
-                    errorMessage += '📝 Please update your area name field to be more specific.';
-                }
-                
-                reject(new Error(errorMessage));
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 15000,
-                maximumAge: 0
-            }
-        );
-    });
-}
-
-// Show popup for fuzzy match confirmation
-async function showFuzzyMatchPopup(coords, foundName) {
-    return new Promise((resolve, reject) => {
-        const modal = document.createElement('div');
-        modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 999999; display: flex; align-items: center; justify-content: center;';
-        
-        modal.innerHTML = `
-            <div style="background: white; padding: 30px; border-radius: 20px; max-width: 400px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-                <div style="font-size: 48px; margin-bottom: 15px;">📍</div>
-                <h3 style="color: #333; margin-bottom: 15px;">Location Found</h3>
-                <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
-                    We found: <strong style="color: #667eea;">${foundName}</strong>
-                </p>
-                <p style="color: #999; font-size: 14px; margin-bottom: 25px;">Is this the correct location?</p>
-                <div style="display: flex; gap: 10px; justify-content: center;">
-                    <button id="confirmYes" style="background: #28a745; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 15px;">✅ Yes, Correct</button>
-                    <button id="confirmNo" style="background: #dc3545; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 15px;">❌ No, Use GPS</button>
-                </div>
-            </div>
-        `;
-        
-        document.body.appendChild(modal);
-        
-        document.getElementById('confirmYes').onclick = () => {
-            document.body.removeChild(modal);
-            resolve(coords);
-        };
-        
-        document.getElementById('confirmNo').onclick = () => {
-            document.body.removeChild(modal);
-            
-            // Request GPS directly
-            if (!navigator.geolocation) {
-                reject(new Error('GPS not supported. Please update your area name.'));
-                return;
-            }
-            
-            alert('📍 Please allow GPS access to get your exact location');
-            
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    resolve({ 
-                        lat: position.coords.latitude, 
-                        lng: position.coords.longitude 
-                    });
-                },
-                (error) => {
-                    reject(new Error('GPS access denied. Please update your area name field.'));
-                },
-                { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-            );
-        };
-    });
-}
+    );
+});
+        }
 
         // Geocode using OpenStreetMap (Nominatim)
 async function geocodeWithOpenStreetMap(address) {
@@ -4302,13 +4139,7 @@ async function geocodeWithOpenStreetMap(address) {
         
         if (data && data.length > 0) {
             console.log('✅ OpenStreetMap SUCCESS:', data[0]);
-            // Return with additional metadata
-            return { 
-                lat: parseFloat(data[0].lat), 
-                lng: parseFloat(data[0].lon),
-                foundName: data[0].display_name,
-                source: 'openstreetmap'
-            };
+            return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
         }
         console.log('⚠️ OpenStreetMap: No results found');
         return null;
@@ -4333,9 +4164,7 @@ async function geocodeWithOpenCage(address) {
             console.log('✅ OpenCage SUCCESS:', data.results[0]);
             return { 
                 lat: data.results[0].geometry.lat, 
-                lng: data.results[0].geometry.lng,
-                foundName: data.results[0].formatted,
-                source: 'opencage'
+                lng: data.results[0].geometry.lng 
             };
         }
         console.log('⚠️ OpenCage: No results found');
@@ -4346,54 +4175,18 @@ async function geocodeWithOpenCage(address) {
     }
 }
 
-// Master geocoding function with fallback and similarity check
-async function geocodeAddress(address, expectedAreaName) {
+// Master geocoding function with fallback
+async function geocodeAddress(address) {
     // Try OpenStreetMap first (free, no limit)
-    let result = await geocodeWithOpenStreetMap(address);
-    if (!result) {
-        // Try OpenCage if OpenStreetMap fails (free 2,500/day)
-        result = await geocodeWithOpenCage(address);
-    }
+    let coords = await geocodeWithOpenStreetMap(address);
+    if (coords) return coords;
     
-    if (!result) {
-        return { matchType: null, coords: null };
-    }
+    // Try OpenCage if OpenStreetMap fails (free 2,500/day)
+    coords = await geocodeWithOpenCage(address);
+    if (coords) return coords;
     
-    // Convert to lowercase for comparison
-    const foundNameLower = result.foundName.toLowerCase();
-    const expectedAreaLower = expectedAreaName.toLowerCase().trim();
-    
-    console.log(`🔍 Checking if "${expectedAreaLower}" exists in "${foundNameLower}"`);
-    
-    // Check if expected area name exists ANYWHERE in the found result
-    if (foundNameLower.includes(expectedAreaLower)) {
-        console.log(`✅ EXACT MATCH: "${expectedAreaLower}" found in result`);
-        return { 
-            matchType: 'exact', 
-            coords: { lat: result.lat, lng: result.lng },
-            foundName: result.foundName
-        };
-    }
-    
-    // If not found, try fuzzy matching on first part of address
-    const foundParts = result.foundName.split(',').map(p => p.trim());
-    const foundAreaName = foundParts[0];
-    
-    const similarity = calculateSimilarity(expectedAreaLower, foundAreaName.toLowerCase());
-    console.log(`📊 Similarity: ${similarity}% between "${expectedAreaLower}" and "${foundAreaName}"`);
-    
-    if (similarity >= 90) {
-        console.log(`⚠️ FUZZY MATCH: ${similarity}% similarity`);
-        return { 
-            matchType: 'fuzzy', 
-            coords: { lat: result.lat, lng: result.lng },
-            foundName: result.foundName
-        };
-    }
-    
-    // No match found
-    console.log(`❌ NO MATCH: "${expectedAreaLower}" not found in "${foundNameLower}"`);
-    return { matchType: null, coords: null };
+    // Both failed
+    return null;
 }
 
         function getBrowserLocation() {
@@ -5281,12 +5074,6 @@ if (currentRequestFilter === 'open' || currentRequestFilter === 'no_response') {
                         reactivateButton = `<button class="btn btn-select action-btn-compact" onclick="reactivateRequest('${req.id}')" style="background: #dc3545 !important;">🔄 Reactivate</button>`;
                     }
                 }
-
-// ✅ NEW: Reopen Request button (for in-progress requests)
-let reopenButton = '';
-if (req.status === 'in_progress' && req.selected_provider_id) {
-    reopenButton = `<button class="btn" style="background: #ffc107; color: #333; margin-top: 10px; width: 100%;" onclick="reopenRequest('${req.id}')">🔄 Reopen & Select Different Provider</button>`;
-}
                                 
                 // Remove new messages badge - it will only show on Chat button
 const responsesBadge = showResponses ? `<span class="info-badge">👥 ${responseCount} Response${responseCount > 1 ? 's' : ''}</span>` : '';
@@ -5346,11 +5133,6 @@ ${warrantyBadge || reactivateButton ? `
     <div style="display: flex; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0f0f0;">
         <button class="btn" style="flex: 1; background: #128C7E; color: white;" onclick="editRequest('${req.id}')">✏️ Edit Request</button>
         <button class="btn btn-cancel" style="flex: 1;" onclick="cancelRequest('${req.id}')">❌ Cancel Request</button>
-    </div>
-` : ''}
-${req.status === 'in_progress' ? `
-    <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0f0f0;">
-        ${reopenButton}
     </div>
 ` : ''}
                         </div>
@@ -6481,30 +6263,6 @@ async function acceptCompletion() {
         
         if (updateError) throw updateError;
         
-        // 🆕 NEW: Check if this was a reactivated request (warranty completion)
-        const { data: request, error: reqError } = await supabase
-            .from('requests')
-            .select('warranty_end_date, selected_provider_id')
-            .eq('id', currentChatData.requestId)
-            .single();
-        
-        if (!reqError && request) {
-            // If warranty_end_date exists, this was a warranty completion
-            if (request.warranty_end_date) {
-                // Call RPC to increment warranty_honored counter
-                const { error: rpcError } = await supabase.rpc('increment_warranty_honored', {
-                    provider_user_id: request.selected_provider_id
-                });
-                
-                if (rpcError) {
-                    console.error('❌ Error incrementing warranty honored counter:', rpcError);
-                } else {
-                    console.log('✅ Warranty honored counter incremented for provider:', request.selected_provider_id);
-                }
-            }
-        }
-        // 🆕 END NEW CODE
-        
         // Add system message
         const { data: existingChat } = await supabase
             .from('chats')
@@ -6823,27 +6581,6 @@ if (provider.average_rating && provider.average_rating > 0 && provider.total_rat
         });
     }
 }
-
-// Calculate warranty honor rate
-let warrantyDisplay = '';
-const received = provider.warranty_requests_received || 0;
-const honored = provider.warranty_requests_honored || 0;
-
-if (received > 0) {
-    const rate = Math.round((honored / received) * 100);
-    let badgeColor = '#28a745';
-    let badgeIcon = '🛡️';
-    
-    if (rate < 50) {
-        badgeColor = '#dc3545';
-        badgeIcon = '⚠️';
-    } else if (rate < 80) {
-        badgeColor = '#ffc107';
-        badgeIcon = '🛡️';
-    }
-    
-    warrantyDisplay = '<p style="margin: 12px 0; color: #333; font-size: 15px;"><strong>' + badgeIcon + ' Warranty Honor Rate:</strong> <span style="background: ' + badgeColor + '; color: white; padding: 4px 10px; border-radius: 12px; font-weight: 600;">' + rate + '% (' + honored + '/' + received + ')</span></p>';
-}
                 
                 const photoHTML = provider.profile_photo 
                     ? `<div style="text-align: center; margin-bottom: 20px;">
@@ -6863,8 +6600,7 @@ if (received > 0) {
                     <div class="profile-details">
                         <p><strong>👤 Name:</strong> ${provider.name}</p>
                         <p><strong>⭐ Rating:</strong> ${ratingDisplay}</p>
-                        ${warrantyDisplay}
-			<p><strong>🔧 Services:</strong> ${serviceList}</p>
+                        <p><strong>🔧 Services:</strong> ${serviceList}</p>
                         <p><strong>📍 Address:</strong> ${addr}</p>
                         <p><strong>📌 Note:</strong> Phone number and full contact details will be shared after both parties agree to connect.</p>
                         ${ratingDetailsHTML}
@@ -7788,155 +7524,63 @@ async function cancelRequest(requestId) {
     }
 }
 
-// Reopen Request - Unselect provider and change status back to 'open'
-async function reopenRequest(requestId) {
-    try {
-        // Get request details first
-        const { data: request, error: fetchError } = await supabase
-            .from('requests')
-            .select('*, selected_provider_id')
-            .eq('id', requestId)
-            .single();
-        
-        if (fetchError) throw fetchError;
-        
-        if (!request || !request.selected_provider_id) {
-            alert('❌ No provider is currently selected for this request.');
-            return;
-        }
-        
-        // Confirmation dialog
-        if (!confirm('🔄 REOPEN REQUEST?\n\n⚠️ This will:\n• Unselect the current provider\n• Change status back to OPEN\n• Allow you to select a different provider\n• Notify all providers who responded\n\nThe current provider will be notified that you reopened the request.\n\nAre you sure?')) {
-            return;
-        }
-        
-        showLoading();
-        
-        // Step 1: Get the chat with selected provider
-        const { data: existingChat, error: chatError } = await supabase
-            .from('chats')
-            .select('messages')
-            .eq('request_id', requestId)
-            .eq('provider_id', request.selected_provider_id)
-            .maybeSingle();
-        
-        if (chatError) console.error('Error fetching chat:', chatError);
-        
-        // Step 2: Add system message to the chat
-        let messages = existingChat?.messages || [];
-        messages.push({
-            sender_id: 'system',
-            sender_name: 'System',
-            message: '🔄 REQUEST REOPENED\n\nThe seeker has reopened this request to consider other providers. You were unselected.\n\nYou can still chat and negotiate if you wish to be reconsidered.',
-            message_type: 'system',
-            timestamp: new Date().toISOString()
-        });
-        
-        // Update chat with system message
-        if (existingChat) {
-            await supabase
-                .from('chats')
-                .update({ messages: messages })
-                .eq('request_id', requestId)
-                .eq('provider_id', request.selected_provider_id);
-        }
-        
-        // Step 3: Update request - change status and clear selected provider
-        const { error: updateError } = await supabase
-            .from('requests')
-            .update({
-                status: 'open',
-                selected_provider_id: null
-            })
-            .eq('id', requestId);
-        
-        if (updateError) throw updateError;
-        
-        console.log('✅ Request reopened successfully');
-        
-        // Step 4: Show success message and reload
-        alert('✅ Request Reopened Successfully!\n\n📋 Your request is now OPEN again.\n👥 All providers who responded can see it.\n💬 You can chat with all providers and select a different one.\n\n🔔 Providers have been notified.');
-        
-        // Reload dashboard
-        await loadUserRequests();
-        showDashboard();
-        
-    } catch (error) {
-        console.error('❌ Error reopening request:', error);
-        alert('❌ Error reopening request: ' + error.message);
-        showDashboard();
-    }
-}
-
 // Reactivate Request (during warranty period)
-       async function reactivateRequest(requestId) {
-    if (!confirm('🔄 Reactivate this request?\n\nThe provider will be notified that you need service again within the warranty period. The same process will repeat.')) return;
-    
-    try {
-        // Get request details to find selected provider
-        const { data: request, error: reqError } = await supabase
-            .from('requests')
-            .select('selected_provider_id')
-            .eq('id', requestId)
-            .single();
-        
-        if (reqError || !request) throw reqError || new Error('Request not found');
-        
-        // 🆕 NEW: Call RPC function to increment counter (bypasses RLS)
-        const { error: rpcError } = await supabase.rpc('increment_warranty_received', {
-            provider_user_id: request.selected_provider_id
-        });
-        
-        if (rpcError) {
-            console.error('❌ Error incrementing warranty counter:', rpcError);
-        } else {
-            console.log('✅ Warranty request counter incremented for provider:', request.selected_provider_id);
+        async function reactivateRequest(requestId) {
+            if (!confirm('🔄 Reactivate this request?\n\nThe provider will be notified that you need service again within the warranty period. The same process will repeat.')) return;
+            
+            try {
+                // Get request details to find selected provider
+                const { data: request, error: reqError } = await supabase
+                    .from('requests')
+                    .select('selected_provider_id')
+                    .eq('id', requestId)
+                    .single();
+                
+                if (reqError || !request) throw reqError || new Error('Request not found');
+                
+                // Update request status
+                const { error: updateError } = await supabase
+                    .from('requests')
+                    .update({
+                        status: 'in_progress',
+                    })
+                    .eq('id', requestId);
+                
+                if (updateError) throw updateError;
+                
+                // Add system message to chat
+                const { data: existingChat } = await supabase
+                    .from('chats')
+                    .select('messages')
+                    .eq('request_id', requestId)
+                    .eq('provider_id', request.selected_provider_id)
+                    .single();
+                
+                let messages = existingChat?.messages || [];
+                
+                messages.push({
+                    sender_id: currentUser.id,
+                    sender_name: currentProfile.name,
+                    message: '🔄 Seeker has reactivated this request. Service needed again within warranty period.',
+                    message_type: 'system',
+                    timestamp: new Date().toISOString()
+                });
+                
+                await supabase
+                    .from('chats')
+                    .upsert({
+                        request_id: requestId,
+                        provider_id: request.selected_provider_id,
+                        messages: messages
+                    }, { onConflict: 'request_id,provider_id' });
+                
+                alert('✅ Request reactivated! The provider will be notified.');
+                loadUserRequests();
+                
+            } catch (error) {
+                alert('Error reactivating request: ' + error.message);
+            }
         }
-        // 🆕 END NEW CODE
-        
-        // Update request status
-        const { error: updateError } = await supabase
-            .from('requests')
-            .update({
-                status: 'in_progress',
-            })
-            .eq('id', requestId);
-        
-        if (updateError) throw updateError;
-        
-        // Add system message to chat
-        const { data: existingChat } = await supabase
-            .from('chats')
-            .select('messages')
-            .eq('request_id', requestId)
-            .eq('provider_id', request.selected_provider_id)
-            .single();
-        
-        let messages = existingChat?.messages || [];
-        
-        messages.push({
-            sender_id: currentUser.id,
-            sender_name: currentProfile.name,
-            message: '🔄 Seeker has reactivated this request. Service needed again within warranty period.',
-            message_type: 'system',
-            timestamp: new Date().toISOString()
-        });
-        
-        await supabase
-            .from('chats')
-            .upsert({
-                request_id: requestId,
-                provider_id: request.selected_provider_id,
-                messages: messages
-            }, { onConflict: 'request_id,provider_id' });
-        
-        alert('✅ Request reactivated! The provider will be notified.');
-        loadUserRequests();
-        
-    } catch (error) {
-        alert('Error reactivating request: ' + error.message);
-    }
-}
 
 // Edit Request - Load form with existing data
         async function editRequest(requestId) {
