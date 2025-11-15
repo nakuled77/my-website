@@ -1829,7 +1829,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         </div>
     </button>
 	<button class="sub-tab" onclick="filterActiveRequests('pending_completion')">
-    <span>Review</span>
+    <span>Pending Completion</span>
     <div class="sub-tab-badges">
         <span class="count-badge" id="pendingCompletionCount">0</span>
         <div class="badge-container hidden" id="pendingCompletionUnread" style="display: none;">
@@ -5242,23 +5242,14 @@ if (currentRequestFilter === 'open' || currentRequestFilter === 'no_response') {
 }
 
             if (filteredRequests.length === 0) {
-    let filterDisplayName = currentRequestFilter;
-    if (currentRequestFilter === 'pending_completion') {
-        filterDisplayName = 'review';
-    } else if (currentRequestFilter === 'in_progress') {
-        filterDisplayName = 'in progress';
-    } else if (currentRequestFilter === 'no_response') {
-        filterDisplayName = 'no response';
-    }
-    
-    container.innerHTML = `
-        <div class="empty-state">
-            <div class="empty-state-icon">📋</div>
-            <div class="empty-state-text">No ${filterDisplayName} requests</div>
-        </div>
-    `;
-    return;
-}
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <div class="empty-state-text">No ${currentRequestFilter} requests</div>
+                    </div>
+                `;
+                return;
+            }
 
             let html = '';            
 
@@ -7195,7 +7186,7 @@ if (true || inProgress.length > 0) {  // Always show
     
     tabsHTML += `
         <button class="sub-tab ${currentResponseFilter === 'in_progress' ? 'active' : ''}" onclick="filterResponses('in_progress')">
-            <span>In Progress</span>
+            <span>⚙️ In Progress</span>
             <div class="sub-tab-badges">
                 <span class="count-badge">${inProgress.length}</span>
                 ${unreadBadge}
@@ -7215,7 +7206,7 @@ if (true || pendingCompletion.length > 0) {
     
     tabsHTML += `
         <button class="sub-tab ${currentResponseFilter === 'pending_completion' ? 'active' : ''}" onclick="filterResponses('pending_completion')">
-            <span>Waiting</span>
+            <span>⏳ Pending Completion</span>
             <div class="sub-tab-badges">
                 <span class="count-badge">${pendingCompletion.length}</span>
                 ${unreadBadge}
@@ -7236,7 +7227,7 @@ if (true || completedResponses.length > 0) {
     
     tabsHTML += `
         <button class="sub-tab ${currentResponseFilter === 'completed' ? 'active' : ''}" onclick="filterResponses('completed')">
-            <span>Completed</span>
+            <span>✅ Completed</span>
             <div class="sub-tab-badges">
                 <span class="count-badge">${completedResponses.length}</span>
                 ${unreadBadge}
@@ -7260,24 +7251,24 @@ if (currentResponseFilter === 'in_progress') {
         responsesData = completedResponses;
     }
     
-   // NEW: If filtered data is empty, show empty state
-if (!responsesData || responsesData.length === 0) {
+    // NEW: If filtered data is empty, show empty state
+    if (!responsesData || responsesData.length === 0) {
     let emptyIcon = '⚙️';
     let emptyText = 'in progress requests';
     
     if (currentResponseFilter === 'in_progress') {
-        emptyIcon = '⚙️';
-        emptyText = 'in progress requests';
-    } else if (currentResponseFilter === 'pending_completion') {  // ✅ FIXED: Changed to currentResponseFilter
-        emptyIcon = '⏳';
-        emptyText = 'waiting requests';  // ✅ Changed to 'waiting requests'
-    } else if (currentResponseFilter === 'reactivated') {
-        emptyIcon = '🔁';
-        emptyText = 'reactivated requests';
-    } else if (currentResponseFilter === 'completed') {
-        emptyIcon = '✅';
-        emptyText = 'completed requests';
-    }
+            emptyIcon = '⚙️';
+            emptyText = 'in progress requests';
+        } else if (currentResponseFilter === 'pending_completion') {  // ← 🆕 NEW EMPTY STATE
+            emptyIcon = '⏳';
+            emptyText = 'pending completion requests';
+        } else if (currentResponseFilter === 'reactivated') {
+            emptyIcon = '🔁';
+            emptyText = 'reactivated requests';
+        } else if (currentResponseFilter === 'completed') {
+            emptyIcon = '✅';
+            emptyText = 'completed requests';
+        }
         
         container.innerHTML = tabsHTML + `
             <div class="empty-state">
