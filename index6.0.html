@@ -2520,7 +2520,6 @@ const VAPID_KEY = "BMa6undK3HLXl033eSYqB_ir7cxnaNCJQSHOUxUO_ya9sdB2j3RUIitnXsWaj
         let currentUser = null;
         let currentProfile = null;
 	let currentDashboardMode = null;
-	let dashboardRefreshInterval = null; // For polling fallback
 	console.log('Step 1: JavaScript loaded');
         console.log('Step 2: Supabase client created');
         let selectedResponseRequest = null;
@@ -3151,25 +3150,10 @@ if (userButton) {
         chatRefreshInterval = null;
     }
     
-    // ═══════════════════════════════════════════════════════════
-    // STEP 3: Load initial dashboard data
-    // ═══════════════════════════════════════════════════════════
-    console.log('📊 Loading initial dashboard data...');
-    loadDashboardData();
-    
-    // ═══════════════════════════════════════════════════════════
-    // STEP 4: Setup Realtime subscriptions (PRIMARY - instant updates)
-    // ═══════════════════════════════════════════════════════════
-    
-    // Check if Realtime is already connected and working
-    if (realtimeChannel && realtimeChannel.state === 'joined') {
-        console.log('✅ Realtime already connected, skipping setup');
-        console.log('📡 Existing channel:', realtimeChannel.topic);
-    } else {
-        console.log('🔔 Setting up Realtime subscriptions...');
-        console.log('🔔 Current channel state:', realtimeChannel?.state || 'null');
-        setupRealtimeSubscriptions();
-    }
+    loadDashboardData(); 
+
+    // ✅ NEW: Start Realtime subscriptions
+    setupRealtimeSubscriptions();
     
     console.log('✅ Dashboard should now be visible');
 }
@@ -4749,42 +4733,18 @@ let realtimeChannel = null;
 
 async function setupRealtimeSubscriptions() {
     try {
-        console.log('═══════════════════════════════════════════════════════════');
-        console.log('🔔 SETTING UP REALTIME SUBSCRIPTIONS');
-        console.log('═══════════════════════════════════════════════════════════');
+        console.log('🔵 Setting up Realtime subscriptions...');
         
-        // ═══════════════════════════════════════════════════════════
-// STEP 1: Smart channel cleanup (only if needed)
-// ═══════════════════════════════════════════════════════════
-if (realtimeChannel) {
-    const currentState = realtimeChannel.state;
-    console.log('📡 Existing channel state:', currentState);
-    
-    // Only remove if channel is in bad state
-    if (currentState === 'closed' || currentState === 'errored') {
-        console.log('🧹 Removing broken Realtime channel...');
-        await supabase.removeChannel(realtimeChannel);
-        realtimeChannel = null;
-        console.log('✅ Broken channel removed');
-    } else if (currentState === 'joined') {
-        console.log('✅ Channel already connected and healthy, reusing it');
-        return; // Don't create new channel, use existing one
-    } else {
-        console.log('🧹 Removing channel in state:', currentState);
-        await supabase.removeChannel(realtimeChannel);
-        realtimeChannel = null;
-    }
-}
+        // Unsubscribe from existing channel if any
+        if (realtimeChannel) {
+            await supabase.removeChannel(realtimeChannel);
+            console.log('Removed old Realtime channel');
+        }
         
-        // Create new channel with unique name
-        const channelName = 'dashboard-changes-' + Date.now();
-        console.log('📡 Creating new channel:', channelName);
-        realtimeChannel = supabase.channel(channelName);
+        // Create new channel
+        realtimeChannel = supabase.channel('dashboard-changes');
         
-        // ═══════════════════════════════════════════════════════════
         // SUBSCRIPTION 1: Listen for changes in REQUESTS table
-        // ═══════════════════════════════════════════════════════════
-        console.log('📋 Setting up REQUESTS table subscription...');
         realtimeChannel.on(
             'postgres_changes',
             {
@@ -4793,20 +4753,12 @@ if (realtimeChannel) {
                 table: 'requests'
             },
             (payload) => {
-                console.log('═══════════════════════════════════════════════════════════');
-                console.log('📋 ✅ REALTIME TRIGGER: Request table changed');
-                console.log('📋 Event:', payload.eventType);
-                console.log('📋 New:', payload.new);
-                console.log('═══════════════════════════════════════════════════════════');
+                console.log('📋 Request change detected:', payload);
                 handleRequestChange(payload);
             }
         );
-        console.log('✅ REQUESTS subscription configured');
         
-        // ═══════════════════════════════════════════════════════════
         // SUBSCRIPTION 2: Listen for changes in REQUEST_RESPONSES table
-        // ═══════════════════════════════════════════════════════════
-        console.log('💬 Setting up REQUEST_RESPONSES table subscription...');
         realtimeChannel.on(
             'postgres_changes',
             {
@@ -4815,20 +4767,12 @@ if (realtimeChannel) {
                 table: 'request_responses'
             },
             (payload) => {
-                console.log('═══════════════════════════════════════════════════════════');
-                console.log('💬 ✅ REALTIME TRIGGER: Response table changed');
-                console.log('💬 Event:', payload.eventType);
-                console.log('💬 New:', payload.new);
-                console.log('═══════════════════════════════════════════════════════════');
+                console.log('💬 Response change detected:', payload);
                 handleResponseChange(payload);
             }
         );
-        console.log('✅ REQUEST_RESPONSES subscription configured');
         
-        // ═══════════════════════════════════════════════════════════
         // SUBSCRIPTION 3: Listen for changes in CHATS table
-        // ═══════════════════════════════════════════════════════════
-        console.log('💬 Setting up CHATS table subscription...');
         realtimeChannel.on(
             'postgres_changes',
             {
@@ -4837,77 +4781,41 @@ if (realtimeChannel) {
                 table: 'chats'
             },
             (payload) => {
-                console.log('═══════════════════════════════════════════════════════════');
-                console.log('💬 ✅ REALTIME TRIGGER: Chat table changed');
-                console.log('💬 Event:', payload.eventType);
-                console.log('💬 Request ID:', payload.new?.request_id);
-                console.log('═══════════════════════════════════════════════════════════');
+                console.log('💬 Chat change detected:', payload);
                 handleChatChange(payload);
             }
         );
-        console.log('✅ CHATS subscription configured');
         
-        // ═══════════════════════════════════════════════════════════
-        // SUBSCRIBE to the channel (CRITICAL STEP)
-        // ═══════════════════════════════════════════════════════════
-        console.log('📡 Subscribing to channel...');
-        realtimeChannel.subscribe((status, error) => {
-            console.log('═══════════════════════════════════════════════════════════');
-            console.log('🔔 REALTIME SUBSCRIPTION STATUS CHANGED');
-            console.log('📊 Status:', status);
-            if (error) {
-                console.error('❌ Error:', error);
-            }
-            console.log('═══════════════════════════════════════════════════════════');
-            
+        // Subscribe to the channel
+        realtimeChannel.subscribe((status) => {
             if (status === 'SUBSCRIBED') {
-                console.log('✅ ✅ ✅ REALTIME CONNECTED AND ACTIVE! ✅ ✅ ✅');
-                console.log('📡 Channel name:', channelName);
-                console.log('📡 Listening to: requests, request_responses, chats');
+                console.log('✅ Realtime subscriptions active!');
             } else if (status === 'CHANNEL_ERROR') {
-                console.error('❌ ❌ ❌ REALTIME ERROR - POLLING WILL HANDLE UPDATES');
+                console.error('❌ Realtime subscription error');
             } else if (status === 'TIMED_OUT') {
-                console.error('⏰ ⏰ ⏰ REALTIME TIMED OUT - POLLING WILL HANDLE UPDATES');
-            } else if (status === 'CLOSED') {
-                console.warn('🔴 🔴 🔴 REALTIME CHANNEL CLOSED');
+                console.error('⏰ Realtime subscription timed out');
             }
         });
         
-        console.log('═══════════════════════════════════════════════════════════');
-        console.log('✅ REALTIME SETUP COMPLETE');
-        console.log('═══════════════════════════════════════════════════════════');
+        console.log('✅ Realtime subscriptions setup complete');
         
     } catch (error) {
-        console.error('═══════════════════════════════════════════════════════════');
-        console.error('❌ ERROR SETTING UP REALTIME:', error);
-        console.error('═══════════════════════════════════════════════════════════');
+        console.error('❌ Error setting up Realtime:', error);
     }
 }
 
 // Handle request changes
-async function handleRequestChange(payload) {
-    console.log('═══════════════════════════════════════════');
-    console.log('📋 REALTIME: Request change detected');
-    console.log('📋 Event type:', payload.eventType);
-    console.log('📋 New record:', payload.new);
-    console.log('📋 Old record:', payload.old);
-    console.log('═══════════════════════════════════════════');
+function handleRequestChange(payload) {
+    const { eventType, new: newRecord, old: oldRecord } = payload;
     
-    // Only skip if user is NOT logged in
-    if (!currentUser || !currentProfile) {
-        console.log('⚠️ REALTIME: User not logged in, skipping refresh');
-        return;
-    }
+    // If user is on dashboard, reload relevant sections
+    const isDashboardVisible = !document.getElementById('dashboardView').classList.contains('hidden');
+    if (!isDashboardVisible) return;
     
-    console.log('🔄 REALTIME: Starting dashboard refresh...');
+    console.log('🔄 Refreshing dashboard due to request change...');
     
-    try {
-        // Actually wait for data to load
-        await loadDashboardData();
-        console.log('✅ REALTIME: Dashboard refreshed successfully');
-    } catch (error) {
-        console.error('❌ REALTIME: Error refreshing dashboard:', error);
-    }
+    // Reload dashboard data
+    loadDashboardData();
 }
 
 // Handle response changes
@@ -8255,17 +8163,9 @@ async function reopenRequest(requestId) {
 
                 if (error) throw error;
 
-console.log('✅ Request inserted into database');
-console.log('⏳ Waiting for Realtime to trigger refresh...');
-
-infoDiv.classList.add('hidden');
-alert('✅ Request created successfully!');
-
-// Give Realtime a moment to trigger before we navigate back
-setTimeout(() => {
-    console.log('🔄 Showing dashboard after delay...');
-    showDashboard();
-}, 500);
+                infoDiv.classList.add('hidden');
+                alert('✅ Request created successfully!');
+                showDashboard();
             } catch (error) {
                 errorDiv.textContent = error.message;
                 errorDiv.classList.remove('hidden');
