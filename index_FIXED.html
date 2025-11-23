@@ -29,23 +29,10 @@
             .user-dropdown { min-width: 160px; }
         }
         @keyframes dropdownSlide { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .dropdown-item { 
-    padding: 12px 20px; 
-    cursor: pointer; 
-    transition: all 0.2s; 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    font-size: 14px; 
-    font-weight: 500; 
-    color: #333; 
-}
+        .dropdown-item { padding: 12px 20px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: #333; border-bottom: 1px solid #f0f0f0; }
+        .dropdown-item:last-child { border-bottom: none; }
         .dropdown-item:hover { background: #f8f9fa; color: #667eea; }
-	.dropdown-separator { 
-    height: 2px; 
-    background: #667eea; 
-    margin: 8px 0; 
-}
+	.dropdown-separator { height: 1px; background: #e0e0e0; margin: 8px 0; }
 	h1 { color: #667eea; text-align: center; margin-bottom: 10px; font-size: 2.5em; }
         h2 { color: #333; margin-bottom: 20px; font-size: 1.5em; }
         h3 { color: #667eea; margin: 20px 0 15px; font-size: 1.2em; }
@@ -737,7 +724,7 @@ div#activeRequestsList div.request-card-left div.request-summary:nth-of-type(1) 
         .warranty-form .btn { margin-top: 16px; font-size: 14px; }
         
 /* Template Modal Styles */
-        .template-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100000; align-items: center; justify-content: center; }
+        .template-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10001; align-items: center; justify-content: center; }
         .template-modal.active { display: flex; }
         .template-modal-content { background: white; border-radius: 16px; padding: 24px; width: 90%; max-width: 500px; max-height: 70vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
         .template-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -1662,19 +1649,14 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         <!-- SECTION 1: OPEN REQUESTS -->
         <div class="collapsible-section">
             <button class="section-toggle" onclick="toggleSection('openRequests')">
-    <div class="section-toggle-left">
-        <span>📋 OPEN REQUESTS</span>
-        <span class="count-badge" id="openRequestsTotal">0</span>
-        <span class="info-badge hidden" style="background: #dc3545; color: white;" id="openRequestsNewResponses">🆕 0</span>
-        <div class="badge-container hidden" id="openRequestsUnread" style="display: none;">
-            <div class="chat-bubble-icon"></div>
-            <span class="unread-badge">0</span>
-        </div>
-    </div>
-    <div class="section-toggle-right">
-        <span class="toggle-icon" id="openRequestsIcon">▼</span>
-    </div>
-</button>
+                <div class="section-toggle-left">
+                    <span>📋 OPEN REQUESTS</span>
+                    <span class="count-badge" id="openRequestsTotal">0</span>
+                </div>
+                <div class="section-toggle-right">
+                    <span class="toggle-icon" id="openRequestsIcon">▼</span>
+                </div>
+            </button>
             <div class="section-content" id="openRequestsContent">
         <div class="section-inner">
             <div class="sub-tabs">
@@ -1684,17 +1666,17 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
                         <span class="count-badge" id="noResponseCount">0</span>
                     </div>
                 </button>
-                <button class="sub-tab" onclick="filterMyRequests('negotiating')">
+<button class="sub-tab" onclick="filterMyRequests('negotiating')">
     <span>Negotiating</span>
     <div class="sub-tab-badges">
         <span class="count-badge" id="negotiatingCount">0</span>
-        <span class="info-badge" style="background: #dc3545; color: white;" id="negotiatingNewResponses">🆕 0</span>
         <div class="badge-container hidden" id="negotiatingUnread" style="display: none;">
             <div class="chat-bubble-icon"></div>
             <span class="unread-badge">0</span>
         </div>
     </div>
 </button>
+
             </div>
             <div id="openRequestsList"></div>
         </div>
@@ -1730,7 +1712,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         </div>
     </button>
 	<button class="sub-tab" onclick="filterActiveRequests('pending_completion')">
-    <span>Review</span>
+    <span>Pending Completion</span>
     <div class="sub-tab-badges">
         <span class="count-badge" id="pendingCompletionCount">0</span>
         <div class="badge-container hidden" id="pendingCompletionUnread" style="display: none;">
@@ -1764,18 +1746,18 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
 <!-- SECTION 1: OPEN REQUESTS (Provider) -->
 <div class="collapsible-section">
     <button class="section-toggle" onclick="toggleSection('providerOpenRequests')">
-    <div class="section-toggle-left">
-        <span>📋 OPEN REQUESTS</span>
-        <span class="count-badge" id="providerOpenRequestsTotal">0</span>
-        <div class="badge-container hidden" id="providerOpenRequestsUnread" style="display: none;">
-            <div class="chat-bubble-icon"></div>
-            <span class="unread-badge">0</span>
+        <div class="section-toggle-left">
+            <span>📋 OPEN REQUESTS</span>
+            <span class="count-badge" id="providerOpenRequestsTotal">0</span>
+            <div class="badge-container hidden" id="providerOpenRequestsUnread" style="display: none;">
+                <div class="chat-bubble-icon"></div>
+                <span class="unread-badge">0</span>
+            </div>
         </div>
-    </div>
-    <div class="section-toggle-right">
-        <span class="toggle-icon" id="providerOpenRequestsIcon">▼</span>
-    </div>
-</button>
+        <div class="section-toggle-right">
+            <span class="toggle-icon" id="providerOpenRequestsIcon">▼</span>
+        </div>
+    </button>
     <div class="section-content" id="providerOpenRequestsContent">
         <div class="section-inner">
             <div id="providerOpenRequestsList"></div>
@@ -1926,8 +1908,8 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
 </div> <!-- ✅ CLOSES createRequestView -->
     
 <!-- Edit Request View -->
-        <div id="editRequestView" class="hidden">
-            <button class="btn btn-secondary" onclick="window.history.back()">← Back</button>
+        <div id="editRequestView" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; overflow-y: auto; padding: 20px;">
+            <button class="btn btn-secondary" onclick="closeEditRequest()">← Back</button>
             <h2 style="margin-top: 20px;">Edit Service Request</h2>
             <div id="editRequestError" class="error hidden"></div>
             <div id="editRequestInfo" class="info hidden"></div>
@@ -2389,10 +2371,9 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56aGl2enp6Y2FubmllanpxdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NTcxMDEsImV4cCI6MjA3NTIzMzEwMX0.ex0z4DZF38IKc57l6V3X-DofTi6ZZUfPVFrajo1cBRY';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
-let currentUser = null;
-let currentProfile = null;
-let currentDashboardMode = null;
-let previousMessages = []; // ✅ NEW: Track previous messages to detect new ones
+        let currentUser = null;
+        let currentProfile = null;
+	let currentDashboardMode = null;
 	console.log('Step 1: JavaScript loaded');
         console.log('Step 2: Supabase client created');
         let selectedResponseRequest = null;
@@ -2886,9 +2867,6 @@ function smartBack() {
         chatRefreshInterval = null;
     }
     
-    // ✅ NEW: Reload dashboard data to refresh unread counts
-    console.log('🔄 Reloading dashboard data to update badges...');
-    
     // ✅ Hide ALL possible views (including edit profile)
     const chatView = document.getElementById('chatView');
     const editProfileView = document.getElementById('editProfileView');
@@ -2926,11 +2904,16 @@ if (createRequestBtn && currentDashboardMode === 'seeker') createRequestBtn.styl
 
 // Navigate back based on origin
 if (chatOpenedFrom === 'responses-modal') {
-    // Show responses modal (don't close it, keep it open)
+    // Show responses modal and refresh data after delay
+    setTimeout(() => {
+        loadUserRequests();
+    }, 1500);
     document.getElementById('responsesModal').classList.add('active');
     chatOpenedFrom = null;
 } else {
-    showDashboard();
+    setTimeout(() => {
+        showDashboard();
+    }, 1000);
     chatOpenedFrom = null;
 }
 
@@ -4204,11 +4187,9 @@ const pendingRequests = [];
 const responseCountMap = {};
 let newMessagesTotal = 0;
 let respondedUnreadCount = 0;
-let pendingUnreadCount = 0;
+let pendingCompletionUnread = 0;
 let completedUnreadCount = 0;
-// NEW: Track negotiating-specific counts
-let negotiatingNewResponsesTotal = 0;
-let negotiatingUnreadMessagesTotal = 0;
+let negotiatingUnreadCount = 0;
 
 // Check for responses and new messages
 for (let req of requests) {
@@ -4218,68 +4199,11 @@ for (let req of requests) {
             .select('id')
             .eq('request_id', req.id);
                     
-        const responseCount = responses ? responses.length : 0;
-        responseCountMap[req.id] = responseCount;
-        
-        if (responseCount > 0) {
-            respondedRequests.push(req.id);
-            
-            // ✅ NEW: Calculate new responses for this negotiating request
-            if (req.seeker_last_viewed_responses_at) {
-                const { data: newResponses } = await supabase
-                    .from('request_responses')
-                    .select('id')
-                    .eq('request_id', req.id)
-                    .gt('created_at', req.seeker_last_viewed_responses_at);
-                
-                const newResponsesCount = newResponses ? newResponses.length : 0;
-                negotiatingNewResponsesTotal += newResponsesCount;
-            } else {
-                // Never viewed before - all responses are "new"
-                negotiatingNewResponsesTotal += responseCount;
-            }
-            
-            // ✅ NEW: Calculate unread messages from ALL providers for this negotiating request
-            const { data: allResponses } = await supabase
-                .from('request_responses')
-                .select('provider_id')
-                .eq('request_id', req.id);
-            
-            if (allResponses && allResponses.length > 0) {
-                for (let response of allResponses) {
-                    const { data: chat } = await supabase
-                        .from('chats')
-                        .select('messages, seeker_last_viewed_at')
-                        .eq('request_id', req.id)
-                        .eq('provider_id', response.provider_id)
-                        .maybeSingle();
+                    const responseCount = responses ? responses.length : 0;
+                    responseCountMap[req.id] = responseCount;
                     
-                    if (chat && chat.messages) {
-                        const lastViewedAt = chat.seeker_last_viewed_at;
-                        
-                        const normalizeToUTC = (timestamp) => {
-                            if (!timestamp) return null;
-                            let normalized = timestamp;
-                            if (typeof timestamp === 'string' && !timestamp.endsWith('Z') && !timestamp.includes('+')) {
-                                normalized = timestamp + 'Z';
-                            }
-                            return new Date(normalized).getTime();
-                        };
-                        
-                        const unreadFromThisProvider = chat.messages.filter(m => {
-                            if (m.sender_id === currentUser.id) return false;
-                            if (!lastViewedAt) return true;
-                            
-                            const messageTime = normalizeToUTC(m.timestamp);
-                            const viewedTime = normalizeToUTC(lastViewedAt);
-                            
-                            return messageTime > viewedTime;
-                        }).length;
-                        
-                        negotiatingUnreadMessagesTotal += unreadFromThisProvider;
-                    }
-                }
-            }
+                    if (responseCount > 0) {
+            respondedRequests.push(req.id);
         }
     } else if (req.status === 'pending_completion') {  // ✅ SKIP in_progress - it has its own tab
         pendingRequests.push(req.id);
@@ -4287,84 +4211,122 @@ for (let req of requests) {
                     respondedRequests.push(req.id);
                 }
                 
-                if ((req.status === 'in_progress' || req.status === 'completed') && req.selected_provider_id) {
-    const { data: chat } = await supabase
-        .from('chats')
-        .select('messages, seeker_last_viewed_at, provider_last_viewed_at')
-        .eq('request_id', req.id)
-        .eq('provider_id', req.selected_provider_id)
-.maybeSingle();
+                if ((req.status === 'in_progress' || req.status === 'pending_completion' || req.status === 'completed') && req.selected_provider_id) {
+                    const { data: chat } = await supabase
+    .from('chats')
+    .select('messages, seeker_last_viewed_at, provider_last_viewed_at')
+    .eq('request_id', req.id)
+    .eq('provider_id', req.selected_provider_id)
+    .single();
+                    
+                    if (chat && chat.messages) {
+                        // Get last viewed time for seeker
+const lastViewedAt = chat.seeker_last_viewed_at;
 
-if (chat && chat.messages) {
-    const lastViewedAt = chat.seeker_last_viewed_at;
-    
-    // ✅ FIX: Normalize timestamps before comparison
-    const normalizeToUTC = (timestamp) => {
-        if (!timestamp) return null;
-        let normalized = timestamp;
-        if (typeof timestamp === 'string' && !timestamp.endsWith('Z') && !timestamp.includes('+')) {
-            normalized = timestamp + 'Z';
-        }
-        return new Date(normalized).getTime();
-    };
-    
-    const unread = chat.messages.filter(m => {
-        if (m.sender_id === currentUser.id) return false;
-        if (!lastViewedAt) return true;
-        
-        const messageTime = normalizeToUTC(m.timestamp);
-        const viewedTime = normalizeToUTC(lastViewedAt);
-        
-        return messageTime > viewedTime;
-    }).length;
-        
-        newMessagesTotal += unread;
+// Count only messages AFTER last viewed time
+const unread = chat.messages.filter(m => 
+    m.sender_id !== currentUser.id &&
+    (!lastViewedAt || new Date(m.timestamp) > new Date(lastViewedAt))
+).length;
+                        newMessagesTotal += unread;
                         
                         // Add to category-specific counters
                         if (req.status === 'in_progress') {
-                            respondedUnreadCount += unread;
-                        } else if (req.status === 'completed') {
-                            completedUnreadCount += unread;
-                        }
+    respondedUnreadCount += unread;
+} else if (req.status === 'pending_completion') {
+    pendingCompletionUnread += unread;
+} else if (req.status === 'completed') {
+    completedUnreadCount += unread;
+}
                     }
                 } else if (req.status === 'pending_completion' && req.selected_provider_id) {
-    const { data: chat } = await supabase
-        .from('chats')
-        .select('messages, seeker_last_viewed_at, provider_last_viewed_at')
-        .eq('request_id', req.id)
-        .eq('provider_id', req.selected_provider_id)  // ✅ CRITICAL FIX: Only check selected provider's chat
-        .maybeSingle();  // ✅ CHANGED: Use maybeSingle() instead of single()
+                    const { data: chat } = await supabase
+                        .from('chats')
+                        .select('messages, seeker_last_viewed_at, provider_last_viewed_at')
+                        .eq('request_id', req.id)
+                        .eq('provider_id', req.selected_provider_id)
+                        .single();
                     
                     if (chat && chat.messages) {
     // Get last viewed time for seeker
     const lastViewedAt = chat.seeker_last_viewed_at;
-
-// ✅ FIX: Normalize timestamps before comparison
-const normalizeToUTC = (timestamp) => {
-    if (!timestamp) return null;
-    let normalized = timestamp;
-    if (typeof timestamp === 'string' && !timestamp.endsWith('Z') && !timestamp.includes('+')) {
-        normalized = timestamp + 'Z';
-    }
-    return new Date(normalized).getTime();
-};
-
-// Count only messages AFTER last viewed time
-const unread = chat.messages.filter(m => {
-    if (m.sender_id === currentUser.id) return false;
-    if (!lastViewedAt) return true;
     
-    const messageTime = normalizeToUTC(m.timestamp);
-    const viewedTime = normalizeToUTC(lastViewedAt);
-    
-    return messageTime > viewedTime;
-}).length;
+    // Count only messages AFTER last viewed time
+    const unread = chat.messages.filter(m => 
+        m.sender_id !== currentUser.id &&
+        (!lastViewedAt || new Date(m.timestamp) > new Date(lastViewedAt))
+    ).length;
     
     newMessagesTotal += unread;
                         pendingUnreadCount += unread;
                     }
+                } else if (req.status === 'open' && respondedRequests.includes(req.id)) {
+	// Check unread messages in negotiating requests (open status with responses)
+    const { data: responses } = await supabase
+        .from('request_responses')
+        .select('provider_id')
+        .eq('request_id', req.id);
+    
+    if (responses && responses.length > 0) {
+        for (let response of responses) {
+            const { data: chat } = await supabase
+                .from('chats')
+                .select('messages, seeker_last_viewed_at')
+                .eq('request_id', req.id)
+                .eq('provider_id', response.provider_id)
+                .single();
+		 console.log('🔄 Fetched fresh chat data:', {
+            requestId: req.id,
+            providerId: response.provider_id,
+            lastViewed: chat?.seeker_last_viewed_at
+        });
+            
+            if (chat && chat.messages) {
+                const lastViewedAt = chat.seeker_last_viewed_at;
+                
+                console.log('🔍 Checking negotiating chat:', {
+                    requestId: req.id,
+                    providerId: response.provider_id,
+                    lastViewedAt: lastViewedAt,
+                    totalMessages: chat.messages.length
+                });
+                
+                const unreadMessages = chat.messages.filter(m => {
+    // Exclude system messages (contact requests, reactivation notices, etc.)
+    const isSystemMessage = m.message_type === 'contact_request' || 
+                           m.message_type === 'system' || 
+                           m.message_type === 'reactivation';
+    
+    const isUnread = !isSystemMessage && 
+                     m.sender_id !== currentUser.id &&
+                     (!lastViewedAt || new Date(m.timestamp) > new Date(lastViewedAt));
+    
+    if (isUnread) {
+        console.log('📩 Unread message found:', {
+            messageTimestamp: m.timestamp,
+            lastViewedAt: lastViewedAt,
+            messageType: m.message_type,
+            comparison: `${m.timestamp} > ${lastViewedAt}`,
+            result: new Date(m.timestamp) > new Date(lastViewedAt)
+        });
+    }
+    
+    return isUnread;
+});
+                
+                const unread = unreadMessages.length;
+                
+                if (unread > 0) {
+                    console.log('✉️ Adding unread count:', unread);
+                    newMessagesTotal += unread;
+                    negotiatingUnreadCount += unread;
                 }
             }
+        }
+    }
+}
+    }
+            
 
             // Update section badges
             const completedRequests = requests.filter(r => r.status === 'completed');
@@ -4394,57 +4356,17 @@ const negotiatingCountEl = document.getElementById('negotiatingCount');
 if (noResponseCountEl) noResponseCountEl.textContent = openCount;
 if (negotiatingCountEl) negotiatingCountEl.textContent = negotiatingCount;
 
-// ✅ NEW: Update Negotiating tab badges (new responses + unread messages)
-const negotiatingNewResponsesEl = document.getElementById('negotiatingNewResponses');
-const negotiatingUnreadEl = document.getElementById('negotiatingUnread');
-
-if (negotiatingNewResponsesEl) {
-    if (negotiatingNewResponsesTotal > 0) {
-        negotiatingNewResponsesEl.textContent = `🆕 ${negotiatingNewResponsesTotal}`;
-        negotiatingNewResponsesEl.classList.remove('hidden');
-        negotiatingNewResponsesEl.style.display = 'inline-flex';
+// Update unread badge for Negotiating subtab
+const negotiatingUnreadBadge = document.getElementById('negotiatingUnread');
+if (negotiatingUnreadBadge) {
+    const badge = negotiatingUnreadBadge.querySelector('.unread-badge');
+    if (negotiatingUnreadCount > 0) {
+        if (badge) badge.textContent = negotiatingUnreadCount;
+        negotiatingUnreadBadge.classList.remove('hidden');
+        negotiatingUnreadBadge.style.display = 'inline-flex';
     } else {
-        negotiatingNewResponsesEl.classList.add('hidden');
-        negotiatingNewResponsesEl.style.display = 'none';
-    }
-}
-
-if (negotiatingUnreadEl) {
-    if (negotiatingUnreadMessagesTotal > 0) {
-        const unreadBadge = negotiatingUnreadEl.querySelector('.unread-badge');
-        if (unreadBadge) unreadBadge.textContent = negotiatingUnreadMessagesTotal;
-        negotiatingUnreadEl.classList.remove('hidden');
-        negotiatingUnreadEl.style.display = 'inline-flex';
-    } else {
-        negotiatingUnreadEl.classList.add('hidden');
-        negotiatingUnreadEl.style.display = 'none';
-    }
-}
-
-// ✅ NEW: Update OPEN REQUESTS main heading badges (same counts as Negotiating)
-const openRequestsNewResponsesEl = document.getElementById('openRequestsNewResponses');
-const openRequestsUnreadEl = document.getElementById('openRequestsUnread');
-
-if (openRequestsNewResponsesEl) {
-    if (negotiatingNewResponsesTotal > 0) {
-        openRequestsNewResponsesEl.textContent = `🆕 ${negotiatingNewResponsesTotal}`;
-        openRequestsNewResponsesEl.classList.remove('hidden');
-        openRequestsNewResponsesEl.style.display = 'inline-block';
-    } else {
-        openRequestsNewResponsesEl.classList.add('hidden');
-        openRequestsNewResponsesEl.style.display = 'none';
-    }
-}
-
-if (openRequestsUnreadEl) {
-    if (negotiatingUnreadMessagesTotal > 0) {
-        const unreadBadge = openRequestsUnreadEl.querySelector('.unread-badge');
-        if (unreadBadge) unreadBadge.textContent = negotiatingUnreadMessagesTotal;
-        openRequestsUnreadEl.classList.remove('hidden');
-        openRequestsUnreadEl.style.display = 'inline-flex';
-    } else {
-        openRequestsUnreadEl.classList.add('hidden');
-        openRequestsUnreadEl.style.display = 'none';
+        negotiatingUnreadBadge.classList.add('hidden');
+        negotiatingUnreadBadge.style.display = 'none';
     }
 }
 
@@ -4465,19 +4387,20 @@ if (pendingCompletionCountEl) pendingCompletionCountEl.textContent = pendingComp
 
 if (completedCountEl) completedCountEl.textContent = completedCount;
 
-// Update Active Requests heading unread badge - ONLY show if there are unread messages
+// Update Active Requests heading unread badge - ONLY count in progress + pending completion + completed (EXCLUDE negotiating)
 const activeRequestsUnreadBadge = document.getElementById('activeRequestsUnreadBadge');
 if (activeRequestsUnreadBadge) {
-    if (newMessagesTotal > 0) {
+    const activeUnreadTotal = respondedUnreadCount + pendingCompletionUnread + completedUnreadCount;
+    if (activeUnreadTotal > 0) {
         const unreadBadgeSpan = activeRequestsUnreadBadge.querySelector('.unread-badge');
-        if (unreadBadgeSpan) unreadBadgeSpan.textContent = newMessagesTotal;
+        if (unreadBadgeSpan) unreadBadgeSpan.textContent = activeUnreadTotal;
         activeRequestsUnreadBadge.style.display = 'inline-flex';
         activeRequestsUnreadBadge.classList.remove('hidden');
     } else {
         activeRequestsUnreadBadge.style.display = 'none';
         activeRequestsUnreadBadge.classList.add('hidden');
     }
-}    
+}
             
             
             // Update main header badge (MY REQUESTS)
@@ -4502,8 +4425,8 @@ try {
     const inProgressUnreadBadge = document.getElementById('inProgressUnread');
     if (inProgressUnreadBadge) {
         const badge = inProgressUnreadBadge.querySelector('.unread-badge');
-        if (pendingUnreadCount > 0) {
-            if (badge) badge.textContent = pendingUnreadCount;
+        if (respondedUnreadCount > 0) {
+            if (badge) badge.textContent = respondedUnreadCount;
             inProgressUnreadBadge.classList.remove('hidden');
             inProgressUnreadBadge.style.display = 'inline-flex';
         } else {
@@ -4513,6 +4436,23 @@ try {
     }
 } catch (error) {
     console.log('Badge update error (in progress):', error);
+}
+
+try {
+    const pendingCompletionUnreadBadge = document.getElementById('pendingCompletionUnread');
+    if (pendingCompletionUnreadBadge) {
+        const badge = pendingCompletionUnreadBadge.querySelector('.unread-badge');
+        if (pendingCompletionUnread > 0) {
+            if (badge) badge.textContent = pendingCompletionUnread;
+            pendingCompletionUnreadBadge.classList.remove('hidden');
+            pendingCompletionUnreadBadge.style.display = 'inline-flex';
+        } else {
+            pendingCompletionUnreadBadge.classList.add('hidden');
+            pendingCompletionUnreadBadge.style.display = 'none';
+        }
+    }
+} catch (error) {
+    console.log('Badge update error (pending completion):', error);
 }
 
 try {
@@ -4588,134 +4528,69 @@ if (currentRequestFilter === 'open' || currentRequestFilter === 'no_response') {
                     }
                 }
 
-let showChat = false;
-let newMessagesCount = 0;
-let responseCount = 0;
-let showResponses = false;
-let isReadOnlyChat = false;
-let newResponsesCount = 0;
-let totalUnreadFromProviders = 0;
+                let showChat = false;
+                let newMessagesCount = 0;
+                let responseCount = 0;
+                let showResponses = false;
 
-if (req.status === 'open') {
-    responseCount = responseCountMap[req.id] || 0;
-    showResponses = responseCount > 0;
+                if (req.status === 'open') {
+                    responseCount = responseCountMap[req.id] || 0;
+                    showResponses = responseCount > 0;
+                } else if ((req.status === 'in_progress' || req.status === 'pending_completion' || req.status === 'completed') && req.selected_provider_id) {
+                 // Check if chat is expired for this specific request
+let isChatExpired = false;
+
+if (req.status === 'completed') {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to midnight for accurate date comparison
     
-    // Calculate NEW responses count (Badge 1)
-    if (responseCount > 0 && req.seeker_last_viewed_responses_at) {
-        const { data: newResponses } = await supabase
-            .from('request_responses')
-            .select('id')
-            .eq('request_id', req.id)
-            .gt('created_at', req.seeker_last_viewed_responses_at);
+    if (req.warranty_end_date) {
+        const warrantyEndDate = new Date(req.warranty_end_date);
+        warrantyEndDate.setHours(0, 0, 0, 0); // Reset time to midnight
         
-        newResponsesCount = newResponses ? newResponses.length : 0;
-    } else if (responseCount > 0 && !req.seeker_last_viewed_responses_at) {
-        // If never viewed before, all responses are "new"
-        newResponsesCount = responseCount;
+        isChatExpired = today > warrantyEndDate;
+        
+        console.log('🔍 SEEKER warranty check:', {
+            title: req.title,
+            today: today.toDateString(),
+            warrantyEndDate: warrantyEndDate.toDateString(),
+            daysRemaining: Math.ceil((warrantyEndDate - today) / (1000 * 60 * 60 * 24)),
+            isChatExpired: isChatExpired
+        });
+    } else if (req.warranty_period === 0) {
+        const createdDate = new Date(req.created_at);
+        const daysSinceCreation = Math.floor((today - createdDate) / (1000 * 60 * 60 * 24));
+        isChatExpired = daysSinceCreation > 7;
     }
     
-    // Calculate total unread messages from ALL providers (Badge 2)
-    if (responseCount > 0) {
-        const { data: allResponses } = await supabase
-            .from('request_responses')
-            .select('provider_id')
-            .eq('request_id', req.id);
-        
-        if (allResponses && allResponses.length > 0) {
-            for (let response of allResponses) {
-                const { data: chat } = await supabase
-                    .from('chats')
-                    .select('messages, seeker_last_viewed_at')
-                    .eq('request_id', req.id)
-                    .eq('provider_id', response.provider_id)
-                    .maybeSingle();
-                
-                if (chat && chat.messages) {
-                    const lastViewedAt = chat.seeker_last_viewed_at;
-                    
-                    const normalizeToUTC = (timestamp) => {
-                        if (!timestamp) return null;
-                        let normalized = timestamp;
-                        if (typeof timestamp === 'string' && !timestamp.endsWith('Z') && !timestamp.includes('+')) {
-                            normalized = timestamp + 'Z';
-                        }
-                        return new Date(normalized).getTime();
-                    };
-                    
-                    const unreadFromThisProvider = chat.messages.filter(m => {
-                        if (m.sender_id === currentUser.id) return false;
-                        if (!lastViewedAt) return true;
-                        
-                        const messageTime = normalizeToUTC(m.timestamp);
-                        const viewedTime = normalizeToUTC(lastViewedAt);
-                        
-                        return messageTime > viewedTime;
-                    }).length;
-                    
-                    totalUnreadFromProviders += unreadFromThisProvider;
-                }
-            }
-        }
-    }
-} else if ((req.status === 'in_progress' || req.status === 'pending_completion' || req.status === 'completed') && req.selected_provider_id) {
-    showChat = true;
-    
-    const { data: chat } = await supabase
+    console.log('🔍 Button check for request:', {
+        requestId: req.id,
+        status: req.status,
+        warrantyEndDate: req.warranty_end_date,
+        warrantyPeriod: req.warranty_period,
+        createdAt: req.created_at,
+        isChatExpired: isChatExpired
+    });
+}
+		showChat = true;                    
+                    const { data: chat } = await supabase
     .from('chats')
     .select('messages, seeker_last_viewed_at, provider_last_viewed_at')
     .eq('request_id', req.id)
     .eq('provider_id', req.selected_provider_id)
     .single();
-    
-    if (chat && chat.messages) {
-        // Get last viewed time for seeker
-        const lastViewedAt = chat.seeker_last_viewed_at;
-        
-        // Count only messages AFTER last viewed time
-        // ✅ FIX: Normalize timestamps before comparison
-const normalizeToUTC = (timestamp) => {
-    if (!timestamp) return null;
-    let normalized = timestamp;
-    if (typeof timestamp === 'string' && !timestamp.endsWith('Z') && !timestamp.includes('+')) {
-        normalized = timestamp + 'Z';
-    }
-    return new Date(normalized).getTime();
-};
-
-newMessagesCount = chat.messages.filter(m => {
-    if (m.sender_id === currentUser.id) return false;
-    if (!lastViewedAt) return true;
-    
-    const messageTime = normalizeToUTC(m.timestamp);
-    const viewedTime = normalizeToUTC(lastViewedAt);
-    
-    return messageTime > viewedTime;
-}).length;
-    }
-    
-    // Check if completed request warranty/grace period expired
-    if (req.status === 'completed') {
-        if (req.warranty_period === 0 || req.warranty_period === null) {
-            // NO WARRANTY - Check 7-day grace period
-            const completionDate = new Date(req.warranty_end_date);
-            const gracePeriodEndDate = new Date(completionDate);
-            gracePeriodEndDate.setDate(gracePeriodEndDate.getDate() + 7);
-            const currentDate = new Date();
-            
-            if (currentDate > gracePeriodEndDate) {
-                isReadOnlyChat = true; // Grace period expired
-            }
-        } else if (req.warranty_period > 0) {
-            // WARRANTY OFFERED - Check warranty expiration
-            const warrantyEndDate = new Date(req.warranty_end_date);
-            const currentDate = new Date();
-            
-            if (currentDate > warrantyEndDate) {
-                isReadOnlyChat = true; // Warranty expired
-            }
-        }
-    }
-}
+                    
+                    if (chat && chat.messages) {
+                        // Get last viewed time for seeker
+                        const lastViewedAt = chat.seeker_last_viewed_at;
+                        
+                        // Count only messages AFTER last viewed time
+                        newMessagesCount = chat.messages.filter(m => 
+                            m.sender_id !== currentUser.id &&
+                            (!lastViewedAt || new Date(m.timestamp) > new Date(lastViewedAt))
+                        ).length;
+                    }
+                }
 
                 let reactivateButton = '';
                 if (req.status === 'completed' && req.warranty_end_date) {
@@ -4726,18 +4601,8 @@ newMessagesCount = chat.messages.filter(m => {
                     }
                 }
                                 
-                // Build responses badge with NEW count and UNREAD count
-let responsesBadge = '';
-if (showResponses) {
-    const newBadge = newResponsesCount > 0 ? `<span class="info-badge" style="background: #dc3545; color: white;">🆕 ${newResponsesCount}</span>` : '';
-    const unreadBadge = totalUnreadFromProviders > 0 ? `
-        <span class="badge-container" style="display: inline-flex; position: relative; margin-left: 8px;">
-            <span class="chat-bubble-icon"></span>
-            <span class="unread-badge">${totalUnreadFromProviders}</span>
-        </span>
-    ` : '';
-    responsesBadge = `<span class="info-badge">👥 ${responseCount} Response${responseCount > 1 ? 's' : ''}</span>${newBadge}${unreadBadge}`;
-}
+                // Remove new messages badge - it will only show on Chat button
+const responsesBadge = showResponses ? `<span class="info-badge">👥 ${responseCount} Response${responseCount > 1 ? 's' : ''}</span>` : '';
 
 html += `
     <div class="request-card compact">
@@ -4755,12 +4620,16 @@ html += `
             👁️ View Responses
         </button>
     ` : ''}
-${showChat ? `
-    <div class="chat-btn-wrapper" style="margin-left: auto !important;">
-        <button class="btn ${isReadOnlyChat ? 'btn-view-profile' : 'btn-chat'}" onclick="openChat('${req.id}', '${req.selected_provider_id}', ${isReadOnlyChat})">${isReadOnlyChat ? '👁️ View Chat' : '💬 Chat'}</button>
-        ${newMessagesCount > 0 && !isReadOnlyChat ? `<span class="chat-unread-badge">${newMessagesCount}</span>` : ''}
-    </div>
-` : ''}
+    ${showChat ? `
+    <div class="chat-btn-wrapper">
+        <button class="btn btn-chat" 
+                style="background: ${isChatExpired ? '#6c757d' : '#128C7E'} !important;" 
+                onclick="openChat('${req.id}', '${req.selected_provider_id}')">
+            ${isChatExpired ? '👁️ View Chat' : '💬 Chat'}
+        </button>
+            ${newMessagesCount > 0 ? `<span class="chat-unread-badge">${newMessagesCount}</span>` : ''}
+        </div>
+    ` : ''}
 </div>
 ${responsesBadge ? `<div class="request-summary">${responsesBadge}</div>` : ''}
 ${warrantyBadge || reactivateButton ? `
@@ -4951,28 +4820,40 @@ async function openChat(requestId, providerId, isReadOnly = false) {
         }
         
         // Determine chat source
-        const chatSource = (currentProfile.user_id === providerId) ? 'myResponses' : 'myRequests';
-        
-        // ✅ CRITICAL FIX: Determine if current user is provider or seeker
-const isCurrentUserTheSeeker = currentProfile.user_id === request.user_id;
-const isCurrentUserTheProvider = currentProfile.user_id === providerId;
+const chatSource = (currentProfile.user_id === providerId) ? 'myResponses' : 'myRequests';
 
-console.log('🔵 Chat role check:', {
-    currentUserId: currentProfile.user_id,
-    requestOwnerId: request.user_id,
-    providerId: providerId,
-    isSeeker: isCurrentUserTheSeeker,
-    isProvider: isCurrentUserTheProvider
+// ✅ NEW: Check if chat should be read-only due to warranty expiry
+const chatExpired = isChatExpired(request);
+console.log('🔍 Chat expiry result:', {
+    requestId: request.id,
+    status: request.status,
+    warrantyPeriod: request.warranty_period,
+    updatedAt: request.updated_at,
+    chatExpired: chatExpired,
+    typeOf: typeof chatExpired
+});
+console.log('🔍 Chat expiry check:', {
+    requestStatus: request.status,
+    warrantyEndDate: request.warranty_end_date,
+    warrantyPeriod: request.warranty_period,
+    isChatExpired: isChatExpired
 });
 
-currentChatData = {
+// If chat is expired, force read-only mode
+if (chatExpired) {
+    console.log('⚠️ Chat expired - forcing read-only mode');
+    isReadOnly = true;
+}
+        
+        currentChatData = {
     requestId: requestId,
     providerId: providerId,
     partnerName: partnerProfile.name,
     partnerId: partnerId,
-    isProvider: isCurrentUserTheProvider && !isCurrentUserTheSeeker,
+    isProvider: currentProfile.user_id === providerId,
     requestStatus: request.status,
-    chatSource: chatSource
+    chatSource: chatSource,
+    isChatExpired: chatExpired  // ← ADD THIS LINE
 };
         
         // Update chat header (while still showing loading)
@@ -4989,25 +4870,35 @@ currentChatData = {
             document.getElementById('chatPartnerPhotoPlaceholder').style.display = 'flex';
         }
         
-// Load messages BEFORE showing chat view
-// await loadChatMessages(); // ❌ COMMENTED OUT - moved to after read-only state is set
+        // Load messages BEFORE showing chat view
+        await loadChatMessages();
         // Mark chat as viewed
-        try {
-            const viewedField = currentChatData.isProvider ? 'provider_last_viewed_at' : 'seeker_last_viewed_at';
-            
-            const { error: viewError } = await supabase
-                .from('chats')
-                .update({ [viewedField]: new Date().toISOString() })
-                .eq('request_id', currentChatData.requestId)
-                .eq('provider_id', currentChatData.providerId);
-            
-            if (viewError) {
-                console.error('⚠️ Error marking chat as viewed:', viewError);
-            } else {
-            }
-        } catch (error) {
-            console.error('⚠️ Error updating last viewed timestamp:', error);
-        }
+try {
+    const viewedField = currentChatData.isProvider ? 'provider_last_viewed_at' : 'seeker_last_viewed_at';
+    const currentTimestamp = new Date().toISOString();
+    
+    console.log('🔍 Updating timestamp:', {
+        field: viewedField,
+        timestamp: currentTimestamp,
+        requestId: currentChatData.requestId,
+        providerId: currentChatData.providerId
+    });
+    
+    const { data: updateData, error: viewError } = await supabase
+        .from('chats')
+        .update({ [viewedField]: currentTimestamp })
+        .eq('request_id', currentChatData.requestId)
+        .eq('provider_id', currentChatData.providerId)
+        .select();
+    
+    if (viewError) {
+        console.error('⚠️ Error marking chat as viewed:', viewError);
+    } else {
+        console.log('✅ Timestamp updated successfully:', updateData);
+    }
+} catch (error) {
+    console.error('⚠️ Error updating last viewed timestamp:', error);
+}
 
         // Check contact sharing status and button visibility
         const { data: chatData } = await supabase
@@ -5051,7 +4942,7 @@ currentChatData = {
             }
         }
 
-        // Handle read-only mode for non-selected providers OR missed opportunities
+        // Handle read-only mode for non-selected providers OR missed opportunities OR expired warranty
 const isNonSelectedProvider = currentChatData.isProvider && 
                               latestRequest && 
                               (latestRequest.status === 'in_progress' || 
@@ -5059,31 +4950,30 @@ const isNonSelectedProvider = currentChatData.isProvider &&
                                latestRequest.status === 'pending_completion') && 
                               latestRequest.selected_provider_id !== currentProfile.user_id;
 
-// ✅ NEW: Store read-only state in currentChatData
-currentChatData.isReadOnly = isReadOnly || false;
-currentChatData.isNonSelectedProvider = isNonSelectedProvider || false;
+// ✅ CRITICAL FIX: Use currentChatData.isChatExpired (which is set from fresh data)
+const isExpiredChat = currentChatData.isChatExpired;
 
-// ✅ FIX: Reload chat messages NOW that read-only state is set
-await loadChatMessages();
+console.log('🔍 Read-only check:', {
+    isNonSelectedProvider: isNonSelectedProvider,
+    isReadOnly: isReadOnly,
+    isExpiredChat: isExpiredChat,
+    shouldBeReadOnly: isNonSelectedProvider || isReadOnly || isExpiredChat
+});
 
-if (isNonSelectedProvider || isReadOnly) {
-    // ✅ DETERMINE THE REASON FOR READ-ONLY MODE
+// Apply read-only if non-selected provider OR missed opportunity OR expired chat
+if (isNonSelectedProvider || isReadOnly || isExpiredChat) {
     let readOnlyReason = '';
-    let statusText = '';
     
     if (isNonSelectedProvider) {
-        // This is a missed opportunity (another provider was selected)
-        readOnlyReason = 'Read-only: This request was assigned to another provider';
-        statusText = 'READ-ONLY - ASSIGNED TO ANOTHER PROVIDER';
-        console.log('⚠️ Read-only mode enabled (non-selected provider)');
-    } else if (isReadOnly) {
-        // This is a completed request with expired warranty
-        readOnlyReason = 'Read-only: Warranty period has expired';
-        statusText = 'READ-ONLY - WARRANTY EXPIRED';
-        console.log('⚠️ Read-only mode enabled (warranty expired)');
+        readOnlyReason = 'This request was assigned to another provider';
+    } else if (isExpiredChat) {
+        readOnlyReason = 'Chat has expired (warranty/service period ended)';
+    } else {
+        readOnlyReason = 'This chat is read-only';
     }
     
-    // Apply read-only mode
+    console.log('⚠️ Read-only mode enabled:', readOnlyReason);
+    
     const messageInput = document.getElementById('chatMessageInput');
     const sendBtn = document.querySelector('.chat-input-wrapper .btn-send');
     const templateBtn = document.querySelector('.template-button');
@@ -5092,7 +4982,7 @@ if (isNonSelectedProvider || isReadOnly) {
     
     if (messageInput) {
         messageInput.disabled = true;
-        messageInput.placeholder = readOnlyReason; // ✅ Context-aware message
+        messageInput.placeholder = 'Read-only: ' + readOnlyReason;
         messageInput.style.background = '#f0f0f0';
         messageInput.style.cursor = 'not-allowed';
     }
@@ -5104,111 +4994,35 @@ if (isNonSelectedProvider || isReadOnly) {
     
     const chatStatus = document.getElementById('chatRequestStatus');
     if (chatStatus) {
-        chatStatus.textContent = statusText; // ✅ Context-aware status
-        chatStatus.style.color = '#dc3545';
-    }
-} else {
-    // ✅ NON-READ-ONLY MODE: Restore all chat functionality
-    const messageInput = document.getElementById('chatMessageInput');
-    const sendBtn = document.querySelector('.chat-input-wrapper .btn-send');
-    const templateBtn = document.querySelector('.template-button');
-    const plusBtn = document.querySelector('.plus-button');
-    const actionButtons = document.querySelector('.chat-action-buttons');
-    
-    // Re-enable input box
-    if (messageInput) {
-        messageInput.disabled = false;
-        messageInput.placeholder = 'Type your message...';
-        messageInput.style.background = 'white';
-        messageInput.style.cursor = 'text';
-    } else {
-    // ✅ NON-READ-ONLY MODE: Restore all chat functionality
-    const messageInput = document.getElementById('chatMessageInput');
-    const sendBtn = document.querySelector('.chat-input-wrapper .btn-send');
-    const templateBtn = document.querySelector('.template-button');
-    const plusBtn = document.querySelector('.plus-button');
-    const actionButtons = document.querySelector('.chat-action-buttons');
-    
-    // Re-enable input box
-    if (messageInput) {
-        messageInput.disabled = false;
-        messageInput.placeholder = 'Type your message...';
-        messageInput.style.background = 'white';
-        messageInput.style.cursor = 'text';
-    }
-    
-    // ✅ RESTORE BUTTONS: Remove inline display styles (let CSS and toggle function handle it)
-    if (plusBtn) plusBtn.style.display = ''; // Remove inline style
-    
-    // ✅ RESTORE TEMPLATE BUTTON: Remove inline style and hide class
-    if (templateBtn) {
-        templateBtn.style.display = ''; // Remove inline style
-        templateBtn.classList.remove('hide'); // Ensure hide class is removed
-    }
-    
-    // ✅ RESTORE SEND BUTTON: Remove inline style and show class
-    if (sendBtn) {
-        sendBtn.style.display = ''; // Remove inline style
-        sendBtn.classList.remove('show'); // Ensure show class is removed
-    }
-    
-    // ✅ RESTORE ACTION BUTTONS
-    if (actionButtons) actionButtons.style.display = '';
-    
-    // ✅ TRIGGER TOGGLE TO SET CORRECT INITIAL STATE
-    toggleSendButton();
-}
-
-// ✅✅✅ NEW CODE BLOCK - ADD AFTER THE ENTIRE if/else BLOCK:
-// Handle contact button visibility based on read-only state
-const contactDetailsHeaderBtn = document.getElementById('contactDetailsHeaderBtn');
-const requestContactBtn = document.querySelector('.btn-contact');
-
-if (contactDetailsHeaderBtn || requestContactBtn) {
-    // Check if contact was approved in chat history
-    const contactApproved = chatData?.messages?.some(m => 
-        m.message_type === 'contact_request' && 
-        m.contact_request_status === 'approved'
-    );
-    
-    // Determine if chat is read-only
-    const isChatReadOnly = isReadOnly || isNonSelectedProvider;
-    
-    // Set button visibility
-    if (contactApproved && !isChatReadOnly) {
-        // Show contact button only if approved AND not read-only
-        if (contactDetailsHeaderBtn) contactDetailsHeaderBtn.style.display = 'inline-block';
-        if (requestContactBtn) requestContactBtn.style.display = 'none';
-    } else {
-        // Hide contact button
-        if (contactDetailsHeaderBtn) contactDetailsHeaderBtn.style.display = 'none';
-        // Show request button only if not read-only
-        if (requestContactBtn) {
-            requestContactBtn.style.display = isChatReadOnly ? 'none' : 'inline-block';
+        if (isExpiredChat) {
+            chatStatus.textContent = 'CHAT EXPIRED - READ ONLY';
+            chatStatus.style.color = '#dc3545';
+        } else {
+            chatStatus.textContent = 'READ-ONLY - ASSIGNED TO ANOTHER PROVIDER';
+            chatStatus.style.color = '#dc3545';
         }
     }
-}
+} else {
+    // NOT read-only - enable all controls
+    console.log('✅ Chat is active - enabling all controls');
     
-    // ✅ RESTORE BUTTONS: Remove inline display styles (let CSS and toggle function handle it)
-    if (plusBtn) plusBtn.style.display = ''; // Remove inline style
+    const messageInput = document.getElementById('chatMessageInput');
+    const sendBtn = document.querySelector('.chat-input-wrapper .btn-send');
+    const templateBtn = document.querySelector('.template-button');
+    const plusBtn = document.querySelector('.plus-button');
+    const actionButtons = document.querySelector('.chat-action-buttons');
     
-    // ✅ RESTORE TEMPLATE BUTTON: Remove inline style and hide class
-    if (templateBtn) {
-        templateBtn.style.display = ''; // Remove inline style
-        templateBtn.classList.remove('hide'); // Ensure hide class is removed
+    if (messageInput) {
+        messageInput.disabled = false;
+        messageInput.placeholder = 'Type your message...';
+        messageInput.style.background = 'white';
+        messageInput.style.cursor = 'text';
     }
     
-    // ✅ RESTORE SEND BUTTON: Remove inline style and show class
-    if (sendBtn) {
-        sendBtn.style.display = ''; // Remove inline style
-        sendBtn.classList.remove('show'); // Ensure show class is removed
-    }
-    
-    // ✅ RESTORE ACTION BUTTONS
-    if (actionButtons) actionButtons.style.display = '';
-    
-    // ✅ TRIGGER TOGGLE TO SET CORRECT INITIAL STATE
-    toggleSendButton();
+    if (sendBtn) sendBtn.style.display = 'inline-flex';
+    if (templateBtn) templateBtn.style.display = 'inline-flex';
+    if (plusBtn) plusBtn.style.display = 'inline-flex';
+    if (actionButtons) actionButtons.style.display = 'flex';
 }
         
         // ⭐ CRITICAL FIX: Show chat view ONLY AFTER everything is loaded
@@ -5262,84 +5076,61 @@ if (chatView) {
     }
 }
 
-// ✅ NEW: Helper function to detect new messages
-function getNewMessages(oldMessages, newMessages) {
-    if (!oldMessages || oldMessages.length === 0) {
-        return []; // First load, no "new" messages yet
+// Check if chat should be read-only based on warranty expiry
+function isChatExpired(request) {
+    // Only completed requests can expire
+    if (request.status !== 'completed') {
+        return false;
     }
     
-    // Find messages in newMessages that are NOT in oldMessages
-    const newOnes = newMessages.filter(newMsg => {
-        const exists = oldMessages.some(oldMsg => 
-            oldMsg.timestamp === newMsg.timestamp && 
-            oldMsg.sender_id === newMsg.sender_id &&
-            oldMsg.message === newMsg.message
-        );
-        return !exists;
+    console.log('🔍 Expiry Check - Step 1:', {
+        requestId: request.id,
+        status: request.status,
+        warrantyPeriod: request.warranty_period,
+        warrantyEndDate: request.warranty_end_date
     });
     
-    return newOnes;
-}
-
-// Load Chat Messages
-async function loadChatMessages() {
-    // ✅ SAFE FIX: Update timestamp IMMEDIATELY when chat is open
-    if (currentChatData && currentProfile) {
-        const now = new Date().toISOString();
-        const chatView = document.getElementById('chatView');
-        const isChatVisible = chatView && !chatView.classList.contains('hidden');
-        
-        if (isChatVisible) {
-    console.log('🔵 Updating timestamp (Safe Fix):', {
-        isProvider: currentChatData.isProvider,
-        requestId: currentChatData.requestId,
-        userId: currentProfile.user_id,
-        providerId: currentChatData.providerId
-    });
-    
-    try {
-        if (currentChatData.isProvider) {
-            // PROVIDER viewing: Update provider_last_viewed_at for THIS provider only
-            const { data: result, error } = await supabase
-                .from('chats')
-                .update({ provider_last_viewed_at: now })
-                .eq('request_id', currentChatData.requestId)
-                .eq('provider_id', currentProfile.user_id)
-                .select();
+    // If no warranty_end_date, we can't determine expiry
+    if (!request.warranty_end_date) {
+        // If warranty_period is 0, chat expires 7 days after created_at
+        if (request.warranty_period === 0) {
+            const today = new Date();
+            const createdDate = new Date(request.created_at);
+            const daysSinceCreation = Math.floor((today - createdDate) / (1000 * 60 * 60 * 24));
             
-            if (error) {
-                console.error('❌ Provider timestamp update FAILED:', error);
-            } else if (!result || result.length === 0) {
-                console.error('❌ Provider timestamp matched ZERO rows');
-            } else {
-                console.log('✅ Provider timestamp updated:', result[0].provider_last_viewed_at);
-            }
-        } else {
-            // SEEKER viewing: Update seeker_last_viewed_at ONLY for the current provider
-            const { data: result, error } = await supabase
-                .from('chats')
-                .update({ seeker_last_viewed_at: now })
-                .eq('request_id', currentChatData.requestId)
-                .eq('provider_id', currentChatData.providerId)  // ✅ CRITICAL FIX: Add provider filter!
-                .select();
+            console.log('🔍 No warranty - checking 7 day grace period:', {
+                createdDate: createdDate.toISOString(),
+                daysSinceCreation: daysSinceCreation,
+                expired: daysSinceCreation > 7
+            });
             
-            if (error) {
-                console.error('❌ Seeker timestamp update FAILED:', error);
-            } else if (!result || result.length === 0) {
-                console.error('❌ Seeker timestamp matched ZERO rows');
-            } else {
-                console.log('✅ Seeker timestamp updated:', result[0].seeker_last_viewed_at);
-            }
+            return daysSinceCreation > 7;
         }
-    } catch (err) {
-        console.error('⚠️ Timestamp update error:', err);
+        
+        // If warranty exists but no end date, assume not expired
+        console.log('⚠️ Has warranty but no end date - assuming NOT expired');
+        return false;
     }
-}
+    
+    // Has warranty_end_date - check if it has passed
+    const today = new Date();
+    const warrantyEndDate = new Date(request.warranty_end_date);
+    const isExpired = today > warrantyEndDate;
+    
+    console.log('🔍 Expiry Check - Final:', {
+        today: today.toISOString(),
+        warrantyEndDate: warrantyEndDate.toISOString(),
+        isExpired: isExpired
+    });
+    
+    return isExpired;
 }
     
+
+        // Load Chat Messages
+async function loadChatMessages() {
     try {
         const { data: chats, error } = await supabase
-
             .from('chats')
             .select('messages')
             .eq('request_id', currentChatData.requestId)
@@ -5354,41 +5145,6 @@ async function loadChatMessages() {
         }
         
         const messages = chat?.messages || [];
-        
-        // ✅ CHECK FIRST LOAD BEFORE STORING (important!)
-        const isFirstLoad = previousMessages.length === 0 || window.lastLoadedChatId !== currentChatData.requestId;
-        
-        // ✅ NEW: Detect new messages
-        const newMessages = getNewMessages(previousMessages, messages);
-        console.log('🔔 New messages detected:', newMessages.length, newMessages); // ⭐ TEMPORARY TEST LINE
-        
-        // ✅ NEW: Check if this is a different chat than last time
-        const isDifferentChat = previousMessages.length > 0 && 
-                               currentChatData.requestId !== window.lastLoadedChatId;
-        
-        // ✅ FIX FLICKERING: If no new messages and not a different chat, skip DOM update
-        // BUT allow first load
-        if (newMessages.length === 0 && !isDifferentChat && !isFirstLoad) {
-            console.log('✅ No new messages, skipping DOM update (no flicker)');
-            return; // Exit early - don't touch DOM
-        }
-        
-        if (isFirstLoad) {
-            console.log('🆕 First load - displaying all messages');
-        }
-        
-        // ✅ NEW: Store current messages for next comparison (AFTER the check)
-        previousMessages = [...messages];
-        window.lastLoadedChatId = currentChatData.requestId;
-        
-        if (newMessages.length === 0 && !isDifferentChat && !isFirstLoad) {
-            console.log('✅ No new messages, skipping DOM update (no flicker)');
-            return; // Exit early - don't touch DOM
-        }
-        
-        if (isFirstLoad) {
-            console.log('🆕 First load - displaying all messages');
-        }
         const container = document.getElementById('chatMessages'); // ✅ MOVED UP - DEFINED BEFORE USE
         
         // If no chat exists and user is non-selected provider, show empty state
@@ -5401,6 +5157,50 @@ async function loadChatMessages() {
             container.innerHTML = '<div class="empty-chat-state"><div class="empty-chat-state-text">No messages yet. Start the conversation!</div></div>';
             return;
         }
+// ✅ NEW: Check if chat is expired and show banner
+const { data: chatExpiryRequest } = await supabase
+    .from('requests')
+    .select('status, warranty_period, warranty_end_date, created_at')
+    .eq('id', currentChatData.requestId)
+    .single();
+
+const chatExpired = chatExpiryRequest ? isChatExpired(chatExpiryRequest) : false
+
+let expiryBanner = '';
+if (currentChatData.isChatExpired) {
+    expiryBanner = `
+        <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 10px; padding: 15px; margin: 15px 0; text-align: center;">
+            <p style="margin: 0; font-weight: 600; color: #856404;">👁️ This chat is view-only. Warranty period has expired.</p>
+        </div>
+    `;
+    
+    // Disable input elements
+    const messageInput = document.getElementById('chatMessageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const plusBtn = document.querySelector('.plus-button');
+    const templateBtn = document.getElementById('templateBtn');
+    
+    if (messageInput) {
+        messageInput.disabled = true;
+        messageInput.placeholder = 'Chat is read-only';
+        messageInput.style.background = '#f5f5f5';
+    }
+    if (sendBtn) {
+        sendBtn.disabled = true;
+        sendBtn.style.opacity = '0.5';
+        sendBtn.style.cursor = 'not-allowed';
+    }
+    if (plusBtn) {
+        plusBtn.disabled = true;
+        plusBtn.style.opacity = '0.5';
+        plusBtn.style.cursor = 'not-allowed';
+    }
+    if (templateBtn) {
+        templateBtn.disabled = true;
+        templateBtn.style.opacity = '0.5';
+        templateBtn.style.cursor = 'not-allowed';
+    }
+}
         
         let html = '';
         messages.forEach((msg, index) => {
@@ -5498,142 +5298,36 @@ else if (msg.message_type === 'completion_request') {
         });
         
         // Check if contact sharing was approved
-const contactApproved = messages.some(m => 
-    m.message_type === 'contact_request' && 
-    m.contact_request_status === 'approved'
-);
-
-// Show/hide contact details button in header
-const contactDetailsHeaderBtn = document.getElementById('contactDetailsHeaderBtn');
-const requestContactBtn = document.querySelector('.btn-contact');
-
-// ✅ NEW: Check if chat is read-only
-const isChatReadOnly = currentChatData && (currentChatData.isReadOnly || currentChatData.isNonSelectedProvider);
-
-if (contactApproved && !isChatReadOnly) {
-    // Show contact details button ONLY if approved AND not read-only
-    if (contactDetailsHeaderBtn) contactDetailsHeaderBtn.style.display = 'inline-block';
-    if (requestContactBtn) requestContactBtn.style.display = 'none';
-} else {
-    // Hide contact details button
-    if (contactDetailsHeaderBtn) contactDetailsHeaderBtn.style.display = 'none';
-    // Show request button only if not read-only
-    if (requestContactBtn) {
-        requestContactBtn.style.display = isChatReadOnly ? 'none' : 'inline-block';
-    }
-}
+        const contactApproved = messages.some(m => 
+            m.message_type === 'contact_request' && 
+            m.contact_request_status === 'approved'
+        );
         
-container.innerHTML = html;
+        // Show/hide contact details button in header
+        const contactDetailsHeaderBtn = document.getElementById('contactDetailsHeaderBtn');
+        const requestContactBtn = document.querySelector('.btn-contact');
         
-        // ✅ FIXED: Smart scroll logic - scroll AFTER DOM update
+        if (contactApproved) {
+            // Show contact details button in header
+            if (contactDetailsHeaderBtn) contactDetailsHeaderBtn.style.display = 'inline-block';
+            // Hide request contact sharing button
+            if (requestContactBtn) requestContactBtn.style.display = 'none';
+        } else {
+            // Hide contact details button in header
+            if (contactDetailsHeaderBtn) contactDetailsHeaderBtn.style.display = 'none';
+            // Show request contact sharing button
+            if (requestContactBtn) requestContactBtn.style.display = 'inline-block';
+        }
+
+ container.innerHTML = html;
+        
+        // Scroll to bottom to show latest message
         setTimeout(() => {
-            // Always scroll if: first load, I sent message, or I was at bottom
-            if (isFirstLoad || hasMyNewMessage || wasAtBottom) {
-                container.scrollTop = container.scrollHeight;
-                console.log('📜 Auto-scrolled to bottom (reason: first=' + isFirstLoad + ', myMsg=' + hasMyNewMessage + ', wasBottom=' + wasAtBottom + ')');
-            } else {
-                console.log('📜 User reading above, not scrolling');
-            }
+            container.scrollTop = container.scrollHeight;
         }, 100);
-        
-        // ✅ NEW: Play sound for new messages (but NOT on first load)
-        if (newMessages.length > 0 && !isDifferentChat) {
-            // Check if any new message is from OTHER person (not me)
-            const hasNewFromOther = newMessages.some(msg => msg.sender_id !== currentUser.id);
-            
-            if (hasNewFromOther) {
-                // Check if I'm currently in THIS specific chat
-                const chatView = document.getElementById('chatView');
-                const isInThisChat = chatView && !chatView.classList.contains('hidden') && 
-                                    currentChatData.requestId === window.lastLoadedChatId;
-                
-                if (isInThisChat) {
-                    // Soft sound - I'm in this chat
-                    console.log('🔔 Playing SOFT sound (in-chat)');
-                    const inChatSound = document.getElementById('inChatSound');
-                    if (inChatSound) {
-                        inChatSound.volume = 0.3;
-                        inChatSound.play()
-                            .then(() => console.log('✅ Soft sound played'))
-                            .catch(e => console.log('❌ Sound blocked by browser:', e));
-                    }
-                } else {
-                    // Loud sound - message from different chat
-                    console.log('🔔 Playing LOUD sound (different chat)');
-                    const newChatSound = document.getElementById('newChatSound');
-                    if (newChatSound) {
-                        newChatSound.volume = 0.7;
-                        newChatSound.play()
-                            .then(() => console.log('✅ Loud sound played'))
-                            .catch(e => console.log('❌ Sound blocked by browser:', e));
-                    }
-                }
-            }
-        }
-        
-        // ✅ CHECK if user is at bottom BEFORE updating DOM
-        const wasAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 100;
-        console.log('📍 User position before update - at bottom:', wasAtBottom);
-        
-        // Check if any new message is from ME (current user)
-        const hasMyNewMessage = newMessages.some(msg => msg.sender_id === currentUser.id);
-        
-    // ✅ NUCLEAR FIX: Update timestamp - handles seeker and provider separately
-        try {
-            const chatView = document.getElementById('chatView');
-            const isChatVisible = chatView && !chatView.classList.contains('hidden');
-            
-            if (isChatVisible && currentChatData) {
-                const now = new Date().toISOString();
-                
-                console.log('🔵 Updating timestamp:', {
-                    isProvider: currentChatData.isProvider,
-                    requestId: currentChatData.requestId,
-                    currentUserId: currentProfile.user_id,
-                    timestamp: now
-                });
-                
-                if (currentChatData.isProvider) {
-                    // PROVIDER viewing: Update provider_last_viewed_at for THIS provider only
-                    const { data: result, error } = await supabase
-                        .from('chats')
-                        .update({ provider_last_viewed_at: now })
-                        .eq('request_id', currentChatData.requestId)
-                        .eq('provider_id', currentProfile.user_id)
-                        .select();
-                    
-                    if (error) {
-                        console.error('❌ Provider timestamp update FAILED:', error);
-                    } else if (!result || result.length === 0) {
-                        console.error('❌ Provider timestamp update matched ZERO rows');
-                    } else {
-                        console.log('✅ Provider timestamp updated successfully:', result);
-                    }
-                    
-                } else {
-    // SEEKER viewing: Update seeker_last_viewed_at ONLY for the current provider
-    const { data: result, error } = await supabase
-        .from('chats')
-        .update({ seeker_last_viewed_at: now })
-        .eq('request_id', currentChatData.requestId)
-        .eq('provider_id', currentChatData.providerId);  // ✅ ADD THIS LINE
-                    
-                    if (error) {
-                        console.error('❌ Seeker timestamp update FAILED:', error);
-                    } else if (!result || result.length === 0) {
-                        console.error('❌ Seeker timestamp update matched ZERO rows');
-                    } else {
-                        console.log('✅ Seeker timestamp updated successfully for', result.length, 'chat(s):', result);
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('⚠️ Error updating last viewed timestamp:', error);
-        }
         
     } catch (error) {
         console.error('Error loading messages:', error);
-
         const container = document.getElementById('chatMessages');
         if (container) {
             container.innerHTML = '<div class="empty-chat-state"><div class="empty-chat-state-text">Error loading messages. Please refresh.</div></div>';
@@ -5657,10 +5351,30 @@ function openImagePreview(imageUrl) {
 }
         // Send Message
         async function sendMessage() {
+// Check if chat should be read-only based on warranty expiry
     const input = document.getElementById('chatMessageInput');
     const message = input.value.trim();
     
     if (!message) return;
+    
+    // ✅ CRITICAL FIX: Check if chat is expired before sending
+    const { data: currentRequest } = await supabase
+        .from('requests')
+        .select('status, warranty_period, updated_at')
+        .eq('id', currentChatData.requestId)
+        .single();
+
+console.log('🔍 Send message expiry check:', {
+    status: currentRequest.status,
+    warrantyPeriod: currentRequest.warranty_period,
+    updatedAt: currentRequest.updated_at,
+    result: isChatExpired(currentRequest)
+});
+    
+    if (currentRequest && isChatExpired(currentRequest)) {
+        alert('⚠️ This chat has expired. You cannot send messages after the warranty/service period has ended.');
+        return; // Block sending
+    }
     
     // Disable button during send to prevent double-clicks
     const sendBtn = document.getElementById('sendBtn');
@@ -5723,6 +5437,19 @@ function openImagePreview(imageUrl) {
             if (file.size > 5 * 1024 * 1024) {
                 alert('Image size should be less than 5MB');
                 return;
+            
+            // ✅ CRITICAL FIX: Check if chat is expired before uploading
+            const { data: currentRequest } = await supabase
+                .from('requests')
+                .select('status, warranty_period, updated_at')
+                .eq('id', currentChatData.requestId)
+                .single();
+            
+            if (currentRequest && shouldChatBeReadOnly(currentRequest)) {
+                alert('⚠️ This chat has expired. You cannot upload images after the warranty/service period has ended.');
+                event.target.value = ''; // Clear file input
+                return; // Block upload
+            }
             }
             
             const reader = new FileReader();
@@ -6260,11 +5987,23 @@ async function acceptCompletion() {
     if (!confirm('✅ Accept work completion?\n\nThis will mark the request as completed and you can rate the provider.')) return;
     
     try {
-        // Update request status to completed
-        const { error: updateError } = await supabase
-            .from('requests')
-            .update({ status: 'completed' })
-            .eq('id', currentChatData.requestId);
+        // Update request status to completed with timestamp
+// Retrieve existing warranty details
+const { data: existingRequest } = await supabase
+    .from('requests')
+    .select('warranty_period, warranty_end_date')
+    .eq('id', currentChatData.requestId)
+    .single();
+
+const { error: updateError } = await supabase
+    .from('requests')
+    .update({ 
+        status: 'completed',
+        updated_at: new Date().toISOString(),
+        warranty_period: existingRequest?.warranty_period,
+        warranty_end_date: existingRequest?.warranty_end_date
+    })
+    .eq('id', currentChatData.requestId);
         
         if (updateError) throw updateError;
         
@@ -6373,22 +6112,15 @@ async function rejectCompletion() {
 
         // View Responses
         async function viewResponses(requestId) {
-    selectedResponseRequest = requestId;
-    
-    try {
-        // Update timestamp when seeker views responses
-        await supabase
-            .from('requests')
-            .update({ seeker_last_viewed_responses_at: new Date().toISOString() })
-            .eq('id', requestId)
-            .eq('user_id', currentUser.id);
-        
-        const { data: responses, error } = await supabase
-            .from('request_responses')
-            .select('*, provider_id')
-            .eq('request_id', requestId);
-        
-        if (error) throw error;
+            selectedResponseRequest = requestId;
+            
+            try {
+                const { data: responses, error } = await supabase
+                    .from('request_responses')
+                    .select('*, provider_id')
+                    .eq('request_id', requestId);
+                
+                if (error) throw error;
                 
                 if (!responses || responses.length === 0) {
                     document.getElementById('responsesList').innerHTML = `
@@ -6437,38 +6169,7 @@ async function rejectCompletion() {
         const stars = '⭐'.repeat(Math.round(provider.average_rating));
         ratingDisplay = `${stars} ${provider.average_rating}/5 (${provider.total_ratings} ${provider.total_ratings === 1 ? 'rating' : 'ratings'})`;
     }
-        
-// ✅ NEW: Calculate unread messages from THIS specific provider
-let providerUnreadCount = 0;
-const { data: providerChat } = await supabase
-    .from('chats')
-    .select('messages, seeker_last_viewed_at')
-    .eq('request_id', requestId)
-    .eq('provider_id', response.provider_id)
-    .maybeSingle();
-
-if (providerChat && providerChat.messages) {
-    const lastViewedAt = providerChat.seeker_last_viewed_at;
-    
-    const normalizeToUTC = (timestamp) => {
-        if (!timestamp) return null;
-        let normalized = timestamp;
-        if (typeof timestamp === 'string' && !timestamp.endsWith('Z') && !timestamp.includes('+')) {
-            normalized = timestamp + 'Z';
-        }
-        return new Date(normalized).getTime();
-    };
-    
-    providerUnreadCount = providerChat.messages.filter(m => {
-        if (m.sender_id === currentUser.id) return false;
-        if (!lastViewedAt) return true;
-        
-        const messageTime = normalizeToUTC(m.timestamp);
-        const viewedTime = normalizeToUTC(lastViewedAt);
-        
-        return messageTime > viewedTime;
-    }).length;
-}            
+                    
                     const { data: request } = await supabase
                         .from('requests')
                         .select('request_latitude, request_longitude')
@@ -6505,27 +6206,19 @@ if (providerChat && providerChat.messages) {
                     const requestStatus = requestDetails?.status;
                     
                     // Show different buttons based on selection status
-let actionButtons = '';
-
-// ✅ NEW: Build chat button with unread badge
-const chatButtonHTML = providerUnreadCount > 0 
-    ? `<div class="chat-btn-wrapper" style="display: inline-block; position: relative;">
-            <button class="btn btn-chat" onclick="chatOpenedFrom='responses-modal'; closeResponsesModal(); openChat('${requestId}', '${response.provider_id}')">💬 Chat</button>
-            <span class="chat-unread-badge">${providerUnreadCount}</span>
-       </div>`
-    : `<button class="btn btn-chat" onclick="chatOpenedFrom='responses-modal'; closeResponsesModal(); openChat('${requestId}', '${response.provider_id}')">💬 Chat</button>`;
+                    let actionButtons = '';
 
 if (isSelected) {
     // Selected provider - always show chat button
     actionButtons = `
         <button class="btn btn-view-profile" onclick="viewProviderProfile('${response.provider_id}')">View Profile</button>
-        ${chatButtonHTML}
+        <button class="btn btn-chat" onclick="chatOpenedFrom='responses-modal'; closeResponsesModal(); openChat('${requestId}', '${response.provider_id}')">💬 Chat</button>
     `;
 } else {
     // Not selected - show view profile and select button
     actionButtons = `
         <button class="btn btn-view-profile" onclick="viewProviderProfile('${response.provider_id}')">View Profile</button>
-        ${chatButtonHTML}
+        <button class="btn btn-chat" onclick="chatOpenedFrom='responses-modal'; closeResponsesModal(); openChat('${requestId}', '${response.provider_id}')">💬 Chat</button>
         <button class="btn btn-select" onclick="selectProvider('${requestId}', '${response.provider_id}')">Select Provider</button>
     `;
 }
@@ -6722,8 +6415,7 @@ async function displayProviderOpenRequests(data) {
             req.request_longitude
         );
         
-        const unreadBadgeHTML = item.unreadCount > 0 ? `<span class="chat-unread-badge">${item.unreadCount}</span>` : '';
-const chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">💬 Chat</button>${unreadBadgeHTML}</div>`;
+        const chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">💬 Chat</button></div>`;
         
         html += `
             <div class="request-card compact">
@@ -6796,47 +6488,25 @@ const chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat ac
         
         if (seekerError) throw seekerError;
         
-        // Check for unread messages in each chat (excluding open status requests)
+        // Check for unread messages in each chat
         const chatChecks = await Promise.all(responses.map(async (response) => {
-            // Get request details to check status
-            const request = requests.find(r => r.id === response.request_id);
-            
-            // Skip open requests (they belong to Open Requests section)
-            if (request && request.status === 'open') {
-                return { requestId: response.request_id, hasMessages: false, unreadCount: 0 };
-            }
             const { data: chat } = await supabase
                 .from('chats')
                 .select('messages, seeker_last_viewed_at, provider_last_viewed_at')
                 .eq('request_id', response.request_id)
                 .eq('provider_id', currentProfile.user_id)
-.single();
-
-if (!chat || !chat.messages) return { requestId: response.request_id, hasMessages: false, unreadCount: 0 };
+                .single();
+            
+            if (!chat || !chat.messages) return { requestId: response.request_id, hasMessages: false, unreadCount: 0 };
 
 // Get last viewed time for provider
 const lastViewedAt = chat.provider_last_viewed_at;
 
-// ✅ FIX: Normalize timestamps before comparison
-const normalizeToUTC = (timestamp) => {
-    if (!timestamp) return null;
-    let normalized = timestamp;
-    if (typeof timestamp === 'string' && !timestamp.endsWith('Z') && !timestamp.includes('+')) {
-        normalized = timestamp + 'Z';
-    }
-    return new Date(normalized).getTime();
-};
-
 // Count only messages AFTER last viewed time
-const unreadCount = chat.messages.filter(m => {
-    if (m.sender_id === currentUser.id) return false;
-    if (!lastViewedAt) return true;
-    
-    const messageTime = normalizeToUTC(m.timestamp);
-    const viewedTime = normalizeToUTC(lastViewedAt);
-    
-    return messageTime > viewedTime;
-}).length;
+const unreadCount = chat.messages.filter(m => 
+    m.sender_id !== currentProfile.user_id &&
+    (!lastViewedAt || new Date(m.timestamp) > new Date(lastViewedAt))
+).length;
             
             return { 
                 requestId: response.request_id, 
@@ -6845,14 +6515,8 @@ const unreadCount = chat.messages.filter(m => {
             };
         }));
         
-        // Filter out open requests from active responses
-        const activeResponses = responses.filter(response => {
-            const request = requests.find(r => r.id === response.request_id);
-            return request && request.status !== 'open';
-        });
-        
-        // Combine all data - EXCLUDE open requests AND missed opportunities
-const combinedData = activeResponses.map(response => {
+        // Combine all data - EXCLUDE missed opportunities (they now belong in Work Opportunities)
+const combinedData = responses.map(response => {
     const request = requests.find(r => r.id === response.request_id);
     
     // Skip if request was deleted or invalid
@@ -6953,7 +6617,7 @@ if (true || inProgress.length > 0) {  // Always show
     
     tabsHTML += `
         <button class="sub-tab ${currentResponseFilter === 'in_progress' ? 'active' : ''}" onclick="filterResponses('in_progress')">
-            <span>In Progress</span>
+            <span>⚙️ In Progress</span>
             <div class="sub-tab-badges">
                 <span class="count-badge">${inProgress.length}</span>
                 ${unreadBadge}
@@ -6962,7 +6626,7 @@ if (true || inProgress.length > 0) {  // Always show
     `;
 }
 
-// Tab 3: Waiting (renamed from Pending Completion)
+// Tab 3: Pending Completion
 if (true || pendingCompletion.length > 0) {
     const unreadBadge = pendingCompletionUnread > 0 ? `
         <div class="badge-container">
@@ -6973,7 +6637,7 @@ if (true || pendingCompletion.length > 0) {
     
     tabsHTML += `
         <button class="sub-tab ${currentResponseFilter === 'pending_completion' ? 'active' : ''}" onclick="filterResponses('pending_completion')">
-            <span>Waiting</span>
+            <span>⏳ Pending Completion</span>
             <div class="sub-tab-badges">
                 <span class="count-badge">${pendingCompletion.length}</span>
                 ${unreadBadge}
@@ -6994,7 +6658,7 @@ if (true || completedResponses.length > 0) {
     
     tabsHTML += `
         <button class="sub-tab ${currentResponseFilter === 'completed' ? 'active' : ''}" onclick="filterResponses('completed')">
-            <span>Completed</span>
+            <span>✅ Completed</span>
             <div class="sub-tab-badges">
                 <span class="count-badge">${completedResponses.length}</span>
                 ${unreadBadge}
@@ -7019,23 +6683,23 @@ if (currentResponseFilter === 'in_progress') {
     }
     
     // NEW: If filtered data is empty, show empty state
-if (!responsesData || responsesData.length === 0) {
-    let emptyIcon = '📋';
+    if (!responsesData || responsesData.length === 0) {
+    let emptyIcon = '⚙️';
     let emptyText = 'in progress requests';
     
     if (currentResponseFilter === 'in_progress') {
-        emptyIcon = '📋';
-        emptyText = 'in progress requests';
-    } else if (currentResponseFilter === 'pending_completion') {
-        emptyIcon = '⏳';
-        emptyText = 'waiting requests';
-    } else if (currentResponseFilter === 'reactivated') {
-        emptyIcon = '🔁';
-        emptyText = 'reactivated requests';
-    } else if (currentResponseFilter === 'completed') {
-        emptyIcon = '✅';
-        emptyText = 'completed requests';
-    }
+            emptyIcon = '⚙️';
+            emptyText = 'in progress requests';
+        } else if (currentResponseFilter === 'pending_completion') {  // ← 🆕 NEW EMPTY STATE
+            emptyIcon = '⏳';
+            emptyText = 'pending completion requests';
+        } else if (currentResponseFilter === 'reactivated') {
+            emptyIcon = '🔁';
+            emptyText = 'reactivated requests';
+        } else if (currentResponseFilter === 'completed') {
+            emptyIcon = '✅';
+            emptyText = 'completed requests';
+        }
         
         container.innerHTML = tabsHTML + `
             <div class="empty-state">
@@ -7067,54 +6731,32 @@ if (!responsesData || responsesData.length === 0) {
     
     let html = tabsHTML; // Start with tabs
     
-for (let data of responsesData) {
-    const req = data.request;
-    if (!req) continue;
-    
-    const icon = SERVICE_ICONS[req.service_category] || '🔧';
-    const timeAgo = getTimeAgo(new Date(data.created_at));
-    
-    // ✅ ADD THESE TWO LINES HERE:
-    const isReactivated = req.status === 'in_progress' && req.warranty_end_date;
-    const reactivatedBadge = isReactivated ? '<span style="color: #dc3545; font-weight: 700; font-size: 11px; margin-left: 6px; background: #fee; padding: 2px 8px; border-radius: 4px;">REACTIVATED</span>' : '';
-    
-    let isReadOnlyChat = false;
+    for (let data of responsesData) {
+        const req = data.request;
+        if (!req) continue;
+        
+        const icon = SERVICE_ICONS[req.service_category] || '🔧';
+        const timeAgo = getTimeAgo(new Date(data.created_at));
+        
+        // ✅ ADD THESE TWO LINES HERE:
+        const isReactivated = req.status === 'in_progress' && req.warranty_end_date;
+        const reactivatedBadge = isReactivated ? '<span style="color: #dc3545; font-weight: 700; font-size: 11px; margin-left: 6px; background: #fee; padding: 2px 8px; border-radius: 4px;">REACTIVATED</span>' : '';
 
 	// Determine status
         let statusBadge = '';
         let chatButton = '';
 
         if (data.isMissedOpportunity) {
-    // Read-only chat button
-    chatButton = `<button class="btn btn-chat action-btn-compact" style="background: #6c757d;" onclick="openChat('${req.id}', '${currentProfile.user_id}')">👁️ View Chat</button>`;
-} else {
-    // Active response - normal buttons with unread badge
-    const unreadBadgeHTML = data.unreadCount > 0 ? `<span class="chat-unread-badge">${data.unreadCount}</span>` : '';
-    
-if (req.status === 'completed') {
-    // CHECK WARRANTY FIRST - BEFORE CREATING BUTTON
-    if (req.warranty_period === 0 || req.warranty_period === null) {
-        const completionDate = new Date(req.warranty_end_date);
-        const gracePeriodEndDate = new Date(completionDate);
-        gracePeriodEndDate.setDate(gracePeriodEndDate.getDate() + 7);
-        const currentDate = new Date();
-        
-        if (currentDate > gracePeriodEndDate) {
-            isReadOnlyChat = true;
-        }
-    } else if (req.warranty_period > 0) {
-        const warrantyEndDate = new Date(req.warranty_end_date);
-        const currentDate = new Date();
-        
-        if (currentDate > warrantyEndDate) {
-            isReadOnlyChat = true;
-        }
-    }
-    
-    // NOW CREATE BUTTON WITH CORRECT FLAG
-    statusBadge = '<span class="status-badge status-completed">✅ COMPLETED</span>';
-    chatButton = `<div class="chat-btn-wrapper"><button class="btn ${isReadOnlyChat ? 'btn-view-profile' : 'btn-chat'} action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}', ${isReadOnlyChat})">${isReadOnlyChat ? '👁️ View Chat' : '💬 Chat'}</button>${isReadOnlyChat ? '' : unreadBadgeHTML}</div>`;
-    } else if (req.status === 'pending_completion' && req.selected_provider_id === currentProfile.user_id) {  // ← 🆕 UPDATED STATUS DISPLAY
+            // Read-only chat button
+            chatButton = `<button class="btn btn-chat action-btn-compact" style="background: #6c757d;" onclick="openChat('${req.id}', '${currentProfile.user_id}')">👁️ View Chat</button>`;
+        } else {
+            // Active response - normal buttons with unread badge
+            const unreadBadgeHTML = data.unreadCount > 0 ? `<span class="chat-unread-badge">${data.unreadCount}</span>` : '';
+            
+            if (req.status === 'completed') {
+                statusBadge = '<span class="status-badge status-completed">✅ COMPLETED</span>';
+                chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">👁️ View Chat</button>${unreadBadgeHTML}</div>`;
+            } else if (req.status === 'pending_completion' && req.selected_provider_id === currentProfile.user_id) {  // ← 🆕 UPDATED STATUS DISPLAY
                 statusBadge = '<span class="status-badge" style="background: #fff3cd; color: #856404;">⏳ PENDING APPROVAL</span>';
                 chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">💬 Chat</button>${unreadBadgeHTML}</div>`;
             } else if (req.status === 'in_progress' && req.selected_provider_id === currentProfile.user_id) {
@@ -7137,22 +6779,32 @@ if (req.status === 'completed') {
         }
         
         // Calculate remaining warranty if completed
-        if (req.status === 'completed' && req.warranty_end_date) {
-            // Only show warranty if this provider is the SELECTED provider who did the work
-            if (req.selected_provider_id === currentProfile.user_id) {
-                const warrantyEndDate = new Date(req.warranty_end_date);
-                const today = new Date();
-                const remainingDays = Math.ceil((warrantyEndDate - today) / (1000 * 60 * 60 * 24));
-                
-                if (remainingDays > 0) {
-                    warrantyBadge = `<span class="info-badge" style="background: #28a745;">🛡️ ${remainingDays} day${remainingDays > 1 ? 's' : ''} warranty</span>`;
-                } else if (remainingDays === 0) {
-                    warrantyBadge = `<span class="info-badge" style="background: #ffc107; color: #333;">🛡️ Warranty expires today</span>`;
-                } else {
-                    warrantyBadge = `<span class="info-badge" style="background: #dc3545;">🛡️ Warranty expired</span>`;
-                }
-            }
+if (req.status === 'completed' && req.warranty_end_date) {
+    // Only show warranty if this provider is the SELECTED provider who did the work
+    if (req.selected_provider_id === currentProfile.user_id) {
+        const warrantyEndDate = new Date(req.warranty_end_date);
+        const today = new Date();
+        const remainingDays = Math.ceil((warrantyEndDate - today) / (1000 * 60 * 60 * 24));
+        
+        // ✅ NEW: Calculate chat expiry based on warranty period
+        const completionDate = new Date(req.updated_at);
+        const warrantyPeriod = req.warranty_period || 0;
+        const chatExpiryDays = Math.max(7, warrantyPeriod);
+        const chatExpiryDate = new Date(completionDate);
+        chatExpiryDate.setDate(chatExpiryDate.getDate() + chatExpiryDays);
+        const chatExpired = today > chatExpiryDate;
+        
+        if (chatExpired) {
+            warrantyBadge = `<span class="info-badge" style="background: #6c757d;">🔒 Chat Expired</span>`;
+        } else if (remainingDays > 0) {
+            warrantyBadge = `<span class="info-badge" style="background: #28a745;">🛡️ ${remainingDays} day${remainingDays > 1 ? 's' : ''} warranty</span>`;
+        } else if (remainingDays === 0) {
+            warrantyBadge = `<span class="info-badge" style="background: #ffc107; color: #333;">🛡️ Warranty expires today</span>`;
+        } else {
+            warrantyBadge = `<span class="info-badge" style="background: #dc3545;">🛡️ Warranty expired</span>`;
         }
+    }
+}
         
         const distance = calculateDistance(
             currentProfile.latitude,
@@ -7345,26 +6997,6 @@ async function loadNearbyRequests() {
             }
         }
 
-// ✅ NEW: Calculate new missed opportunities count
-const lastMissedOpenedAt = currentProfile.missed_opportunities_last_opened_at;
-let newMissedCount = 0;
-
-if (!lastMissedOpenedAt) {
-    // Never opened before - all missed opportunities are "new"
-    newMissedCount = missedOpportunities.length;
-} else {
-    // Count missed opportunities that became "missed" after last viewed time
-    const lastOpenedDate = new Date(lastMissedOpenedAt);
-    newMissedCount = missedOpportunities.filter(r => {
-        // A request becomes "missed" when it moves to in_progress/completed with different provider
-        // We check if the request was updated (status changed) after last viewed time
-        const requestUpdatedAt = new Date(r.updated_at || r.created_at);
-        return requestUpdatedAt > lastOpenedDate;
-    }).length;
-}
-
-console.log('🔵 New missed opportunities count:', newMissedCount);
-
         // Update badges
         const availableCount = nearby.length;
         const totalElement = document.getElementById('availableWorkTotal');
@@ -7396,7 +7028,7 @@ console.log('🔵 New missed opportunities count:', newMissedCount);
             }
         }
 
-        displayNearbyRequests(nearby, missedOpportunities, newMissedCount);
+        displayNearbyRequests(nearby, missedOpportunities);
         
     } catch (error) {
         console.error('❌ Error loading nearby requests:', error);
@@ -7404,7 +7036,7 @@ console.log('🔵 New missed opportunities count:', newMissedCount);
 }
 
 // Step 6: Pass both available and missed to display function
-async function displayNearbyRequests(availableRequests, missedRequests, newMissedCount) {
+async function displayNearbyRequests(availableRequests, missedRequests) {
     const container = document.getElementById('nearbyRequestsList');
 const tabsContainer = document.getElementById('urgencyTabs');
 
@@ -7460,19 +7092,7 @@ if (availableCount > 0) {
 
 // Missed Opportunities tab
 if (missedCount > 0) {
-    const newMissedBadge = newMissedCount > 0 
-        ? `<span class="info-badge" style="background: #dc3545; color: white;" id="missedOpportunitiesNew">🆕 ${newMissedCount}</span>`
-        : '';
-    
-    tabsHTML += `
-        <button class="sub-tab ${currentFilter === 'missed' ? 'active' : ''}" onclick="filterWorkOpportunities('missed')">
-            <span>⛔ Missed Opportunities</span>
-            <div class="sub-tab-badges">
-                <span class="count-badge">${missedCount}</span>
-                ${newMissedBadge}
-            </div>
-        </button>
-    `;
+    tabsHTML += `<button class="sub-tab ${currentFilter === 'missed' ? 'active' : ''}" onclick="filterWorkOpportunities('missed')">⛔ Missed Opportunities <span class="count-badge">${missedCount}</span></button>`;
 }
 
 tabsContainer.innerHTML = tabsHTML;
@@ -7738,9 +7358,10 @@ async function cancelRequest(requestId) {
                     return;
                 }
                 
-                // Show edit view and populate form
-                hideAllViews();
-                document.getElementById('editRequestView').classList.remove('hidden');
+                // Show edit view as overlay (don't hide dashboard)
+const editRequestView = document.getElementById('editRequestView');
+editRequestView.classList.remove('hidden');
+editRequestView.style.display = 'block';
                 
                 // Populate form fields
                 document.getElementById('editRequestId').value = request.id;
@@ -7765,6 +7386,15 @@ async function cancelRequest(requestId) {
                 showDashboard();
             }
         }
+
+// Close Edit Request overlay
+function closeEditRequest() {
+    const editRequestView = document.getElementById('editRequestView');
+    if (editRequestView) {
+        editRequestView.classList.add('hidden');
+        editRequestView.style.display = 'none';
+    }
+}
 
 // Edit Request Form Submission
         document.getElementById('editRequestForm').addEventListener('submit', async (e) => {
@@ -8230,7 +7860,7 @@ function filterActiveRequests(filter) {
         }
 
 	// Filter work opportunities (Available vs Missed)
-async function filterWorkOpportunities(filter) {
+function filterWorkOpportunities(filter) {
     window.currentWorkFilter = filter;
     
     // Update active tab
@@ -8238,30 +7868,8 @@ async function filterWorkOpportunities(filter) {
     tabs.forEach(tab => tab.classList.remove('active'));
     event.target.classList.add('active');
     
-    // ✅ NEW: Mark missed opportunities as viewed when clicked
-    if (filter === 'missed') {
-        try {
-            const now = new Date().toISOString();
-            
-            const { error } = await supabase
-                .from('profiles')
-                .update({ missed_opportunities_last_opened_at: now })
-                .eq('user_id', currentProfile.user_id);
-            
-            if (error) throw error;
-            
-            // Update local profile
-            currentProfile.missed_opportunities_last_opened_at = now;
-            
-            console.log('✅ Missed opportunities marked as viewed');
-            
-        } catch (error) {
-            console.error('Error marking missed opportunities as viewed:', error);
-        }
-    }
-    
     // Reload nearby requests to refresh display
-    await loadNearbyRequests();
+    loadNearbyRequests();
 }
 	
 	
@@ -9531,13 +9139,6 @@ async function loadProviderOpenRequests() {
                 </div>
             `;
             document.getElementById('providerOpenRequestsTotal').textContent = '0';
-            
-            // Hide unread badge
-            const unreadBadge = document.getElementById('providerOpenRequestsUnread');
-            if (unreadBadge) {
-                unreadBadge.classList.add('hidden');
-                unreadBadge.style.display = 'none';
-            }
             return;
         }
         
@@ -9571,70 +9172,18 @@ async function loadProviderOpenRequests() {
             .select('user_id, name')
             .in('user_id', userIds);
 
-        // Check for unread messages in each open request chat
-        let totalOpenUnread = 0;
-        
-        const combinedData = await Promise.all(responses
+        const combinedData = responses
             .filter(response => openRequests.find(r => r.id === response.request_id))
-            .map(async (response) => {
+            .map(response => {
                 const request = openRequests.find(r => r.id === response.request_id);
                 const seeker = seekers?.find(s => s.user_id === request.user_id);
-                
-                // Check for unread messages
-                let unreadCount = 0;
-                const { data: chat } = await supabase
-                    .from('chats')
-                    .select('messages, provider_last_viewed_at')
-                    .eq('request_id', response.request_id)
-                    .eq('provider_id', currentProfile.user_id)
-                    .maybeSingle();
-                
-                if (chat && chat.messages) {
-                    const lastViewedAt = chat.provider_last_viewed_at;
-                    
-                    const normalizeToUTC = (timestamp) => {
-                        if (!timestamp) return null;
-                        let normalized = timestamp;
-                        if (typeof timestamp === 'string' && !timestamp.endsWith('Z') && !timestamp.includes('+')) {
-                            normalized = timestamp + 'Z';
-                        }
-                        return new Date(normalized).getTime();
-                    };
-                    
-                    unreadCount = chat.messages.filter(m => {
-                        if (m.sender_id === currentUser.id) return false;
-                        if (!lastViewedAt) return true;
-                        
-                        const messageTime = normalizeToUTC(m.timestamp);
-                        const viewedTime = normalizeToUTC(lastViewedAt);
-                        
-                        return messageTime > viewedTime;
-                    }).length;
-                    
-                    totalOpenUnread += unreadCount;
-                }
-                
                 return {
                     ...response,
                     request: request,
                     seekerName: seeker?.name || 'Unknown',
-                    unreadCount: unreadCount
+                    unreadCount: 0
                 };
-            }));
-        
-        // Update Open Requests unread badge
-        const openUnreadBadge = document.getElementById('providerOpenRequestsUnread');
-        if (openUnreadBadge) {
-            if (totalOpenUnread > 0) {
-                const badge = openUnreadBadge.querySelector('.unread-badge');
-                if (badge) badge.textContent = totalOpenUnread;
-                openUnreadBadge.classList.remove('hidden');
-                openUnreadBadge.style.display = 'inline-flex';
-            } else {
-                openUnreadBadge.classList.add('hidden');
-                openUnreadBadge.style.display = 'none';
-            }
-        }
+            });
 
         await displayProviderOpenRequests(combinedData);
         
@@ -9642,25 +9191,6 @@ async function loadProviderOpenRequests() {
         console.error('Error loading provider open requests:', error);
     }
 }
-
-// ✅ Enable sound on first user interaction (required by browsers)
-document.addEventListener('click', function enableSound() {
-    const inChatSound = document.getElementById('inChatSound');
-    const newChatSound = document.getElementById('newChatSound');
-    
-    // Try to play and immediately pause to "prime" the audio
-    if (inChatSound) {
-        inChatSound.play().then(() => inChatSound.pause()).catch(() => {});
-    }
-    if (newChatSound) {
-        newChatSound.play().then(() => newChatSound.pause()).catch(() => {});
-    }
-    
-    console.log('✅ Sound enabled after user interaction');
-    
-    // Remove this listener after first click
-    document.removeEventListener('click', enableSound);
-}, { once: true });
 
 </script>
 
@@ -9821,14 +9351,6 @@ document.addEventListener('click', function enableSound() {
         </div>
     </div>
 </div>
-
-<!-- Notification Sounds -->
-<audio id="inChatSound" preload="auto">
-    <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGWe77eedTRALUKXi8LZjHAU4kte==" type="audio/wav">
-</audio>
-<audio id="newChatSound" preload="auto">
-    <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGWe77eedTRALT6Ti8LdjHQY4kdXyzHksBS+Axe/bjEgPG2W47+idTRANU6jn8bllHgU5kdXzzXksBTCBxO7bik0OHGa87+qeThANU6no8btoHwU6kdX0zn4tBTGCxO3cjU8PHGe97+ufTw8NVKro8L1pIAU7k9X1z4AvBTODxezcj1EQHWi+8O2gUBENVazo8L5rIQU8k9X2z4EwBTSDxuzdkFIRHWm/8e2hURIMVq3p8cBsIwU9lNX3z4IxBTWEx+3dkVQSHmrA8u6iUxINV67p8cFtJAU+ldX4z4QyBTaFx+7ek1UXH2vB8++jVBMMWLDq8sJvJgU/ldb5z4YzBjeGye/flFUXH2zC9PCkVhQNWbHr88NxJwVAltb60IcRBjiHyu/fllcXIG3D9PGlVxUNWrLr9MRyKQZBl9f70Ig0BzmIy+/fl1gYIG7E9fKnWBYNW7Pt9cVzKwZCmNj80Io1BzqJzO/gmVgYIm/F9vOoWhcOXLTu9sZ1LAZDmdn90Ys2BzqKzfDhm1kaI3DG9/SqWxgOXbXu98d2LQZEmtr/0o03BzuLzu/jnFoaJHHH+PWrXBkOXrbu+Mh4LgZFm9z/0483BzuM0O/knVwbJXLI+fWsXRoPX7jv+cl5LwZGnN3/05I4Bz2N0fDln10cJXPJ+vWtXxsQYLnw+sp6MQZHnN7/1JQ5Bz6O0vHmn18dJnTK+/avYBwRYbjx+8t7MwZInd//1ZU6Bz+P0/LnoGAdJ3XL/PexYR0RYrnz/Mx8NAZJ" type="audio/wav">
-</audio>
 
 </body>
 </html>
