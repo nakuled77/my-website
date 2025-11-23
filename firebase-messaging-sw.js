@@ -1,7 +1,7 @@
+// firebase-messaging-sw.js
 importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js');
 
-// Firebase config
 firebase.initializeApp({
     apiKey: "AIzaSyA84umO1nKUfa-NmR40ifMlTP0ccx7SSp8",
     authDomain: "helpbuddy-app.firebaseapp.com",
@@ -13,43 +13,27 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-// Handle background notifications
+// Background message handler
 messaging.onBackgroundMessage((payload) => {
-    console.log('🔔 Background notification received:', payload);
+    console.log('Background message received:', payload);
     
     const notificationTitle = payload.notification?.title || 'HelpBuddy';
     const notificationOptions = {
         body: payload.notification?.body || 'You have a new update',
-        icon: '/public/icon-192x192.png',
-        badge: '/public/icon-96x96.png',
-        tag: payload.data?.request_id || 'helpbuddy-notification',
-        data: payload.data,
+        icon: '/android-icon-192x192.png',     // ✅ FIXED PATH
+        badge: '/android-icon-144x144.png',    // ✅ FIXED PATH
+        tag: 'helpbuddy-notification',
         requireInteraction: true,
-        actions: [
-            {
-                action: 'open',
-                title: 'View'
-            },
-            {
-                action: 'close',
-                title: 'Dismiss'
-            }
-        ]
     };
     
     self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// Handle notification clicks
+// Notification click handler
 self.addEventListener('notificationclick', (event) => {
-    console.log('🔔 Notification clicked:', event);
-    
     event.notification.close();
     
-    if (event.action === 'open' || !event.action) {
-        // Open the app
-        event.waitUntil(
-            clients.openWindow('/')
-        );
-    }
+    event.waitUntil(
+        clients.openWindow('/')
+    );
 });

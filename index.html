@@ -2516,12 +2516,12 @@ if (messaging) {
         
         const notificationTitle = payload.notification?.title || 'HelpBuddy';
         const notificationOptions = {
-            body: payload.notification?.body || 'You have a new update',
-            icon: '/public/icon-192x192.png',
-            badge: '/public/icon-96x96.png',
-            tag: 'helpbuddy-notification',
-            requireInteraction: true,
-        };
+    body: payload.notification?.body || 'You have a new update',
+    icon: '/android-icon-192x192.png',     // ✅ FIXED
+    badge: '/android-icon-144x144.png',    // ✅ FIXED
+    tag: 'helpbuddy-notification',         // ✅ KEPT
+    requireInteraction: true,              // ✅ KEPT
+};
         
         // Show notification
         if (Notification.permission === 'granted') {
