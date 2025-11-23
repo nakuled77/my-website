@@ -2440,7 +2440,6 @@ async function requestNotificationPermission() {
             const token = await messaging.getToken({
     vapidKey: 'BDwqy2g6dWGjmAg9wcnRClLhDhWXGBokX6R3Tn9lcxxllSeljQXVhuF26malwuaUsgItQUqWDjBtxmITG2LHgz0'
 });
-            });
             
             if (token) {
                 console.log('✅ FCM Token obtained:', token);
