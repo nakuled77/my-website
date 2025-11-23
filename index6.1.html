@@ -4,11 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpBuddy - Service Marketplace</title>
-    <link rel="manifest" href="/manifest.json">  <!-- ✅ ADD THIS LINE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
-    <!-- ==================== FIREBASE SDK FOR PUSH NOTIFICATIONS ==================== -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
@@ -2392,152 +2388,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
         const SUPABASE_URL = 'https://nzhivzzzcanniejzqvsc.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56aGl2enp6Y2FubmllanpxdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NTcxMDEsImV4cCI6MjA3NTIzMzEwMX0.ex0z4DZF38IKc57l6V3X-DofTi6ZZUfPVFrajo1cBRY';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        // ==================== FIREBASE INITIALIZATION ====================
-let messaging = null;
-let fcmToken = null;
-
-try {
-    // Initialize Firebase
-    firebase.initializeApp({
-        apiKey: "AIzaSyA84umO1nKUfa-NmR40ifMlTP0ccx7SSp8",
-        authDomain: "helpbuddy-app.firebaseapp.com",
-        projectId: "helpbuddy-app",
-        storageBucket: "helpbuddy-app.firebasestorage.app",
-        messagingSenderId: "207546481980",
-        appId: "1:207546481980:web:9cfa7d2cade0b263b93239"
-    });
-
-    // Initialize Firebase Messaging
-    messaging = firebase.messaging();
-    console.log('✅ Firebase Messaging initialized');
-} catch (error) {
-    console.error('❌ Firebase initialization error:', error);
-}
-
-// ==================== REGISTER SERVICE WORKER ====================
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/firebase-messaging-sw.js')
-        .then((registration) => {
-            console.log('✅ Service Worker registered:', registration);
-        })
-        .catch((error) => {
-            console.error('❌ Service Worker registration failed:', error);
-        });
-}
-
-// ==================== REQUEST NOTIFICATION PERMISSION & GET FCM TOKEN ====================
-async function requestNotificationPermission() {
-    try {
-        console.log('🔵 Requesting notification permission...');
         
-        // Request permission
-        const permission = await Notification.requestPermission();
-        
-        if (permission === 'granted') {
-            console.log('✅ Notification permission granted');
-            
-            // Get FCM token
-            const token = await messaging.getToken({
-                vapidKey: 'BMaGunJKcHLXI033csYqB_ir7conaiNCJQGHOUxuJO_ya9sidB2j3RUIitnY6tWajCiadGlCicMdpMvnitSdd2JsMvy2Y'
-            });
-            
-            if (token) {
-                console.log('✅ FCM Token obtained:', token);
-                fcmToken = token;
-                
-                // Store token in Supabase
-                await storeFCMToken(token);
-            } else {
-                console.error('❌ No FCM token received');
-            }
-        } else if (permission === 'denied') {
-            console.warn('⚠️ Notification permission denied by user');
-            alert('⚠️ Notifications are blocked. Please enable them in your browser settings to receive service request alerts.');
-        } else {
-            console.warn('⚠️ Notification permission dismissed');
-        }
-    } catch (error) {
-        console.error('❌ Error requesting notification permission:', error);
-    }
-}
-
-// ==================== STORE FCM TOKEN IN SUPABASE ====================
-async function storeFCMToken(token) {
-    try {
-        if (!currentUser || !currentUser.id) {
-            console.log('⚠️ No user logged in, skipping token storage');
-            return;
-        }
-        
-        console.log('💾 Storing FCM token in Supabase...');
-        
-        // Check if token already exists for this user
-        const { data: existingTokens, error: checkError } = await supabase
-            .from('fcm_tokens')
-            .select('id')
-            .eq('user_id', currentUser.id)
-            .eq('fcm_token', token);
-        
-        if (checkError) {
-            console.error('❌ Error checking existing tokens:', checkError);
-            return;
-        }
-        
-        if (existingTokens && existingTokens.length > 0) {
-            console.log('ℹ️ FCM token already exists for this user');
-            return;
-        }
-        
-        // Insert new token
-        const { error: insertError } = await supabase
-            .from('fcm_tokens')
-            .insert([{
-                user_id: currentUser.id,
-                fcm_token: token,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-            }]);
-        
-        if (insertError) {
-            console.error('❌ Error storing FCM token:', insertError);
-        } else {
-            console.log('✅ FCM token stored successfully');
-        }
-    } catch (error) {
-        console.error('❌ Error in storeFCMToken:', error);
-    }
-}
-
-// ==================== HANDLE FOREGROUND MESSAGES ====================
-if (messaging) {
-    messaging.onMessage((payload) => {
-        console.log('🔔 Foreground message received:', payload);
-        
-        const notificationTitle = payload.notification?.title || 'HelpBuddy';
-        const notificationOptions = {
-            body: payload.notification?.body || 'You have a new update',
-            icon: '/public/icon-192x192.png',
-            badge: '/public/icon-96x96.png',
-            tag: 'helpbuddy-notification',
-            requireInteraction: true,
-        };
-        
-        // Show notification
-        if (Notification.permission === 'granted') {
-            new Notification(notificationTitle, notificationOptions);
-        }
-        
-        // Play notification sound
-        playNotificationSound('newRequestSound');
-        
-        // Refresh dashboard data
-        if (currentDashboardMode === 'provider' && currentProfile && currentProfile.is_provider) {
-            console.log('🔄 Refreshing dashboard data...');
-            loadNearbyRequests();
-            loadProviderResponses();
-        }
-    });
-}
 let currentUser = null;
 let currentProfile = null;
 let currentDashboardMode = null;
@@ -2550,14 +2401,6 @@ let previousMessages = []; // ✅ NEW: Track previous messages to detect new one
 	let currentResponseFilter = 'active';
 	window.currentWorkFilter = 'available'; // For Work Opportunities filtering
 	let chatOpenedFrom = null; // Track where chat was opened from
-
-	// ========== REALTIME SUBSCRIPTIONS ==========
-let realtimeSubscriptions = {
-    requests: null,
-    responses: null,
-    chats: null,
-    profiles: null
-};
 
         const SERVICE_ICONS = {
             electrician: '🔧',
@@ -4052,323 +3895,15 @@ async function geocodeAddress(address) {
         currentProfile = data;
         console.log('Step 7: Profile loaded:', currentProfile);
         displayProfile(data);
-console.log('Step 8: Calling showDashboard');
-showDashboard();
-
-// ✅ NEW: Start realtime subscriptions after login
-await setupRealtimeSubscriptions();
-       // ✅ NEW: Request notification permission after login (if provider)
-if (currentProfile.is_provider && messaging) {
-    setTimeout(() => {
-        requestNotificationPermission();
-    }, 2000); // Wait 2 seconds after login to request permission
-} 
+        console.log('Step 8: Calling showDashboard');
+        showDashboard();
+        
         window.isLoadingProfile = false;  // Reset flag
     } catch (error) {
         window.isLoadingProfile = false;  // Reset flag on error too
         alert('Error loading profile: ' + error.message);
         showLogin();
     }
-}
-
-// ========== SETUP REALTIME SUBSCRIPTIONS ==========
-async function setupRealtimeSubscriptions() {
-    console.log('🔵 Setting up Realtime subscriptions...');
-    
-    // Cleanup old subscriptions first
-    cleanupRealtimeSubscriptions();
-    
-    // 1️⃣ SUBSCRIBE TO REQUESTS TABLE (New requests, status changes)
-    realtimeSubscriptions.requests = supabase
-        .channel('requests_channel')
-        .on(
-            'postgres_changes',
-            { 
-                event: '*', 
-                schema: 'public', 
-                table: 'requests'
-            },
-            (payload) => {
-                console.log('🔔 Requests table changed:', payload);
-                handleRequestChange(payload);
-            }
-        )
-        .subscribe();
-    
-    // 2️⃣ SUBSCRIBE TO REQUEST_RESPONSES TABLE (New responses from providers)
-    realtimeSubscriptions.responses = supabase
-        .channel('responses_channel')
-        .on(
-            'postgres_changes',
-            { 
-                event: '*', 
-                schema: 'public', 
-                table: 'request_responses'
-            },
-            (payload) => {
-                console.log('🔔 Responses table changed:', payload);
-                handleResponseChange(payload);
-            }
-        )
-        .subscribe();
-    
-    // 3️⃣ SUBSCRIBE TO CHATS TABLE (New messages, contact approvals)
-    realtimeSubscriptions.chats = supabase
-        .channel('chats_channel')
-        .on(
-            'postgres_changes',
-            { 
-                event: '*', 
-                schema: 'public', 
-                table: 'chats'
-            },
-            (payload) => {
-                console.log('🔔 Chats table changed:', payload);
-                handleChatChange(payload);
-            }
-        )
-        .subscribe();
-    
-    // 4️⃣ SUBSCRIBE TO PROFILES TABLE (Email verification, profile updates)
-    realtimeSubscriptions.profiles = supabase
-        .channel('profiles_channel')
-        .on(
-            'postgres_changes',
-            { 
-                event: 'UPDATE', 
-                schema: 'public', 
-                table: 'profiles',
-                filter: `user_id=eq.${currentProfile.user_id}`
-            },
-            (payload) => {
-                console.log('🔔 Your profile changed:', payload);
-                handleProfileChange(payload);
-            }
-        )
-        .subscribe();
-    
-    console.log('✅ Realtime subscriptions active!');
-}
-
-// ========== CLEANUP REALTIME SUBSCRIPTIONS ==========
-function cleanupRealtimeSubscriptions() {
-    console.log('🧹 Cleaning up old subscriptions...');
-    
-    Object.keys(realtimeSubscriptions).forEach(key => {
-        if (realtimeSubscriptions[key]) {
-            supabase.removeChannel(realtimeSubscriptions[key]);
-            realtimeSubscriptions[key] = null;
-        }
-    });
-}
-
-// ========== SOUND NOTIFICATION SYSTEM ==========
-
-// Play notification sound (with browser permission handling)
-function playNotificationSound(soundId) {
-    try {
-        const sound = document.getElementById(soundId);
-        if (!sound) {
-            console.log('⚠️ Sound element not found:', soundId);
-            return;
-        }
-        
-        // Reset sound to beginning
-        sound.currentTime = 0;
-        
-        // Try to play
-        const playPromise = sound.play();
-        
-        if (playPromise !== undefined) {
-            playPromise
-                .then(() => {
-                    console.log('🔊 Sound played:', soundId);
-                })
-                .catch(error => {
-                    console.log('⚠️ Sound blocked by browser (user needs to interact first):', error.message);
-                });
-        }
-    } catch (error) {
-        console.log('⚠️ Sound error:', error.message);
-    }
-}
-
-// Enable sound after first user interaction
-let soundEnabled = false;
-
-function enableSoundOnFirstClick() {
-    if (!soundEnabled) {
-        soundEnabled = true;
-        console.log('✅ Sound notifications enabled after user interaction');
-    }
-}
-
-// Add listener for first click anywhere (silent activation)
-document.addEventListener('click', enableSoundOnFirstClick, { once: true });
-
-// ========== HANDLE REALTIME CHANGES ==========
-
-// Handle changes to REQUESTS table
-async function handleRequestChange(payload) {
-    const { eventType, new: newRecord, old: oldRecord } = payload;
-    
-    // If in seeker mode, refresh user requests
-    if (currentDashboardMode === 'seeker') {
-        console.log('♻️ Refreshing seeker requests...');
-        await loadUserRequests();
-    }
-    
-    // If in provider mode, refresh nearby requests
-    if (currentDashboardMode === 'provider' && currentProfile.is_provider) {
-        console.log('♻️ Refreshing provider requests...');
-        
-        // 🔊 NEW: Play sound if new request appears
-        if (eventType === 'INSERT' && newRecord.status === 'open') {
-            playNotificationSound('newRequestSound');
-        }
-        
-        await loadNearbyRequests();
-        await loadProviderResponses();
-        await loadProviderOpenRequests();
-    }
-}
-
-// Handle changes to REQUEST_RESPONSES table
-async function handleResponseChange(payload) {
-    const { eventType, new: newRecord, old: oldRecord } = payload;
-    
-    // If I'm the seeker, refresh my requests (new responses badge)
-    if (currentDashboardMode === 'seeker') {
-        console.log('♻️ New response received, refreshing...');
-        
-        // 🔊 NEW: Play sound if new response received
-        if (eventType === 'INSERT') {
-            playNotificationSound('newResponseSound');
-        }
-        
-        await loadUserRequests();
-    }
-    
-    // If I'm a provider, refresh my responses
-    if (currentDashboardMode === 'provider' && currentProfile.is_provider) {
-        console.log('♻️ Refreshing provider responses...');
-        await loadProviderResponses();
-        await loadProviderOpenRequests();
-    }
-}
-
-// Handle changes to CHATS table
-async function handleChatChange(payload) {
-    const { eventType, new: newRecord, old: oldRecord } = payload;
-    
-    console.log('🔔 Chats table changed:', eventType);
-    
-    // ✅ Safety check
-    if (!newRecord) {
-        console.log('❌ No newRecord, exiting');
-        return;
-    }
-    
-    // ✅ Check if this chat involves current user
-    const isMyChat = (
-        newRecord.request_id && 
-        newRecord.provider_id &&
-        currentUser && 
-        currentProfile
-    );
-    
-    if (!isMyChat) {
-        console.log('⏭️ Skipping - not my chat');
-        return;
-    }
-    
-    // ✅ Check if currently in THIS specific chat
-    const chatView = document.getElementById('chatView');
-    const isInThisChat = (
-        chatView && 
-        !chatView.classList.contains('hidden') &&
-        currentChatData &&
-        currentChatData.requestId === newRecord.request_id &&
-        currentChatData.providerId === newRecord.provider_id
-    );
-    
-    if (isInThisChat) {
-        // Already in this chat - just refresh messages (no sound)
-        console.log('♻️ In this chat, refreshing silently...');
-        await loadChatMessages();
-        return;
-    }
-    
-    // ✅ NOT in this chat - check if there's a new message
-    
-    // NEW APPROACH: Check the LAST MESSAGE TIMESTAMP
-    if (newRecord.messages && newRecord.messages.length > 0) {
-        const lastMessage = newRecord.messages[newRecord.messages.length - 1];
-        const lastMessageTime = new Date(lastMessage.timestamp).getTime();
-        const now = Date.now();
-        
-        // If message was sent in the last 10 seconds, consider it "new"
-        const isRecentMessage = (now - lastMessageTime) < 10000;
-        
-        console.log('📊 Last message time:', new Date(lastMessage.timestamp).toLocaleTimeString());
-        console.log('📊 Time since message:', Math.round((now - lastMessageTime) / 1000), 'seconds ago');
-        console.log('📊 Is recent message:', isRecentMessage);
-        console.log('📊 Message from:', lastMessage.sender_id);
-        console.log('📊 Current user:', currentUser.id);
-        
-        // Check if message is recent AND from someone else
-        if (isRecentMessage && lastMessage.sender_id !== currentUser.id) {
-            console.log('🔊 NEW MESSAGE! Playing sound...');
-            playNotificationSound('newMessageSound');
-            
-            // Refresh dashboard
-            console.log('♻️ Updating badges...');
-            if (currentDashboardMode === 'seeker') {
-                await loadUserRequests();
-            } else if (currentDashboardMode === 'provider') {
-                await loadProviderResponses();
-                await loadProviderOpenRequests();
-            }
-        } else if (!isRecentMessage) {
-            console.log('⏭️ Old message (>', Math.round((now - lastMessageTime) / 1000), 'seconds old), skipping');
-        } else if (lastMessage.sender_id === currentUser.id) {
-            console.log('⏭️ My own message, skipping sound');
-        }
-    } else {
-        console.log('⏭️ No messages in chat');
-    }
-}
-
-// Handle changes to PROFILES table (your own profile)
-async function handleProfileChange(payload) {
-    const { eventType, new: newRecord, old: oldRecord } = payload;
-    
-    console.log('♻️ Your profile updated, reloading...', payload);
-    
-    // ✅ Safety check: Make sure we have both old and new records
-    if (!oldRecord || !newRecord) {
-        console.log('⚠️ Incomplete profile data, skipping alert');
-        currentProfile = newRecord || currentProfile;
-        return;
-    }
-    
-    // Update local profile
-    currentProfile = newRecord;
-    
-    // ✅ ONLY show alert if email_verified actually changed from false to true
-    if (
-        oldRecord.email_verified === false && 
-        newRecord.email_verified === true
-    ) {
-        alert('✅ Email verified successfully! You can now create requests and respond to work.');
-        
-        // Remove verification banner if exists
-        const banner = document.getElementById('verificationBanner');
-        if (banner) banner.remove();
-    }
-    
-    // ✅ Silently update display (no alert for other profile changes)
-    displayProfile(newRecord);
 }
 
 // Handle Password Reset
@@ -8489,13 +8024,10 @@ showDashboard();
             if (!confirm('Are you sure you want to logout?')) return;
             
             if (chatRefreshInterval) {
-    clearInterval(chatRefreshInterval);
-}
-
-// ✅ NEW: Cleanup realtime subscriptions on logout
-cleanupRealtimeSubscriptions();
-
-await supabase.auth.signOut();
+                clearInterval(chatRefreshInterval);
+            }
+            
+            await supabase.auth.signOut();
             currentUser = null;
             currentProfile = null;
 	sessionStorage.removeItem('dashboardMode');
@@ -10111,7 +9643,24 @@ async function loadProviderOpenRequests() {
     }
 }
 
-
+// ✅ Enable sound on first user interaction (required by browsers)
+document.addEventListener('click', function enableSound() {
+    const inChatSound = document.getElementById('inChatSound');
+    const newChatSound = document.getElementById('newChatSound');
+    
+    // Try to play and immediately pause to "prime" the audio
+    if (inChatSound) {
+        inChatSound.play().then(() => inChatSound.pause()).catch(() => {});
+    }
+    if (newChatSound) {
+        newChatSound.play().then(() => newChatSound.pause()).catch(() => {});
+    }
+    
+    console.log('✅ Sound enabled after user interaction');
+    
+    // Remove this listener after first click
+    document.removeEventListener('click', enableSound);
+}, { once: true });
 
 </script>
 
@@ -10273,15 +9822,12 @@ async function loadProviderOpenRequests() {
     </div>
 </div>
 
-<!-- Notification Sounds - Using browser notification sound -->
-<audio id="newRequestSound" preload="auto">
-    <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4T9ruaxAAAAAAD/+xDEAA8AAAGkAAAAIAAANIAAAAQoLlRjbWUgMS4xMDMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQxA4PAABpAAAACAAADSAAAAETGF2YzU4LjEzAAAAAAAAAAAAAAAAAAAAAP/7EMQPDwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAA==" type="audio/mp3">
+<!-- Notification Sounds -->
+<audio id="inChatSound" preload="auto">
+    <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGWe77eedTRALUKXi8LZjHAU4kte==" type="audio/wav">
 </audio>
-<audio id="newResponseSound" preload="auto">
-    <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4T9ruaxAAAAAAD/+xDEAA8AAAGkAAAAIAAANIAAAAQoLlRjbWUgMS4xMDMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQxA4PAABpAAAACAAADSAAAAETGF2YzU4LjEzAAAAAAAAAAAAAAAAAAAAAP/7EMQPDwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAA==" type="audio/mp3">
-</audio>
-<audio id="newMessageSound" preload="auto">
-    <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4T9ruaxAAAAAAD/+xDEAA8AAAGkAAAAIAAANIAAAAQoLlRjbWUgMS4xMDMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQxA4PAABpAAAACAAADSAAAAETGF2YzU4LjEzAAAAAAAAAAAAAAAAAAAAAP/7EMQPDwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAA==" type="audio/mp3">
+<audio id="newChatSound" preload="auto">
+    <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGWe77eedTRALT6Ti8LdjHQY4kdXyzHksBS+Axe/bjEgPG2W47+idTRANU6jn8bllHgU5kdXzzXksBTCBxO7bik0OHGa87+qeThANU6no8btoHwU6kdX0zn4tBTGCxO3cjU8PHGe97+ufTw8NVKro8L1pIAU7k9X1z4AvBTODxezcj1EQHWi+8O2gUBENVazo8L5rIQU8k9X2z4EwBTSDxuzdkFIRHWm/8e2hURIMVq3p8cBsIwU9lNX3z4IxBTWEx+3dkVQSHmrA8u6iUxINV67p8cFtJAU+ldX4z4QyBTaFx+7ek1UXH2vB8++jVBMMWLDq8sJvJgU/ldb5z4YzBjeGye/flFUXH2zC9PCkVhQNWbHr88NxJwVAltb60IcRBjiHyu/fllcXIG3D9PGlVxUNWrLr9MRyKQZBl9f70Ig0BzmIy+/fl1gYIG7E9fKnWBYNW7Pt9cVzKwZCmNj80Io1BzqJzO/gmVgYIm/F9vOoWhcOXLTu9sZ1LAZDmdn90Ys2BzqKzfDhm1kaI3DG9/SqWxgOXbXu98d2LQZEmtr/0o03BzuLzu/jnFoaJHHH+PWrXBkOXrbu+Mh4LgZFm9z/0483BzuM0O/knVwbJXLI+fWsXRoPX7jv+cl5LwZGnN3/05I4Bz2N0fDln10cJXPJ+vWtXxsQYLnw+sp6MQZHnN7/1JQ5Bz6O0vHmn18dJnTK+/avYBwRYbjx+8t7MwZInd//1ZU6Bz+P0/LnoGAdJ3XL/PexYR0RYrnz/Mx8NAZJ" type="audio/wav">
 </audio>
 
 </body>
