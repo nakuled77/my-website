@@ -4305,7 +4305,7 @@ async function handleChatChange(payload) {
         return;
     }
     
-    // ✅ CRITICAL FIX: Check if currently in THIS specific chat
+    // ✅ Check if currently in THIS specific chat
     const chatView = document.getElementById('chatView');
     const isInThisChat = (
         chatView && 
@@ -4316,38 +4316,17 @@ async function handleChatChange(payload) {
     );
     
     if (isInThisChat) {
-        // Already in this chat - just refresh messages (no sound here, handled below)
+        // Already in this chat - just refresh messages (no sound)
         console.log('♻️ In this chat, refreshing silently...');
-        await loadChatMessages('realtime_refresh');
+        await loadChatMessages();
         return;
     }
     
     // ✅ NOT in this chat - check if there's a new message
     
-    // 🆕 CRITICAL FIX: Compare message arrays to detect REAL new messages
-    const oldMessages = oldRecord?.messages || [];
-    const newMessages = newRecord.messages || [];
-    
-    console.log('📊 Old messages count:', oldMessages.length);
-    console.log('📊 New messages count:', newMessages.length);
-    
-    // If message count is the same, it's just a timestamp update - IGNORE IT
-    if (oldMessages.length === newMessages.length) {
-        console.log('⏭️ No new messages (just timestamp update), skipping sound');
-        
-        // Still update badges though
-        if (currentDashboardMode === 'seeker') {
-            await loadUserRequests();
-        } else if (currentDashboardMode === 'provider') {
-            await loadProviderResponses();
-            await loadProviderOpenRequests();
-        }
-        return;
-    }
-    
-    // ✅ NEW MESSAGE DETECTED - Check the LAST MESSAGE TIMESTAMP
-    if (newMessages.length > 0) {
-        const lastMessage = newMessages[newMessages.length - 1];
+    // NEW APPROACH: Check the LAST MESSAGE TIMESTAMP
+    if (newRecord.messages && newRecord.messages.length > 0) {
+        const lastMessage = newRecord.messages[newRecord.messages.length - 1];
         const lastMessageTime = new Date(lastMessage.timestamp).getTime();
         const now = Date.now();
         
@@ -4362,15 +4341,8 @@ async function handleChatChange(payload) {
         
         // Check if message is recent AND from someone else
         if (isRecentMessage && lastMessage.sender_id !== currentUser.id) {
-            console.log('🔊 NEW MESSAGE! Playing smart notification...');
-            
-            // ✅ NEW: Use smart notification system
-            playSmartNotification({
-                requestId: newRecord.request_id,
-                providerId: newRecord.provider_id,
-                senderName: lastMessage.sender_name,
-                message: lastMessage.message
-            });
+            console.log('🔊 NEW MESSAGE! Playing sound...');
+            playNotificationSound('newMessageSound');
             
             // Refresh dashboard
             console.log('♻️ Updating badges...');
@@ -5769,7 +5741,7 @@ if (chatView) {
         
         // Start auto-refresh
         if (chatRefreshInterval) clearInterval(chatRefreshInterval);
-        chatRefreshInterval = setInterval(() => loadChatMessages('realtime_refresh'), 5000);
+        chatRefreshInterval = setInterval(loadChatMessages, 5000);
         
     } catch (error) {
         console.error('❌ ❌ ❌ ERROR OPENING CHAT:', error);
@@ -5799,58 +5771,59 @@ function getNewMessages(oldMessages, newMessages) {
 
 // Load Chat Messages
 async function loadChatMessages() {
-    // ✅ CRITICAL FIX: Only update timestamp if we're VIEWING the chat (not just refreshing)
-    const chatView = document.getElementById('chatView');
-    const isChatVisible = chatView && !chatView.classList.contains('hidden');
-    
-    // 🆕 NEW: Add flag to prevent timestamp update during Realtime refresh
-    const isRealtimeRefresh = arguments[0] === 'realtime_refresh';
-    
-    if (currentChatData && currentProfile && isChatVisible && !isRealtimeRefresh) {
+    // ✅ SAFE FIX: Update timestamp IMMEDIATELY when chat is open
+    if (currentChatData && currentProfile) {
         const now = new Date().toISOString();
+        const chatView = document.getElementById('chatView');
+        const isChatVisible = chatView && !chatView.classList.contains('hidden');
         
-        console.log('🔵 Updating timestamp (User actively viewing chat)');
-        
-        try {
-            if (currentChatData.isProvider) {
-                // PROVIDER viewing: Update provider_last_viewed_at for THIS provider only
-                const { data: result, error } = await supabase
-                    .from('chats')
-                    .update({ provider_last_viewed_at: now })
-                    .eq('request_id', currentChatData.requestId)
-                    .eq('provider_id', currentProfile.user_id)
-                    .select();
-                
-                if (error) {
-                    console.error('❌ Provider timestamp update FAILED:', error);
-                } else if (!result || result.length === 0) {
-                    console.error('❌ Provider timestamp matched ZERO rows');
-                } else {
-                    console.log('✅ Provider timestamp updated:', result[0].provider_last_viewed_at);
-                }
+        if (isChatVisible) {
+    console.log('🔵 Updating timestamp (Safe Fix):', {
+        isProvider: currentChatData.isProvider,
+        requestId: currentChatData.requestId,
+        userId: currentProfile.user_id,
+        providerId: currentChatData.providerId
+    });
+    
+    try {
+        if (currentChatData.isProvider) {
+            // PROVIDER viewing: Update provider_last_viewed_at for THIS provider only
+            const { data: result, error } = await supabase
+                .from('chats')
+                .update({ provider_last_viewed_at: now })
+                .eq('request_id', currentChatData.requestId)
+                .eq('provider_id', currentProfile.user_id)
+                .select();
+            
+            if (error) {
+                console.error('❌ Provider timestamp update FAILED:', error);
+            } else if (!result || result.length === 0) {
+                console.error('❌ Provider timestamp matched ZERO rows');
             } else {
-                // SEEKER viewing: Update seeker_last_viewed_at ONLY for the current provider
-                const { data: result, error } = await supabase
-                    .from('chats')
-                    .update({ seeker_last_viewed_at: now })
-                    .eq('request_id', currentChatData.requestId)
-                    .eq('provider_id', currentChatData.providerId)
-                    .select();
-                
-                if (error) {
-                    console.error('❌ Seeker timestamp update FAILED:', error);
-                } else if (!result || result.length === 0) {
-                    console.error('❌ Seeker timestamp matched ZERO rows');
-                } else {
-                    console.log('✅ Seeker timestamp updated:', result[0].seeker_last_viewed_at);
-                }
+                console.log('✅ Provider timestamp updated:', result[0].provider_last_viewed_at);
             }
-        } catch (err) {
-            console.error('⚠️ Timestamp update error:', err);
+        } else {
+            // SEEKER viewing: Update seeker_last_viewed_at ONLY for the current provider
+            const { data: result, error } = await supabase
+                .from('chats')
+                .update({ seeker_last_viewed_at: now })
+                .eq('request_id', currentChatData.requestId)
+                .eq('provider_id', currentChatData.providerId)  // ✅ CRITICAL FIX: Add provider filter!
+                .select();
+            
+            if (error) {
+                console.error('❌ Seeker timestamp update FAILED:', error);
+            } else if (!result || result.length === 0) {
+                console.error('❌ Seeker timestamp matched ZERO rows');
+            } else {
+                console.log('✅ Seeker timestamp updated:', result[0].seeker_last_viewed_at);
+            }
         }
-    } else if (isRealtimeRefresh) {
-        console.log('⏭️ Skipping timestamp update (Realtime refresh)');
+    } catch (err) {
+        console.error('⚠️ Timestamp update error:', err);
     }
+}
+}
     
     try {
         const { data: chats, error } = await supabase
