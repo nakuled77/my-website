@@ -4216,63 +4216,6 @@ function playNotificationSound(soundId) {
     }
 }
 
-// ========== SMART NOTIFICATION - CONTEXT-AWARE SOUND ==========
-function playSmartNotification(data) {
-    console.log('🔔 playSmartNotification called with:', data);
-    
-    try {
-        // Check if user is currently in THIS specific chat
-        const chatView = document.getElementById('chatView');
-        const isInThisChat = (
-            chatView && 
-            !chatView.classList.contains('hidden') &&
-            currentChatData &&
-            currentChatData.requestId === data.requestId &&
-            currentChatData.providerId === data.providerId
-        );
-        
-        if (isInThisChat) {
-            // User is IN this chat - play SOFT sound
-            console.log('🔊 Playing SOFT sound (user is in this chat)');
-            const inChatSound = document.getElementById('inChatSound');
-            if (inChatSound) {
-                inChatSound.volume = 0.3; // Soft volume
-                inChatSound.currentTime = 0;
-                inChatSound.play()
-                    .then(() => console.log('✅ Soft in-chat sound played'))
-                    .catch(e => console.log('⚠️ Sound blocked:', e.message));
-            } else {
-                console.log('⚠️ inChatSound element not found');
-            }
-        } else {
-            // User is NOT in this chat - play LOUD sound
-            console.log('🔊 Playing LOUD sound (user is elsewhere)');
-            const newChatSound = document.getElementById('newChatSound');
-            if (newChatSound) {
-                newChatSound.volume = 0.7; // Loud volume
-                newChatSound.currentTime = 0;
-                newChatSound.play()
-                    .then(() => console.log('✅ Loud notification sound played'))
-                    .catch(e => console.log('⚠️ Sound blocked:', e.message));
-            } else {
-                console.log('⚠️ newChatSound element not found');
-            }
-        }
-        
-        // Optional: Show browser notification if supported
-        if (Notification.permission === 'granted' && !isInThisChat) {
-            new Notification('New Message from ' + data.senderName, {
-                body: data.message.substring(0, 100),
-                icon: '/android-icon-192x192.png',
-                tag: 'helpbuddy-message'
-            });
-        }
-        
-    } catch (error) {
-        console.error('❌ Error in playSmartNotification:', error);
-    }
-}
-
 // Enable sound after first user interaction
 let soundEnabled = false;
 
@@ -10380,26 +10323,15 @@ async function loadProviderOpenRequests() {
     </div>
 </div>
 
-<!-- ========== NOTIFICATION SOUNDS ========== -->
-
-<!-- 1. New Request Sound (for providers when new request appears) -->
+<!-- Notification Sounds - Using browser notification sound -->
 <audio id="newRequestSound" preload="auto">
-    <source src="/sounds/notification-loud.mp3" type="audio/mp3">
+    <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4T9ruaxAAAAAAD/+xDEAA8AAAGkAAAAIAAANIAAAAQoLlRjbWUgMS4xMDMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQxA4PAABpAAAACAAADSAAAAETGF2YzU4LjEzAAAAAAAAAAAAAAAAAAAAAP/7EMQPDwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAA==" type="audio/mp3">
 </audio>
-
-<!-- 2. New Response Sound (for seekers when provider responds) -->
 <audio id="newResponseSound" preload="auto">
-    <source src="/sounds/notification-loud.mp3" type="audio/mp3">
+    <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4T9ruaxAAAAAAD/+xDEAA8AAAGkAAAAIAAANIAAAAQoLlRjbWUgMS4xMDMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQxA4PAABpAAAACAAADSAAAAETGF2YzU4LjEzAAAAAAAAAAAAAAAAAAAAAP/7EMQPDwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAA==" type="audio/mp3">
 </audio>
-
-<!-- 3. Soft In-Chat Sound (when viewing the chat - SOFT sound) -->
-<audio id="inChatSound" preload="auto">
-    <source src="/sounds/notification-soft.mp3" type="audio/mp3">
-</audio>
-
-<!-- 4. Loud New Chat Sound (when NOT viewing the chat - LOUD sound) -->
-<audio id="newChatSound" preload="auto">
-    <source src="/sounds/notification-loud.mp3" type="audio/mp3">
+<audio id="newMessageSound" preload="auto">
+    <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4T9ruaxAAAAAAD/+xDEAA8AAAGkAAAAIAAANIAAAAQoLlRjbWUgMS4xMDMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQxA4PAABpAAAACAAADSAAAAETGF2YzU4LjEzAAAAAAAAAAAAAAAAAAAAAP/7EMQPDwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAA==" type="audio/mp3">
 </audio>
 
 </body>
