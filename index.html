@@ -4316,7 +4316,7 @@ async function handleChatChange(payload) {
     );
     
     if (isInThisChat) {
-        // Already in this chat - just refresh messages (no sound here, handled below)
+        // Already in this chat - just refresh messages (no sound)
         console.log('♻️ In this chat, refreshing silently...');
         await loadChatMessages();
         return;
@@ -4341,15 +4341,8 @@ async function handleChatChange(payload) {
         
         // Check if message is recent AND from someone else
         if (isRecentMessage && lastMessage.sender_id !== currentUser.id) {
-            console.log('🔊 NEW MESSAGE! Playing smart notification...');
-            
-            // ✅ NEW: Use smart notification system
-            playSmartNotification({
-                requestId: newRecord.request_id,
-                providerId: newRecord.provider_id,
-                senderName: lastMessage.sender_name,
-                message: lastMessage.message
-            });
+            console.log('🔊 NEW MESSAGE! Playing sound...');
+            playNotificationSound('newMessageSound');
             
             // Refresh dashboard
             console.log('♻️ Updating badges...');
@@ -5303,29 +5296,7 @@ ${warrantyBadge || reactivateButton ? `
                 console.error('Container still null after rendering. Filter:', currentRequestFilter);
             }
         }
-         
-	// ========== USER STATE DETECTION ==========
-function getUserState(newMessageData) {
-    const isInBackground = document.hidden;
-    const chatView = document.getElementById('chatView');
-    const isInChat = chatView && !chatView.classList.contains('hidden');
-    
-    let isInSameChat = false;
-    if (isInChat && currentChatData && newMessageData) {
-        isInSameChat = (currentChatData.requestId === newMessageData.requestId && 
-                       currentChatData.providerId === newMessageData.providerId);
-    }
-    
-    let isUserAtBottom = false;
-    if (isInChat && isInSameChat) {
-        const scrollContainer = document.getElementById('chatMessages');
-        if (scrollContainer) {
-            isUserAtBottom = (scrollContainer.scrollHeight - scrollContainer.scrollTop <= scrollContainer.clientHeight + 100);
-        }
-    }
-    
-    return { isInBackground, isInChat, isInSameChat, isUserAtBottom };
-}   
+            
 
         // Helper function for time ago
         function getTimeAgo(date) {
@@ -5339,94 +5310,6 @@ function getUserState(newMessageData) {
             if (days < 7) return `${days}d ago`;
             return date.toLocaleDateString();
         }
-
-// ========== SMART NOTIFICATION HANDLER ==========
-function playSmartNotification(messageData) {
-    const state = getUserState(messageData);
-    
-    console.log('🔔 Notification State:', {
-        isInBackground: state.isInBackground,
-        isInChat: state.isInChat,
-        isInSameChat: state.isInSameChat,
-        isUserAtBottom: state.isUserAtBottom
-    });
-    
-    // SCENARIO 1: User in different browser tab (background)
-    if (state.isInBackground) {
-        showBrowserNotification('New message from ' + (messageData.senderName || 'HelpBuddy'));
-        return; // Browser notification has its own system sound
-    }
-    
-    // SCENARIO 2: User on app but NOT in chat view
-    if (!state.isInChat) {
-        playNotificationSound('loud');
-        return;
-    }
-    
-    // SCENARIO 3: User in SAME chat but reading above (not at bottom)
-    if (state.isInSameChat && !state.isUserAtBottom) {
-        playNotificationSound('soft');
-        return;
-    }
-    
-    // SCENARIO 4: User in DIFFERENT chat
-    if (!state.isInSameChat) {
-        playNotificationSound('loud');
-        return;
-    }
-    
-    // SCENARIO 5: User in same chat at bottom - NO sound (they see it)
-    console.log('✅ User at bottom of current chat - no sound played');
-}
-
-// Play notification sound (loud or soft)
-function playNotificationSound(type) {
-    try {
-        const soundId = type === 'soft' ? 'softNotificationSound' : 'loudNotificationSound';
-        const sound = document.getElementById(soundId);
-        
-        if (!sound) {
-            console.error('❌ Sound element not found:', soundId);
-            return;
-        }
-        
-        // Reset to beginning
-        sound.currentTime = 0;
-        
-        // Set volume
-        sound.volume = type === 'soft' ? 0.4 : 0.7;
-        
-        // Try to play
-        const playPromise = sound.play();
-        
-        if (playPromise !== undefined) {
-            playPromise
-                .then(() => {
-                    console.log('🔊 ' + type.toUpperCase() + ' sound played successfully');
-                })
-                .catch(error => {
-                    console.log('⚠️ Sound blocked by browser:', error.message);
-                });
-        }
-    } catch (error) {
-        console.error('❌ Sound error:', error);
-    }
-}
-
-// Show browser notification (for background tab)
-function showBrowserNotification(message) {
-    if (Notification.permission === 'granted') {
-        new Notification('HelpBuddy', {
-            body: message,
-            icon: '/android-icon-192x192.png',
-            badge: '/android-icon-144x144.png',
-            tag: 'helpbuddy-notification',
-            requireInteraction: false,
-            silent: false // Use system notification sound
-        });
-        console.log('🔔 Browser notification shown');
-    }
-}
 
         // Toggle request details
 function toggleRequestDetails(event, requestId) {
@@ -10251,22 +10134,7 @@ async function loadProviderOpenRequests() {
     }
 }
 
-// ========== HANDLE TAB VISIBILITY CHANGES ==========
-document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) {
-        console.log('👁️ User returned to tab');
-        // User returned to tab - update timestamps if in chat
-        if (currentChatData) {
-            const chatView = document.getElementById('chatView');
-            if (chatView && !chatView.classList.contains('hidden')) {
-                console.log('✅ Updating last viewed timestamp');
-                // Timestamp will be updated by loadChatMessages on next refresh
-            }
-        }
-    } else {
-        console.log('🙈 User left tab (background)');
-    }
-});
+
 
 </script>
 
@@ -10428,12 +10296,9 @@ document.addEventListener('visibilitychange', () => {
     </div>
 </div>
 
-<!-- ==================== NOTIFICATION SOUNDS ==================== -->
-<audio id="loudNotificationSound" preload="auto">
-    <source src="/sounds/notification-loud.mp3" type="audio/mp3">
-</audio>
-<audio id="softNotificationSound" preload="auto">
-    <source src="/sounds/notification-soft.mp3" type="audio/mp3">
+<!-- Notification Sounds - Using browser notification sound -->
+<audio id="newRequestSound" preload="auto">
+    <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4T9ruaxAAAAAAD/+xDEAA8AAAGkAAAAIAAANIAAAAQoLlRjbWUgMS4xMDMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQxA4PAABpAAAACAAADSAAAAETGF2YzU4LjEzAAAAAAAAAAAAAAAAAAAAAP/7EMQPDwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAA==" type="audio/mp3">
 </audio>
 <audio id="newResponseSound" preload="auto">
     <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4T9ruaxAAAAAAD/+xDEAA8AAAGkAAAAIAAANIAAAAQoLlRjbWUgMS4xMDMAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQxA4PAABpAAAACAAADSAAAAETGF2YzU4LjEzAAAAAAAAAAAAAAAAAAAAAP/7EMQPDwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAP/7EMQODwAAaQAAAAgAAA0gAAABAAAAAA==" type="audio/mp3">
