@@ -3219,10 +3219,11 @@ async function displayProfileStats() {
             // ========== PROVIDER STATS ==========
             
             // 1. Average Rating
-            let ratingText = 'No ratings yet';
+            let ratingText = 'No ratings';
+            let ratingStars = '';
             if (currentProfile.average_rating && currentProfile.average_rating > 0 && currentProfile.total_ratings > 0) {
-                const stars = '⭐'.repeat(Math.round(currentProfile.average_rating));
-                ratingText = `${stars} ${currentProfile.average_rating}/5 (${currentProfile.total_ratings} ${currentProfile.total_ratings === 1 ? 'rating' : 'ratings'})`;
+                ratingStars = '⭐'.repeat(Math.round(currentProfile.average_rating));
+                ratingText = `${currentProfile.average_rating}/5`;
             }
             
             // 2. Completed Jobs (as selected provider)
@@ -3239,20 +3240,26 @@ async function displayProfileStats() {
             const activeSinceText = activeSinceDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
             
             statsHTML = `
-    <div style="flex: 1; padding-left: 20px;">
-        <div style="background: #f0f4ff; padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #667eea;">
-            <div style="font-size: 12px; color: #666; margin-bottom: 2px;">Rating</div>
-            <div style="font-size: 14px; font-weight: 600; color: #333;">${ratingText}</div>
+    <div style="flex: 1; padding-left: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start;">
+        <!-- Rating - Top Left -->
+        <div style="background: #f0f4ff; padding: 8px 10px; border-radius: 6px; border-left: 3px solid #667eea;">
+            <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Rating</div>
+            <div style="font-size: 13px; font-weight: 600; color: #333;">${ratingStars}</div>
+            <div style="font-size: 12px; font-weight: 600; color: #667eea;">${ratingText}</div>
+            <div style="font-size: 10px; color: #999;">${currentProfile.total_ratings || 0} reviews</div>
         </div>
         
-        <div style="background: #f0f4ff; padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #28a745;">
-            <div style="font-size: 12px; color: #666; margin-bottom: 2px;">Completed Jobs</div>
-            <div style="font-size: 14px; font-weight: 600; color: #333;">✅ ${completedCount} ${completedCount === 1 ? 'Job' : 'Jobs'}</div>
+        <!-- Completed Jobs - Top Right -->
+        <div style="background: #f0f4ff; padding: 8px 10px; border-radius: 6px; border-left: 3px solid #28a745;">
+            <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Completed</div>
+            <div style="font-size: 20px; font-weight: 700; color: #28a745; line-height: 1;">✅</div>
+            <div style="font-size: 13px; font-weight: 600; color: #333; margin-top: 2px;">${completedCount} Jobs</div>
         </div>
         
-        <div style="background: #f0f4ff; padding: 10px 12px; border-radius: 8px; border-left: 4px solid #17a2b8;">
-            <div style="font-size: 12px; color: #666; margin-bottom: 2px;">Member Since</div>
-            <div style="font-size: 14px; font-weight: 600; color: #333;">📅 ${activeSinceText}</div>
+        <!-- Member Since - Bottom Spanning Both Columns -->
+        <div style="background: #f0f4ff; padding: 8px 10px; border-radius: 6px; border-left: 3px solid #17a2b8; grid-column: 1 / -1;">
+            <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Member Since</div>
+            <div style="font-size: 13px; font-weight: 600; color: #333;">📅 ${activeSinceText}</div>
         </div>
     </div>
 `;
@@ -3278,15 +3285,19 @@ async function displayProfileStats() {
             const completedCount = completedRequests ? completedRequests.length : 0;
             
             statsHTML = `
-    <div style="flex: 1; padding-left: 20px;">
-        <div style="background: #f0f4ff; padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #667eea;">
-            <div style="font-size: 12px; color: #666; margin-bottom: 2px;">Total Requests Created</div>
-            <div style="font-size: 14px; font-weight: 600; color: #333;">📊 ${totalRequests} ${totalRequests === 1 ? 'Request' : 'Requests'}</div>
+    <div style="flex: 1; padding-left: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start;">
+        <!-- Total Requests - Left -->
+        <div style="background: #f0f4ff; padding: 8px 10px; border-radius: 6px; border-left: 3px solid #667eea;">
+            <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Total</div>
+            <div style="font-size: 20px; font-weight: 700; color: #667eea; line-height: 1;">📊</div>
+            <div style="font-size: 13px; font-weight: 600; color: #333; margin-top: 2px;">${totalRequests} Requests</div>
         </div>
         
-        <div style="background: #f0f4ff; padding: 10px 12px; border-radius: 8px; border-left: 4px solid #28a745;">
-            <div style="font-size: 12px; color: #666; margin-bottom: 2px;">Completed Services</div>
-            <div style="font-size: 14px; font-weight: 600; color: #333;">✅ ${completedCount} ${completedCount === 1 ? 'Service' : 'Services'}</div>
+        <!-- Completed Services - Right -->
+        <div style="background: #f0f4ff; padding: 8px 10px; border-radius: 6px; border-left: 3px solid #28a745;">
+            <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Completed</div>
+            <div style="font-size: 20px; font-weight: 700; color: #28a745; line-height: 1;">✅</div>
+            <div style="font-size: 13px; font-weight: 600; color: #333; margin-top: 2px;">${completedCount} Services</div>
         </div>
     </div>
 `;
