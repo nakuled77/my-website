@@ -1054,17 +1054,6 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     margin-bottom: 12px !important; 
 }
 }
-@media (max-width: 480px) {
-    #editProfileView > div:first-child {
-        max-width: 100% !important;
-        padding: 12px !important;
-    }
-    
-    #editProfileView > div:nth-child(2) {
-        max-width: 100% !important;
-        padding: 0 12px 40px 12px !important;
-    }
-}
     </style>
 </head>
 <body>
@@ -2011,39 +2000,32 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
 
 <!-- Edit Profile View -->
 <div id="editProfileView" class="hidden">
-    <!-- Header with constrained width -->
-    <div style="max-width: 600px; margin: 0 auto; padding: 20px 20px 0 20px;">
-        <!-- Title and Back Button Row -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h2 style="margin: 0; color: #667eea; font-size: 24px;">Edit Profile</h2>
-            <button class="btn btn-secondary" onclick="smartBack()" style="margin: 0; padding: 10px 20px;">← Back</button>
-        </div>
-        
-        <!-- Personal Information Heading -->
-        <h3 style="margin: 0 0 20px 0; color: #333; font-size: 18px;">👤 Personal Information</h3>
-        
-        <!-- Profile Photo and Stats Row -->
-        <div style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 30px;">
-            <!-- LEFT: Profile Photo -->
-            <div style="flex-shrink: 0;">
-                <img id="currentProfilePhoto" src="" alt="Profile" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #667eea; display: none;">
-                <div id="noProfilePhoto" style="width: 120px; height: 120px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #999;">👤</div>
-            </div>
+    <!-- Header Section with Profile Photo and Back Button -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; padding: 20px 20px 0 20px;">
+        <!-- Left: Headings + Profile Photo -->
+        <div>
+            <h2 style="margin: 0 0 15px 0; color: #667eea; font-size: 24px;">Edit Profile</h2>
+            <h3 style="margin: 0 0 20px 0; color: #333; font-size: 18px;">👤 Personal Information</h3>
             
-            <!-- RIGHT: Stats Container -->
-            <div id="profileStatsContainer" style="flex: 1; min-width: 0;">
-                <!-- Stats will be inserted here by displayProfileStats() -->
-            </div>
-        </div>
+            <div style="display: flex; align-items: flex-start; gap: 20px; margin-top: 10px;">
+    <!-- LEFT: Profile Photo -->
+    <div style="flex-shrink: 0;">
+        <img id="currentProfilePhoto" src="" alt="Profile" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #667eea; display: none;">
+        <div id="noProfilePhoto" style="width: 120px; height: 120px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #999;">👤</div>
     </div>
     
-    <!-- Rest of the form with constrained width -->
-    <div style="max-width: 600px; margin: 0 auto; padding: 0 20px 40px 20px;">
-        <div id="editProfileError" class="error hidden"></div>
-        <div id="editProfileInfo" class="info hidden"></div>
+    <!-- RIGHT: Stats Container -->
+    <div id="profileStatsContainer" style="flex: 1;">
+        <!-- Stats will be inserted here by displayProfileStats() -->
+    </div>
+</div>
+        </div>
         
-        <form id="editProfileForm">
-            <!-- All form fields continue here unchanged -->
+        <!-- Right: Back Button -->
+        <div>
+            <button class="btn btn-secondary" onclick="smartBack()" style="margin: 0;">← Back</button>
+        </div>
+    </div>
     
     <div id="editProfileError" class="error hidden"></div>
     <div id="editProfileInfo" class="info hidden"></div>
@@ -3237,11 +3219,10 @@ async function displayProfileStats() {
             // ========== PROVIDER STATS ==========
             
             // 1. Average Rating
-            let ratingText = 'No ratings';
-            let ratingStars = '';
+            let ratingText = 'No ratings yet';
             if (currentProfile.average_rating && currentProfile.average_rating > 0 && currentProfile.total_ratings > 0) {
-                ratingStars = '⭐'.repeat(Math.round(currentProfile.average_rating));
-                ratingText = `${currentProfile.average_rating}/5`;
+                const stars = '⭐'.repeat(Math.round(currentProfile.average_rating));
+                ratingText = `${stars} ${currentProfile.average_rating}/5 (${currentProfile.total_ratings} ${currentProfile.total_ratings === 1 ? 'rating' : 'ratings'})`;
             }
             
             // 2. Completed Jobs (as selected provider)
@@ -3258,26 +3239,20 @@ async function displayProfileStats() {
             const activeSinceText = activeSinceDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
             
             statsHTML = `
-    <div style="flex: 1; padding-left: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start;">
-        <!-- Rating - Top Left -->
-        <div style="background: #f0f4ff; padding: 8px 10px; border-radius: 6px; border-left: 3px solid #667eea;">
-            <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Rating</div>
-            <div style="font-size: 13px; font-weight: 600; color: #333;">${ratingStars}</div>
-            <div style="font-size: 12px; font-weight: 600; color: #667eea;">${ratingText}</div>
-            <div style="font-size: 10px; color: #999;">${currentProfile.total_ratings || 0} reviews</div>
+    <div style="flex: 1; padding-left: 20px;">
+        <div style="background: #f0f4ff; padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #667eea;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 2px;">Rating</div>
+            <div style="font-size: 14px; font-weight: 600; color: #333;">${ratingText}</div>
         </div>
         
-        <!-- Completed Jobs - Top Right -->
-        <div style="background: #f0f4ff; padding: 8px 10px; border-radius: 6px; border-left: 3px solid #28a745;">
-            <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Completed</div>
-            <div style="font-size: 20px; font-weight: 700; color: #28a745; line-height: 1;">✅</div>
-            <div style="font-size: 13px; font-weight: 600; color: #333; margin-top: 2px;">${completedCount} Jobs</div>
+        <div style="background: #f0f4ff; padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #28a745;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 2px;">Completed Jobs</div>
+            <div style="font-size: 14px; font-weight: 600; color: #333;">✅ ${completedCount} ${completedCount === 1 ? 'Job' : 'Jobs'}</div>
         </div>
         
-        <!-- Member Since - Bottom Spanning Both Columns -->
-        <div style="background: #f0f4ff; padding: 8px 10px; border-radius: 6px; border-left: 3px solid #17a2b8; grid-column: 1 / -1;">
-            <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Member Since</div>
-            <div style="font-size: 13px; font-weight: 600; color: #333;">📅 ${activeSinceText}</div>
+        <div style="background: #f0f4ff; padding: 10px 12px; border-radius: 8px; border-left: 4px solid #17a2b8;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 2px;">Member Since</div>
+            <div style="font-size: 14px; font-weight: 600; color: #333;">📅 ${activeSinceText}</div>
         </div>
     </div>
 `;
@@ -3303,19 +3278,15 @@ async function displayProfileStats() {
             const completedCount = completedRequests ? completedRequests.length : 0;
             
             statsHTML = `
-    <div style="flex: 1; padding-left: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start;">
-        <!-- Total Requests - Left -->
-        <div style="background: #f0f4ff; padding: 8px 10px; border-radius: 6px; border-left: 3px solid #667eea;">
-            <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Total</div>
-            <div style="font-size: 20px; font-weight: 700; color: #667eea; line-height: 1;">📊</div>
-            <div style="font-size: 13px; font-weight: 600; color: #333; margin-top: 2px;">${totalRequests} Requests</div>
+    <div style="flex: 1; padding-left: 20px;">
+        <div style="background: #f0f4ff; padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #667eea;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 2px;">Total Requests Created</div>
+            <div style="font-size: 14px; font-weight: 600; color: #333;">📊 ${totalRequests} ${totalRequests === 1 ? 'Request' : 'Requests'}</div>
         </div>
         
-        <!-- Completed Services - Right -->
-        <div style="background: #f0f4ff; padding: 8px 10px; border-radius: 6px; border-left: 3px solid #28a745;">
-            <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Completed</div>
-            <div style="font-size: 20px; font-weight: 700; color: #28a745; line-height: 1;">✅</div>
-            <div style="font-size: 13px; font-weight: 600; color: #333; margin-top: 2px;">${completedCount} Services</div>
+        <div style="background: #f0f4ff; padding: 10px 12px; border-radius: 8px; border-left: 4px solid #28a745;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 2px;">Completed Services</div>
+            <div style="font-size: 14px; font-weight: 600; color: #333;">✅ ${completedCount} ${completedCount === 1 ? 'Service' : 'Services'}</div>
         </div>
     </div>
 `;
@@ -5501,6 +5472,11 @@ ${warrantyBadge || reactivateButton ? `
         <button class="btn btn-cancel" style="flex: 1;" onclick="cancelRequest('${req.id}')">❌ Cancel Request</button>
     </div>
 ` : ''}
+${(req.status === 'in_progress' || req.status === 'pending_completion') && req.selected_provider_id ? `
+    <div style="display: flex; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0f0f0;">
+        <button class="btn" style="flex: 1; background: #ff9800; color: white;" onclick="changeProvider('${req.id}', '${req.selected_provider_id}')">🔄 Change Provider</button>
+    </div>
+` : ''}
                         </div>
                     </div>
                 `;
@@ -5762,7 +5738,7 @@ currentChatData = {
             }
         }
 
-        // Handle read-only mode for non-selected providers OR missed opportunities
+        // Handle read-only mode for non-selected providers OR missed opportunities OR deselected providers
 const isNonSelectedProvider = currentChatData.isProvider && 
                               latestRequest && 
                               (latestRequest.status === 'in_progress' || 
@@ -5770,19 +5746,42 @@ const isNonSelectedProvider = currentChatData.isProvider &&
                                latestRequest.status === 'pending_completion') && 
                               latestRequest.selected_provider_id !== currentProfile.user_id;
 
+// ✅ NEW: Check if provider is DESELECTED (in rejected table)
+let isDeselectedProvider = false;
+if (currentChatData.isProvider) {
+    const { data: rejectionCheck } = await supabase
+        .from('request_rejected_providers')
+        .select('id')
+        .eq('request_id', currentChatData.requestId)
+        .eq('provider_id', currentProfile.user_id)
+        .maybeSingle();
+    
+    isDeselectedProvider = !!rejectionCheck;
+    
+    if (isDeselectedProvider) {
+        console.log('⚠️ Provider is DESELECTED (in rejection table)');
+    }
+}
+
 // ✅ NEW: Store read-only state in currentChatData
 currentChatData.isReadOnly = isReadOnly || false;
 currentChatData.isNonSelectedProvider = isNonSelectedProvider || false;
+currentChatData.isDeselectedProvider = isDeselectedProvider || false;
 
 // ✅ FIX: Reload chat messages NOW that read-only state is set
 await loadChatMessages();
 
-if (isNonSelectedProvider || isReadOnly) {
+if (isNonSelectedProvider || isReadOnly || isDeselectedProvider) {
     // ✅ DETERMINE THE REASON FOR READ-ONLY MODE
     let readOnlyReason = '';
     let statusText = '';
     
-    if (isNonSelectedProvider) {
+    if (isDeselectedProvider) {
+        // This provider was DESELECTED by the seeker
+        readOnlyReason = 'Read-only: You have been deselected by the seeker';
+        statusText = 'READ-ONLY - DESELECTED';
+        console.log('⚠️ Read-only mode enabled (deselected provider)');
+    } else if (isNonSelectedProvider) {
         // This is a missed opportunity (another provider was selected)
         readOnlyReason = 'Read-only: This request was assigned to another provider';
         statusText = 'READ-ONLY - ASSIGNED TO ANOTHER PROVIDER';
@@ -7557,19 +7556,49 @@ const unreadCount = chat.messages.filter(m => {
             };
         }));
         
-        // Filter out open requests from active responses
-        const activeResponses = responses.filter(response => {
-            const request = requests.find(r => r.id === response.request_id);
-            return request && request.status !== 'open';
-        });
-        
-        // Combine all data - EXCLUDE open requests AND missed opportunities
+        // ✅ NEW: Check for deselected providers FIRST (before any filtering)
+const deselectedChecks = await Promise.all(responses.map(async (response) => {
+    const { data: rejectionCheck } = await supabase
+        .from('request_rejected_providers')
+        .select('id')
+        .eq('request_id', response.request_id)
+        .eq('provider_id', currentProfile.user_id)
+        .maybeSingle();
+    
+    return {
+        requestId: response.request_id,
+        isDeselected: !!rejectionCheck
+    };
+}));
+
+// Filter out open requests AND deselected requests from active responses
+const activeResponses = responses.filter(response => {
+    const request = requests.find(r => r.id === response.request_id);
+    
+    // ✅ NEW: Skip deselected requests
+    const deselectedInfo = deselectedChecks.find(d => d.requestId === response.request_id);
+    if (deselectedInfo && deselectedInfo.isDeselected) {
+        console.log('⏭️ Filtering out deselected request from responses:', response.request_id);
+        return false;
+    }
+    
+    return request && request.status !== 'open';
+});
+
+// Combine all data - EXCLUDE open requests AND missed opportunities
 const combinedData = activeResponses.map(response => {
     const request = requests.find(r => r.id === response.request_id);
     
     // Skip if request was deleted or invalid
     if (!request || !request.request_latitude || !request.request_longitude) {
         return null;
+    }
+    
+    // ✅ NEW: Check if this provider is DESELECTED
+    const deselectedInfo = deselectedChecks.find(d => d.requestId === response.request_id);
+    if (deselectedInfo && deselectedInfo.isDeselected) {
+        console.log('⏭️ Skipping deselected request:', request.id);
+        return null; // Skip deselected requests - they go to Missed Opportunities
     }
     
     // Check if this is a "missed opportunity"
@@ -8038,24 +8067,52 @@ async function loadNearbyRequests() {
 
         const missedOpportunities = [];
 
-        for (let req of allRespondedRequests || []) {
-            const isMissed = (req.status === 'in_progress' || req.status === 'completed' || req.status === 'pending_completion') && 
-                             req.selected_provider_id !== currentProfile.user_id;
-            
-            if (isMissed && req.request_latitude && req.request_longitude) {
-                const distance = calculateDistance(
-                    currentProfile.latitude,
-                    currentProfile.longitude,
-                    req.request_latitude,
-                    req.request_longitude
-                );
-                
-                missedOpportunities.push({
-                    ...req,
-                    distance: distance
-                });
-            }
-        }
+// ✅ NEW: Check for deselected requests
+const { data: deselectedRequests, error: deselectedError } = await supabase
+    .from('request_rejected_providers')
+    .select('request_id')
+    .eq('provider_id', currentProfile.user_id);
+
+if (deselectedError) {
+    console.error('Error fetching deselected requests:', deselectedError);
+}
+
+const deselectedRequestIds = new Set((deselectedRequests || []).map(r => r.request_id));
+
+console.log('🔵 Deselected request IDs:', Array.from(deselectedRequestIds));
+
+for (let req of allRespondedRequests || []) {
+    // Check if this is a regular missed opportunity (another provider was selected)
+    const isMissed = (req.status === 'in_progress' || req.status === 'completed' || req.status === 'pending_completion') && 
+                     req.selected_provider_id !== currentProfile.user_id;
+    
+    // ✅ NEW: Check if this provider was DESELECTED
+    const isDeselected = deselectedRequestIds.has(req.id);
+    
+    if ((isMissed || isDeselected) && req.request_latitude && req.request_longitude) {
+        const distance = calculateDistance(
+            currentProfile.latitude,
+            currentProfile.longitude,
+            req.request_latitude,
+            req.request_longitude
+        );
+        
+        console.log('📊 Adding to missed opportunities:', {
+            id: req.id,
+            title: req.title,
+            isMissed: isMissed,
+            isDeselected: isDeselected
+        });
+        
+        missedOpportunities.push({
+            ...req,
+            distance: distance,
+            isDeselected: isDeselected  // ✅ NEW: Mark deselected requests
+        });
+    }
+}
+
+console.log('🔵 Total missed opportunities:', missedOpportunities.length);
 
 // ✅ NEW: Calculate new missed opportunities count
 const lastMissedOpenedAt = currentProfile.missed_opportunities_last_opened_at;
@@ -8221,9 +8278,9 @@ tabsContainer.innerHTML = tabsHTML;
     <span class="urgency-bubble ${req.urgency}"></span>
     <span class="request-title-text">${icon} ${req.title}</span>
     <span class="request-chevron" id="chevron-nearby-${req.id}">▼</span>
-</div>
-                        <div class="request-summary">
+</div><div class="request-summary">
     <span class="info-badge">📍 ${req.distance} km</span>
+    ${req.isDeselected ? '<span class="info-badge" style="background: #dc3545; color: white;">❌ DESELECTED</span>' : ''}
     ${newBadge}
 </div>
                         <div class="request-summary" style="margin-top: 6px; color: #999;">
@@ -8357,6 +8414,121 @@ async function cancelRequest(requestId) {
         
     } catch (error) {
         alert('Error cancelling request: ' + error.message);
+    }
+}
+
+// Change Provider (Deselect current provider)
+async function changeProvider(requestId, currentProviderId) {
+    if (!confirm('🔄 Change Provider?\n\nThis will:\n• Deselect the current provider\n• Move request back to "Open" status\n• Notify current provider they were deselected\n• Reactivate chats with other providers\n\nDo you want to continue?')) return;
+    
+    try {
+        console.log('🔵 Starting changeProvider:', { requestId, currentProviderId });
+        
+        // Step 1: Insert into request_rejected_providers table
+        const { error: rejectError } = await supabase
+            .from('request_rejected_providers')
+            .insert([{
+                request_id: requestId,
+                provider_id: currentProviderId,
+                rejected_by: currentUser.id,
+                rejection_reason: 'deselected'
+            }]);
+        
+        if (rejectError) {
+            console.error('❌ Error inserting rejection:', rejectError);
+            throw rejectError;
+        }
+        
+        console.log('✅ Provider added to rejection table');
+        
+        // Step 2: Update request - set status back to open and clear selected provider
+        const { error: updateError } = await supabase
+            .from('requests')
+            .update({
+                selected_provider_id: null,
+                status: 'open'
+            })
+            .eq('id', requestId);
+        
+        if (updateError) {
+            console.error('❌ Error updating request:', updateError);
+            throw updateError;
+        }
+        
+        console.log('✅ Request status changed to open');
+        
+        // Step 3: Add system message to deselected provider's chat
+        const { data: deselectedChat } = await supabase
+            .from('chats')
+            .select('messages')
+            .eq('request_id', requestId)
+            .eq('provider_id', currentProviderId)
+            .maybeSingle();
+        
+        if (deselectedChat) {
+            let messages = deselectedChat.messages || [];
+            messages.push({
+                sender_id: currentUser.id,
+                sender_name: currentProfile.name,
+                message: '❌ You have been deselected for this request. The seeker is looking for another provider.',
+                message_type: 'system',
+                timestamp: new Date().toISOString()
+            });
+            
+            await supabase
+                .from('chats')
+                .update({ messages: messages })
+                .eq('request_id', requestId)
+                .eq('provider_id', currentProviderId);
+            
+            console.log('✅ System message sent to deselected provider');
+        }
+        
+        // Step 4: Notify other providers who responded (reactivate their chats)
+        const { data: allResponses } = await supabase
+            .from('request_responses')
+            .select('provider_id')
+            .eq('request_id', requestId)
+            .neq('provider_id', currentProviderId);
+        
+        if (allResponses && allResponses.length > 0) {
+            for (let response of allResponses) {
+                const { data: otherChat } = await supabase
+                    .from('chats')
+                    .select('messages')
+                    .eq('request_id', requestId)
+                    .eq('provider_id', response.provider_id)
+                    .maybeSingle();
+                
+                if (otherChat) {
+                    let messages = otherChat.messages || [];
+                    messages.push({
+                        sender_id: currentUser.id,
+                        sender_name: currentProfile.name,
+                        message: '🔄 Request is open again! You can now respond and chat.',
+                        message_type: 'system',
+                        timestamp: new Date().toISOString()
+                    });
+                    
+                    await supabase
+                        .from('chats')
+                        .update({ messages: messages })
+                        .eq('request_id', requestId)
+                        .eq('provider_id', response.provider_id);
+                }
+            }
+            
+            console.log('✅ Other providers notified');
+        }
+        
+        alert('✅ Provider changed successfully!\n\nThe request is now open again and other providers have been notified.');
+        
+        // Reload dashboard
+        await loadUserRequests();
+        
+    } catch (error) {
+        console.error('❌ Error changing provider:', error);
+        alert('❌ Error changing provider: ' + error.message);
     }
 }
 
@@ -10265,19 +10437,51 @@ async function loadProviderOpenRequests() {
         if (reqError) throw reqError;
         
         // Filter only OPEN status (negotiating)
-        const openRequests = requests.filter(r => r.status === 'open');
-        
-        document.getElementById('providerOpenRequestsTotal').textContent = openRequests.length;
-        
-        if (openRequests.length === 0) {
-            document.getElementById('providerOpenRequestsList').innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">📋</div>
-                    <div class="empty-state-text">No open requests yet</div>
-                </div>
-            `;
-            return;
-        }
+const openRequests = requests.filter(r => r.status === 'open');
+
+// ✅ NEW: Check for deselected providers
+const deselectedChecks = await Promise.all(openRequests.map(async (request) => {
+    const { data: rejectionCheck } = await supabase
+        .from('request_rejected_providers')
+        .select('id')
+        .eq('request_id', request.id)
+        .eq('provider_id', currentProfile.user_id)
+        .maybeSingle();
+    
+    return {
+        requestId: request.id,
+        isDeselected: !!rejectionCheck
+    };
+}));
+
+// ✅ NEW: Filter out deselected requests
+const nonDeselectedOpenRequests = openRequests.filter(request => {
+    const deselectedInfo = deselectedChecks.find(d => d.requestId === request.id);
+    if (deselectedInfo && deselectedInfo.isDeselected) {
+        console.log('⏭️ Hiding deselected open request:', request.id, request.title);
+        return false;
+    }
+    return true;
+});
+
+document.getElementById('providerOpenRequestsTotal').textContent = nonDeselectedOpenRequests.length;
+
+if (nonDeselectedOpenRequests.length === 0) {
+    document.getElementById('providerOpenRequestsList').innerHTML = `
+        <div class="empty-state">
+            <div class="empty-state-icon">📋</div>
+            <div class="empty-state-text">No open requests yet</div>
+        </div>
+    `;
+    
+    // Hide unread badge
+    const unreadBadge = document.getElementById('providerOpenRequestsUnread');
+    if (unreadBadge) {
+        unreadBadge.classList.add('hidden');
+        unreadBadge.style.display = 'none';
+    }
+    return;
+}
         
         // Get seeker profiles and chat info
         const userIds = openRequests.map(r => r.user_id);
@@ -10290,9 +10494,9 @@ async function loadProviderOpenRequests() {
         let totalOpenUnread = 0;
         
         const combinedData = await Promise.all(responses
-            .filter(response => openRequests.find(r => r.id === response.request_id))
+    .filter(response => nonDeselectedOpenRequests.find(r => r.id === response.request_id))
             .map(async (response) => {
-                const request = openRequests.find(r => r.id === response.request_id);
+    const request = nonDeselectedOpenRequests.find(r => r.id === response.request_id);
                 const seeker = seekers?.find(s => s.user_id === request.user_id);
                 
                 // Check for unread messages
