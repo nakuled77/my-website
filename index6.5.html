@@ -4136,16 +4136,15 @@ async function setupRealtimeSubscriptions() {
         .subscribe();
     
     // 3️⃣ SUBSCRIBE TO CHATS TABLE (New messages, contact approvals)
-realtimeSubscriptions.chats = supabase
-    .channel('chats_channel')
-    .on(
-        'postgres_changes',
-        { 
-            event: 'UPDATE',  // ← CHANGED from '*' to 'UPDATE'
-            schema: 'public', 
-            table: 'chats'
-            // Note: We removed the filter because it doesn't work as expected
-        },
+    realtimeSubscriptions.chats = supabase
+        .channel('chats_channel')
+        .on(
+            'postgres_changes',
+            { 
+                event: '*', 
+                schema: 'public', 
+                table: 'chats'
+            },
             (payload) => {
                 console.log('🔔 Chats table changed:', payload);
                 handleChatChange(payload);
@@ -4345,8 +4344,8 @@ async function handleChatChange(payload) {
     console.log('🔔 Chats table changed:', eventType);
     
     // ✅ Safety check
-    if (!newRecord || !oldRecord) {
-        console.log('❌ Missing record data, exiting');
+    if (!newRecord) {
+        console.log('❌ No newRecord, exiting');
         return;
     }
     
@@ -4373,24 +4372,27 @@ async function handleChatChange(payload) {
         currentChatData.providerId === newRecord.provider_id
     );
     
-    // ✅ NUCLEAR FIX: Compare message arrays using JSON.stringify
+    if (isInThisChat) {
+        // Already in this chat - just refresh messages (no sound here, handled below)
+        console.log('♻️ In this chat, refreshing silently...');
+        await loadChatMessages('realtime_refresh');
+        return;
+    }
+    
+    // ✅ NOT in this chat - check if there's a new message
+    
+    // 🆕 CRITICAL FIX: Compare message arrays to detect REAL new messages
     const oldMessages = oldRecord?.messages || [];
     const newMessages = newRecord.messages || [];
     
-    const oldMessagesHash = JSON.stringify(oldMessages);
-    const newMessagesHash = JSON.stringify(newMessages);
+    console.log('📊 Old messages count:', oldMessages.length);
+    console.log('📊 New messages count:', newMessages.length);
     
-    console.log('📊 Message comparison:', {
-        oldCount: oldMessages.length,
-        newCount: newMessages.length,
-        arraysEqual: oldMessagesHash === newMessagesHash
-    });
-    
-    // If message arrays are EXACTLY the same, it's just a timestamp update - IGNORE IT
-    if (oldMessagesHash === newMessagesHash) {
-        console.log('⏭️ No actual message changes (just timestamp update), skipping');
+    // If message count is the same, it's just a timestamp update - IGNORE IT
+    if (oldMessages.length === newMessages.length) {
+        console.log('⏭️ No new messages (just timestamp update), skipping sound');
         
-        // Still update badges though (in case unread count changed due to viewing)
+        // Still update badges though
         if (currentDashboardMode === 'seeker') {
             await loadUserRequests();
         } else if (currentDashboardMode === 'provider') {
@@ -4400,34 +4402,26 @@ async function handleChatChange(payload) {
         return;
     }
     
-    console.log('✅ REAL MESSAGE CHANGE DETECTED!');
-    
-    // If in this chat, refresh messages
-    if (isInThisChat) {
-        console.log('♻️ In this chat, refreshing...');
-        await loadChatMessages('realtime_refresh');
-        return;
-    }
-    
-    // Check if the last message is recent and from someone else
+    // ✅ NEW MESSAGE DETECTED - Check the LAST MESSAGE TIMESTAMP
     if (newMessages.length > 0) {
         const lastMessage = newMessages[newMessages.length - 1];
         const lastMessageTime = new Date(lastMessage.timestamp).getTime();
         const now = Date.now();
         
+        // If message was sent in the last 10 seconds, consider it "new"
         const isRecentMessage = (now - lastMessageTime) < 10000;
         
-        console.log('📊 Last message check:', {
-            time: new Date(lastMessage.timestamp).toLocaleTimeString(),
-            ageSeconds: Math.round((now - lastMessageTime) / 1000),
-            isRecent: isRecentMessage,
-            fromMe: lastMessage.sender_id === currentUser.id
-        });
+        console.log('📊 Last message time:', new Date(lastMessage.timestamp).toLocaleTimeString());
+        console.log('📊 Time since message:', Math.round((now - lastMessageTime) / 1000), 'seconds ago');
+        console.log('📊 Is recent message:', isRecentMessage);
+        console.log('📊 Message from:', lastMessage.sender_id);
+        console.log('📊 Current user:', currentUser.id);
         
-        // Play sound only for recent messages from others
+        // Check if message is recent AND from someone else
         if (isRecentMessage && lastMessage.sender_id !== currentUser.id) {
-            console.log('🔊 NEW MESSAGE! Playing notification...');
+            console.log('🔊 NEW MESSAGE! Playing smart notification...');
             
+            // ✅ NEW: Use smart notification system
             playSmartNotification({
                 requestId: newRecord.request_id,
                 providerId: newRecord.provider_id,
@@ -4443,7 +4437,13 @@ async function handleChatChange(payload) {
                 await loadProviderResponses();
                 await loadProviderOpenRequests();
             }
+        } else if (!isRecentMessage) {
+            console.log('⏭️ Old message (>', Math.round((now - lastMessageTime) / 1000), 'seconds old), skipping');
+        } else if (lastMessage.sender_id === currentUser.id) {
+            console.log('⏭️ My own message, skipping sound');
         }
+    } else {
+        console.log('⏭️ No messages in chat');
     }
 }
 
@@ -5525,13 +5525,7 @@ async function openChat(requestId, providerId, isReadOnly = false) {
         
         // Determine chat source
         const chatSource = (currentProfile.user_id === providerId) ? 'myResponses' : 'myRequests';
-        // Check if we're opening chat from responses modal
-	const responsesModalOpen = document.getElementById('responsesModal').classList.contains('active');
-if (responsesModalOpen) {
-    chatOpenedFrom = 'responses-modal';  // ✅ Set ONLY when coming from modal
-} else {
-    chatOpenedFrom = null;  // ✅ Clear otherwise
-}
+        
         // ✅ CRITICAL FIX: Determine if current user is provider or seeker
 const isCurrentUserTheSeeker = currentProfile.user_id === request.user_id;
 const isCurrentUserTheProvider = currentProfile.user_id === providerId;
@@ -7132,6 +7126,7 @@ if (isSelected) {
                 document.getElementById('responsesList').innerHTML = html;
 
 // Mark that we're in responses modal
+chatOpenedFrom = 'responses-modal';
 document.getElementById('responsesModal').classList.add('active');
             } catch (error) {
                 alert('Error loading responses: ' + error.message);
@@ -7260,8 +7255,6 @@ if (provider.average_rating && provider.average_rating > 0 && provider.total_rat
         // Close Modals
 function closeResponsesModal() {
     document.getElementById('responsesModal').classList.remove('active');
-    chatOpenedFrom = null;  // ✅ Clear the state
-    selectedResponseRequest = null;  // ✅ Clear selected request
 }
 
 function closeResponsesModalAndGoBack() {
