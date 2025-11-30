@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 🐛 DEBUG CONSOLE (Eruda) - Enable for mobile debugging, disable for production -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/eruda"></script> -->
-<!-- <script>eruda.init();</script> -->
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpBuddy - Service Marketplace</title>
@@ -1101,7 +1100,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
             📧 Contact: <a href="mailto:helpbuddy.assist@gmail.com" style="color: #667eea; text-decoration: underline; cursor: pointer; font-weight: 500;">helpbuddy.assist@gmail.com</a>
         </div>
         <div style="color: #999;">
-            © 2025 HelpBuddy
+            © 2025 HelpBuddy - Surender Singh Grewal
         </div>
     </div>
 </div>
@@ -1274,7 +1273,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
                     📧 Contact: <a href="mailto:helpbuddy.assist@gmail.com" style="color: #667eea; text-decoration: underline; cursor: pointer; font-weight: 500;">helpbuddy.assist@gmail.com</a>
                 </div>
                 <div style="color: #999;">
-                    © 2025 HelpBuddy
+                    © 2025 HelpBuddy - Surender Singh Grewal
                 </div>
             </div>
         </div>
@@ -1301,7 +1300,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     
     <!-- Footer -->
     <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; font-size: 12px; color: #666;">
-        <div style="color: #999;">© 2025 HelpBuddy</div>
+        <div style="color: #999;">© 2025 HelpBuddy - Surender Singh Grewal</div>
     </div>
 </div>
 
@@ -1584,12 +1583,36 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     </div>
 </div>
 
-
+<!-- Password Reset View -->
+<div id="passwordResetView" class="hidden">
+    <h2>🔑 Reset Your Password</h2>
+    <div id="passwordResetError" class="error hidden"></div>
+    <div id="passwordResetInfo" class="info hidden"></div>
+    
+    <form id="passwordResetForm">
+        <div class="form-group">
+            <label>New Password <span class="required">*</span></label>
+            <input type="password" id="newPassword" required minlength="6" placeholder="Enter new password (min 6 characters)">
+        </div>
+        
+        <div class="form-group">
+            <label>Confirm New Password <span class="required">*</span></label>
+            <input type="password" id="confirmNewPassword" required minlength="6" placeholder="Re-enter new password">
+        </div>
+        
+        <button type="submit" class="btn btn-full" id="resetPasswordBtn">🔒 Reset Password</button>
+    </form>
+    
+    <!-- Footer -->
+    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; font-size: 12px; color: #666;">
+        <div style="color: #999;">© 2025 HelpBuddy - Surender Singh Grewal</div>
+    </div>
+</div>
 
         <!-- Dashboard View -->
 <div id="dashboardView" class="hidden">
     <!-- Row 2: Create Request (LEFT) + User Profile (MIDDLE) + Profile Photo/Back (RIGHT) -->
-<div id="dashboardHeader" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 20px 20px 0 20px;">
+<div id="dashboardHeader" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 0 20px;">
     <!-- LEFT: Toggle Button + Create Request Button -->
     <div style="display: flex; align-items: center; gap: 15px;">
         <button id="modeToggleBtn" class="btn" onclick="toggleDashboardMode()" style="margin: 0; display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
@@ -2162,7 +2185,7 @@ div#myResponsesList div.request-card-left div.request-summary:nth-of-type(1) > b
     
     <!-- LEFT: Profile Photo + Username (adjacent to back button) -->
     <div style="display: flex; align-items: center; gap: 12px; cursor: pointer; flex: 1; margin-left: 12px;" onclick="openChatPartnerProfile()">
-        <img id="chatPartnerPhoto" src="" alt="" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid white; display: none; cursor: pointer;">
+        <img id="chatPartnerPhoto" src="" alt="" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid white; display: none; cursor: pointer;" onclick="if(this.src) openImagePreview(this.src)">
         <div id="chatPartnerPhotoPlaceholder" style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 20px;">👤</div>
         <div class="chat-header-left">
             <div class="chat-partner-name" id="chatPartnerName">Chat</div>
@@ -3968,20 +3991,20 @@ await loadProfile();
         // Geocoding
         async function getCoordinates(formData) {
             const strategies = [
-    formData.house_number 
-        ? `${formData.house_number}, ${formData.area_name}, ${formData.landmark || ''}, ${formData.city}, ${formData.state}, ${formData.pin_code}, India`.replace(/,\s*,/g, ',')
-        : null,
-    formData.landmark
-        ? `${formData.area_name}, ${formData.landmark}, ${formData.city}, ${formData.state}, ${formData.pin_code}, India`
-        : null,
-    `${formData.area_name}, ${formData.city}, ${formData.state}, ${formData.pin_code}, India`
-];
+                formData.house_number 
+                    ? `${formData.house_number}, ${formData.area_name}, ${formData.landmark || ''}, ${formData.city}, ${formData.state}, India`.replace(/,\s*,/g, ',')
+                    : null,
+                formData.landmark
+                    ? `${formData.area_name}, ${formData.landmark}, ${formData.city}, ${formData.state}, India`
+                    : null,
+                `${formData.area_name}, ${formData.city}, ${formData.state}, India`
+            ];
 
             // Try all geocoding strategies with detailed logging
 for (let address of strategies.filter(Boolean)) {
     try {
         console.log('🔍 Trying to geocode:', address);
-        const coords = await geocodeAddress(address, formData);
+        const coords = await geocodeAddress(address);
         if (coords) {
             console.log('✅ Geocoding success:', coords);
             return coords;
@@ -4057,17 +4080,9 @@ async function geocodeWithOpenStreetMap(address) {
         const data = await response.json();
         
         if (data && data.length > 0) {
-    console.log('✅ OpenStreetMap returned result:', data[0]);
-    
-    // Create result object with formatted address
-    const result = {
-        lat: parseFloat(data[0].lat),
-        lng: parseFloat(data[0].lon),
-        formatted: data[0].display_name || ''
-    };
-    
-    return result;
-}
+            console.log('✅ OpenStreetMap SUCCESS:', data[0]);
+            return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+        }
         console.log('⚠️ OpenStreetMap: No results found');
         return null;
     } catch (error) {
@@ -4088,14 +4103,12 @@ async function geocodeWithOpenCage(address) {
         const data = await response.json();
         
         if (data.results && data.results.length > 0) {
-    console.log('✅ OpenCage returned result:', data.results[0]);
-    
-    return { 
-        lat: data.results[0].geometry.lat, 
-        lng: data.results[0].geometry.lng,
-        formatted: data.results[0].formatted || ''
-    };
-}
+            console.log('✅ OpenCage SUCCESS:', data.results[0]);
+            return { 
+                lat: data.results[0].geometry.lat, 
+                lng: data.results[0].geometry.lng 
+            };
+        }
         console.log('⚠️ OpenCage: No results found');
         return null;
     } catch (error) {
@@ -4105,69 +4118,17 @@ async function geocodeWithOpenCage(address) {
 }
 
 // Master geocoding function with fallback
-async function geocodeAddress(address, formData) {
-    console.log('🔵 Trying to geocode:', address);
-    
+async function geocodeAddress(address) {
     // Try OpenStreetMap first (free, no limit)
-    let result = await geocodeWithOpenStreetMap(address);
-    if (result && validateGeocodingResult(result, formData)) {
-        console.log('✅ OpenStreetMap: Valid result found');
-        return { lat: result.lat, lng: result.lng };
-    } else if (result) {
-        console.log('⚠️ OpenStreetMap: Result found but validation failed');
-    }
+    let coords = await geocodeWithOpenStreetMap(address);
+    if (coords) return coords;
     
     // Try OpenCage if OpenStreetMap fails (free 2,500/day)
-    result = await geocodeWithOpenCage(address);
-    if (result && validateGeocodingResult(result, formData)) {
-        console.log('✅ OpenCage: Valid result found');
-        return { lat: result.lat, lng: result.lng };
-    } else if (result) {
-        console.log('⚠️ OpenCage: Result found but validation failed');
-    }
+    coords = await geocodeWithOpenCage(address);
+    if (coords) return coords;
     
-    // Both failed validation
-    console.log('❌ All geocoding attempts failed validation');
+    // Both failed
     return null;
-}
-
-// Validate geocoding result - ALL 4 fields must match
-function validateGeocodingResult(result, formData) {
-    const formatted = result.formatted.toLowerCase();
-    
-    const areaName = formData.area_name.toLowerCase().trim();
-    const city = formData.city.toLowerCase().trim();
-    const state = formData.state.toLowerCase().trim();
-    const pinCode = formData.pin_code.trim();
-    
-    // Check ALL FOUR fields
-    const hasAreaName = formatted.includes(areaName);
-    const hasCity = formatted.includes(city);
-    const hasState = formatted.includes(state);
-    const hasPinCode = formatted.includes(pinCode);
-    
-    // MANDATORY: Area + City + State MUST be present
-    if (!hasAreaName) {
-        console.log('❌ REJECTED: Area name missing');
-        return false;
-    }
-    if (!hasCity) {
-        console.log('❌ REJECTED: City missing');
-        return false;
-    }
-    if (!hasState) {
-        console.log('❌ REJECTED: State missing');
-        return false;
-    }
-    
-    // PIN CODE: Nice to have, but NOT mandatory
-    if (hasPinCode) {
-        console.log('✅ PERFECT MATCH: All 4 fields matched (Area + City + State + PIN)');
-    } else {
-        console.log('✅ GOOD MATCH: 3 core fields matched (Area + City + State) - PIN code not found but acceptable');
-    }
-    
-    return true; // Accept if 3 mandatory fields match (with or without PIN)
 }
 
         function getBrowserLocation() {
@@ -6385,7 +6346,7 @@ container.innerHTML = html;
 // Open Image Preview (Full Screen)
 function openImagePreview(imageUrl) {
     const modal = document.createElement('div');
-    modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999999; display: flex; align-items: center; justify-content: center; cursor: pointer;';
+    modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; display: flex; align-items: center; justify-content: center; cursor: pointer;';
     
     modal.innerHTML = `
         <img src="${imageUrl}" style="max-width: 90%; max-height: 90%; border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);">
