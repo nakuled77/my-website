@@ -7565,12 +7565,9 @@ if (!currentRequestFilter || currentRequestFilter === '') {
     currentRequestFilter = 'no_response';
 }
 
-                // Cache the data for fast tab switching
-        window.cachedUserRequests = data || [];
-        
-        await displayUserRequests(window.cachedUserRequests);
+        await displayUserRequests(data || []);
                 
-                const openRequests = (window.cachedUserRequests).filter(r => r.status === 'open');
+                const openRequests = (data || []).filter(r => r.status === 'open');
                 document.getElementById('createRequestBtn').disabled = openRequests.length >= 5;
                 document.getElementById('requestLimitWarning').classList.toggle('hidden', openRequests.length < 5);
             } catch (error) {
@@ -7622,52 +7619,142 @@ const pendingRequests = [];
 const responseCountMap = {};
 let newMessagesTotal = 0;
 let respondedUnreadCount = 0;
-let inProgressUnreadCount = 0;  // ✅ NEW: Track in_progress specifically
 let pendingUnreadCount = 0;
 let completedUnreadCount = 0;
 // NEW: Track negotiating-specific counts
 let negotiatingNewResponsesTotal = 0;
 let negotiatingUnreadMessagesTotal = 0;
 
-// ========== PARALLEL BADGE COUNTING ==========
-// Pre-fetch ALL responses and chats in bulk (2 queries instead of N*M)
+// Check for responses and new messages
+for (let req of requests) {
+    if (req.status === 'open') {  // ✅ ONLY count open requests as "responded"
+        const { data: responses } = await supabase
+            .from('request_responses')
+            .select('id')
+            .eq('request_id', req.id);
+                    
+        const responseCount = responses ? responses.length : 0;
+        responseCountMap[req.id] = responseCount;
+        
+        if (responseCount > 0) {
+            respondedRequests.push(req.id);
+            
+            // ✅ NEW: Calculate new responses for this negotiating request
+            if (req.seeker_last_viewed_responses_at) {
+                const { data: newResponses } = await supabase
+                    .from('request_responses')
+                    .select('id')
+                    .eq('request_id', req.id)
+                    .gt('created_at', req.seeker_last_viewed_responses_at);
+                
+                const newResponsesCount = newResponses ? newResponses.length : 0;
+                negotiatingNewResponsesTotal += newResponsesCount;
+            } else {
+                // Never viewed before - all responses are "new"
+                negotiatingNewResponsesTotal += responseCount;
+            }
+            
+            // ✅ NEW: Calculate unread messages from ALL providers for this negotiating request
+            const { data: allResponses } = await supabase
+                .from('request_responses')
+                .select('provider_id')
+                .eq('request_id', req.id);
+            
+            if (allResponses && allResponses.length > 0) {
+                for (let response of allResponses) {
+                    const { data: chat } = await supabase
+                        .from('chats')
+                        .select('messages, seeker_last_viewed_at')
+                        .eq('request_id', req.id)
+                        .eq('provider_id', response.provider_id)
+                        .maybeSingle();
+                    
+                    if (chat && chat.messages) {
+                        const lastViewedAt = chat.seeker_last_viewed_at;
+                        
+                        const normalizeToUTC = (timestamp) => {
+                            if (!timestamp) return null;
+                            let normalized = timestamp;
+                            if (typeof timestamp === 'string' && !timestamp.endsWith('Z') && !timestamp.includes('+')) {
+                                normalized = timestamp + 'Z';
+                            }
+                            return new Date(normalized).getTime();
+                        };
+                        
+                        const unreadFromThisProvider = chat.messages.filter(m => {
+                            if (m.sender_id === currentUser.id) return false;
+                            if (!lastViewedAt) return true;
+                            
+                            const messageTime = normalizeToUTC(m.timestamp);
+                            const viewedTime = normalizeToUTC(lastViewedAt);
+                            
+                            return messageTime > viewedTime;
+                        }).length;
+                        
+                        negotiatingUnreadMessagesTotal += unreadFromThisProvider;
+                    }
+                }
+            }
+        }
+    } else if (req.status === 'pending_completion') {  // ✅ SKIP in_progress - it has its own tab
+        pendingRequests.push(req.id);
+    } else if (req.status === 'completed') {
+                    respondedRequests.push(req.id);
+                }
+                
+                if ((req.status === 'in_progress' || req.status === 'completed') && req.selected_provider_id) {
+    const { data: chat } = await supabase
+        .from('chats')
+        .select('messages, seeker_last_viewed_at, provider_last_viewed_at')
+        .eq('request_id', req.id)
+        .eq('provider_id', req.selected_provider_id)
+.maybeSingle();
 
-const openRequestIds = requests.filter(r => r.status === 'open').map(r => r.id);
-const activeRequestIds = requests.filter(r => 
-    (r.status === 'in_progress' || r.status === 'pending_completion' || r.status === 'completed') && 
-    r.selected_provider_id
-).map(r => r.id);
+if (chat && chat.messages) {
+    const lastViewedAt = chat.seeker_last_viewed_at;
+    
+    // ✅ FIX: Normalize timestamps before comparison
+    const normalizeToUTC = (timestamp) => {
+        if (!timestamp) return null;
+        let normalized = timestamp;
+        if (typeof timestamp === 'string' && !timestamp.endsWith('Z') && !timestamp.includes('+')) {
+            normalized = timestamp + 'Z';
+        }
+        return new Date(normalized).getTime();
+    };
+    
+    const unread = chat.messages.filter(m => {
+        if (m.sender_id === currentUser.id) return false;
+        if (!lastViewedAt) return true;
+        
+        const messageTime = normalizeToUTC(m.timestamp);
+        const viewedTime = normalizeToUTC(lastViewedAt);
+        
+        return messageTime > viewedTime;
+    }).length;
+        
+        newMessagesTotal += unread;
+                        
+                        // Add to category-specific counters
+                        if (req.status === 'in_progress') {
+                            respondedUnreadCount += unread;
+                        } else if (req.status === 'completed') {
+                            completedUnreadCount += unread;
+                        }
+                    }
+                } else if (req.status === 'pending_completion' && req.selected_provider_id) {
+    const { data: chat } = await supabase
+        .from('chats')
+        .select('messages, seeker_last_viewed_at, provider_last_viewed_at')
+        .eq('request_id', req.id)
+        .eq('provider_id', req.selected_provider_id)  // ✅ CRITICAL FIX: Only check selected provider's chat
+        .maybeSingle();  // ✅ CHANGED: Use maybeSingle() instead of single()
+                    
+                    if (chat && chat.messages) {
+    // Get last viewed time for seeker
+    const lastViewedAt = chat.seeker_last_viewed_at;
 
-// Bulk fetch all responses for open requests
-const { data: allResponsesData } = await supabase
-    .from('request_responses')
-    .select('id, request_id, provider_id, created_at')
-    .in('request_id', openRequestIds.length > 0 ? openRequestIds : ['none']);
-
-// Bulk fetch all chats
-const allRequestIds = requests.map(r => r.id);
-const { data: allChatsData } = await supabase
-    .from('chats')
-    .select('request_id, provider_id, messages, seeker_last_viewed_at')
-    .in('request_id', allRequestIds.length > 0 ? allRequestIds : ['none']);
-
-// Build lookup maps for O(1) access
-const responsesByRequest = {};
-const chatsByRequestProvider = {};
-
-(allResponsesData || []).forEach(resp => {
-    if (!responsesByRequest[resp.request_id]) {
-        responsesByRequest[resp.request_id] = [];
-    }
-    responsesByRequest[resp.request_id].push(resp);
-});
-
-(allChatsData || []).forEach(chat => {
-    const key = `${chat.request_id}_${chat.provider_id}`;
-    chatsByRequestProvider[key] = chat;
-});
-
-// Helper function for timestamp normalization
+// ✅ FIX: Normalize timestamps before comparison
 const normalizeToUTC = (timestamp) => {
     if (!timestamp) return null;
     let normalized = timestamp;
@@ -7677,83 +7764,22 @@ const normalizeToUTC = (timestamp) => {
     return new Date(normalized).getTime();
 };
 
-// Now process requests using cached data (NO MORE QUERIES IN LOOP!)
-for (let req of requests) {
-    if (req.status === 'open') {
-        const responses = responsesByRequest[req.id] || [];
-        const responseCount = responses.length;
-        responseCountMap[req.id] = responseCount;
-        
-        if (responseCount > 0) {
-            respondedRequests.push(req.id);
-            
-            // Calculate new responses count
-            if (req.seeker_last_viewed_responses_at) {
-                const viewedTime = normalizeToUTC(req.seeker_last_viewed_responses_at);
-                const newResponsesCount = responses.filter(r => 
-                    normalizeToUTC(r.created_at) > viewedTime
-                ).length;
-                negotiatingNewResponsesTotal += newResponsesCount;
-            } else {
-                negotiatingNewResponsesTotal += responseCount;
-            }
-            
-            // Calculate unread messages from all providers
-            for (let response of responses) {
-                const chatKey = `${req.id}_${response.provider_id}`;
-                const chat = chatsByRequestProvider[chatKey];
-                
-                if (chat && chat.messages) {
-                    const lastViewedAt = chat.seeker_last_viewed_at;
-                    const unreadFromThisProvider = chat.messages.filter(m => {
-                        if (m.sender_id === currentUser.id) return false;
-                        if (!lastViewedAt) return true;
-                        const messageTime = normalizeToUTC(m.timestamp);
-                        const viewedTime = normalizeToUTC(lastViewedAt);
-                        return messageTime > viewedTime;
-                    }).length;
-                    negotiatingUnreadMessagesTotal += unreadFromThisProvider;
+// Count only messages AFTER last viewed time
+const unread = chat.messages.filter(m => {
+    if (m.sender_id === currentUser.id) return false;
+    if (!lastViewedAt) return true;
+    
+    const messageTime = normalizeToUTC(m.timestamp);
+    const viewedTime = normalizeToUTC(lastViewedAt);
+    
+    return messageTime > viewedTime;
+}).length;
+    
+    newMessagesTotal += unread;
+                        pendingUnreadCount += unread;
+                    }
                 }
             }
-        }
-    } else if (req.status === 'pending_completion') {
-        pendingRequests.push(req.id);
-    } else if (req.status === 'completed') {
-        respondedRequests.push(req.id);
-    }
-    
-    // Count unread for in_progress, pending_completion, completed
-    if ((req.status === 'in_progress' || req.status === 'pending_completion' || req.status === 'completed') && req.selected_provider_id) {
-        const chatKey = `${req.id}_${req.selected_provider_id}`;
-        const chat = chatsByRequestProvider[chatKey];
-        
-        if (chat && chat.messages) {
-            const lastViewedAt = chat.seeker_last_viewed_at;
-            const unread = chat.messages.filter(m => {
-                if (m.sender_id === currentUser.id) return false;
-                if (!lastViewedAt) return true;
-                const messageTime = normalizeToUTC(m.timestamp);
-                const viewedTime = normalizeToUTC(lastViewedAt);
-                return messageTime > viewedTime;
-            }).length;
-            
-            newMessagesTotal += unread;
-            
-            if (req.status === 'in_progress') {
-                inProgressUnreadCount += unread;
-            } else if (req.status === 'pending_completion') {
-                pendingUnreadCount += unread;
-            } else if (req.status === 'completed') {
-                completedUnreadCount += unread;
-            }
-        }
-    }
-}
-
-// Store cached data for card rendering
-window.cachedResponsesByRequest = responsesByRequest;
-window.cachedChatsByRequestProvider = chatsByRequestProvider;
-window.cachedNormalizeToUTC = normalizeToUTC;
 
             // Update section badges
             const completedRequests = requests.filter(r => r.status === 'completed');
@@ -7891,8 +7917,8 @@ try {
     const inProgressUnreadBadge = document.getElementById('inProgressUnread');
     if (inProgressUnreadBadge) {
         const badge = inProgressUnreadBadge.querySelector('.unread-badge');
-        if (inProgressUnreadCount > 0) {  // ✅ FIXED: Use inProgressUnreadCount
-            if (badge) badge.textContent = inProgressUnreadCount;
+        if (pendingUnreadCount > 0) {
+            if (badge) badge.textContent = pendingUnreadCount;
             inProgressUnreadBadge.classList.remove('hidden');
             inProgressUnreadBadge.style.display = 'inline-flex';
         } else {
@@ -7902,24 +7928,6 @@ try {
     }
 } catch (error) {
     console.log('Badge update error (in progress):', error);
-}
-
-// ✅ NEW: Update Review/Pending Completion tab badge
-try {
-    const pendingCompletionUnreadBadge = document.getElementById('pendingCompletionUnread');
-    if (pendingCompletionUnreadBadge) {
-        const badge = pendingCompletionUnreadBadge.querySelector('.unread-badge');
-        if (pendingUnreadCount > 0) {
-            if (badge) badge.textContent = pendingUnreadCount;
-            pendingCompletionUnreadBadge.classList.remove('hidden');
-            pendingCompletionUnreadBadge.style.display = 'inline-flex';
-        } else {
-            pendingCompletionUnreadBadge.classList.add('hidden');
-            pendingCompletionUnreadBadge.style.display = 'none';
-        }
-    }
-} catch (error) {
-    console.log('Badge update error (pending completion):', error);
 }
 
 try {
@@ -7970,9 +7978,9 @@ if (currentRequestFilter === 'open' || currentRequestFilter === 'no_response') {
                 const serviceIcon = SERVICE_ICONS[req.service_category] || '🔧';
                 const isReactivated = req.status === 'in_progress' && req.warranty_end_date;
                 
-		const reactivatedBadge = isReactivated ? '<span style="color: #dc3545; font-weight: 700; font-size: 11px; margin-left: 6px; background: #fee; padding: 2px 8px; border-radius: 4px;">' + t('reactivated') + '</span>' : '';
+		const reactivatedBadge = isReactivated ? '<span style="color: #dc3545; font-weight: 700; font-size: 11px; margin-left: 6px; background: #fee; padding: 2px 8px; border-radius: 4px;">REACTIVATED</span>' : '';
 		const statusClass = `status-${req.status.replace('_', '-')}`;
-                let statusText = t('status_' + req.status);
+                let statusText = req.status.replace('_', ' ').toUpperCase();
                 const timeAgo = getTimeAgo(new Date(req.created_at));
 
                 let warrantyBadge = '';
@@ -7986,11 +7994,11 @@ if (currentRequestFilter === 'open' || currentRequestFilter === 'no_response') {
                         const remainingDays = Math.ceil((warrantyEndDate - today) / (1000 * 60 * 60 * 24));
                         
                         if (remainingDays > 0) {
-                            warrantyBadge = `<span class="info-badge" style="background: #28a745;">🛡️ ${remainingDays} ${t('days_warranty')}</span>`;
+                            warrantyBadge = `<span class="info-badge" style="background: #28a745;">🛡️ ${remainingDays} day${remainingDays > 1 ? 's' : ''} warranty left</span>`;
                         } else if (remainingDays === 0) {
-                            warrantyBadge = `<span class="info-badge" style="background: #ffc107; color: #333;">🛡️ ${t('warranty_expires_today')}</span>`;
+                            warrantyBadge = `<span class="info-badge" style="background: #ffc107; color: #333;">🛡️ Warranty expires today</span>`;
                         } else {
-                            warrantyBadge = `<span class="info-badge" style="background: #dc3545;">🛡️ ${t('warranty_expired')}</span>`;
+                            warrantyBadge = `<span class="info-badge" style="background: #dc3545;">🛡️ Warranty expired</span>`;
                         }
                     }
                 }
@@ -8007,73 +8015,118 @@ if (req.status === 'open') {
     responseCount = responseCountMap[req.id] || 0;
     showResponses = responseCount > 0;
     
-    // Use cached data instead of queries!
-    const responses = window.cachedResponsesByRequest[req.id] || [];
-    const normalizeToUTC = window.cachedNormalizeToUTC;
-    
-    // Calculate NEW responses count (Badge 1) - FROM CACHE
+    // Calculate NEW responses count (Badge 1)
     if (responseCount > 0 && req.seeker_last_viewed_responses_at) {
-        const viewedTime = normalizeToUTC(req.seeker_last_viewed_responses_at);
-        newResponsesCount = responses.filter(r => 
-            normalizeToUTC(r.created_at) > viewedTime
-        ).length;
+        const { data: newResponses } = await supabase
+            .from('request_responses')
+            .select('id')
+            .eq('request_id', req.id)
+            .gt('created_at', req.seeker_last_viewed_responses_at);
+        
+        newResponsesCount = newResponses ? newResponses.length : 0;
     } else if (responseCount > 0 && !req.seeker_last_viewed_responses_at) {
+        // If never viewed before, all responses are "new"
         newResponsesCount = responseCount;
     }
     
-    // Calculate total unread messages from ALL providers (Badge 2) - FROM CACHE
+    // Calculate total unread messages from ALL providers (Badge 2)
     if (responseCount > 0) {
-        for (let response of responses) {
-            const chatKey = `${req.id}_${response.provider_id}`;
-            const chat = window.cachedChatsByRequestProvider[chatKey];
-            
-            if (chat && chat.messages) {
-                const lastViewedAt = chat.seeker_last_viewed_at;
-                const unreadFromThisProvider = chat.messages.filter(m => {
-                    if (m.sender_id === currentUser.id) return false;
-                    if (!lastViewedAt) return true;
-                    const messageTime = normalizeToUTC(m.timestamp);
-                    const viewedTime = normalizeToUTC(lastViewedAt);
-                    return messageTime > viewedTime;
-                }).length;
-                totalUnreadFromProviders += unreadFromThisProvider;
+        const { data: allResponses } = await supabase
+            .from('request_responses')
+            .select('provider_id')
+            .eq('request_id', req.id);
+        
+        if (allResponses && allResponses.length > 0) {
+            for (let response of allResponses) {
+                const { data: chat } = await supabase
+                    .from('chats')
+                    .select('messages, seeker_last_viewed_at')
+                    .eq('request_id', req.id)
+                    .eq('provider_id', response.provider_id)
+                    .maybeSingle();
+                
+                if (chat && chat.messages) {
+                    const lastViewedAt = chat.seeker_last_viewed_at;
+                    
+                    const normalizeToUTC = (timestamp) => {
+                        if (!timestamp) return null;
+                        let normalized = timestamp;
+                        if (typeof timestamp === 'string' && !timestamp.endsWith('Z') && !timestamp.includes('+')) {
+                            normalized = timestamp + 'Z';
+                        }
+                        return new Date(normalized).getTime();
+                    };
+                    
+                    const unreadFromThisProvider = chat.messages.filter(m => {
+                        if (m.sender_id === currentUser.id) return false;
+                        if (!lastViewedAt) return true;
+                        
+                        const messageTime = normalizeToUTC(m.timestamp);
+                        const viewedTime = normalizeToUTC(lastViewedAt);
+                        
+                        return messageTime > viewedTime;
+                    }).length;
+                    
+                    totalUnreadFromProviders += unreadFromThisProvider;
+                }
             }
         }
     }
 } else if ((req.status === 'in_progress' || req.status === 'pending_completion' || req.status === 'completed') && req.selected_provider_id) {
     showChat = true;
     
-    // Use cached chat data instead of query!
-    const chatKey = `${req.id}_${req.selected_provider_id}`;
-    const chat = window.cachedChatsByRequestProvider[chatKey];
-    const normalizeToUTC = window.cachedNormalizeToUTC;
+    const { data: chat } = await supabase
+    .from('chats')
+    .select('messages, seeker_last_viewed_at, provider_last_viewed_at')
+    .eq('request_id', req.id)
+    .eq('provider_id', req.selected_provider_id)
+    .single();
     
     if (chat && chat.messages) {
+        // Get last viewed time for seeker
         const lastViewedAt = chat.seeker_last_viewed_at;
-        newMessagesCount = chat.messages.filter(m => {
-            if (m.sender_id === currentUser.id) return false;
-            if (!lastViewedAt) return true;
-            const messageTime = normalizeToUTC(m.timestamp);
-            const viewedTime = normalizeToUTC(lastViewedAt);
-            return messageTime > viewedTime;
-        }).length;
+        
+        // Count only messages AFTER last viewed time
+        // ✅ FIX: Normalize timestamps before comparison
+const normalizeToUTC = (timestamp) => {
+    if (!timestamp) return null;
+    let normalized = timestamp;
+    if (typeof timestamp === 'string' && !timestamp.endsWith('Z') && !timestamp.includes('+')) {
+        normalized = timestamp + 'Z';
+    }
+    return new Date(normalized).getTime();
+};
+
+newMessagesCount = chat.messages.filter(m => {
+    if (m.sender_id === currentUser.id) return false;
+    if (!lastViewedAt) return true;
+    
+    const messageTime = normalizeToUTC(m.timestamp);
+    const viewedTime = normalizeToUTC(lastViewedAt);
+    
+    return messageTime > viewedTime;
+}).length;
     }
     
     // Check if completed request warranty/grace period expired
     if (req.status === 'completed') {
         if (req.warranty_period === 0 || req.warranty_period === null) {
+            // NO WARRANTY - Check 7-day grace period
             const completionDate = new Date(req.warranty_end_date);
             const gracePeriodEndDate = new Date(completionDate);
             gracePeriodEndDate.setDate(gracePeriodEndDate.getDate() + 7);
             const currentDate = new Date();
+            
             if (currentDate > gracePeriodEndDate) {
-                isReadOnlyChat = true;
+                isReadOnlyChat = true; // Grace period expired
             }
         } else if (req.warranty_period > 0) {
+            // WARRANTY OFFERED - Check warranty expiration
             const warrantyEndDate = new Date(req.warranty_end_date);
             const currentDate = new Date();
+            
             if (currentDate > warrantyEndDate) {
-                isReadOnlyChat = true;
+                isReadOnlyChat = true; // Warranty expired
             }
         }
     }
@@ -8084,7 +8137,7 @@ if (req.status === 'open') {
                     const warrantyEndDate = new Date(req.warranty_end_date);
                     const today = new Date();
                     if (warrantyEndDate > today) {
-                        reactivateButton = `<button class="btn btn-select action-btn-compact" onclick="reactivateRequest('${req.id}')" style="background: #dc3545 !important;">🔄 ${t('btn_reactivate')}</button>`;
+                        reactivateButton = `<button class="btn btn-select action-btn-compact" onclick="reactivateRequest('${req.id}')" style="background: #dc3545 !important;">🔄 Reactivate</button>`;
                     }
                 }
                                 
@@ -8119,7 +8172,7 @@ html += `
     ` : ''}
 ${showChat ? `
     <div class="chat-btn-wrapper" style="margin-left: auto !important;">
-        <button class="btn ${isReadOnlyChat ? 'btn-view-profile' : 'btn-chat'}" onclick="openChat('${req.id}', '${req.selected_provider_id}', ${isReadOnlyChat})">${isReadOnlyChat ? '👁️ ' + t('view_chat') : '💬 ' + t('chat')}</button>
+        <button class="btn ${isReadOnlyChat ? 'btn-view-profile' : 'btn-chat'}" onclick="openChat('${req.id}', '${req.selected_provider_id}', ${isReadOnlyChat})">${isReadOnlyChat ? '👁️ View Chat' : '💬 Chat'}</button>
         ${newMessagesCount > 0 && !isReadOnlyChat ? `<span class="chat-unread-badge">${newMessagesCount}</span>` : ''}
     </div>
 ` : ''}
@@ -8138,7 +8191,7 @@ ${warrantyBadge || reactivateButton ? `
                             <div class="request-card-right">
     ${showChat ? `
     <div class="chat-btn-wrapper">
-        <button class="btn btn-chat action-btn-compact" onclick="chatOpenedFrom='responses-modal'; closeResponsesModal(); openChat('${req.id}', '${req.selected_provider_id}')">${'💬 ' + t('chat')}</button>
+        <button class="btn btn-chat action-btn-compact" onclick="chatOpenedFrom='responses-modal'; closeResponsesModal(); openChat('${req.id}', '${req.selected_provider_id}')">💬 Chat</button>
         ${newMessagesCount > 0 ? `<span class="chat-unread-badge">${newMessagesCount}</span>` : ''}
     </div>
 ` : ''}
@@ -8161,7 +8214,7 @@ ${warrantyBadge || reactivateButton ? `
 
 ${(req.status === 'in_progress' || req.status === 'pending_completion') && req.selected_provider_id ? `
     <div style="display: flex; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0f0f0;">
-        <button class="btn" style="flex: 1; background: #ff9800; color: white;" onclick="changeProvider('${req.id}', '${req.selected_provider_id}')">🔄 ${t('btn_change_provider')}</button>
+        <button class="btn" style="flex: 1; background: #ff9800; color: white;" onclick="changeProvider('${req.id}', '${req.selected_provider_id}')">🔄 Change Provider</button>
     </div>
 ` : ''}
                         </div>
@@ -12154,14 +12207,8 @@ if (!currentRequestFilter || currentRequestFilter === 'responded') {
     currentRequestFilter = 'in_progress';
 }
     
-        // Use cached data if available, otherwise reload
-    if (window.cachedUserRequests && window.cachedUserRequests.length > 0) {
-        requestAnimationFrame(() => {
-            displayUserRequests(window.cachedUserRequests);
-        });
-    } else {
-        loadUserRequests();
-    }
+    // Reload and filter requests
+    loadUserRequests();
 }
 
 function filterActiveRequests(filter) {
@@ -12191,14 +12238,8 @@ function filterActiveRequests(filter) {
         }
     }
     
-        // Use cached data if available, otherwise reload
-    if (window.cachedUserRequests && window.cachedUserRequests.length > 0) {
-        requestAnimationFrame(() => {
-            displayUserRequests(window.cachedUserRequests);
-        });
-    } else {
-        loadUserRequests();
-    }
+    // Reload and filter requests
+    loadUserRequests();
 }
 
         function filterByUrgency(urgency) {
