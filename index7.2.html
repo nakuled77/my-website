@@ -5968,18 +5968,6 @@ if (profileError) {
     throw profileError;
 }
 
-// ✅ NEW: Add transaction entry for initial signup credits (200 credits from DB default)
-console.log('🔵 Adding initial signup bonus transaction...');
-await supabase.from('credit_transactions').insert([{
-    user_id: authData.user.id,
-    transaction_type: 'credit',
-    amount: 200,
-    description: 'Welcome bonus: Initial signup credits',
-    status: 'completed',
-    related_request_id: null
-}]);
-console.log('✅ Initial signup transaction recorded');
-
 // ✅ NEW: Create referral record if valid referral code was used
 if (referrerId) {
     console.log('🔵 Creating referral record...');
@@ -5994,8 +5982,8 @@ if (referrerId) {
     } else {
         console.log('✅ Referral record created! Referrer:', referrerId);
         
-// Award welcome bonus to referred user (+20 credits for using referral)
-await addCredits(authData.user.id, 20, 'Signup bonus: You signed up using a referral code', null, 'completed', null);
+        // Award welcome bonus to referred user (+10 credits)
+        await addCredits(authData.user.id, 10, 'referral_welcome_bonus', 'Welcome bonus for signing up with referral code');
     }
 }
 
@@ -6399,7 +6387,7 @@ async function awardReferralVerificationBonus(userId) {
             .select('*')
             .eq('referred_id', userId)
             .eq('credits_awarded_verification', false)
-            .maybeSingle();
+            .single();
         
         if (!referral) {
             console.log('⏭️ No pending referral verification bonus');
@@ -6407,7 +6395,7 @@ async function awardReferralVerificationBonus(userId) {
         }
         
         // Award +25 credits to referrer
-await addCredits(referral.referrer_id, 25, 'Referral bonus: Your referred user verified their email', null, 'completed', null);
+        await addCredits(referral.referrer_id, 25, 'referral_verification_bonus', 'Referral bonus: Your referred user verified their email');
         
         // Update referral record
         await supabase
@@ -6443,8 +6431,8 @@ async function awardReferralFirstRequestBonus(userId) {
             return;
         }
         
-        // Award +25 credits to referrer
-await addCredits(referral.referrer_id, 25, 'Referral bonus: Your referred user created their first request', null, 'completed', null);
+        // Award +50 credits to referrer
+        await addCredits(referral.referrer_id, 50, 'referral_first_request_bonus', 'Referral bonus: Your referred user completed their first request');
         
         // Update referral record
         await supabase
@@ -7333,10 +7321,13 @@ async function handleProfileChange(payload) {
     
     // ✅ ONLY show alert if email_verified actually changed from false to true
     if (
-    oldRecord.email_verified === false && 
-    newRecord.email_verified === true
-) {
-    alert('✅ Email verified successfully! You can now create requests and respond to work.');
+        oldRecord.email_verified === false && 
+        newRecord.email_verified === true
+    ) {
+        alert('✅ Email verified successfully! You can now create requests and respond to work.');
+        
+        // ✅ Award referral verification bonus to referrer
+        await awardReferralVerificationBonus(currentUser.id);
         
         // Remove verification banner if exists
         const banner = document.getElementById('verificationBanner');
@@ -7445,7 +7436,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-let isVerificationInProgress = false;  // NEW
 
 // Handle email verification callback
 async function handleEmailVerification() {
@@ -7463,9 +7453,6 @@ async function handleEmailVerification() {
     if (!token || type !== 'signup') {
         return false;
     }
-
-// ✅ NEW: Set flag to prevent race condition
-    isVerificationInProgress = true;
     
     console.log('✅ Verification token found, processing...');
     showLoading();
@@ -7508,6 +7495,10 @@ const { error: updateError } = await supabase
     .update({ email_verified: true })
     .eq('user_id', session.user.id);
 
+// Award referral bonus after verification
+await awardReferralVerificationBonus(currentUser.id);
+
+
 if (updateError) {
     console.error('❌ Error updating email_verified:', updateError);
     throw new Error('Failed to update verification status: ' + updateError.message);
@@ -7527,11 +7518,6 @@ console.log('✅ Email verified successfully!');
         
         // Redirect to login page
         showLogin();
-
- // ✅ NEW: Reset flag after small delay
-    setTimeout(() => {
-        isVerificationInProgress = false;
-    }, 1000);
         
         return true;
         
@@ -7651,8 +7637,7 @@ if (currentRequestFilter === 'open' || currentRequestFilter === 'no_response' ||
         return;
     }
 
-    // Count statistics
-
+            // Count statistics
 const respondedRequests = [];
 const pendingRequests = [];
 const responseCountMap = {};
@@ -11998,26 +11983,23 @@ document.getElementById('createRequestForm').addEventListener('submit', async (e
             .single();
 
         if (insertError) throw insertError;
+        
+        // 🆕 STEP 3: DEDUCT 25 CREDITS AFTER REQUEST CREATION
+        await deductCredits(
+            currentUser.id,
+            25,
+            `Created service request: ${title}`,
+            newRequest.id,  // Link to the newly created request
+            'completed',    // Status is completed (immediate deduction)
+            null            // No warranty for this transaction
+        );
+        
+        // Update local profile credit count
+        currentProfile.credits -= 25;
+        displayCreditBalance();  // Refresh credit display in header
 
-// 🆕 STEP 3: DEDUCT 25 CREDITS AFTER REQUEST CREATION
-await deductCredits(
-    currentUser.id,
-    25,
-    `Created service request: ${title}`,
-    newRequest.id,  // Link to the newly created request
-    'completed',    // Status is completed (immediate deduction)
-    null            // No warranty for this transaction
-);
-
-// Update local profile credit count
-currentProfile.credits -= 25;
-displayCreditBalance();  // Refresh credit display in header
-
-// ✅ NEW: Award referral bonus to referrer if this is user's first request
-await awardReferralFirstRequestBonus(currentUser.id);
-
-infoDiv.classList.add('hidden');
-alert(`✅ ${t('request_created')}\n\n💳 -25 credits deducted`);
+        infoDiv.classList.add('hidden');
+        alert(`✅ ${t('request_created')}\n\n💳 -25 credits deducted`);
         showDashboard();
         
     } catch (error) {
