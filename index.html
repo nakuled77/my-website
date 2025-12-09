@@ -4717,56 +4717,6 @@ let realtimeSubscriptions = {
     }
 }
 
-
-// ✅ Resend verification email function
-async function resendVerificationEmail() {
-    try {
-        console.log('📧 Resending verification email...');
-        
-        // Get current session
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        
-        if (sessionError || !session) {
-            console.error('❌ No active session:', sessionError);
-            alert('❌ Please login first');
-            return;
-        }
-
-        // Disable button and show loading state
-        const resendBtn = event.target;
-        resendBtn.disabled = true;
-        resendBtn.textContent = `${t('sending')}`;
-
-        // Resend verification email using Supabase auth.resend()
-        const { error } = await supabase.auth.resend({
-            type: 'signup',
-            email: session.user.email,
-            options: {
-                emailRedirectTo: `${window.location.origin}/`
-            }
-        });
-
-        if (error) {
-            throw error;
-        }
-
-        alert('✅ Verification email sent!\n\nPlease check your inbox and spam folder.');
-        console.log('✅ Verification email sent successfully');
-
-    } catch (error) {
-        console.error('❌ Error resending verification email:', error);
-        alert('❌ Failed to send verification email: ' + error.message);
-    } finally {
-        // Re-enable button
-        const resendBtn = event.target;
-        if (resendBtn) {
-    resendBtn.disabled = false;
-        resendBtn.textContent = `📧 ${t('resend_email')}`;
-        }
-    }
-}
-
-
 // ✅ Function to resend verification email
 async function resendVerificationEmail() {
     try {
@@ -5909,9 +5859,14 @@ infoDiv.textContent = `💾 ${t('saving_profile')}`;
 const expiryTime = new Date();
 expiryTime.setHours(expiryTime.getHours() + 48);
 
+// ===== ADD DEBUG LOGS HERE =====
 // Get referral code if entered
 const referralCodeInput = document.getElementById('signupReferralCode').value.trim().toUpperCase();
 let referrerId = null;
+
+console.log('🔍 DEBUG: Referral code input element exists?', document.getElementById('signupReferralCode'));
+console.log('🔍 DEBUG: Referral code entered:', referralCodeInput);
+console.log('🔍 DEBUG: Is referral code provided?', !!referralCodeInput);
 
 // Validate referral code if provided
 if (referralCodeInput) {
@@ -5922,11 +5877,13 @@ if (referralCodeInput) {
         .eq('referral_code', referralCodeInput)
         .single();
     
+    console.log('🔍 DEBUG: Referrer query result:', { referrerProfile, refError });
+    
     if (referrerProfile) {
         referrerId = referrerProfile.user_id;
-        console.log('✅ Valid referral code from:', referrerProfile.name);
+        console.log('✅ Valid referral code from:', referrerProfile.name, 'ID:', referrerId);
     } else {
-        console.log('⚠️ Invalid referral code, ignoring');
+        console.log('⚠️ Invalid referral code - not found in database');
     }
 }
 
@@ -6035,28 +5992,21 @@ console.log('✅ Verification email sent automatically by Supabase');
 
         console.log('✅ ✅ ✅ SIGNUP COMPLETE! Staying logged in with restricted view...');
 
-// ✅ Set current user (stay logged in)
-currentUser = authData.user;
-
-// ✅ Hide signup view
-const signupView = document.getElementById('signupView');
-if (signupView) {
-    signupView.classList.add('hidden');
-    signupView.style.display = 'none';
-}
-
-// ✅ Hide info message
-infoDiv.classList.add('hidden');
-
-// ✅ Show success message
-alert(t('account_created_verify_email'));
+// ✅ LOGOUT the user immediately after signup
+console.log('🔵 Logging out user after signup...');
+await supabase.auth.signOut();
+currentUser = null;
 
 // ✅ Clear form
 document.getElementById('signupForm').reset();
 
-// ✅ Load profile and show restricted dashboard
-await loadProfile();
+// ✅ Show success message and redirect to login
+alert('✅ Account created successfully!\n\n📧 A verification email has been sent to ' + formData.email + '\n\nPlease check your inbox (and spam folder) and verify your email before logging in.');
 
+// ✅ Redirect to login view
+hideAllViews();
+document.getElementById('loginView').classList.remove('hidden');
+console.log('✅ User logged out and redirected to login');
         
     } catch (error) {
         console.error('❌ ❌ ❌ SIGNUP FAILED:', error);
