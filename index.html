@@ -5748,7 +5748,29 @@ async function rejectCompletionFromChat(messageIndex) {
                     loginView.style.display = 'none';
                 }
                 
-                await loadProfile();
+await loadProfile();
+
+// ✅ DEBUG: Log all referral-related values
+console.log('🔍 REFERRAL BONUS CHECK:', {
+    hasCurrentUser: !!currentUser,
+    hasCurrentProfile: !!currentProfile,
+    email_verified: currentProfile?.email_verified,
+    referral_bonus_awarded: currentProfile?.referral_bonus_awarded,
+    referred_by: currentProfile?.referred_by,
+    user_id: currentUser?.id
+});
+
+// Check and award referral bonus on first verified login
+if (currentUser && currentProfile && currentProfile.email_verified && !currentProfile.referral_bonus_awarded && currentProfile.referred_by) {
+    console.log('✅ All conditions met! Awarding referral bonus...');
+    await awardReferralBonus(currentUser.id);
+} else {
+    console.log('⏭️ Referral bonus conditions NOT met:', {
+        reason: !currentProfile?.email_verified ? 'email not verified' :
+                currentProfile?.referral_bonus_awarded ? 'bonus already awarded' :
+                !currentProfile?.referred_by ? 'no referrer (referred_by is null)' : 'unknown'
+    });
+}
             } catch (error) {
                 errorDiv.textContent = error.message;
                 errorDiv.classList.remove('hidden');
@@ -5915,10 +5937,22 @@ const { error: profileError } = await supabase.from('profiles').insert([{
     email_verified: false,
     verification_link_expires_at: expiryTime.toISOString(),
     last_verification_email_sent_at: new Date().toISOString(),
-    referral_code: newUserReferralCode  // ← NEW: Assign referral code
+    referral_code: newUserReferralCode,  // ← NEW: Assign referral code
+    referred_by: referrerId,  // ← ADD THIS (will be null if no referral code used)
+    referral_bonus_awarded: false,  // ← ADD THIS
 }]);
 
 console.log('✅ STEP 5 COMPLETE: Profile creation result:', profileError);
+
+// ✅ DEBUG: Verify what was actually saved
+if (!profileError) {
+    console.log('🔍 DEBUG: Profile saved with referral data:', {
+        user_id: authData.user.id,
+        referred_by: referrerId,
+        referral_bonus_awarded: false,
+        referral_code: newUserReferralCode
+    });
+}
 
 if (profileError) {
     console.error('❌ STEP 5 FAILED: Profile error:', profileError);
@@ -5936,25 +5970,6 @@ await supabase.from('credit_transactions').insert([{
     related_request_id: null
 }]);
 console.log('✅ Initial signup transaction recorded');
-
-// ✅ NEW: Create referral record if valid referral code was used
-if (referrerId) {
-    console.log('🔵 Creating referral record...');
-    const { error: referralError } = await supabase.from('referrals').insert([{
-        referrer_id: referrerId,
-        referred_id: authData.user.id,
-        status: 'pending'
-    }]);
-    
-    if (referralError) {
-        console.log('⚠️ Referral record failed (might be duplicate):', referralError.message);
-    } else {
-        console.log('✅ Referral record created! Referrer:', referrerId);
-        
-// Award welcome bonus to referred user (+20 credits for using referral)
-await addCredits(authData.user.id, 20, 'Signup bonus: You signed up using a referral code', null, 'completed', null);
-    }
-}
 
 console.log('✅ Verification email sent automatically by Supabase');
 
@@ -6000,13 +6015,14 @@ currentUser = null;
 // ✅ Clear form
 document.getElementById('signupForm').reset();
 
-// ✅ Show success message and redirect to login
-alert('✅ Account created successfully!\n\n📧 A verification email has been sent to ' + formData.email + '\n\nPlease check your inbox (and spam folder) and verify your email before logging in.');
-
-// ✅ Redirect to login view
+// ✅ FIXED: Redirect to login BEFORE showing alert (so page doesn't get stuck)
 hideAllViews();
 document.getElementById('loginView').classList.remove('hidden');
+document.getElementById('loginView').style.display = 'block';
 console.log('✅ User logged out and redirected to login');
+
+// ✅ Show success message AFTER redirect (non-blocking alternative recommended)
+alert('✅ Account created successfully!\n\n📧 A verification email has been sent to ' + formData.email + '\n\nPlease check your inbox (and spam folder) and verify your email before logging in.');
         
     } catch (error) {
         console.error('❌ ❌ ❌ SIGNUP FAILED:', error);
@@ -6333,6 +6349,97 @@ async function addCredits(userId, amount, description, relatedRequestId = null, 
     } catch (error) {
         console.error('❌ Error adding credits:', error);
         throw error;
+    }
+}
+
+// Award referral bonus to both users
+async function awardReferralBonus(userId) {
+    try {
+        console.log('🎁 Checking for pending referral bonus for user:', userId);
+        
+        // Get user's profile to check for pending referral
+        const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('referred_by, referral_bonus_awarded, name, credits')
+            .eq('user_id', userId)
+            .single();
+        
+        // ✅ DEBUG: Log what was fetched
+        console.log('🔍 DEBUG awardReferralBonus - Profile fetched:', {
+            profile: profile,
+            error: profileError
+        });
+        
+        if (profileError) {
+            console.error('❌ Error fetching profile:', profileError);
+            return;
+        }
+        
+        // Check if bonus already awarded or no referrer
+        if (!profile.referred_by) {
+            console.log('ℹ️ No referrer found for this user');
+            return;
+        }
+        
+        if (profile.referral_bonus_awarded) {
+            console.log('ℹ️ Referral bonus already awarded');
+            return;
+        }
+        
+        console.log('🎁 Awarding referral bonuses...');
+        
+        // Step 1: Create referral record
+        const { error: referralError } = await supabase.from('referrals').insert([{
+            referrer_id: profile.referred_by,
+            referred_id: userId,
+            status: 'completed'
+        }]);
+        
+        if (referralError) {
+            console.error('❌ Error creating referral record:', referralError);
+            // Continue anyway - bonus is more important
+        } else {
+            console.log('✅ Referral record created');
+        }
+        
+        // Step 2: Award bonus to NEW USER (+20 credits)
+        await addCredits(
+            userId, 
+            20, 
+            'Signup bonus: You signed up using a referral code', 
+            null, 
+            'completed', 
+            null
+        );
+        console.log('✅ +20 credits awarded to new user');
+        
+        // Step 3: Award bonus to REFERRER (+50 credits)
+        await addCredits(
+            profile.referred_by, 
+            50, 
+            'Referral bonus: Someone signed up using your referral code', 
+            null, 
+            'completed', 
+            null
+        );
+        console.log('✅ +50 credits awarded to referrer');
+        
+        // Step 4: Mark bonus as awarded
+        const { error: updateError } = await supabase
+            .from('profiles')
+            .update({ referral_bonus_awarded: true })
+            .eq('user_id', userId);
+        
+        if (updateError) {
+            console.error('❌ Error updating referral_bonus_awarded flag:', updateError);
+        } else {
+            console.log('✅ Referral bonus marked as awarded');
+        }
+        
+        console.log('🎉 Referral bonus process completed successfully!');
+        
+    } catch (error) {
+        console.error('❌ Error in awardReferralBonus:', error);
     }
 }
 
