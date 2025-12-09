@@ -2974,20 +2974,6 @@ body.dark-theme span[class*="status"] {
 
 <div id="warrantyForm" class="warranty-form hidden">
     <h3><span data-i18n="select_warranty_period">Select Warranty Period</span></h3>
-    
-    <!-- NEW: Keep Existing Warranty Option (shown only for reactivated requests) -->
-    <div id="keepExistingWarrantyOption" class="warranty-option" style="display: none; margin-bottom: 12px;">
-        <input type="radio" name="warranty" id="warrantyExisting" value="existing">
-        <label for="warrantyExisting" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border-color: #28a745;">
-            🔄 <span id="keepExistingWarrantyText">Keep Existing Warranty</span>
-        </label>
-    </div>
-    
-    <!-- NEW: Separator for new warranty options -->
-    <div id="newWarrantyDivider" style="display: none; text-align: center; margin: 12px 0; color: #666; font-size: 13px;">
-        — OR provide new warranty —
-    </div>
-    
     <div class="warranty-options">
         <div class="warranty-option">
             <input type="radio" name="warranty" id="warranty0" value="0">
@@ -3014,8 +3000,8 @@ body.dark-theme span[class*="status"] {
             <label for="warranty365"><span data-i18n="1_year">1 Year</span></label>
         </div>
     </div>
-    <button class="btn" onclick="completeWork()"><span data-i18n="send_completion_request">Send Completion Request</span></button>
-</div>
+    <button class="btn btn-full" onclick="completeWork()" style="margin-top: 15px;"><span data-i18n="confirm_completion">Confirm Completion</span></button>
+</div>              
                     <div class="chat-input-wrapper">
                         <button class="plus-button" onclick="showAttachmentOptions()" title="Attach">+</button>
                         <textarea id="chatMessageInput" data-i18n-placeholder="type_your_message" placeholder="Type your message..." rows="2" oninput="toggleSendButton()"></textarea>
@@ -3453,13 +3439,9 @@ year_1: "1 Year",        // ✅ KEEP THIS
     status_assigned_other: "ASSIGNED TO ANOTHER PROVIDER",
     status_warranty_expired: "WARRANTY EXPIRED",
     // ADD THESE NEW KEYS:
-    full_address: "Full Address",
-    service_label: "Service",
-    urgency_label: "Urgency",
-    keep_existing_warranty: "Keep Existing Warranty",
-    days_remaining: "days remaining",
-    or_provide_new_warranty: "OR provide new warranty",
-
+full_address: "Full Address",
+service_label: "Service",
+urgency_label: "Urgency",
     
     // ============================================================
     // SECTION 19: BUTTONS & ACTIONS
@@ -4040,9 +4022,6 @@ provider_mode: "सेवा प्रदाता",
     status_readonly: "सिर्फ देखने के लिए",
     status_assigned_other: "अन्य प्रदाता को चुना गया",
     status_warranty_expired: "वारंटी खत्म",
-    keep_existing_warranty: "मौजूदा वारंटी रखें",
-    days_remaining: "दिन बाकी",
-    or_provide_new_warranty: "या नई वारंटी दें",
     
     // ============================================================
     // SECTION 19: BUTTONS & ACTIONS
@@ -8438,8 +8417,13 @@ currentChatData = {
     if (latestRequest.status === 'in_progress' && markCompleteBtn) {
         markCompleteBtn.style.display = 'inline-block';
     }
-  }
 }
+            
+            if (!currentChatData.isProvider && latestRequest.status === 'pending_completion') {
+                if (acceptBtn) acceptBtn.style.display = 'inline-block';
+                if (rejectBtn) rejectBtn.style.display = 'inline-block';
+            }
+        }
 
         // Handle read-only mode for non-selected providers OR missed opportunities OR deselected providers
 const isNonSelectedProvider = currentChatData.isProvider && 
@@ -9570,76 +9554,38 @@ async function declineContactSharing(messageIndex) {
     }
 }
         // Show Warranty Form
-async function showWarrantyForm() {
-    // Security check: Only selected provider can show warranty form
-    if (!currentChatData.isProvider) {
-        alert(`❌ ${t('only_provider_can_complete')}`);
-        return;
-    }
-    
-    // Verify this provider is the selected one
-    const { data: request } = await supabase
-        .from('requests')
-        .select('selected_provider_id, status, warranty_period, warranty_end_date')
-        .eq('id', currentChatData.requestId)
-        .single();
-    
-    if (!request) {
-        alert(`❌ ${t('request_not_found')}`);
-        return;
-    }
-    
-    if (request.selected_provider_id !== currentProfile.user_id) {
-        alert(`❌ ${t('not_selected_provider')}`);
-        return;
-    }
-    
-    if (request.status !== 'in_progress') {
-        alert(`❌ ${t('request_not_in_progress')}`);
-        return;
-    }
-    
-    // Reset all radio buttons
-    document.querySelectorAll('input[name="warranty"]').forEach(radio => {
-        radio.checked = false;
-    });
-    
-    // Check if this is a REACTIVATED request (has existing warranty)
-    const keepExistingOption = document.getElementById('keepExistingWarrantyOption');
-    const newWarrantyDivider = document.getElementById('newWarrantyDivider');
-    const keepExistingText = document.getElementById('keepExistingWarrantyText');
-    
-    if (request.warranty_end_date) {
-        // This is a reactivated request - calculate remaining warranty
-        const warrantyEndDate = new Date(request.warranty_end_date);
-        const today = new Date();
-        const remainingDays = Math.ceil((warrantyEndDate - today) / (1000 * 60 * 60 * 24));
-        
-        if (remainingDays > 0) {
-            // Show the "Keep Existing Warranty" option
-            keepExistingOption.style.display = 'block';
-            newWarrantyDivider.style.display = 'block';
-            keepExistingText.textContent = `🔄 Keep Existing Warranty (${remainingDays} days left)`;
-            
-            // Pre-select the existing warranty option
-            document.getElementById('warrantyExisting').checked = true;
-            
-            console.log(`📋 Reactivated request detected. Remaining warranty: ${remainingDays} days`);
-        } else {
-            // Warranty expired - hide the option
-            keepExistingOption.style.display = 'none';
-            newWarrantyDivider.style.display = 'none';
+        async function showWarrantyForm() {
+            // Security check: Only selected provider can show warranty form
+            if (!currentChatData.isProvider) {
+            alert(`❌ ${t('only_provider_can_complete')}`);
+            return;
         }
-    } else {
-        // First-time completion - hide the keep existing option
-        keepExistingOption.style.display = 'none';
-        newWarrantyDivider.style.display = 'none';
-    }
-    
-    // All checks passed - show the form
-    document.getElementById('warrantyForm').classList.remove('hidden');
-}
-
+        
+        // Verify this provider is the selected one
+        const { data: request } = await supabase
+            .from('requests')
+            .select('selected_provider_id, status')
+            .eq('id', currentChatData.requestId)
+            .single();
+        
+        if (!request) {
+            alert(`❌ ${t('request_not_found')}`);
+            return;
+        }
+        
+        if (request.selected_provider_id !== currentProfile.user_id) {
+            alert(`❌ ${t('not_selected_provider')}`);
+            return;
+        }
+        
+        if (request.status !== 'in_progress') {
+            alert(`❌ ${t('request_not_in_progress')}`);
+            return;
+        }
+            
+            // All checks passed - show the form
+            document.getElementById('warrantyForm').classList.remove('hidden');
+        }
 // Complete Work
 async function completeWork() {
     const selectedWarranty = document.querySelector('input[name="warranty"]:checked');
@@ -9654,56 +9600,21 @@ async function completeWork() {
     try {
         console.log('🔵 STEP 3D: Starting work completion with pending bonus...');
         
-        let warrantyDays;
-        let warrantyEndDate;
-        let isKeepingExistingWarranty = false;
+        const warrantyDays = parseInt(selectedWarranty.value);
+        const warrantyEndDate = new Date();
+        warrantyEndDate.setDate(warrantyEndDate.getDate() + warrantyDays);
         
-        // Check if "Keep Existing Warranty" was selected
-        if (selectedWarranty.value === 'existing') {
-            // Fetch existing warranty info from the request
-            const { data: existingRequest } = await supabase
-                .from('requests')
-                .select('warranty_period, warranty_end_date')
-                .eq('id', currentChatData.requestId)
-                .single();
-            
-            if (!existingRequest || !existingRequest.warranty_end_date) {
-                alert('❌ Error: Could not find existing warranty information.');
-                return;
-            }
-            
-            // Keep the existing warranty end date
-            warrantyEndDate = new Date(existingRequest.warranty_end_date);
-            const today = new Date();
-            warrantyDays = Math.ceil((warrantyEndDate - today) / (1000 * 60 * 60 * 24));
-            isKeepingExistingWarranty = true;
-            
-            console.log('📊 Keeping existing warranty:', warrantyDays, 'days remaining');
-            console.log('📅 Existing warranty expires:', warrantyEndDate.toISOString());
-        } else {
-            // New warranty selected
-            warrantyDays = parseInt(selectedWarranty.value);
-            warrantyEndDate = new Date();
-            warrantyEndDate.setDate(warrantyEndDate.getDate() + warrantyDays);
-            
-            console.log('📊 New warranty period:', warrantyDays, 'days');
-            console.log('📅 Warranty expires:', warrantyEndDate.toISOString());
-        }
+        console.log('📊 Warranty period:', warrantyDays, 'days');
+        console.log('📅 Warranty expires:', warrantyEndDate.toISOString());
         
         // STEP 1: Update request status to pending_completion
-        const updateData = {
-            status: 'pending_completion'
-        };
-        
-        // Only update warranty fields if providing NEW warranty
-        if (!isKeepingExistingWarranty) {
-            updateData.warranty_period = warrantyDays;
-            updateData.warranty_end_date = warrantyEndDate.toISOString();
-        }
-        
         const { error: updateError } = await supabase
             .from('requests')
-            .update(updateData)
+            .update({
+                status: 'pending_completion',
+                warranty_period: warrantyDays,
+                warranty_end_date: warrantyEndDate.toISOString()
+            })
             .eq('id', currentChatData.requestId);
         
         if (updateError) throw updateError;
@@ -9769,15 +9680,9 @@ async function completeWork() {
         
         let messages = existingChat?.messages || [];
         
-        // Build warranty text based on selection
-        let warrantyText;
-        if (isKeepingExistingWarranty) {
-            warrantyText = `existing warranty (${warrantyDays} days remaining)`;
-        } else if (warrantyDays === 0) {
-            warrantyText = 'no warranty';
-        } else {
-            warrantyText = `${warrantyDays} days warranty`;
-        }
+        const warrantyText = warrantyDays === 0 
+            ? 'no warranty' 
+            : `${warrantyDays} days warranty`;
         
         messages.push({
             sender_id: currentUser.id,
