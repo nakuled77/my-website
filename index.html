@@ -7515,6 +7515,8 @@ if (updateError) {
 
 console.log('✅ Email verified successfully!');
 
+// Award referral bonus to the referrer (if applicable)
+await awardReferralVerificationBonus(session.user.id);
         
         // Logout the user (they should login manually after verification)
         await supabase.auth.signOut();
