@@ -535,37 +535,7 @@ body.dark-theme #providerSettings input::placeholder {
         input, select, textarea { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; transition: all 0.3s; font-family: inherit; }
         textarea { resize: vertical; min-height: 100px; }
         input:focus, select:focus, textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
-        /* Password visibility toggle styles */
-.password-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.password-wrapper input {
-    width: 100%;
-    padding-right: 45px;
-}
-
-.password-toggle-btn {
-    position: absolute;
-    right: 12px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    color: #666;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    transition: color 0.3s;
-    line-height: 1;
-}
-
-.password-toggle-btn:hover {
-    color: #667eea;
-}
-	.btn { padding: 14px 24px; background: #128C7E; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn { padding: 14px 24px; background: #128C7E; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
 	.btn:hover { background: #0d6b5f; transform: translateY(-1px); box-shadow: 0 2px 8px rgba(18, 140, 126, 0.3); }
         .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; background: #95a5a6; }
         .btn-full { width: 100%; }
@@ -1747,14 +1717,9 @@ body.dark-theme span[class*="status"] {
             <input type="email" id="loginEmail" required>
         </div>
         <div class="form-group">
-    <label><span data-i18n="password">Password</span> <span class="required">*</span></label>
-    <div class="password-wrapper">
-        <input type="password" id="loginPassword" required>
-        <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('loginPassword', this)">
-            <span class="eye-icon">👁️‍🗨️</span>
-        </button>
-    </div>
-</div>
+        <label><span data-i18n="password">Password</span> <span class="required">*</span></label>
+            <input type="password" id="loginPassword" required>
+        </div>
         <button type="submit" class="btn btn-full"><span data-i18n="login">Login</span></button>
         <div style="text-align: center; margin-top: 20px; font-size: 14px;">
     <a href="#" onclick="showSignup(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;"><span data-i18n="sign_up_link">Sign up for new user registration</span></a>
@@ -1808,18 +1773,13 @@ body.dark-theme span[class*="status"] {
                 <div class="form-group">
     <label><span data-i18n="phone_number">Phone Number</span> <span class="required">*</span></label>
     <input type="tel" id="signupPhone" pattern="[0-9]{10}" required 
-       oninput="validatePhoneInput(this)">
+           oninput="validatePhoneInput(this)" title="<span data-i18n="enter_correct_number">Enter correct number</span>">
     <div id="signupPhoneError" style="color: #dc3545; font-size: 12px; margin-top: 5px; display: none;">Enter correct number</div>
 </div>
                 <div class="form-group">
-    <label><span data-i18n="password">Password</span> <span class="required">*</span></label>
-    <div class="password-wrapper">
-        <input type="password" id="signupPassword" minlength="6" required>
-        <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('signupPassword', this)">
-            <span class="eye-icon">👁️‍🗨️</span>
-        </button>
-    </div>
-</div>
+                    <label><span data-i18n="password">Password</span> <span class="required">*</span></label>
+                    <input type="password" id="signupPassword" minlength="6" required>
+                </div>
                 <h3>📍 <span data-i18n="address_details">Address Details</span></h3>
                 <div class="form-group">
                     <label data-i18n="house_number">House Number</label>
@@ -1990,26 +1950,17 @@ body.dark-theme span[class*="status"] {
     <form id="passwordResetForm">
         <div class="form-group">
             <label><span data-i18n="new_password">New Password</span> <span class="required">*</span></label>
-            <div class="password-wrapper">
-                <input type="password" id="newPassword" required minlength="6" data-i18n-placeholder="enter_new_password_placeholder">
-                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('newPassword', this)">
-                    <span class="eye-icon">👁️‍🗨️</span>
-                </button>
-            </div>
+            <input type="password" id="newPassword" required minlength="6" data-i18n-placeholder="enter_new_password_placeholder">
         </div>
         
         <div class="form-group">
             <label><span data-i18n="confirm_new_password">Confirm New Password</span> <span class="required">*</span></label>
-            <div class="password-wrapper">
-                <input type="password" id="confirmNewPassword" required minlength="6" data-i18n-placeholder="reenter_new_password_placeholder">
-                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('confirmNewPassword', this)">
-                    <span class="eye-icon">👁️‍🗨️</span>
-                </button>
-            </div>
+            <input type="password" id="confirmNewPassword" required minlength="6" data-i18n-placeholder="reenter_new_password_placeholder">
         </div>
         
         <button type="submit" class="btn btn-full" id="resetPasswordBtn">🔒 <span data-i18n="reset_password_btn">Reset Password</span></button>
     </form>
+    
     
     <!-- Footer -->
     <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; font-size: 12px; color: #666;">
@@ -5939,13 +5890,16 @@ console.log('🔍 DEBUG: Is referral code provided?', !!referralCodeInput);
 if (referralCodeInput) {
     console.log('🔵 Checking referral code:', referralCodeInput);
     const { data: referrerProfile, error: refError } = await supabase
-        .rpc('validate_referral_code', { code: referralCodeInput });
+        .from('profiles')
+        .select('user_id, name')
+        .eq('referral_code', referralCodeInput)
+        .single();
     
     console.log('🔍 DEBUG: Referrer query result:', { referrerProfile, refError });
     
-    if (referrerProfile && referrerProfile.length > 0) {
-        referrerId = referrerProfile[0].user_id;
-        console.log('✅ Valid referral code from:', referrerProfile[0].name, 'ID:', referrerId);
+    if (referrerProfile) {
+        referrerId = referrerProfile.user_id;
+        console.log('✅ Valid referral code from:', referrerProfile.name, 'ID:', referrerId);
     } else {
         console.log('⚠️ Invalid referral code - not found in database');
     }
@@ -6055,28 +6009,11 @@ currentUser = null;
 // ✅ Clear form
 document.getElementById('signupForm').reset();
 
-// ✅ IMPROVED: Force redirect with explicit display management
-const signupView = document.getElementById('signupView');
-const loginView = document.getElementById('loginView');
-
-// Hide signup view
-if (signupView) {
-    signupView.classList.add('hidden');
-    signupView.style.display = 'none';
-}
-
-// Show login view
-if (loginView) {
-    loginView.classList.remove('hidden');
-    loginView.style.display = 'block';
-}
-
+// ✅ FIXED: Redirect to login BEFORE showing alert (so page doesn't get stuck)
+hideAllViews();
+document.getElementById('loginView').classList.remove('hidden');
+document.getElementById('loginView').style.display = 'block';
 console.log('✅ User logged out and redirected to login');
-
-// ✅ Use setTimeout to ensure UI updates before alert
-setTimeout(() => {
-    alert('✅ Account created successfully!\n\n📧 A verification email has been sent to ' + formData.email + '\n\nPlease check your inbox (and spam folder) and verify your email before logging in.');
-}, 100);
 
 // ✅ Show success message AFTER redirect (non-blocking alternative recommended)
 alert('✅ Account created successfully!\n\n📧 A verification email has been sent to ' + formData.email + '\n\nPlease check your inbox (and spam folder) and verify your email before logging in.');
@@ -11180,42 +11117,23 @@ async function viewProviderProfile(providerId) {
             const ratingWord = provider.total_ratings === 1 ? t('rating') : t('ratings');
             ratingDisplay = `${stars} ${provider.average_rating}/5 (${provider.total_ratings} ${ratingWord})`;
             
-            // ✅ UPDATED: Fetch review details WITH service_type
+            // Still fetch review details for display
             const { data: ratings } = await supabase
                 .from('ratings')
-                .select('rating, review, created_at, service_type')  // ← ADDED service_type
+                .select('rating, review, created_at')
                 .eq('provider_id', providerId)
                 .order('created_at', { ascending: false });
             
             if (ratings && ratings.length > 0) {
-                // ✅ NEW: Service type icons and names mapping
-                const serviceIcons = {
-                    electrician: `🔧 ${t('electrician')}`,
-                    plumber: `🚰 ${t('plumber')}`,
-                    ac_repair: `❄️ ${t('ac_repair')}`,
-                    carpenter: `🔨 ${t('carpenter')}`,
-                    painter: `🎨 ${t('painter')}`,
-                    cleaner: `🧹 ${t('cleaner')}`
-                };
-                
                 ratingDetailsHTML = `<hr style="margin: 20px 0;"><h3 style="margin-bottom: 15px;">${t('recent_reviews')}:</h3>`;
-                ratings.slice(0, 5).forEach(r => {  // ← CHANGED: Show last 5 ratings (was 3)
+                ratings.slice(0, 3).forEach(r => {
                     const reviewStars = '⭐'.repeat(r.rating);
                     const reviewDate = new Date(r.created_at).toLocaleDateString();
-                    
-                    // ✅ NEW: Get service name with icon
-                    const serviceName = r.service_type && serviceIcons[r.service_type] 
-                        ? serviceIcons[r.service_type] 
-                        : '🔧 Service';  // Fallback if service_type is missing
-                    
                     ratingDetailsHTML += `
-                        <div style="background: #f5f5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #667eea;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <div style="font-weight: 600; color: #667eea;">${reviewStars} ${r.rating}/5</div>
-                                <span style="background: #667eea; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">${serviceName}</span>
-                            </div>
-                            ${r.review ? `<p style="color: #555; margin-bottom: 5px; font-size: 14px; line-height: 1.5;">"${r.review}"</p>` : ''}
-                            <p style="font-size: 12px; color: #999; margin-top: 8px;">📅 ${reviewDate}</p>
+                        <div style="background: #f5f5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                            <div style="font-weight: 600; color: #667eea; margin-bottom: 5px;">${reviewStars} ${r.rating}/5</div>
+                            ${r.review ? `<p style="color: #555; margin-bottom: 5px;">"${r.review}"</p>` : ''}
+                            <p style="font-size: 12px; color: #999;">${reviewDate}</p>
                         </div>
                     `;
                 });
@@ -13625,7 +13543,6 @@ return cities;
         }
 
 	async function openChatPartnerProfile() {
-    alert('🔥 UPDATED CODE IS RUNNING!'); // ← THIS LINE
     try {
         // Get partner's full profile
         const { data: partnerProfile, error } = await supabase
@@ -13665,48 +13582,29 @@ return cities;
         }
         
         // Get partner's ratings
-let ratingsHTML = '';
+        let ratingsHTML = '';
 if (partnerProfile.average_rating && partnerProfile.average_rating > 0 && partnerProfile.total_ratings > 0) {
     const stars = '⭐'.repeat(Math.round(partnerProfile.average_rating));
     const reviewWord = partnerProfile.total_ratings === 1 ? t('review') : t('reviews');
     ratingsHTML = `<h3 style="margin-top: 20px; margin-bottom: 10px;">${t('rating')}: ${stars} ${partnerProfile.average_rating}/5 (${partnerProfile.total_ratings} ${reviewWord})</h3>`;
     
-    // ✅ UPDATED: Fetch review details WITH service_type
+    // Fetch review details for display
     const { data: ratings } = await supabase
         .from('ratings')
-        .select('rating, review, created_at, service_type')  // ← ADDED service_type
+        .select('rating, review, created_at')
         .eq('provider_id', partnerProfile.user_id)
         .order('created_at', { ascending: false });
     
     if (ratings && ratings.length > 0) {
-        // ✅ NEW: Service type icons and names mapping
-        const serviceIcons = {
-            electrician: `🔧 ${t('electrician')}`,
-            plumber: `🚰 ${t('plumber')}`,
-            ac_repair: `❄️ ${t('ac_repair')}`,
-            carpenter: `🔨 ${t('carpenter')}`,
-            painter: `🎨 ${t('painter')}`,
-            cleaner: `🧹 ${t('cleaner')}`
-        };
-        
         ratingsHTML += '<div style="margin-top: 10px;">';
-        ratings.slice(0, 5).forEach(r => {  // ← CHANGED: Show last 5 ratings (was 3)
+        ratings.slice(0, 3).forEach(r => {
             const reviewStars = '⭐'.repeat(r.rating);
             const reviewDate = new Date(r.created_at).toLocaleDateString();
-            
-            // ✅ NEW: Get service name with icon
-            const serviceName = r.service_type && serviceIcons[r.service_type] 
-                ? serviceIcons[r.service_type] 
-                : '🔧 Service';  // Fallback if service_type is missing
-            
             ratingsHTML += `
-                <div style="background: #f5f5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #667eea;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <div style="font-weight: 600; color: #667eea;">${reviewStars} ${r.rating}/5</div>
-                        <span style="background: #667eea; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">${serviceName}</span>
-                    </div>
-                    ${r.review ? `<p style="color: #555; margin-bottom: 5px; font-size: 14px; line-height: 1.5;">"${r.review}"</p>` : ''}
-                    <p style="font-size: 12px; color: #999; margin-top: 8px;">📅 ${reviewDate}</p>
+                <div style="background: #f5f5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="font-weight: 600; color: #667eea; margin-bottom: 5px;">${reviewStars} ${r.rating}/5</div>
+                    ${r.review ? `<p style="color: #555; margin-bottom: 5px; font-size: 14px;">"${r.review}"</p>` : ''}
+                    <p style="font-size: 12px; color: #999;">${reviewDate}</p>
                 </div>
             `;
         });
@@ -13779,22 +13677,7 @@ async function submitRating() {
         
         const review = document.getElementById('ratingReview').value.trim();
         
-        // ✅ NEW STEP 1: Get service_id from request first
-        const { data: requestData, error: fetchError } = await supabase
-            .from('requests')
-            .select('service_category, warranty_end_date')  // ← Added service_id here
-            .eq('id', currentRatingData.requestId)
-            .single();
-        
-        if (fetchError) throw fetchError;
-        
-        const serviceType = requestData.service_category;  // ← Get service type
-        const warrantyEndDate = requestData.warranty_end_date;
-        
-        console.log('🔧 Service type:', serviceType);
-        console.log('📅 Warranty expires:', warrantyEndDate);
-        
-        // ✅ STEP 2: Insert the rating WITH service_type
+        // STEP 1: Insert the rating
         const { error } = await supabase
             .from('ratings')
             .insert([{
@@ -13803,15 +13686,27 @@ async function submitRating() {
                 provider_id: currentRatingData.providerId,
                 rating: selectedRating,
                 review: review || null,
-                service_type: serviceType,  // ← ADDED THIS LINE
                 created_at: new Date().toISOString()
             }]);
         
         if (error) throw error;
         
-        console.log('✅ Rating inserted successfully with service type:', serviceType);
+        console.log('✅ Rating inserted successfully');
         
-        // STEP 3: Add +10 credits for seeker (rest of your code remains the same...)
+        // STEP 2: Get warranty info from request
+        const { data: requestData, error: fetchError } = await supabase
+            .from('requests')
+            .select('warranty_end_date')
+            .eq('id', currentRatingData.requestId)
+            .single();
+        
+        if (fetchError) throw fetchError;
+        
+        const warrantyEndDate = requestData.warranty_end_date;
+        
+        console.log('📅 Warranty expires:', warrantyEndDate);
+        
+// STEP 3: Add +10 credits for seeker (PENDING until warranty expires) - ONLY ONCE PER REQUEST
 const seekerRatingBonus = 10;
 
 // Check if seeker already got rating bonus for this request
@@ -14189,22 +14084,6 @@ function closeForgotPasswordModal() {
     const modal = document.getElementById('forgotPasswordModal');
     if (modal) {
         modal.classList.remove('active');
-    }
-}
-
-// Toggle password visibility
-function togglePasswordVisibility(inputId, button) {
-    const input = document.getElementById(inputId);
-    const icon = button.querySelector('.eye-icon');
-    
-    if (input.type === 'password') {
-        // Show password
-        input.type = 'text';
-        icon.textContent = '👁️'; // Open eye
-    } else {
-        // Hide password
-        input.type = 'password';
-        icon.textContent = '👁️‍🗨️'; // Closed eye
     }
 }
 
