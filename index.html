@@ -2641,6 +2641,8 @@ body.dark-theme span[class*="status"] {
             </div>
         </div>
         
+        <h3>📍 <span data-i18n="service_location">Service Location</span></h3>
+        
         <div class="checkbox-group">
             <input type="checkbox" id="differentLocation" onchange="toggleLocationFields()">
             <label for="differentLocation" style="margin: 0;"><span data-i18n="use_different_location">Use different location for this service</span></label>
@@ -3313,7 +3315,8 @@ provider_mode: "Provider",
     urgent: "Urgent",
     normal: "Normal",
     low: "Low",
-    use_different_location: "Check this if service is needed at a different address",
+    service_location: "Service Location",
+    use_different_location: "Use different location for this service",
     create_request: "Create Request",
     max_requests_reached: "Maximum 5 open requests reached",
     service_type_cannot_change: "Service type cannot be changed after creation",
@@ -3767,9 +3770,9 @@ year_1: "1 Year",        // ✅ KEEP THIS
     // SECTION 2: USER ROLES & IDENTITY
     // ============================================================
     seeker: "उपभोक्ता",
-    provider: "सेवा प्रदाता",
-    seeker_mode: "उपभोक्ता",
-    provider_mode: "सेवा प्रदाता",
+provider: "सेवा प्रदाता",
+seeker_mode: "उपभोक्ता",
+provider_mode: "सेवा प्रदाता",
     
     // ============================================================
     // SECTION 3: AUTHENTICATION - LOGIN PAGE
@@ -3813,7 +3816,7 @@ year_1: "1 Year",        // ✅ KEEP THIS
     
     // ============================================================
     // SECTION 5: SERVICE CATEGORIES (All Services)
-    // ============================================================
+// ============================================================
     select_service: "सेवा चुनें",
     select_service_to_add: "जोड़ने के लिए सेवा चुनें",
     add_service: "जोड़ें",
@@ -3900,7 +3903,8 @@ year_1: "1 Year",        // ✅ KEEP THIS
     urgent: "बहुत जरूरी",
     normal: "सामान्य",
     low: "कम जरूरी",
-    use_different_location: "अगर सेवा किसी अन्य पते पर चाहिए तो यह टिक करें",
+    service_location: "कहाँ काम करवाना है",
+    use_different_location: "दूसरी जगह चुनें",
     create_request: "अनुरोध करें",
     max_requests_reached: "5 से ज्यादा मांगें नहीं हो सकती",
     service_type_cannot_change: "अनुरोध बनने के बाद सेवा प्रकार नहीं बदला जा सकता",
@@ -6001,6 +6005,8 @@ console.log('✅ Verification email sent automatically by Supabase');
             console.log('✅ STEP 6 SKIPPED: Not a provider');
         }
 
+        console.log('✅ ✅ ✅ SIGNUP COMPLETE! Staying logged in with restricted view...');
+
 // ✅ LOGOUT the user immediately after signup
 console.log('🔵 Logging out user after signup...');
 await supabase.auth.signOut();
@@ -6024,490 +6030,87 @@ alert('✅ Account created successfully!\n\n📧 A verification email has been s
         document.getElementById('signupView').classList.remove('hidden');
         errorDiv.textContent = error.message;
         errorDiv.classList.remove('hidden');
-        submitBtn.disabled = false;
+submitBtn.disabled = false;
         submitBtn.textContent = t('sign_up');
         infoDiv.classList.add('hidden');
     }
 });
 
-// ==========================================
-// STEP 1: FUZZY STRING MATCHING
-// Add this at the TOP of your file
-// ==========================================
-
-/**
- * Calculate Levenshtein distance between two strings
- * Returns similarity percentage (0-100%)
- */
-function calculateStringSimilarity(str1, str2) {
-    // Normalize strings: lowercase, remove spaces, special chars
-    const normalize = (s) => s.toLowerCase()
-        .replace(/\s+/g, '')
-        .replace(/[^\w\u0900-\u097F]/g, ''); // Keep alphanumeric + Hindi chars
-    
-    const s1 = normalize(str1);
-    const s2 = normalize(str2);
-    
-    if (s1 === s2) return 100;
-    if (s1.length === 0 || s2.length === 0) return 0;
-    
-    // Levenshtein distance algorithm
-    const matrix = [];
-    
-    for (let i = 0; i <= s2.length; i++) {
-        matrix[i] = [i];
-    }
-    
-    for (let j = 0; j <= s1.length; j++) {
-        matrix[0][j] = j;
-    }
-    
-    for (let i = 1; i <= s2.length; i++) {
-        for (let j = 1; j <= s1.length; j++) {
-            if (s2.charAt(i - 1) === s1.charAt(j - 1)) {
-                matrix[i][j] = matrix[i - 1][j - 1];
-            } else {
-                matrix[i][j] = Math.min(
-                    matrix[i - 1][j - 1] + 1, // substitution
-                    matrix[i][j - 1] + 1,     // insertion
-                    matrix[i - 1][j] + 1      // deletion
-                );
-            }
-        }
-    }
-    
-    const distance = matrix[s2.length][s1.length];
-    const maxLength = Math.max(s1.length, s2.length);
-    const similarity = ((maxLength - distance) / maxLength) * 100;
-    
-    return Math.round(similarity);
-}
-
-/**
- * Test the function (you can remove this after testing)
- */
-console.log('Testing String Similarity:');
-console.log('Bhivani vs Bhiwani:', calculateStringSimilarity('Bhivani', 'Bhiwani') + '%'); // Should be ~85%
-console.log('Sector 12 vs Sector 12A:', calculateStringSimilarity('Sector 12', 'Sector 12A') + '%'); // Should be ~90%
-console.log('Model Town vs Model Town Extension:', calculateStringSimilarity('Model Town', 'Model Town Extension') + '%'); // Should be ~70%
-
-// ==========================================
-// STEP 2: STATE NORMALIZATION
-// Add this AFTER the calculateStringSimilarity function
-// ==========================================
-
-/**
- * Normalize state names to handle all variations
- * Returns standardized state name
- */
-function normalizeStateName(stateName) {
-    if (!stateName) return '';
-    
-    const normalized = stateName.toLowerCase().trim();
-    
-    // State mapping with all variations
-    const stateMap = {
-        // Haryana
-        'haryana': 'haryana',
-        'hr': 'haryana',
-        'hariyana': 'haryana',
-        'हरियाणा': 'haryana',
-        
-        // Punjab
-        'punjab': 'punjab',
-        'pb': 'punjab',
-        'panjab': 'punjab',
-        'पंजाब': 'punjab',
-        
-        // Delhi
-        'delhi': 'delhi',
-        'dl': 'delhi',
-        'दिल्ली': 'delhi',
-        'new delhi': 'delhi',
-        
-        // Uttar Pradesh
-        'uttar pradesh': 'uttarpradesh',
-        'up': 'uttarpradesh',
-        'उत्तर प्रदेश': 'uttarpradesh',
-        
-        // Rajasthan
-        'rajasthan': 'rajasthan',
-        'rj': 'rajasthan',
-        'राजस्थान': 'rajasthan',
-        
-        // Madhya Pradesh
-        'madhya pradesh': 'madhyapradesh',
-        'mp': 'madhyapradesh',
-        'मध्य प्रदेश': 'madhyapradesh',
-        
-        // Gujarat
-        'gujarat': 'gujarat',
-        'gj': 'gujarat',
-        'गुजरात': 'gujarat',
-        
-        // Maharashtra
-        'maharashtra': 'maharashtra',
-        'mh': 'maharashtra',
-        'महाराष्ट्र': 'maharashtra',
-        
-        // Karnataka
-        'karnataka': 'karnataka',
-        'ka': 'karnataka',
-        'कर्नाटक': 'karnataka',
-        
-        // Tamil Nadu
-        'tamil nadu': 'tamilnadu',
-        'tn': 'tamilnadu',
-        'तमिल नाडु': 'tamilnadu',
-        
-        // Telangana
-        'telangana': 'telangana',
-        'ts': 'telangana',
-        'tg': 'telangana',
-        'तेलंगाना': 'telangana',
-        
-        // Andhra Pradesh
-        'andhra pradesh': 'andhrapradesh',
-        'ap': 'andhrapradesh',
-        'आंध्र प्रदेश': 'andhrapradesh',
-        
-        // West Bengal
-        'west bengal': 'westbengal',
-        'wb': 'westbengal',
-        'पश्चिम बंगाल': 'westbengal',
-        
-        // Bihar
-        'bihar': 'bihar',
-        'br': 'bihar',
-        'बिहार': 'bihar',
-        
-        // Odisha
-        'odisha': 'odisha',
-        'or': 'odisha',
-        'orissa': 'odisha',
-        'ओडिशा': 'odisha',
-        
-        // Jharkhand
-        'jharkhand': 'jharkhand',
-        'jh': 'jharkhand',
-        'झारखंड': 'jharkhand',
-        
-        // Chhattisgarh
-        'chhattisgarh': 'chhattisgarh',
-        'ct': 'chhattisgarh',
-        'chattisgarh': 'chhattisgarh',
-        'छत्तीसगढ़': 'chhattisgarh',
-        
-        // Assam
-        'assam': 'assam',
-        'as': 'assam',
-        'असम': 'assam',
-        
-        // Kerala
-        'kerala': 'kerala',
-        'kl': 'kerala',
-        'केरल': 'kerala',
-        
-        // Goa
-        'goa': 'goa',
-        'ga': 'goa',
-        'गोवा': 'goa',
-        
-        // Himachal Pradesh
-        'himachal pradesh': 'himachalpradesh',
-        'hp': 'himachalpradesh',
-        'हिमाचल प्रदेश': 'himachalpradesh',
-        
-        // Uttarakhand
-        'uttarakhand': 'uttarakhand',
-        'uk': 'uttarakhand',
-        'uttaranchal': 'uttarakhand',
-        'उत्तराखंड': 'uttarakhand',
-        
-        // Jammu and Kashmir
-        'jammu and kashmir': 'jammuandkashmir',
-        'jk': 'jammuandkashmir',
-        'j&k': 'jammuandkashmir',
-        'जम्मू और कश्मीर': 'jammuandkashmir'
-    };
-    
-    // Check if state exists in map
-    if (stateMap[normalized]) {
-        return stateMap[normalized];
-    }
-    
-    // If not found, return normalized version (removes spaces)
-    return normalized.replace(/\s+/g, '');
-}
-
-/**
- * Check if two state names match (handles all variations)
- */
-function statesMatch(state1, state2) {
-    const normalized1 = normalizeStateName(state1);
-    const normalized2 = normalizeStateName(state2);
-    
-    return normalized1 === normalized2;
-}
-
-/**
- * Test the function (you can remove this after testing)
- */
-console.log('Testing State Normalization:');
-console.log('Haryana = HR:', statesMatch('Haryana', 'HR')); // Should be true
-console.log('Haryana = हरियाणा:', statesMatch('Haryana', 'हरियाणा')); // Should be true
-console.log('Haryana = HARYANA:', statesMatch('Haryana', 'HARYANA')); // Should be true
-console.log('Haryana = Hariyana:', statesMatch('Haryana', 'Hariyana')); // Should be true
-console.log('Haryana = Punjab:', statesMatch('Haryana', 'Punjab')); // Should be false
-console.log('UP = Uttar Pradesh:', statesMatch('UP', 'Uttar Pradesh')); // Should be true
         // Geocoding
-        // ==========================================
-// STEP 5: UPDATED getCoordinates WITH CONFIRMATION POPUP
-// REPLACE your existing getCoordinates function with this
-// ==========================================
+        async function getCoordinates(formData) {
+            const strategies = [
+    formData.house_number 
+        ? `${formData.house_number}, ${formData.area_name}, ${formData.landmark || ''}, ${formData.city}, ${formData.state}, ${formData.pin_code}, India`.replace(/,\s*,/g, ',')
+        : null,
+    formData.landmark
+        ? `${formData.area_name}, ${formData.landmark}, ${formData.city}, ${formData.state}, ${formData.pin_code}, India`
+        : null,
+    `${formData.area_name}, ${formData.city}, ${formData.state}, ${formData.pin_code}, India`
+];
 
-/**
- * Get coordinates with smart validation and user confirmation
- */
-async function getCoordinates(formData) {
-    const strategies = [
-        formData.house_number 
-            ? `${formData.house_number}, ${formData.area_name}, ${formData.landmark || ''}, ${formData.city}, ${formData.state}, ${formData.pin_code}, India`.replace(/,\s*,/g, ',')
-            : null,
-        formData.landmark
-            ? `${formData.area_name}, ${formData.landmark}, ${formData.city}, ${formData.state}, ${formData.pin_code}, India`
-            : null,
-        `${formData.area_name}, ${formData.city}, ${formData.state}, ${formData.pin_code}, India`
-    ];
-
-    // Try all geocoding strategies with detailed logging
-    for (let address of strategies.filter(Boolean)) {
-        try {
-            console.log('🔍 Trying to geocode:', address);
-            const result = await geocodeAddress(address, formData);
-            
-            if (result) {
-                console.log('✅ Geocoding success:', result);
-                
-                // Check if user confirmation is needed
-                if (result.needsConfirmation) {
-                    console.log('⚠️ Confidence level requires user confirmation');
-                    
-                    const confirmed = await showConfirmationPopup(result.matchedAddress, formData);
-                    
-                    if (confirmed) {
-                        console.log('✅ User confirmed the address');
-                        return { lat: result.lat, lng: result.lng };
-                    } else {
-                        console.log('❌ User rejected the address, requesting GPS...');
-                        break;
-                    }
-                } else {
-                    console.log('✅ High confidence, auto-accepting address');
-                    return { lat: result.lat, lng: result.lng };
-                }
-            }
-        } catch (error) {
-            console.log('❌ Geocoding failed for:', address, error);
-        }
-    }
-
-    // Try PIN code-based fallback before GPS
-    console.log('⚠️ Trying PIN code-based fallback...');
+            // Try all geocoding strategies with detailed logging
+for (let address of strategies.filter(Boolean)) {
     try {
-        const pinResult = await geocodeByPinCode(formData);
-        if (pinResult) {
-            console.log('✅ PIN code fallback successful');
-            
-            if (pinResult.needsConfirmation) {
-                const confirmed = await showConfirmationPopup(pinResult.matchedAddress, formData);
-                
-                if (confirmed) {
-                    console.log('✅ User confirmed PIN code location');
-                    return { lat: pinResult.lat, lng: pinResult.lng };
-                }
-            } else {
-                return { lat: pinResult.lat, lng: pinResult.lng };
-            }
+        console.log('🔍 Trying to geocode:', address);
+        const coords = await geocodeAddress(address, formData);
+        if (coords) {
+            console.log('✅ Geocoding success:', coords);
+            return coords;
         }
     } catch (error) {
-        console.log('❌ PIN code fallback failed:', error);
+        console.log('❌ Geocoding failed for:', address, error);
     }
-
-    // All strategies failed - request GPS
-    console.log('⚠️ All geocoding strategies failed. Requesting GPS...');
-
-    // Request GPS location as fallback
-    return requestGPSLocation();
 }
 
-/**
- * Show bilingual confirmation popup (Hindi + English)
- * Returns: Promise<boolean> - true if user confirms, false if they choose GPS
- */
-function showConfirmationPopup(matchedAddress, formData) {
-    return new Promise((resolve) => {
-        // Create overlay
-        const overlay = document.createElement('div');
-        overlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            font-family: Arial, sans-serif;
-        `;
+// All geocoding strategies failed - show helpful message
+console.log('⚠️ All geocoding strategies failed. Requesting GPS...');
 
-        // Create popup box
-        const popup = document.createElement('div');
-        popup.style.cssText = `
-            background: white;
-            border-radius: 12px;
-            padding: 24px;
-            max-width: 90%;
-            width: 400px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        `;
-
-        // Extract city, area from matched address for display
-        const displayAddress = `${formData.area_name}, ${formData.city}\n${formData.state} - ${formData.pin_code}`;
-
-        popup.innerHTML = `
-            <div style="font-size: 48px; margin-bottom: 16px;">📍</div>
+            // Mobile-friendly GPS request
+return new Promise((resolve, reject) => {
+    // Try to get GPS location
+    if (!navigator.geolocation) {
+        reject(new Error(t('gps_not_supported_message')));
+        return;
+    }
+    
+    // Show a user-friendly alert (works better on mobile than confirm)
+    alert(t('location_required_gps_alert'));
+    
+    // Request GPS location
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            console.log('✅ GPS location obtained:', position.coords);
+            resolve({ 
+                lat: position.coords.latitude, 
+                lng: position.coords.longitude 
+            });
+        },
+        (error) => {
+            console.error('❌ GPS error:', error);
             
-            <div style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 8px;">
-                Is this your service area?
-            </div>
-            <div style="font-size: 16px; font-weight: bold; color: #666; margin-bottom: 20px;">
-                क्या यह आपका सेवा क्षेत्र है?
-            </div>
+            let errorMessage = t('location_access_denied_header');
             
-            <div style="background: #f5f5f5; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
-                <div style="font-size: 16px; color: #333; font-weight: 500; white-space: pre-line;">
-                    ${displayAddress}
-                </div>
-            </div>
-            
-            <div style="display: flex; gap: 12px; flex-direction: column;">
-                <button id="confirmYes" style="
-                    background: #4CAF50;
-                    color: white;
-                    border: none;
-                    padding: 14px 24px;
-                    border-radius: 8px;
-                    font-size: 16px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-                ">
-                    ✓ Yes, This is Correct<br>
-                    <span style="font-size: 14px; font-weight: normal;">हाँ, यह सही है</span>
-                </button>
-                
-                <button id="confirmNo" style="
-                    background: #f44336;
-                    color: white;
-                    border: none;
-                    padding: 14px 24px;
-                    border-radius: 8px;
-                    font-size: 16px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
-                ">
-                    ✗ No, Use My Phone Location<br>
-                    <span style="font-size: 14px; font-weight: normal;">नहीं, मेरी फ़ोन लोकेशन उपयोग करें</span>
-                </button>
-            </div>
-        `;
-
-        overlay.appendChild(popup);
-        document.body.appendChild(overlay);
-
-        // Add hover effects
-        const yesBtn = popup.querySelector('#confirmYes');
-        const noBtn = popup.querySelector('#confirmNo');
-
-        yesBtn.addEventListener('mouseenter', () => {
-            yesBtn.style.background = '#45a049';
-        });
-        yesBtn.addEventListener('mouseleave', () => {
-            yesBtn.style.background = '#4CAF50';
-        });
-
-        noBtn.addEventListener('mouseenter', () => {
-            noBtn.style.background = '#da190b';
-        });
-        noBtn.addEventListener('mouseleave', () => {
-            noBtn.style.background = '#f44336';
-        });
-
-        // Handle button clicks
-        yesBtn.addEventListener('click', () => {
-            document.body.removeChild(overlay);
-            resolve(true);
-        });
-
-        noBtn.addEventListener('click', () => {
-            document.body.removeChild(overlay);
-            resolve(false);
-        });
-    });
-}
-
-/**
- * Request GPS location from user's phone
- */
-function requestGPSLocation() {
-    return new Promise((resolve, reject) => {
-        if (!navigator.geolocation) {
-            reject(new Error('GPS not supported on this device\nइस डिवाइस पर GPS उपलब्ध नहीं है'));
-            return;
-        }
-        
-        // Show alert before requesting GPS
-        alert('We need your phone location to find your exact service area.\n\nहमें आपका सटीक सेवा क्षेत्र खोजने के लिए आपके फ़ोन की लोकेशन चाहिए।');
-        
-        // Request GPS location
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                console.log('✅ GPS location obtained:', position.coords);
-                resolve({ 
-                    lat: position.coords.latitude, 
-                    lng: position.coords.longitude 
-                });
-            },
-            (error) => {
-                console.error('❌ GPS error:', error);
-                
-                let errorMessage = 'Unable to get your location.\nआपकी लोकेशन प्राप्त नहीं हो सकी।\n\n';
-                
-                if (error.code === 1) {
-                    errorMessage += 'Please allow location access in your browser settings.\nकृपया अपने ब्राउज़र सेटिंग्स में लोकेशन एक्सेस की अनुमति दें।';
-                } else if (error.code === 2) {
-                    errorMessage += 'Location signal not available.\nलोकेशन सिग्नल उपलब्ध नहीं है।';
-                } else if (error.code === 3) {
-                    errorMessage += 'Location request timed out.\nलोकेशन रिक्वेस्ट समय समाप्त हो गई।';
-                }
-                
-                reject(new Error(errorMessage));
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 15000,
-                maximumAge: 0
+            if (error.code === 1) {
+                // User denied permission
+                errorMessage += t('gps_permission_denied_message');
+            } else if (error.code === 2) {
+                // Position unavailable
+                errorMessage += t('gps_signal_unavailable');
+            } else if (error.code === 3) {
+                // Timeout
+                errorMessage += t('gps_timeout_message');
             }
-        );
-    });
-}
-
-console.log('✅ Step 5: Updated getCoordinates with confirmation popup loaded');
+            
+            reject(new Error(errorMessage));
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 15000, // 15 seconds timeout
+            maximumAge: 0
+        }
+    );
+});
+        }
 
         // Geocode using OpenStreetMap (Nominatim)
 async function geocodeWithOpenStreetMap(address) {
@@ -6565,60 +6168,26 @@ async function geocodeWithOpenCage(address) {
     }
 }
 
-// ==========================================
-// STEP 4: UPDATED GEOCODE ADDRESS FUNCTION
-// REPLACE your existing geocodeAddress function with this
-// ==========================================
-
-/**
- * Master geocoding function with smart validation
- * Returns: { lat, lng, confidence, needsConfirmation, matchedAddress } or null
- */
+// Master geocoding function with fallback
 async function geocodeAddress(address, formData) {
     console.log('🔵 Trying to geocode:', address);
     
     // Try OpenStreetMap first (free, no limit)
     let result = await geocodeWithOpenStreetMap(address);
-    if (result) {
-        const validation = validateGeocodingResult(result, formData);
-        
-        if (validation.valid) {
-            console.log('✅ OpenStreetMap: Valid result found');
-            console.log('📊 Confidence:', validation.confidence + '%');
-            console.log('❓ Needs confirmation:', validation.needsConfirmation);
-            
-            return { 
-                lat: result.lat, 
-                lng: result.lng,
-                confidence: validation.confidence,
-                needsConfirmation: validation.needsConfirmation,
-                matchedAddress: validation.matchedAddress
-            };
-        } else {
-            console.log('⚠️ OpenStreetMap: Result found but validation failed');
-        }
+    if (result && validateGeocodingResult(result, formData)) {
+        console.log('✅ OpenStreetMap: Valid result found');
+        return { lat: result.lat, lng: result.lng };
+    } else if (result) {
+        console.log('⚠️ OpenStreetMap: Result found but validation failed');
     }
     
     // Try OpenCage if OpenStreetMap fails (free 2,500/day)
     result = await geocodeWithOpenCage(address);
-    if (result) {
-        const validation = validateGeocodingResult(result, formData);
-        
-        if (validation.valid) {
-            console.log('✅ OpenCage: Valid result found');
-            console.log('📊 Confidence:', validation.confidence + '%');
-            console.log('❓ Needs confirmation:', validation.needsConfirmation);
-            
-            return { 
-                lat: result.lat, 
-                lng: result.lng,
-                confidence: validation.confidence,
-                needsConfirmation: validation.needsConfirmation,
-                matchedAddress: validation.matchedAddress
-            };
-        } else {
-            console.log('⚠️ OpenCage: Result found but validation failed');
-        }
+    if (result && validateGeocodingResult(result, formData)) {
+        console.log('✅ OpenCage: Valid result found');
+        return { lat: result.lat, lng: result.lng };
+    } else if (result) {
+        console.log('⚠️ OpenCage: Result found but validation failed');
     }
     
     // Both failed validation
@@ -6626,219 +6195,54 @@ async function geocodeAddress(address, formData) {
     return null;
 }
 
-console.log('✅ Step 4: Updated geocodeAddress function loaded');
-
-// ==========================================
-// STEP 3: SMART VALIDATION WITH CONFIDENCE SCORING
-// REPLACE your existing validateGeocodingResult function with this
-// ==========================================
-
-/**
- * Validate geocoding result with smart fuzzy matching
- * Returns: { valid: boolean, confidence: number, needsConfirmation: boolean, matchedAddress: string }
- */
+// Validate geocoding result - ALL 4 fields must match
 function validateGeocodingResult(result, formData) {
-    const formatted = result.formatted || '';
+    const formatted = result.formatted.toLowerCase();
     
-    console.log('🔍 Validating geocoding result...');
-    console.log('📍 Formatted address from API:', formatted);
-    console.log('📝 User input:', {
-        area: formData.area_name,
-        city: formData.city,
-        state: formData.state,
-        pin: formData.pin_code
-    });
+    const areaName = formData.area_name.toLowerCase().trim();
+    const city = formData.city.toLowerCase().trim();
+    const state = formData.state.toLowerCase().trim();
+    const pinCode = formData.pin_code.trim();
     
-    // Extract user input
-    const userArea = (formData.area_name || '').trim();
-    const userCity = (formData.city || '').trim();
-    const userState = (formData.state || '').trim();
-    const userPin = (formData.pin_code || '').trim();
+    // Check ALL FOUR fields
+    const hasAreaName = formatted.includes(areaName);
+    const hasCity = formatted.includes(city);
+    const hasState = formatted.includes(state);
+    const hasPinCode = formatted.includes(pinCode);
     
-    // Check if mandatory fields are present
-    if (!userArea || !userCity || !userState) {
-        console.log('❌ VALIDATION FAILED: Missing mandatory fields');
-        return { valid: false, confidence: 0, needsConfirmation: false };
+    // MANDATORY: Area + City + State MUST be present
+    if (!hasAreaName) {
+        console.log('❌ REJECTED: Area name missing');
+        return false;
+    }
+    if (!hasCity) {
+        console.log('❌ REJECTED: City missing');
+        return false;
+    }
+    if (!hasState) {
+        console.log('❌ REJECTED: State missing');
+        return false;
     }
     
-    // === STEP 1: STATE VALIDATION (MANDATORY) ===
-    const formattedLower = formatted.toLowerCase();
-    const normalizedUserState = normalizeStateName(userState);
-    
-    // Check if state exists in formatted address
-    let stateFound = false;
-    
-    // Try to find state in various forms
-    const stateVariations = [
-        userState.toLowerCase(),
-        normalizedUserState,
-        // Get all possible variations from our state map
-        userState.toLowerCase().substring(0, 2) // Abbreviation
-    ];
-    
-    for (let stateVar of stateVariations) {
-        if (formattedLower.includes(stateVar)) {
-            stateFound = true;
-            break;
-        }
-    }
-    
-    if (!stateFound) {
-        console.log('❌ VALIDATION FAILED: State not found in result');
-        console.log('   Expected state:', userState);
-        console.log('   Normalized:', normalizedUserState);
-        return { valid: false, confidence: 0, needsConfirmation: false };
-    }
-    
-    console.log('✅ State matched:', userState);
-    
-    // === STEP 2: CITY VALIDATION (MANDATORY with 85%+ similarity) ===
-    let cityMatch = 0;
-    let bestCityMatch = 0;
-    
-    // Split formatted address into words to find city
-    const words = formatted.toLowerCase().split(/[,\s]+/);
-    
-    for (let word of words) {
-        const similarity = calculateStringSimilarity(word, userCity);
-        if (similarity > bestCityMatch) {
-            bestCityMatch = similarity;
-        }
-    }
-    
-    cityMatch = bestCityMatch;
-    
-    // City must match at least 85% (allows minor typos like Bhivani/Bhiwani)
-    if (cityMatch < 85) {
-        console.log('❌ VALIDATION FAILED: City match too low');
-        console.log('   Expected city:', userCity);
-        console.log('   Best match found:', bestCityMatch + '%');
-        return { valid: false, confidence: 0, needsConfirmation: false };
-    }
-    
-    console.log('✅ City matched:', userCity, '(' + cityMatch + '%)');
-    
-    // === STEP 3: AREA VALIDATION (MANDATORY with 60%+ similarity) ===
-    let areaMatch = 0;
-    let bestAreaMatch = 0;
-    
-    // Check area name in formatted address
-    for (let word of words) {
-        const similarity = calculateStringSimilarity(word, userArea);
-        if (similarity > bestAreaMatch) {
-            bestAreaMatch = similarity;
-        }
-    }
-    
-    // Also check multi-word area names
-    const userAreaWords = userArea.toLowerCase().split(/\s+/);
-    if (userAreaWords.length > 1) {
-        // Check if all words of area name exist
-        let allWordsFound = true;
-        for (let areaWord of userAreaWords) {
-            if (areaWord.length < 3) continue; // Skip small words like "New", "Old"
-            
-            let wordFound = false;
-            for (let word of words) {
-                if (calculateStringSimilarity(word, areaWord) >= 80) {
-                    wordFound = true;
-                    break;
-                }
-            }
-            if (!wordFound) {
-                allWordsFound = false;
-                break;
-            }
-        }
-        
-        if (allWordsFound) {
-            bestAreaMatch = Math.max(bestAreaMatch, 85); // Boost if all words found
-        }
-    }
-    
-    areaMatch = bestAreaMatch;
-    
-    // Area must match at least 60%
-    if (areaMatch < 60) {
-        console.log('❌ VALIDATION FAILED: Area match too low');
-        console.log('   Expected area:', userArea);
-        console.log('   Best match found:', bestAreaMatch + '%');
-        return { valid: false, confidence: 0, needsConfirmation: false };
-    }
-    
-    console.log('✅ Area matched:', userArea, '(' + areaMatch + '%)');
-    
-    // === STEP 4: PIN CODE (OPTIONAL - adds confidence) ===
-    const pinMatch = formattedLower.includes(userPin.toLowerCase());
-    if (pinMatch) {
-        console.log('✅ PIN code matched:', userPin);
+    // PIN CODE: Nice to have, but NOT mandatory
+    if (hasPinCode) {
+        console.log('✅ PERFECT MATCH: All 4 fields matched (Area + City + State + PIN)');
     } else {
-        console.log('⚠️ PIN code not found (optional)');
+        console.log('✅ GOOD MATCH: 3 core fields matched (Area + City + State) - PIN code not found but acceptable');
     }
     
-    // === STEP 5: CALCULATE OVERALL CONFIDENCE ===
-    // Area match is most important for 100m accuracy
-    let confidence = areaMatch;
-    
-    // Boost confidence if PIN matches
-    if (pinMatch) {
-        confidence = Math.min(100, confidence + 10);
-    }
-    
-    // === STEP 6: DETERMINE ACTION ===
-    let needsConfirmation = false;
-    
-    if (confidence >= 80) {
-        console.log('✅ HIGH CONFIDENCE (' + confidence + '%) - Auto-accept');
-        needsConfirmation = false;
-    } else if (confidence >= 60) {
-        console.log('⚠️ MEDIUM CONFIDENCE (' + confidence + '%) - Needs user confirmation');
-        needsConfirmation = true;
-    } else {
-        console.log('❌ LOW CONFIDENCE (' + confidence + '%) - Reject');
-        return { valid: false, confidence: confidence, needsConfirmation: false };
-    }
-    
-    return {
-        valid: true,
-        confidence: confidence,
-        needsConfirmation: needsConfirmation,
-        matchedAddress: formatted
-    };
+    return true; // Accept if 3 mandatory fields match (with or without PIN)
 }
 
-console.log('✅ Step 3: Smart validation function loaded');
-
- // ==========================================
-// PIN CODE FALLBACK STRATEGY
-// Add this AFTER geocodeAddress function
-// ==========================================
-
-/**
- * Try geocoding using PIN code + City (more reliable for Indian addresses)
- */
-async function geocodeByPinCode(formData) {
-    console.log('🔵 Trying PIN code-based geocoding...');
-    
-    // Strategy 1: PIN code + City + State
-    const address1 = `${formData.pin_code}, ${formData.city}, ${formData.state}, India`;
-    let result = await geocodeWithOpenStreetMap(address1);
-    
-    if (result) {
-        console.log('✅ PIN code geocoding returned result:', result);
-        // For PIN code-based results, we relax validation (only check state and city)
-        return {
-            lat: result.lat,
-            lng: result.lng,
-            confidence: 65, // Medium confidence (will trigger confirmation)
-            needsConfirmation: true,
-            matchedAddress: `${formData.area_name}, ${formData.city}, ${formData.state} - ${formData.pin_code}`
-        };
-    }
-    
-    console.log('❌ PIN code geocoding failed');
-    return null;
-}       
+        function getBrowserLocation() {
+            return new Promise((resolve, reject) => {
+                if (!navigator.geolocation) reject(new Error('Geolocation not supported'));
+                navigator.geolocation.getCurrentPosition(
+                    (position) => resolve({ lat: position.coords.latitude, lng: position.coords.longitude }),
+                    (error) => reject(new Error('Unable to locate address. Please try again or allow location access.'))
+                );
+            });
+        }
 
         // Convert Image to Base64
         function convertImageToBase64(file) {
@@ -6853,20 +6257,30 @@ async function geocodeByPinCode(formData) {
 // ==================== CREDIT SYSTEM HELPER FUNCTIONS ====================
 
 // Deduct credits from user
-async function deductCredits(userId, amount, description, relatedRequestId = null, status = 'completed', warrantyExpiresAt = null) {
+async function deductCredits(userId, amount, description, relatedRequestId = null) {
     try {
         console.log(`💳 Deducting ${amount} credits from user ${userId}`);
         
-        // If status is 'completed', deduct credits immediately
-        if (status === 'completed') {
-            // Use RPC to bypass RLS (negative amount = deduction)
-            const { error: rpcError } = await supabase.rpc('add_credits_bypass_rls', {
-                target_user_id: userId,
-                credit_amount: -amount  // Negative to deduct
-            });
-            
-            if (rpcError) throw rpcError;
+        // Check if user has enough credits
+        const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('credits')
+            .eq('user_id', userId)
+            .single();
+        
+        if (profileError) throw profileError;
+        
+        if (!profile || profile.credits < amount) {
+            throw new Error(`Insufficient credits. You have ${profile?.credits || 0} credits, but need ${amount} credits.`);
         }
+        
+        // Deduct credits
+        const { error: updateError } = await supabase
+            .from('profiles')
+            .update({ credits: profile.credits - amount })
+            .eq('user_id', userId);
+        
+        if (updateError) throw updateError;
         
         // Log transaction
         const { error: logError } = await supabase
@@ -6876,9 +6290,8 @@ async function deductCredits(userId, amount, description, relatedRequestId = nul
                 transaction_type: 'debit',
                 amount: amount,
                 description: description,
-                status: status,
-                related_request_id: relatedRequestId,
-                warranty_expires_at: warrantyExpiresAt
+                status: 'completed',
+                related_request_id: relatedRequestId
             }]);
         
         if (logError) throw logError;
@@ -6894,126 +6307,49 @@ async function deductCredits(userId, amount, description, relatedRequestId = nul
 
 // Add credits to user (with pending support)
 async function addCredits(userId, amount, description, relatedRequestId = null, status = 'completed', warrantyExpiresAt = null) {
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('🔵 START addCredits()');
-    console.log('   userId:', userId);
-    console.log('   amount:', amount);
-    console.log('   description:', description);
-    console.log('   status:', status);
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    
     try {
+        console.log(`💰 Adding ${amount} credits to user ${userId} (status: ${status})`);
+        
         // If status is 'completed', add credits immediately
         if (status === 'completed') {
-            console.log('✅ Status is completed, proceeding to update profile...');
-            
-            // Use RPC function to bypass RLS
-            console.log('💾 Calling add_credits_bypass_rls RPC...');
-            const { data: rpcData, error: rpcError } = await supabase.rpc('add_credits_bypass_rls', {
-                target_user_id: userId,
-                credit_amount: amount
-            });
-            
-            console.log('💾 RPC result:');
-            console.log('   - rpcData:', rpcData);
-            console.log('   - rpcError:', rpcError);
-            
-            if (rpcError) {
-                console.error('❌ RPC CALL FAILED!');
-                console.error('   Error details:', JSON.stringify(rpcError, null, 2));
-                throw rpcError;
-            }
-            
-            console.log('✅ Profile credits updated successfully via RPC!');
-            
-            // ✅ If the updated user is the currently logged-in user, refresh their UI
-            if (currentUser && currentUser.id === userId) {
-                console.log('🔄 Refreshing current user profile...');
-                await loadProfile(currentUser.id);
-                displayCreditBalance();
-                
-                // Also reload referral data if it exists
-                if (typeof loadReferralData === 'function') {
-                    await loadReferralData();
-                }
-            }
-            
-            // Verify the update
-            console.log('🔍 Verifying credit update...');
-            const { data: verifyProfile, error: verifyError } = await supabase
+            const { data: profile, error: profileError } = await supabase
                 .from('profiles')
-                .select('credits, name')
+                .select('credits')
                 .eq('user_id', userId)
                 .single();
             
-            if (verifyError) {
-                console.error('⚠️ Could not verify update:', verifyError);
-            } else {
-                console.log('✅ Verification result:');
-                console.log('   Name:', verifyProfile.name);
-                console.log('   Credits:', verifyProfile.credits);
-            }
-        } else {
-            console.log('⏸️ Status is pending, skipping profile update');
+            if (profileError) throw profileError;
+            
+            const { error: updateError } = await supabase
+                .from('profiles')
+                .update({ credits: profile.credits + amount })
+                .eq('user_id', userId);
+            
+            if (updateError) throw updateError;
         }
         
         // Log transaction
-        console.log('📝 Logging transaction...');
-        const transactionData = {
-            user_id: userId,
-            transaction_type: 'credit',
-            amount: amount,
-            description: description,
-            status: status,
-            related_request_id: relatedRequestId,
-            warranty_expires_at: warrantyExpiresAt
-        };
-        
-        console.log('   Transaction data:', transactionData);
-        
-        const { data: logData, error: logError } = await supabase
+        const { error: logError } = await supabase
             .from('credit_transactions')
-            .insert([transactionData])
-            .select();
+            .insert([{
+                user_id: userId,
+                transaction_type: 'credit',
+                amount: amount,
+                description: description,
+                status: status,
+                related_request_id: relatedRequestId,
+                warranty_expires_at: warrantyExpiresAt
+            }]);
         
-        console.log('📝 Transaction log result:');
-        console.log('   - logData:', logData);
-        console.log('   - logError:', logError);
+        if (logError) throw logError;
         
-        if (logError) {
-            console.error('❌ TRANSACTION LOG FAILED!');
-            console.error('   Error details:', JSON.stringify(logError, null, 2));
-            throw logError;
-        }
-        
-        console.log('✅ Transaction logged successfully');
-        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        console.log('🎉 addCredits() COMPLETED SUCCESSFULLY');
-        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log(`✅ Successfully added ${amount} credits (status: ${status})`);
         return true;
         
     } catch (error) {
-        console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        console.error('💥 FATAL ERROR in addCredits()');
-        console.error('   Error message:', error.message);
-        console.error('   Error details:', JSON.stringify(error, null, 2));
-        console.error('   Stack trace:', error.stack);
-        console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.error('❌ Error adding credits:', error);
         throw error;
     }
-
-// ✅ If the updated user is the currently logged-in user, refresh their UI
-if (currentUser && currentUser.id === userId) {
-    console.log('🔄 Refreshing current user profile...');
-    await loadProfile(currentUser.id);
-    displayCreditBalance();
-    
-    // ✅ Also reload referral data
-    if (typeof loadReferralData === 'function') {
-        await loadReferralData();
-    }
-}
-
 }
 
 // Award referral bonus to both users
@@ -7053,12 +6389,11 @@ async function awardReferralBonus(userId) {
         console.log('🎁 Awarding referral bonuses...');
         
         // Step 1: Create referral record
-const { error: referralError } = await supabase.from('referrals').insert([{
-    referrer_id: profile.referred_by,
-    referred_id: userId,
-    status: 'completed',
-    credits_awarded_first_request: false  // ✅ ADD THIS!
-}]);
+        const { error: referralError } = await supabase.from('referrals').insert([{
+            referrer_id: profile.referred_by,
+            referred_id: userId,
+            status: 'completed'
+        }]);
         
         if (referralError) {
             console.error('❌ Error creating referral record:', referralError);
@@ -7079,50 +6414,15 @@ const { error: referralError } = await supabase.from('referrals').insert([{
         console.log('✅ +20 credits awarded to new user');
         
         // Step 3: Award bonus to REFERRER (+50 credits)
-console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-console.log('🎁 AWARDING REFERRER BONUS');
-console.log('   Referrer ID:', profile.referred_by);
-console.log('   New user name:', profile.name);
-console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-
-try {
-    const newUserName = profile.name || 'A new user';
-    
-    await addCredits(
-        profile.referred_by, 
-        50, 
-        `Referral bonus: ${newUserName} signed up using your referral code`, 
-        null, 
-        'completed', 
-        null
-    );
-    
-    console.log('✅ Referrer bonus awarded successfully');
-    
-} catch (referrerBonusError) {
-    console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.error('💥 FAILED TO AWARD REFERRER BONUS!');
-    console.error('   Error:', referrerBonusError);
-    console.error('   This is a CRITICAL issue - referrer did not receive credits!');
-    console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    // Don't throw - let the process continue for the new user
-}
-
-// Verify provider credits were updated
-console.log('🔍 Verifying referrer credits...');
-const { data: verifyProvider, error: verifyError } = await supabase
-    .from('profiles')
-    .select('credits, name')
-    .eq('user_id', profile.referred_by)
-    .single();
-
-if (verifyError) {
-    console.error('❌ Error verifying provider credits:', verifyError);
-} else {
-    console.log('✅ Referrer verification result:');
-    console.log('   Name:', verifyProvider.name);
-    console.log('   Credits:', verifyProvider.credits);
-}
+        await addCredits(
+            profile.referred_by, 
+            50, 
+            'Referral bonus: Someone signed up using your referral code', 
+            null, 
+            'completed', 
+            null
+        );
+        console.log('✅ +50 credits awarded to referrer');
         
         // Step 4: Mark bonus as awarded
         const { error: updateError } = await supabase
@@ -7134,9 +6434,6 @@ if (verifyError) {
             console.error('❌ Error updating referral_bonus_awarded flag:', updateError);
         } else {
             console.log('✅ Referral bonus marked as awarded');
-	    // After referral bonus awarded successfully, reload the profile to update UI
-            await loadProfile(currentUser.id);
-            displayCreditBalance(); // Call your function that updates the credit display
         }
         
         console.log('🎉 Referral bonus process completed successfully!');
@@ -7144,107 +6441,81 @@ if (verifyError) {
     } catch (error) {
         console.error('❌ Error in awardReferralBonus:', error);
     }
-
-// Step 4: Mark bonus as awarded
-const { error: updateError } = await supabase
-    .from('profiles')
-    .update({ referral_bonus_awarded: true })
-    .eq('user_id', userId);
-
-if (updateError) {
-    console.error('❌ Error updating referral_bonus_awarded flag:', updateError);
-} else {
-    console.log('✅ Referral bonus marked as awarded');
-    await loadProfile(currentUser.id);
-    displayCreditBalance();
-    
-    // ✅ ALSO reload referral data
-    await loadReferralData();
-}
-
 }
 
 // ========== REFERRAL CREDIT AWARDS ==========
 
-// Award referrer when referred user completes first request (+25 credits)
-async function awardReferralFirstRequestBonus(userId) {
-    console.log('🔵 Checking referral first request bonus for:', userId);
+// Award referrer when referred user verifies email (+25 credits)
+async function awardReferralVerificationBonus(userId) {
+    console.log('🔵 Checking referral verification bonus for:', userId);
     
     try {
-        // Step 1: Get the referral record
+        // Find if this user was referred by someone
         const { data: referral, error: refError } = await supabase
             .from('referrals')
             .select('*')
             .eq('referred_id', userId)
+            .eq('credits_awarded_verification', false)
             .maybeSingle();
         
-        if (refError) {
-            console.error('❌ Error fetching referral:', refError);
+        if (!referral) {
+            console.log('⏭️ No pending referral verification bonus');
             return;
         }
+        
+        // Award +25 credits to referrer
+await addCredits(referral.referrer_id, 25, 'Referral bonus: Your referred user verified their email', null, 'completed', null);
+        
+        // Update referral record
+        await supabase
+            .from('referrals')
+            .update({ 
+                credits_awarded_verification: true,
+                status: 'email_verified'
+            })
+            .eq('id', referral.id);
+        
+        console.log('✅ Referral verification bonus awarded to:', referral.referrer_id);
+        
+    } catch (error) {
+        console.log('⚠️ Referral verification bonus check failed:', error.message);
+    }
+}
+
+// Award referrer when referred user completes first request (+50 credits)
+async function awardReferralFirstRequestBonus(userId) {
+    console.log('🔵 Checking referral first request bonus for:', userId);
+    
+    try {
+        // Find if this user was referred and hasn't triggered first request bonus yet
+        const { data: referral, error: refError } = await supabase
+            .from('referrals')
+            .select('*')
+            .eq('referred_id', userId)
+            .eq('credits_awarded_first_request', false)
+            .single();
         
         if (!referral) {
-            console.log('⏭️ User was not referred by anyone');
+            console.log('⏭️ No pending referral first request bonus');
             return;
         }
         
-        console.log('📊 Referral found:', referral);
-        console.log('📊 Flag status:', referral.credits_awarded_first_request);
+        // Award +25 credits to referrer
+await addCredits(referral.referrer_id, 25, 'Referral bonus: Your referred user created their first request', null, 'completed', null);
         
-        // Step 2: CHECK THE FLAG FIRST AND FOREMOST
-        if (referral.credits_awarded_first_request === true) {
-            console.log('⏭️ STOP: First request bonus already awarded (flag is true)');
-            return;
-        }
-        
-        // Step 3: Try to update the flag atomically (THIS IS THE KEY!)
-        // Use UPDATE with WHERE condition to ensure only ONE request succeeds
-        const { data: updateResult, error: updateError } = await supabase
+        // Update referral record
+        await supabase
             .from('referrals')
             .update({ 
                 credits_awarded_first_request: true,
                 status: 'first_request_completed'
             })
-            .eq('id', referral.id)
-            .eq('credits_awarded_first_request', false) // ⭐ CRITICAL: Only update if still false
-            .select(); // Return the updated row
+            .eq('id', referral.id);
         
-        if (updateError) {
-            console.error('❌ Error updating referral flag:', updateError);
-            return;
-        }
-        
-        // Step 4: Check if the update actually happened
-        if (!updateResult || updateResult.length === 0) {
-            console.log('⏭️ STOP: Flag was already updated by another request (race condition prevented)');
-            return;
-        }
-        
-        console.log('✅ Flag updated successfully - proceeding to award credits');
-        
-        // Step 5: Get user name for description
-        const { data: userProfile } = await supabase
-            .from('profiles')
-            .select('name')
-            .eq('user_id', userId)
-            .single();
-        
-        const userName = userProfile?.name || 'A user';
-        
-        // Step 6: NOW award credits (flag is already set, so this can only happen once)
-        await addCredits(
-            referral.referrer_id, 
-            25, 
-            `Referral bonus: ${userName} (${userId}) created their first request`,
-            null, 
-            'completed', 
-            null
-        );
-        
-        console.log('✅ Referral first request bonus awarded successfully');
+        console.log('✅ Referral first request bonus awarded to:', referral.referrer_id);
         
     } catch (error) {
-        console.error('❌ Referral first request bonus failed:', error);
+        console.log('⚠️ Referral first request bonus check failed:', error.message);
     }
 }
 
@@ -7252,14 +6523,7 @@ async function awardReferralFirstRequestBonus(userId) {
 
 // Load and display referral data
 async function loadReferralData() {
-    console.log('🔍 loadReferralData called');
-    console.log('   currentProfile:', currentProfile);
-    console.log('   currentProfile.user_id:', currentProfile?.user_id);
-    
-    if (!currentProfile) {
-        console.log('❌ No currentProfile - returning early');
-        return;
-    }
+    if (!currentProfile) return;
     
     try {
         // Display user's referral code
@@ -7274,41 +6538,23 @@ async function loadReferralData() {
             .select('*')
             .eq('referrer_id', currentProfile.user_id);
         
-if (error) {
-    console.error('❌ Referral query error:', error);
-    throw error;
-}
-
-console.log('📊 Referral query results:', referrals);
-console.log('   Total found:', referrals?.length);
-
-const totalReferrals = referrals?.length || 0;
-        const completedReferrals = referrals?.filter(r => r.status === 'completed' || r.status === 'first_request_completed').length || 0;        
+        if (error) throw error;
+        
+        const totalReferrals = referrals?.length || 0;
+        const verifiedReferrals = referrals?.filter(r => r.credits_awarded_verification).length || 0;
+        
         // Calculate credits earned from referrals
         let creditsEarned = 0;
         referrals?.forEach(r => {
-            if (r.status === 'completed') creditsEarned += 50;  // Signup bonus
-            if (r.credits_awarded_first_request) creditsEarned += 25;  // First request bonus
+            if (r.credits_awarded_verification) creditsEarned += 25;
+            if (r.credits_awarded_first_request) creditsEarned += 50;
         });
         
-        // Update UI with null checks
-        const totalEl = document.getElementById('totalReferrals');
-        if (totalEl) totalEl.textContent = totalReferrals;
+        // Update UI
+        document.getElementById('totalReferrals').textContent = totalReferrals;
+        document.getElementById('verifiedReferrals').textContent = verifiedReferrals;
+        document.getElementById('referralCreditsEarned').textContent = creditsEarned;
         
-        const verifiedEl = document.getElementById('verifiedReferrals');
-        if (verifiedEl) verifiedEl.textContent = completedReferrals;
-        
-        const creditsEl = document.getElementById('referralCreditsEarned');
-        if (creditsEl) creditsEl.textContent = creditsEarned;
-        // ✅ Also update MODAL elements directly
-        const modalTotalEl = document.getElementById('modalTotalReferrals');
-        if (modalTotalEl) modalTotalEl.textContent = totalReferrals;
-        
-        const modalVerifiedEl = document.getElementById('modalVerifiedReferrals');
-        if (modalVerifiedEl) modalVerifiedEl.textContent = completedReferrals;
-        
-        const modalCreditsEl = document.getElementById('modalReferralCredits');
-        if (modalCreditsEl) modalCreditsEl.textContent = creditsEarned;        
     } catch (error) {
         console.error('Error loading referral data:', error);
     }
@@ -7386,9 +6632,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Referral Modal Functions
 function openReferralModal() {
-    // ✅ Load fresh referral data
-    loadReferralData();
-    
     // Sync data from existing elements
     const code = currentProfile?.referral_code || '---';
     document.getElementById('modalReferralCode').textContent = code;
@@ -7401,10 +6644,8 @@ function openReferralModal() {
     if (verifiedRef) document.getElementById('modalVerifiedReferrals').textContent = verifiedRef.textContent;
     if (creditsRef) document.getElementById('modalReferralCredits').textContent = creditsRef.textContent;
     
-        document.getElementById('referralModal').style.display = 'flex';
-    // Close profile dropdown if it exists
-    const profileDropdown = document.getElementById('profileDropdown');
-    if (profileDropdown) profileDropdown.style.display = 'none';
+    document.getElementById('referralModal').style.display = 'flex';
+    closeProfileDropdown();
 }
 
 function closeReferralModal() {
@@ -10542,7 +9783,55 @@ async function completeWork() {
         if (updateError) throw updateError;
         
         console.log('✅ Request status updated to pending_completion');
-console.log(`✅ Request status updated, waiting for seeker approval`);
+        
+        // STEP 2: Add pending +10 credit bonus for provider (awarded after warranty)
+        const providerBonus = 10;
+        
+        // Check if provider already has a pending completion bonus for this request
+        const { data: existingProviderBonusData, error: providerBonusCheckError } = await supabase
+            .from('credit_transactions')
+            .select('id, amount')
+            .eq('user_id', currentProfile.user_id)
+            .eq('related_request_id', currentChatData.requestId)
+            .eq('status', 'pending')
+            .like('description', '%completion bonus%');
+        
+        if (providerBonusCheckError) throw providerBonusCheckError;
+        
+        // Get the first matching bonus (if multiple exist due to previous bugs)
+        const existingProviderBonus = existingProviderBonusData && existingProviderBonusData.length > 0 
+            ? existingProviderBonusData[0] 
+            : null;
+        
+        if (existingProviderBonus) {
+            // Update existing bonus with new warranty date (in case of reactivation)
+            console.log(`🔄 Provider already has completion bonus. Updating warranty date...`);
+            
+            const { error: updateError } = await supabase
+                .from('credit_transactions')
+                .update({ 
+                    warranty_expires_at: warrantyEndDate.toISOString()
+                })
+                .eq('id', existingProviderBonus.id);
+            
+            if (updateError) throw updateError;
+            
+            console.log(`✅ Provider bonus warranty date updated to ${warrantyEndDate.toISOString()}`);
+        } else {
+            // Create new pending bonus for provider (first time completion)
+            await addCredits(
+                currentProfile.user_id,
+                providerBonus,
+                'Work completion bonus (pending warranty)',
+                currentChatData.requestId,
+                'pending',  // ← Status is PENDING
+                warrantyEndDate.toISOString()  // ← Will be awarded after this date
+            );
+            
+            console.log(`✅ Provider pending bonus created: +${providerBonus} credits`);
+        }
+        
+        console.log(`✅ Provider pending bonus: +${providerBonus} credits (awarded after ${warrantyDays} days)`);
         
         // STEP 3: Send completion message with warranty info
         const { data: existingChat } = await supabase
@@ -10582,9 +9871,10 @@ console.log(`✅ Request status updated, waiting for seeker approval`);
         
         console.log('✅ Completion message sent with pending bonus info');
         
-console.log('✅ STEP 3D COMPLETE: Completion request sent to seeker');
+        console.log('✅ STEP 3D COMPLETE: Provider gets +10 credits (pending after warranty)');
         
-alert(`✅ ${t('completion_request_sent')}\n\n⏳ Waiting for customer approval...`);        
+        alert(`✅ ${t('completion_request_sent')}\n\n💳 You'll receive +${providerBonus} credits after warranty period expires!`);
+        
         // Hide warranty form and mark complete button
         document.getElementById('warrantyForm').classList.add('hidden');
         document.getElementById('markCompleteBtn').style.display = 'none';
@@ -10621,9 +9911,9 @@ async function acceptCompletion() {
         console.log('📅 Warranty expires:', warrantyEndDate);
         
         // STEP 2: Show confirmation with seeker's credit bonus (PRIVACY PROTECTED)
-const confirmMessage = warrantyDays > 0
-    ? `✅ Accept work completion?\n\n💳 You'll receive +${seekerBonus} credits after ${warrantyDays} days warranty expires (first acceptance only).\n\n⭐ Rate the provider to earn +10 bonus credits (first rating only)!`
-    : `✅ Accept work completion?\n\n💳 You'll receive +${seekerBonus} credits immediately (first acceptance only).\n\n⭐ Rate the provider to earn +10 bonus credits (first rating only)!`;
+        const confirmMessage = warrantyDays > 0
+            ? `✅ Accept work completion?\n\n💳 You'll receive +${seekerBonus} credits after ${warrantyDays} days warranty expires.\n\nYou can then rate the provider.`
+            : `✅ Accept work completion?\n\n💳 You'll receive +${seekerBonus} credits immediately (no warranty).\n\nYou can then rate the provider.`;
         
         if (!confirm(confirmMessage)) return;
         
@@ -10638,54 +9928,48 @@ const confirmMessage = warrantyDays > 0
         if (updateError) throw updateError;
         
         console.log('✅ Request status updated to completed');
-
-console.log('🔴 DEBUG: About to execute STEP 4 - Seeker bonus');  // ADD THIS
-
-// STEP 4: Add pending +5 credit bonus for seeker (awarded after warranty)
-// Award completion bonus to seeker (pending warranty)
-const seekerCompletionBonus = 5;
-try {
-    console.log('💳 Attempting to award seeker completion bonus...');
-    
-    // ✅ FIX: Get seeker ID from currentChatData (the person viewing the chat who is accepting)
-    const seekerId = currentUser.id;  // The seeker is the one accepting completion
-    const requestId = currentChatData.requestId;
-    
-        console.log('💳 Attempting to award seeker completion bonus...');
-    console.log('   Seeker ID:', currentUser.id);
-    console.log('   Request ID:', currentChatData.requestId);
-    
-    // Check if seeker already received completion bonus for THIS request
-    const { data: existingSeekerBonus, error: checkError } = await supabase
-        .from('credit_transactions')
-        .select('id')
-        .eq('user_id', currentUser.id)
-        .eq('related_request_id', currentChatData.requestId)
-        .like('description', '%completion bonus%')
-        .maybeSingle();
-    
-    if (checkError) {
-        console.error('❌ Error checking existing seeker bonus:', checkError);
-    }
-    
-    console.log('   Existing bonus check result:', existingSeekerBonus);
-    
-    if (!existingSeekerBonus) {
-        await addCredits(
-            currentUser.id,
-            seekerCompletionBonus,
-            'Request completion bonus (pending warranty)',
-            currentChatData.requestId,
-            'pending',
-            warrantyEndDate
-        );
-        console.log('✅ Seeker completion bonus awarded:', seekerCompletionBonus);
-    } else {
-        console.log('⏭️ Seeker already received completion bonus for this request');
-    }
-} catch (bonusError) {
-    console.error('❌ Error awarding seeker completion bonus:', bonusError);
-}
+        
+        // STEP 4: Add pending +5 credit bonus for seeker (awarded after warranty)
+        // Check if seeker already has a pending completion bonus for this request
+        const { data: existingSeekerBonus, error: seekerBonusCheckError } = await supabase
+            .from('credit_transactions')
+            .select('id, amount')
+            .eq('user_id', currentUser.id)
+            .eq('related_request_id', currentChatData.requestId)
+            .eq('status', 'pending')
+            .like('description', '%completion bonus%')
+            .maybeSingle();
+        
+        if (seekerBonusCheckError) throw seekerBonusCheckError;
+        
+        if (existingSeekerBonus) {
+            // Update existing bonus with new warranty date (in case of reactivation)
+            console.log(`🔄 Seeker already has completion bonus. Updating warranty date...`);
+            
+            const { error: updateError } = await supabase
+                .from('credit_transactions')
+                .update({ 
+                    warranty_expires_at: warrantyEndDate
+                })
+                .eq('id', existingSeekerBonus.id);
+            
+            if (updateError) throw updateError;
+            
+            console.log(`✅ Seeker bonus warranty date updated to ${warrantyEndDate}`);
+        } else {
+            // Create new pending bonus for seeker (first time acceptance)
+            await addCredits(
+                currentUser.id,
+                seekerBonus,
+                'Request completion bonus (pending warranty)',
+                currentChatData.requestId,
+                'pending',  // ← Status is PENDING
+                warrantyEndDate  // ← Will be awarded after warranty expires
+            );
+            
+            console.log(`✅ Seeker pending bonus created: +${seekerBonus} credits`);
+        }
+        
         console.log(`✅ Seeker pending bonus: +${seekerBonus} credits (awarded after warranty)`);
         
         // STEP 5: Add system message (NO credit amounts - privacy protected)
@@ -10803,93 +10087,7 @@ async function rejectCompletion() {
     } catch (error) {
         alert('❌ Error: ' + error.message);
     }
-}  
-         
-// ========== COMPLETION FROM CHAT MESSAGE CARD ==========
-
-// Approve Completion from Chat Message Card
-async function approveCompletionFromChat(messageIndex) {
-    try {
-        console.log('🔵 approveCompletionFromChat called with index:', messageIndex);
-        
-        // Get existing chat to update message status
-        const { data: existingChat, error: fetchError } = await supabase
-            .from('chats')
-            .select('messages')
-            .eq('request_id', currentChatData.requestId)
-            .eq('provider_id', currentChatData.providerId)
-            .single();
-        
-        if (fetchError) throw fetchError;
-        
-        let messages = existingChat?.messages || [];
-        
-        // Update the completion request message status
-        if (messages[messageIndex]) {
-            messages[messageIndex].completion_request_status = 'approved';
-        }
-        
-        // Save updated messages
-        const { error: updateError } = await supabase
-            .from('chats')
-            .update({ messages: messages })
-            .eq('request_id', currentChatData.requestId)
-            .eq('provider_id', currentChatData.providerId);
-        
-        if (updateError) throw updateError;
-        
-        console.log('✅ Message status updated to approved');
-        
-        // Now call the main acceptCompletion function
-        await acceptCompletion();
-        
-    } catch (error) {
-        console.error('❌ Error in approveCompletionFromChat:', error);
-        alert('❌ Error: ' + error.message);
-    }
-}
-
-// Reject Completion from Chat Message Card
-async function rejectCompletionFromChat(messageIndex) {
-    try {
-        console.log('🔵 rejectCompletionFromChat called with index:', messageIndex);
-        
-        // Get existing chat to update message status
-        const { data: existingChat, error: fetchError } = await supabase
-            .from('chats')
-            .select('messages')
-            .eq('request_id', currentChatData.requestId)
-            .eq('provider_id', currentChatData.providerId)
-            .single();
-        
-        if (fetchError) throw fetchError;
-        
-        let messages = existingChat?.messages || [];
-        
-        // Update the completion request message status
-        if (messages[messageIndex]) {
-            messages[messageIndex].completion_request_status = 'declined';
-        }
-        
-        // Save updated messages
-        const { error: updateError } = await supabase
-            .from('chats')
-            .update({ messages: messages })
-            .eq('request_id', currentChatData.requestId)
-            .eq('provider_id', currentChatData.providerId);
-        
-        if (updateError) throw updateError;
-        
-        console.log('✅ Message status updated to declined');
-        
-        // Now call the main rejectCompletion function
-        await rejectCompletion();
-        
-    } catch (error) {
-        console.error('❌ Error in rejectCompletionFromChat:', error);
-        alert('❌ Error: ' + error.message);
-    }
-}
+}           
 
         // View Responses
         async function viewResponses(requestId) {
@@ -12870,9 +12068,9 @@ await deductCredits(
     null            // No warranty for this transaction
 );
 
-// ✅ Reload profile from database
-await loadProfile(currentUser.id);
-displayCreditBalance();
+// Update local profile credit count
+currentProfile.credits -= 25;
+displayCreditBalance();  // Refresh credit display in header
 
 // ✅ NEW: Award referral bonus to referrer if this is user's first request
 await awardReferralFirstRequestBonus(currentUser.id);
@@ -13706,41 +12904,25 @@ async function submitRating() {
         
         console.log('📅 Warranty expires:', warrantyEndDate);
         
-// STEP 3: Add +10 credits for seeker (PENDING until warranty expires) - ONLY ONCE PER REQUEST
-const seekerRatingBonus = 10;
-
-// Check if seeker already got rating bonus for this request
-const { data: existingSeekerRatingBonus, error: seekerBonusCheckError } = await supabase
-    .from('credit_transactions')
-    .select('id')
-    .eq('user_id', currentUser.id)
-    .eq('related_request_id', currentRatingData.requestId)
-    .like('description', '%Rating submission bonus%')
-    .maybeSingle();
-
-if (seekerBonusCheckError) throw seekerBonusCheckError;
-
-if (existingSeekerRatingBonus) {
-    console.log('⏭️ Seeker already received rating bonus for this request. Skipping...');
-} else {
-    await addCredits(
-        currentUser.id,
-        seekerRatingBonus,
-        'Rating submission bonus (pending warranty)',
-        currentRatingData.requestId,
-        'pending',
-        warrantyEndDate
-    );
-    console.log(`✅ Seeker rating bonus: +${seekerRatingBonus} credits (pending)`);
-}
+        // STEP 3: Add +10 credits for seeker (PENDING until warranty expires)
+        const seekerRatingBonus = 10;
+        
+        await addCredits(
+            currentUser.id,
+            seekerRatingBonus,
+            'Rating submission bonus (pending warranty)',
+            currentRatingData.requestId,
+            'pending',
+            warrantyEndDate
+        );
         
         console.log(`✅ Seeker rating bonus: +${seekerRatingBonus} credits (pending)`);
         
-// STEP 4: Calculate AVERAGE rating for THIS REQUEST and determine bonus
-const { data: allRatings, error: ratingsError } = await supabase
-    .from('ratings')
-    .select('rating')
-    .eq('request_id', currentRatingData.requestId);
+        // STEP 4: Calculate provider's AVERAGE rating and determine bonus
+        const { data: allRatings, error: ratingsError } = await supabase
+            .from('ratings')
+            .select('rating')
+            .eq('provider_id', currentRatingData.providerId);
         
         if (ratingsError) throw ratingsError;
         
@@ -13798,7 +12980,7 @@ const { data: allRatings, error: ratingsError } = await supabase
             await addCredits(
                 currentRatingData.providerId,
                 providerRatingBonus,
-`Rating bonus: ${averageRating.toFixed(1)}⭐ request avg (pending warranty)`,
+                `Rating bonus: ${averageRating.toFixed(1)}⭐ avg (pending warranty)`,
                 currentRatingData.requestId,
                 'pending',
                 warrantyEndDate
