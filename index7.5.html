@@ -1720,377 +1720,6 @@ body.dark-theme span[class*="status"] {
     font-weight: 600 !important;
 }
 
-/* Service Category Accordion Styles */
-.service-category {
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  overflow: hidden;
-}
-
-.service-category-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background: #f9fafb;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.service-category-header:hover {
-  background: #f3f4f6;
-}
-
-.service-category-header .category-icon {
-  font-size: 1.5rem;
-  margin-right: 12px;
-}
-
-.service-category-header .category-title {
-  flex: 1;
-  font-weight: 600;
-  color: #1f2937;
-}
-
-.service-category-header .expand-icon {
-  transition: transform 0.3s;
-}
-
-.subcategory-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px 10px 48px;
-  border-top: 1px solid #f3f4f6;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.subcategory-item:hover {
-  background: #eff6ff;
-}
-
-.subcategory-item.selected {
-  background: #dbeafe;
-}
-
-.subcategory-item .subcategory-name {
-  flex: 1;
-  color: #374151;
-}
-
-.info-bubble {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #3b82f6;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  position: relative;
-}
-
-.info-bubble:hover {
-  background: #2563eb;
-}
-
-.info-tooltip {
-  position: fixed;
-  background: #1f2937;
-  color: #fff;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 12px;
-  width: 220px;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 10000;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  display: none;
-  pointer-events: none;
-}
-
-.info-bubble:hover .info-tooltip {
-  display: block;
-}
-
-.info-tooltip::after {
-  content: '';
-  position: absolute;
-  right: -6px;
-  top: 50%;
-  transform: translateY(-50%);
-  border-width: 6px;
-  border-style: solid;
-  border-color: transparent transparent transparent #1f2937;
-  pointer-events: none;
-}
-
-.info-tooltip ul {
-  margin: 0;
-  padding-left: 16px;
-}
-
-.info-tooltip li {
-  margin-bottom: 4px;
-}
-
-/* Service Selection Dropdown Styles */
-.service-dropdown-trigger {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    background: white;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 15px;
-    color: #333;
-    transition: all 0.3s ease;
-}
-
-.service-dropdown-trigger:hover {
-    border-color: #667eea;
-    background: #f8f9ff;
-}
-
-.service-dropdown-trigger.active {
-    border-color: #667eea;
-    background: #f0f4ff;
-}
-
-.service-dropdown-trigger .placeholder {
-    color: #999;
-}
-
-.service-dropdown-trigger .selected-service {
-    color: #667eea;
-    font-weight: 600;
-}
-
-.service-dropdown-trigger .dropdown-arrow {
-    font-size: 12px;
-    color: #667eea;
-    transition: transform 0.3s ease;
-}
-
-.service-dropdown-trigger.active .dropdown-arrow {
-    transform: rotate(180deg);
-}
-
-/* Hide accordion by default */
-#serviceAccordion {
-    display: none;
-    margin-top: 10px;
-    max-height: 400px;
-    overflow-y: auto;
-    border: 2px solid #667eea;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-}
-
-#serviceAccordion.show {
-    display: block;
-}
-
-/* Category behavior when dropdown is open */
-#serviceAccordion .service-category.hidden {
-    display: none;
-}
-
-/* Selected state for subcategory */
-.subcategory-item.selected {
-    background: #667eea;
-    color: white;
-}
-
-.subcategory-item.selected .subcategory-name {
-    color: white;
-    font-weight: 600;
-}
-
-.subcategory-item.selected .info-bubble {
-    background: white;
-    color: #667eea;
-}
-
-/* Provider Profile - Add Service Section */
-.provider-add-service-section {
-    margin-top: 20px;
-    padding: 20px;
-    background: #f8f9ff;
-    border-radius: 10px;
-    border: 2px dashed #667eea;
-}
-
-.provider-add-service-header {
-    font-size: 16px;
-    font-weight: 600;
-    color: #667eea;
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.provider-service-add-row {
-    display: flex;
-    gap: 10px;
-    align-items: stretch;
-    position: relative;
-}
-
-.provider-service-dropdown-container {
-    flex: 1;
-    position: relative;
-}
-
-.provider-service-dropdown-trigger {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    background: white;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-    color: #333;
-    transition: all 0.3s ease;
-    min-height: 46px;
-}
-
-.provider-service-dropdown-trigger:hover {
-    border-color: #667eea;
-    background: #f8f9ff;
-}
-
-.provider-service-dropdown-trigger.active {
-    border-color: #667eea;
-    background: #f0f4ff;
-}
-
-.provider-service-dropdown-trigger .placeholder {
-    color: #999;
-}
-
-.provider-service-dropdown-trigger .selected-service {
-    color: #667eea;
-    font-weight: 600;
-}
-
-.provider-service-dropdown-trigger .dropdown-arrow {
-    font-size: 12px;
-    color: #667eea;
-    transition: transform 0.3s ease;
-}
-
-.provider-service-dropdown-trigger.active .dropdown-arrow {
-    transform: rotate(180deg);
-}
-
-/* Upward opening accordion */
-#providerServiceAccordion {
-    display: none;
-    position: absolute;
-    bottom: 100%;
-    left: 0;
-    right: 0;
-    margin-bottom: 10px;
-    max-height: 400px;
-    overflow-y: auto;
-    border: 2px solid #667eea;
-    border-radius: 8px;
-    background: white;
-    box-shadow: 0 -4px 12px rgba(102, 126, 234, 0.15);
-    z-index: 1000;
-}
-
-#providerServiceAccordion.show {
-    display: block;
-}
-
-/* Category behavior when dropdown is open */
-#providerServiceAccordion .service-category.hidden {
-    display: none;
-}
-
-/* Selected state for subcategory in provider dropdown */
-#providerServiceAccordion .subcategory-item.selected {
-    background: #667eea;
-    color: white;
-}
-
-#providerServiceAccordion .subcategory-item.selected .subcategory-name {
-    color: white;
-    font-weight: 600;
-}
-
-#providerServiceAccordion .subcategory-item.selected .info-bubble {
-    background: white;
-    color: #667eea;
-}
-
-.provider-add-service-btn {
-    padding: 12px 24px;
-    background: #667eea;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 14px;
-    white-space: nowrap;
-    transition: all 0.3s ease;
-    min-height: 46px;
-}
-
-.provider-add-service-btn:hover {
-    background: #5568d3;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-}
-
-.provider-add-service-btn:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* Service Category Content - Show/Hide Logic */
-.service-category-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
-    padding: 0;
-}
-
-.service-category.expanded .service-category-content {
-    max-height: 500px;
-    padding: 10px 0;
-}
-
-/* Expand icon rotation */
-.service-category-header .expand-icon {
-    transition: transform 0.3s ease;
-}
-
-.service-category.expanded .expand-icon {
-    transform: rotate(180deg);
-}
-
-/* Make sure subcategory items are visible when category is expanded */
-#providerServiceAccordion .service-category.expanded .subcategory-item {
-    display: flex;
-}
     </style>
 </head>
 <body>
@@ -2288,265 +1917,35 @@ body.dark-theme span[class*="status"] {
                     </div>
                        
                     <div class="form-group">
-    <label><span data-i18n="services_i_provide">Services I Provide</span> <span class="required">*</span></label>
-    <input type="hidden" id="signupServicesSelected" value="">
-    <div id="signupServiceAccordion" class="border rounded-lg">
-        
-        <!-- Electrician -->
-        <div class="service-category" data-category="electrician">
-            <div class="service-category-header">
-                <span class="category-icon">🔌</span>
-                <span class="category-title" data-i18n="electrician">Electrician</span>
-                <span class="expand-icon">▼</span>
-            </div>
-            <div class="service-category-content">
-                <div class="subcategory-item signup-service-item" data-value="electrician_installation">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_electrician_installation" value="electrician_installation">
-                    <label for="signup_electrician_installation" class="subcategory-name" data-i18n="elec_installation">Installation Services</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="elec_installation_examples">Fan installation, Light fitting, Switch/socket installation, Geyser connection, Doorbell installation, Appliance wiring</div>
+                        <label><span data-i18n="services_i_provide">Services I Provide</span> <span class="required">*</span></label>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="service_electrician" value="electrician">
+                                <label for="service_electrician" style="margin: 0;">🔧 <span data-i18n="electrician">Electrician</span></label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="service_plumber" value="plumber">
+                                <label for="service_plumber" style="margin: 0;">🚰 <span data-i18n="plumber">Plumber</span></label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="service_ac_repair" value="ac_repair">
+                                <label for="service_ac_repair" style="margin: 0;">❄️ <span data-i18n="ac_repair">AC Repair</span></label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="service_carpenter" value="carpenter">
+                                <label for="service_carpenter" style="margin: 0;">🔨 <span data-i18n="carpenter">Carpenter</span></label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="service_painter" value="painter">
+                                <label for="service_painter" style="margin: 0;">🎨 <span data-i18n="painter">Painter</span></label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="service_cleaner" value="cleaner">
+                                <label for="service_cleaner" style="margin: 0;">🧹 <span data-i18n="cleaner">Cleaner</span></label>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="electrician_repair">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_electrician_repair" value="electrician_repair">
-                    <label for="signup_electrician_repair" class="subcategory-name" data-i18n="elec_repair">Repair Services</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="elec_repair_examples">Fan not working, Switchboard issues, Light flickering, Short circuit, MCB tripping, Power socket problems</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="electrician_wiring">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_electrician_wiring" value="electrician_wiring">
-                    <label for="signup_electrician_wiring" class="subcategory-name" data-i18n="elec_wiring">New House Wiring / Rewiring</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="elec_wiring_examples">Complete house wiring, Old wiring replacement, Distribution board setup, Under-construction electrical work, Adding new circuits</div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Plumber -->
-        <div class="service-category" data-category="plumber">
-            <div class="service-category-header">
-                <span class="category-icon">🚰</span>
-                <span class="category-title" data-i18n="plumber">Plumber</span>
-                <span class="expand-icon">▼</span>
-            </div>
-            <div class="service-category-content">
-                <div class="subcategory-item signup-service-item" data-value="plumber_installation">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_plumber_installation" value="plumber_installation">
-                    <label for="signup_plumber_installation" class="subcategory-name" data-i18n="plumb_installation">Installation Services</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="plumb_installation_examples">Tap/faucet installation, Bathroom fitting, Kitchen sink setup, Water tank installation, Motor/pump installation, Pipeline laying</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="plumber_repair">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_plumber_repair" value="plumber_repair">
-                    <label for="signup_plumber_repair" class="subcategory-name" data-i18n="plumb_repair">Repair Services</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="plumb_repair_examples">Tap leaking, Pipe leakage, Toilet flush problems, Drain blockage, Basin clogged, Water overflow issues</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="plumber_new_work">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_plumber_new_work" value="plumber_new_work">
-                    <label for="signup_plumber_new_work" class="subcategory-name" data-i18n="plumb_new_work">New House Plumbing Work</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="plumb_new_work_examples">Complete bathroom plumbing, Kitchen plumbing setup, Drainage system, Water supply lines, Under-construction plumbing work</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- AC Services -->
-        <div class="service-category" data-category="ac_services">
-            <div class="service-category-header">
-                <span class="category-icon">❄️</span>
-                <span class="category-title" data-i18n="ac_services">AC Services</span>
-                <span class="expand-icon">▼</span>
-            </div>
-            <div class="service-category-content">
-                <div class="subcategory-item signup-service-item" data-value="ac_installation">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_ac_installation" value="ac_installation">
-                    <label for="signup_ac_installation" class="subcategory-name" data-i18n="ac_installation">AC Installation</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="ac_installation_examples">New AC installation, AC uninstall & reinstall, Indoor/outdoor unit mounting, Piping & drainage setup, AC shifting</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="ac_repair_service">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_ac_repair_service" value="ac_repair_service">
-                    <label for="signup_ac_repair_service" class="subcategory-name" data-i18n="ac_repair_service">AC Repair & Servicing</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="ac_repair_examples">AC not cooling, AC cleaning, Filter cleaning, Strange noise, Water leakage, Compressor issues</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="ac_gas_filling">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_ac_gas_filling" value="ac_gas_filling">
-                    <label for="signup_ac_gas_filling" class="subcategory-name" data-i18n="ac_gas_filling">AC Gas Filling</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="ac_gas_examples">Gas refilling, Low cooling due to gas, Gas leak repair, Pressure check, Cooling performance issues</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Carpenter -->
-        <div class="service-category" data-category="carpenter">
-            <div class="service-category-header">
-                <span class="category-icon">🔨</span>
-                <span class="category-title" data-i18n="carpenter">Carpenter</span>
-                <span class="expand-icon">▼</span>
-            </div>
-            <div class="service-category-content">
-                <div class="subcategory-item signup-service-item" data-value="carpenter_repair">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_carpenter_repair" value="carpenter_repair">
-                    <label for="signup_carpenter_repair" class="subcategory-name" data-i18n="carp_repair">Furniture Repair</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="carp_repair_examples">Bed repair, Chair/sofa fixing, Table repair, Drawer problems, Hinge replacement, Furniture polish touch-up</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="carpenter_custom">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_carpenter_custom" value="carpenter_custom">
-                    <label for="signup_carpenter_custom" class="subcategory-name" data-i18n="carp_custom">Furniture Making (Custom Work)</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="carp_custom_examples">Custom wardrobe, Study table, TV unit, Shoe rack, Kitchen cabinets, Bookshelves</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="carpenter_door_window">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_carpenter_door_window" value="carpenter_door_window">
-                    <label for="signup_carpenter_door_window" class="subcategory-name" data-i18n="carp_door_window">Door & Window Work</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="carp_door_examples">Door installation/repair, Window frame work, Door lock fitting, Handles & latches, Sliding door tracks, Kitchen cabinet doors</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Painter -->
-        <div class="service-category" data-category="painter">
-            <div class="service-category-header">
-                <span class="category-icon">🎨</span>
-                <span class="category-title" data-i18n="painter">Painter</span>
-                <span class="expand-icon">▼</span>
-            </div>
-            <div class="service-category-content">
-                <div class="subcategory-item signup-service-item" data-value="painter_house">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_painter_house" value="painter_house">
-                    <label for="signup_painter_house" class="subcategory-name" data-i18n="paint_house">House / Building Painting</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="paint_house_examples">Room painting, Full house painting, Exterior wall painting, Ceiling painting, Balcony painting, Boundary wall painting</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="painter_furniture">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_painter_furniture" value="painter_furniture">
-                    <label for="signup_painter_furniture" class="subcategory-name" data-i18n="paint_furniture">Furniture & Wood Painting</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="paint_furniture_examples">Door painting, Window frames, Wooden furniture, Cupboard painting, Railing painting, Wood varnish work</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="painter_texture">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_painter_texture" value="painter_texture">
-                    <label for="signup_painter_texture" class="subcategory-name" data-i18n="paint_texture">Texture & Decorative Painting</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="paint_texture_examples">Textured walls, Designer finishes, Kids room designs, Stencil art, Accent walls, Special effects</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Cleaner -->
-        <div class="service-category" data-category="cleaner">
-            <div class="service-category-header">
-                <span class="category-icon">🧹</span>
-                <span class="category-title" data-i18n="cleaner">Cleaner</span>
-                <span class="expand-icon">▼</span>
-            </div>
-            <div class="service-category-content">
-                <div class="subcategory-item signup-service-item" data-value="cleaner_house">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_cleaner_house" value="cleaner_house">
-                    <label for="signup_cleaner_house" class="subcategory-name" data-i18n="clean_house">House Cleaning</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="clean_house_examples">Room cleaning, Kitchen deep clean, Bathroom cleaning, Floor mopping, Balcony cleaning, Full house cleaning</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="cleaner_upholstery">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_cleaner_upholstery" value="cleaner_upholstery">
-                    <label for="signup_cleaner_upholstery" class="subcategory-name" data-i18n="clean_upholstery">Sofa, Carpet & Upholstery Cleaning</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="clean_upholstery_examples">Sofa cleaning, Carpet shampooing, Mattress cleaning, Curtain cleaning, Chair upholstery, Fabric deep cleaning</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="cleaner_vehicle">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_cleaner_vehicle" value="cleaner_vehicle">
-                    <label for="signup_cleaner_vehicle" class="subcategory-name" data-i18n="clean_vehicle">Vehicle Cleaning</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="clean_vehicle_examples">Car washing, Bike cleaning, Car interior cleaning, Vehicle detailing, Dashboard cleaning, Seat shampooing</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Appliance Repair -->
-        <div class="service-category" data-category="appliance_repair">
-            <div class="service-category-header">
-                <span class="category-icon">🔧</span>
-                <span class="category-title" data-i18n="appliance_repair">Appliance Repair</span>
-                <span class="expand-icon">▼</span>
-            </div>
-            <div class="service-category-content">
-                <div class="subcategory-item signup-service-item" data-value="appliance_washing">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_appliance_washing" value="appliance_washing">
-                    <label for="signup_appliance_washing" class="subcategory-name" data-i18n="app_washing">Washing Machine</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="app_washing_examples">Not spinning, Water not draining, Not starting, Making noise, Door not closing, Drum problems</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="appliance_refrigerator">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_appliance_refrigerator" value="appliance_refrigerator">
-                    <label for="signup_appliance_refrigerator" class="subcategory-name" data-i18n="app_refrigerator">Refrigerator</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="app_refrigerator_examples">Not cooling, Freezer issues, Strange noise, Water leakage, Ice formation, Door seal problems</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="appliance_tv">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_appliance_tv" value="appliance_tv">
-                    <label for="signup_appliance_tv" class="subcategory-name" data-i18n="app_tv">TV / LED</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="app_tv_examples">No display, Screen flickering, No sound, Lines on screen, Remote not working, HDMI port issues</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="appliance_geyser">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_appliance_geyser" value="appliance_geyser">
-                    <label for="signup_appliance_geyser" class="subcategory-name" data-i18n="app_geyser">Geyser / Water Heater</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="app_geyser_examples">Not heating water, Thermostat issues, Leaking water, Gas ignition problem, Heating element fault, Pilot light issues</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="appliance_ro">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_appliance_ro" value="appliance_ro">
-                    <label for="signup_appliance_ro" class="subcategory-name" data-i18n="app_ro">RO / Water Purifier</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="app_ro_examples">Not purifying, Low water flow, Filter change, TDS issues, Leaking, Motor not working</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="appliance_microwave">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_appliance_microwave" value="appliance_microwave">
-                    <label for="signup_appliance_microwave" class="subcategory-name" data-i18n="app_microwave">Microwave / Oven</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="app_microwave_examples">Not heating, Turntable not rotating, Door latch broken, Display issues, Strange sounds, Sparking inside</div>
-                    </div>
-                </div>
-                <div class="subcategory-item signup-service-item" data-value="appliance_other">
-                    <input type="checkbox" class="signup-service-checkbox" id="signup_appliance_other" value="appliance_other">
-                    <label for="signup_appliance_other" class="subcategory-name" data-i18n="app_other">Other Small Appliances</label>
-                    <div class="info-bubble">i
-                        <div class="info-tooltip" data-i18n="app_other_examples">Fan repair, Mixer not working, Grinder issues, Iron problems, Cooler pump, Water pump, Chimney repair</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    <small style="color: #999; font-size: 12px; margin-top: 8px; display: block;"><span data-i18n="select_at_least_one_service">* Select at least one service you provide</span></small>
-</div>
                 </div>
 
 		<!-- ✅ Terms & Conditions Checkbox - ADD THIS -->
@@ -3248,250 +2647,18 @@ body.dark-theme span[class*="status"] {
     <div id="createRequestInfo" class="info hidden"></div>
     
     <form id="createRequestForm">
-        <div class="mb-4">
-  <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="serviceType">Service Type</label>
-  <input type="hidden" id="serviceType" name="serviceType" required>
-  <input type="hidden" id="serviceSubtype" name="serviceSubtype">
-  
-  <!-- Dropdown Trigger Button -->
-  <div class="service-dropdown-trigger" id="serviceDropdownTrigger">
-    <span class="placeholder" data-i18n="select_service_type">Select Service Type</span>
-    <span class="dropdown-arrow">▼</span>
-  </div>
-  
-  <!-- Accordion (Hidden by default) -->
-  <div id="serviceAccordion" class="border rounded-lg">
-    
-    <!-- Electrician -->
-    <div class="service-category" data-category="electrician">
-      <div class="service-category-header">
-        <span class="category-icon">🔌</span>
-        <span class="category-title" data-i18n="electrician">Electrician</span>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="service-category-content">
-        <div class="subcategory-item" data-value="electrician_installation">
-          <span class="subcategory-name" data-i18n="elec_installation">Installation Services</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="elec_installation_examples">Fan installation, Light fitting, Switch/socket installation, Geyser connection, Doorbell installation, Appliance wiring</div>
-          </div>
+        <div class="form-group">
+            <label><span data-i18n="service_type">Service Type</span> <span class="required">*</span></label>
+            <select id="serviceType" required>
+                <option value="" data-i18n="select_service">Select Service</option>
+                <option value="electrician">🔧 <span data-i18n="electrician">Electrician</span></option>
+                <option value="plumber">🚰 <span data-i18n="plumber">Plumber</span></option>
+                <option value="ac_repair">❄️ <span data-i18n="ac_repair">AC Repair</span></option>
+                <option value="carpenter">🔨 <span data-i18n="carpenter">Carpenter</span></option>
+                <option value="painter">🎨 <span data-i18n="painter">Painter</span></option>
+                <option value="cleaner">🧹 <span data-i18n="cleaner">Cleaner</span></option>
+            </select>
         </div>
-        <div class="subcategory-item" data-value="electrician_repair">
-          <span class="subcategory-name" data-i18n="elec_repair">Repair Services</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="elec_repair_examples">Fan not working, Switchboard issues, Light flickering, Short circuit, MCB tripping, Power socket problems</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="electrician_wiring">
-          <span class="subcategory-name" data-i18n="elec_wiring">New House Wiring / Rewiring</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="elec_wiring_examples">Complete house wiring, Old wiring replacement, Distribution board setup, Under-construction electrical work, Adding new circuits</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Plumber -->
-    <div class="service-category" data-category="plumber">
-      <div class="service-category-header">
-        <span class="category-icon">🚰</span>
-        <span class="category-title" data-i18n="plumber">Plumber</span>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="service-category-content">
-        <div class="subcategory-item" data-value="plumber_installation">
-          <span class="subcategory-name" data-i18n="plumb_installation">Installation Services</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="plumb_installation_examples">Tap/faucet installation, Bathroom fitting, Kitchen sink setup, Water tank installation, Motor/pump installation, Pipeline laying</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="plumber_repair">
-          <span class="subcategory-name" data-i18n="plumb_repair">Repair Services</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="plumb_repair_examples">Tap leaking, Pipe leakage, Toilet flush problems, Drain blockage, Basin clogged, Water overflow issues</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="plumber_new_work">
-          <span class="subcategory-name" data-i18n="plumb_new_work">New House Plumbing Work</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="plumb_new_work_examples">Complete bathroom plumbing, Kitchen plumbing setup, Drainage system, Water supply lines, Under-construction plumbing work</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- AC Services -->
-    <div class="service-category" data-category="ac_repair">
-      <div class="service-category-header">
-        <span class="category-icon">❄️</span>
-        <span class="category-title" data-i18n="ac_services">AC Services</span>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="service-category-content">
-        <div class="subcategory-item" data-value="ac_installation">
-          <span class="subcategory-name" data-i18n="ac_installation">AC Installation</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="ac_installation_examples">New AC installation, AC uninstall & reinstall, Indoor/outdoor unit mounting, Piping & drainage setup, AC shifting</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="ac_repair_service">
-          <span class="subcategory-name" data-i18n="ac_repair_service">AC Repair & Servicing</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="ac_repair_examples">AC not cooling, AC cleaning, Filter cleaning, Strange noise, Water leakage, Compressor issues</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="ac_gas_filling">
-          <span class="subcategory-name" data-i18n="ac_gas_filling">AC Gas Filling</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="ac_gas_examples">Gas refilling, Low cooling due to gas, Gas leak repair, Pressure check, Cooling performance issues</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Carpenter -->
-    <div class="service-category" data-category="carpenter">
-      <div class="service-category-header">
-        <span class="category-icon">🔨</span>
-        <span class="category-title" data-i18n="carpenter">Carpenter</span>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="service-category-content">
-        <div class="subcategory-item" data-value="carpenter_repair">
-          <span class="subcategory-name" data-i18n="carp_repair">Furniture Repair</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="carp_repair_examples">Bed repair, Chair/sofa fixing, Table repair, Drawer problems, Hinge replacement, Furniture polish touch-up</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="carpenter_custom">
-          <span class="subcategory-name" data-i18n="carp_custom">Furniture Making (Custom Work)</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="carp_custom_examples">Custom wardrobe, Study table, TV unit, Shoe rack, Kitchen cabinets, Bookshelves</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="carpenter_door_window">
-          <span class="subcategory-name" data-i18n="carp_door_window">Door & Window Work</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="carp_door_examples">Door installation/repair, Window frame work, Door lock fitting, Handles & latches, Sliding door tracks, Kitchen cabinet doors</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Painter -->
-    <div class="service-category" data-category="painter">
-      <div class="service-category-header">
-        <span class="category-icon">🎨</span>
-        <span class="category-title" data-i18n="painter">Painter</span>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="service-category-content">
-        <div class="subcategory-item" data-value="painter_house">
-          <span class="subcategory-name" data-i18n="paint_house">House / Building Painting</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="paint_house_examples">Room painting, Full house painting, Exterior wall painting, Ceiling painting, Balcony painting, Boundary wall painting</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="painter_furniture">
-          <span class="subcategory-name" data-i18n="paint_furniture">Furniture & Wood Painting</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="paint_furniture_examples">Door painting, Window frames, Wooden furniture, Cupboard painting, Railing painting, Wood varnish work</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="painter_texture">
-          <span class="subcategory-name" data-i18n="paint_texture">Texture & Decorative Painting</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="paint_texture_examples">Textured walls, Designer finishes, Kids room designs, Stencil art, Accent walls, Special effects</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Cleaner -->
-    <div class="service-category" data-category="cleaner">
-      <div class="service-category-header">
-        <span class="category-icon">🧹</span>
-        <span class="category-title" data-i18n="cleaner">Cleaner</span>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="service-category-content">
-        <div class="subcategory-item" data-value="cleaner_house">
-          <span class="subcategory-name" data-i18n="clean_house">House Cleaning</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="clean_house_examples">Room cleaning, Kitchen deep clean, Bathroom cleaning, Floor mopping, Balcony cleaning, Full house cleaning</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="cleaner_upholstery">
-          <span class="subcategory-name" data-i18n="clean_upholstery">Sofa, Carpet & Upholstery Cleaning</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="clean_upholstery_examples">Sofa cleaning, Carpet shampooing, Mattress cleaning, Curtain cleaning, Chair upholstery, Fabric deep cleaning</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="cleaner_vehicle">
-          <span class="subcategory-name" data-i18n="clean_vehicle">Vehicle Cleaning</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="clean_vehicle_examples">Car washing, Bike cleaning, Car interior cleaning, Vehicle detailing, Dashboard cleaning, Seat shampooing</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Appliance Repair -->
-    <div class="service-category" data-category="appliance_repair">
-      <div class="service-category-header">
-        <span class="category-icon">🔧</span>
-        <span class="category-title" data-i18n="appliance_repair">Appliance Repair</span>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="service-category-content">
-        <div class="subcategory-item" data-value="appliance_washing">
-          <span class="subcategory-name" data-i18n="app_washing">Washing Machine</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="app_washing_examples">Not spinning, Water not draining, Not starting, Making noise, Door not closing, Drum problems</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="appliance_refrigerator">
-          <span class="subcategory-name" data-i18n="app_refrigerator">Refrigerator</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="app_refrigerator_examples">Not cooling, Freezer issues, Strange noise, Water leakage, Ice formation, Door seal problems</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="appliance_tv">
-          <span class="subcategory-name" data-i18n="app_tv">TV / LED</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="app_tv_examples">No display, Screen flickering, No sound, Lines on screen, Remote not working, HDMI port issues</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="appliance_geyser">
-          <span class="subcategory-name" data-i18n="app_geyser">Geyser / Water Heater</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="app_geyser_examples">Not heating water, Thermostat issues, Leaking water, Gas ignition problem, Heating element fault, Pilot light issues</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="appliance_ro">
-          <span class="subcategory-name" data-i18n="app_ro">RO / Water Purifier</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="app_ro_examples">Not purifying, Low water flow, Filter change, TDS issues, Leaking, Motor not working</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="appliance_microwave">
-          <span class="subcategory-name" data-i18n="app_microwave">Microwave / Oven</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="app_microwave_examples">Not heating, Turntable not rotating, Door latch broken, Display issues, Strange sounds, Sparking inside</div>
-          </div>
-        </div>
-        <div class="subcategory-item" data-value="appliance_other">
-          <span class="subcategory-name" data-i18n="app_other">Other Small Appliances</span>
-          <div class="info-bubble">i
-            <div class="info-tooltip" data-i18n="app_other_examples">Fan repair, Mixer not working, Grinder issues, Iron problems, Cooler pump, Water pump, Chimney repair</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-  <p id="selectedServiceDisplay" class="mt-2 text-sm text-blue-600 font-medium" style="display:none;"></p>
-</div>
         
         <div class="form-group">
             <label><span data-i18n="title">Title</span> <span class="required">*</span></label>
@@ -3779,273 +2946,24 @@ body.dark-theme span[class*="status"] {
                 </select>
             </div>
             
-<div class="form-group">
-    <label><span data-i18n="your_services">Your Services</span></label>
-    <div id="currentServicesList" style="margin-bottom: 20px;"></div>
-    
-    <!-- Add New Service Section -->
-    <div class="provider-add-service-section">
-        <div class="provider-add-service-header">
-            ➕ <span data-i18n="add_new_service">Add New Service</span>
-        </div>
-        
-        <div class="provider-service-add-row">
-            <!-- Dropdown Container -->
-            <div class="provider-service-dropdown-container">
-                <!-- Hidden inputs -->
-                <input type="hidden" id="newServiceSelect" value="">
-                <input type="hidden" id="newServiceSubtype" value="">
-                
-                <!-- Dropdown Trigger -->
-                <div class="provider-service-dropdown-trigger" id="providerServiceDropdownTrigger">
-                    <span class="placeholder" data-i18n="select_service_to_add">Select Service to Add</span>
-                    <span class="dropdown-arrow">▼</span>
-                </div>
-                
-                <!-- Accordion (Opens Upward) -->
-                <div id="providerServiceAccordion" class="border rounded-lg">
-    
-    <!-- Electrician -->
-    <div class="service-category" data-category="electrician">
-        <div class="service-category-header">
-            <span class="category-icon">🔌</span>
-            <span class="category-title" data-i18n="electrician">Electrician</span>
-            <span class="expand-icon">▼</span>
-        </div>
-        <div class="service-category-content">
-            <div class="subcategory-item" data-value="electrician_installation">
-                <span class="subcategory-name" data-i18n="elec_installation">Installation Services</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="elec_installation_examples">Fan installation, Light fitting, Switch/socket installation, Geyser connection, Doorbell installation, Appliance wiring</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="electrician_repair">
-                <span class="subcategory-name" data-i18n="elec_repair">Repair Services</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="elec_repair_examples">Fan not working, Switchboard issues, Light flickering, Short circuit, MCB tripping, Power socket problems</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="electrician_wiring">
-                <span class="subcategory-name" data-i18n="elec_wiring">New House Wiring / Rewiring</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="elec_wiring_examples">Complete house wiring, Old wiring replacement, Distribution board setup, Under-construction electrical work, Adding new circuits</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Plumber -->
-    <div class="service-category" data-category="plumber">
-        <div class="service-category-header">
-            <span class="category-icon">🚰</span>
-            <span class="category-title" data-i18n="plumber">Plumber</span>
-            <span class="expand-icon">▼</span>
-        </div>
-        <div class="service-category-content">
-            <div class="subcategory-item" data-value="plumber_installation">
-                <span class="subcategory-name" data-i18n="plumb_installation">Installation Services</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="plumb_installation_examples">Tap/faucet installation, Bathroom fitting, Kitchen sink setup, Water tank installation, Motor/pump installation, Pipeline laying</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="plumber_repair">
-                <span class="subcategory-name" data-i18n="plumb_repair">Repair Services</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="plumb_repair_examples">Tap leaking, Pipe leakage, Toilet flush problems, Drain blockage, Basin clogged, Water overflow issues</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="plumber_new_work">
-                <span class="subcategory-name" data-i18n="plumb_new_work">New House Plumbing Work</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="plumb_new_work_examples">Complete bathroom plumbing, Kitchen plumbing setup, Drainage system, Water supply lines, Under-construction plumbing work</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- AC Services -->
-    <div class="service-category" data-category="ac_services">
-        <div class="service-category-header">
-            <span class="category-icon">❄️</span>
-            <span class="category-title" data-i18n="ac_services">AC Services</span>
-            <span class="expand-icon">▼</span>
-        </div>
-        <div class="service-category-content">
-            <div class="subcategory-item" data-value="ac_installation">
-                <span class="subcategory-name" data-i18n="ac_installation">AC Installation</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="ac_installation_examples">New AC installation, AC uninstall & reinstall, Indoor/outdoor unit mounting, Piping & drainage setup, AC shifting</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="ac_repair_service">
-                <span class="subcategory-name" data-i18n="ac_repair_service">AC Repair & Servicing</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="ac_repair_examples">AC not cooling, AC cleaning, Filter cleaning, Strange noise, Water leakage, Compressor issues</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="ac_gas_filling">
-                <span class="subcategory-name" data-i18n="ac_gas_filling">AC Gas Filling</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="ac_gas_examples">Gas refilling, Low cooling due to gas, Gas leak repair, Pressure check, Cooling performance issues</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Carpenter -->
-    <div class="service-category" data-category="carpenter">
-        <div class="service-category-header">
-            <span class="category-icon">🔨</span>
-            <span class="category-title" data-i18n="carpenter">Carpenter</span>
-            <span class="expand-icon">▼</span>
-        </div>
-        <div class="service-category-content">
-            <div class="subcategory-item" data-value="carpenter_repair">
-                <span class="subcategory-name" data-i18n="carp_repair">Furniture Repair</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="carp_repair_examples">Bed repair, Chair/sofa fixing, Table repair, Drawer problems, Hinge replacement, Furniture polish touch-up</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="carpenter_custom">
-                <span class="subcategory-name" data-i18n="carp_custom">Furniture Making (Custom Work)</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="carp_custom_examples">Custom wardrobe, Study table, TV unit, Shoe rack, Kitchen cabinets, Bookshelves</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="carpenter_door_window">
-                <span class="subcategory-name" data-i18n="carp_door_window">Door & Window Work</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="carp_door_examples">Door installation/repair, Window frame work, Door lock fitting, Handles & latches, Sliding door tracks, Kitchen cabinet doors</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Painter -->
-    <div class="service-category" data-category="painter">
-        <div class="service-category-header">
-            <span class="category-icon">🎨</span>
-            <span class="category-title" data-i18n="painter">Painter</span>
-            <span class="expand-icon">▼</span>
-        </div>
-        <div class="service-category-content">
-            <div class="subcategory-item" data-value="painter_house">
-                <span class="subcategory-name" data-i18n="paint_house">House / Building Painting</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="paint_house_examples">Room painting, Full house painting, Exterior wall painting, Ceiling painting, Balcony painting, Boundary wall painting</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="painter_furniture">
-                <span class="subcategory-name" data-i18n="paint_furniture">Furniture & Wood Painting</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="paint_furniture_examples">Door painting, Window frames, Wooden furniture, Cupboard painting, Railing painting, Wood varnish work</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="painter_texture">
-                <span class="subcategory-name" data-i18n="paint_texture">Texture & Decorative Painting</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="paint_texture_examples">Textured walls, Designer finishes, Kids room designs, Stencil art, Accent walls, Special effects</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Cleaner -->
-    <div class="service-category" data-category="cleaner">
-        <div class="service-category-header">
-            <span class="category-icon">🧹</span>
-            <span class="category-title" data-i18n="cleaner">Cleaner</span>
-            <span class="expand-icon">▼</span>
-        </div>
-        <div class="service-category-content">
-            <div class="subcategory-item" data-value="cleaner_house">
-                <span class="subcategory-name" data-i18n="clean_house">House Cleaning</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="clean_house_examples">Room cleaning, Kitchen deep clean, Bathroom cleaning, Floor mopping, Balcony cleaning, Full house cleaning</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="cleaner_upholstery">
-                <span class="subcategory-name" data-i18n="clean_upholstery">Sofa, Carpet & Upholstery Cleaning</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="clean_upholstery_examples">Sofa cleaning, Carpet shampooing, Mattress cleaning, Curtain cleaning, Chair upholstery, Fabric deep cleaning</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="cleaner_vehicle">
-                <span class="subcategory-name" data-i18n="clean_vehicle">Vehicle Cleaning</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="clean_vehicle_examples">Car washing, Bike cleaning, Car interior cleaning, Vehicle detailing, Dashboard cleaning, Seat shampooing</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Appliance Repair -->
-    <div class="service-category" data-category="appliance_repair">
-        <div class="service-category-header">
-            <span class="category-icon">🔧</span>
-            <span class="category-title" data-i18n="appliance_repair">Appliance Repair</span>
-            <span class="expand-icon">▼</span>
-        </div>
-        <div class="service-category-content">
-            <div class="subcategory-item" data-value="appliance_washing">
-                <span class="subcategory-name" data-i18n="app_washing">Washing Machine</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="app_washing_examples">Not spinning, Water not draining, Not starting, Making noise, Door not closing, Drum problems</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="appliance_refrigerator">
-                <span class="subcategory-name" data-i18n="app_refrigerator">Refrigerator</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="app_refrigerator_examples">Not cooling, Freezer issues, Strange noise, Water leakage, Ice formation, Door seal problems</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="appliance_tv">
-                <span class="subcategory-name" data-i18n="app_tv">TV / LED</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="app_tv_examples">No display, Screen flickering, No sound, Lines on screen, Remote not working, HDMI port issues</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="appliance_geyser">
-                <span class="subcategory-name" data-i18n="app_geyser">Geyser / Water Heater</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="app_geyser_examples">Not heating water, Thermostat issues, Leaking water, Gas ignition problem, Heating element fault, Pilot light issues</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="appliance_ro">
-                <span class="subcategory-name" data-i18n="app_ro">RO / Water Purifier</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="app_ro_examples">Not purifying, Low water flow, Filter change, TDS issues, Leaking, Motor not working</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="appliance_microwave">
-                <span class="subcategory-name" data-i18n="app_microwave">Microwave / Oven</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="app_microwave_examples">Not heating, Turntable not rotating, Door latch broken, Display issues, Strange sounds, Sparking inside</div>
-                </div>
-            </div>
-            <div class="subcategory-item" data-value="appliance_other">
-                <span class="subcategory-name" data-i18n="app_other">Other Small Appliances</span>
-                <div class="info-bubble">i
-                    <div class="info-tooltip" data-i18n="app_other_examples">Fan repair, Mixer not working, Grinder issues, Iron problems, Cooler pump, Water pump, Chimney repair</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-                <!-- End of accordion -->
-            </div>
-            <!-- End of dropdown container -->
+            <h3>📋 <span data-i18n="services_i_provide">Services I Provide</span></h3>
+            <div id="currentServicesList" style="margin-bottom: 20px;"></div>
             
-            <!-- Add Service Button -->
-            <button type="button" class="provider-add-service-btn" id="providerAddServiceBtn" onclick="addProviderService()">
-                ✅ <span data-i18n="add_service">Add Service</span>
-            </button>
-        </div>
-        <!-- End of add row -->
-    </div>
-    <!-- End of add service section -->
-</div>
+            <div class="form-group">
+                <label><span data-i18n="add_new_service">Add New Service</span></label>
+                <div style="display: flex; gap: 10px;">
+                    <select id="newServiceSelect" style="flex: 1;">
+                        <option value="" data-i18n="select_service_to_add">Select Service to Add</option>
+                        <option value="electrician">🔧 Electrician</option>
+                        <option value="plumber">🚰 Plumber</option>
+                        <option value="ac_repair">❄️ AC Repair</option>
+                        <option value="carpenter">🔨 Carpenter</option>
+                        <option value="painter">🎨 Painter</option>
+                        <option value="cleaner">🧹 Cleaner</option>
+                    </select>
+                    <button type="button" class="btn" onclick="addService()"><span data-i18n="add_service">Add Service</span></button>
+                </div>
+            </div>
         </div>
         
         <button type="submit" class="btn btn-full" id="saveProfileBtn">💾 <span data-i18n="save_changes">Save Changes</span></button>
@@ -4364,11 +3282,10 @@ provider_mode: "Provider",
     add_new_service: "Add New Service",
     electrician: "Electrician",
     plumber: "Plumber",
-    ac_services: "AC Services",
+    ac_repair: "AC Repair",
     carpenter: "Carpenter",
     painter: "Painter",
     cleaner: "Cleaner",
-    appliance_repair: "Appliance Repair",
     no_services_listed: "No services listed",
     please_select_service: "Please select a service to add",
     
@@ -4880,136 +3797,6 @@ year_1: "1 Year",        // ✅ KEEP THIS
     gps_permission_denied_message: "\n\n❌ You denied location access. Please enable location in your browser settings:\n1. Click the lock icon in address bar\n2. Allow location access\n3. Refresh the page and try again",
     gps_signal_unavailable: "\n\n❌ GPS signal unavailable. Please:\n1. Make sure location services are enabled on your device\n2. Try moving to an open area with better GPS signal\n3. Refresh and try again",
     gps_timeout_message: "\n\n❌ GPS location took too long. Please:\n1. Check your internet connection\n2. Enable location services\n3. Try again",
-    
-
-    select_service_type: "Select Service Type",
-    please_select_service_type: "Please select a service type",
-
-    // ============================================================
-// SECTION 16: SERVICE TYPE TRANSLATIONS
-// ============================================================
-// Electrician
-electrician_installation: "Electrician - Installation Services",
-electrician_repair: "Electrician - Repair Services",
-electrician_wiring: "Electrician - New House Wiring/Rewiring",
-
-// Plumber
-plumber_installation: "Plumber - Installation Services",
-plumber_repair: "Plumber - Repair Services",
-plumber_new_work: "Plumber - New House Plumbing Work",
-
-// AC Services
-ac_installation: "AC - Installation",
-ac_repair_service: "AC - Repair & Servicing",
-ac_gas_filling: "AC - Gas Filling",
-
-// Carpenter
-carpenter_repair: "Carpenter - Furniture Repair",
-carpenter_custom: "Carpenter - Furniture Making (Custom Work)",
-carpenter_door_window: "Carpenter - Door & Window Work",
-
-// Painter
-painter_house: "Painter - House/Building Painting",
-painter_furniture: "Painter - Furniture & Wood Painting",
-painter_texture: "Painter - Texture & Decorative Painting",
-
-// Cleaner
-cleaner_house: "Cleaner - House Cleaning",
-cleaner_upholstery: "Cleaner - Sofa, Carpet & Upholstery Cleaning",
-cleaner_vehicle: "Cleaner - Vehicle Cleaning",
-
-// Appliance Repair
-appliance_washing: "Appliance Repair - Washing Machine",
-appliance_refrigerator: "Appliance Repair - Refrigerator",
-appliance_tv: "Appliance Repair - TV/LED",
-appliance_geyser: "Appliance Repair - Geyser/Water Heater",
-appliance_ro: "Appliance Repair - RO/Water Purifier",
-appliance_microwave: "Appliance Repair - Microwave/Oven",
-appliance_other: "Appliance Repair - Other Small Appliances",
-
-// Short form service names (used in display)
-elec_installation: "Installation Services",
-elec_repair: "Repair Services",
-elec_wiring: "New House Wiring/Rewiring",
-
-plumb_installation: "Installation Services",
-plumb_repair: "Repair Services",
-plumb_new_work: "New House Plumbing Work",
-
-ac_installation: "AC Installation",
-ac_repair_service: "AC Repair & Servicing",
-ac_gas_filling: "AC Gas Filling",
-
-carp_repair: "Furniture Repair",
-carp_custom: "Furniture Making (Custom Work)",
-carp_door_window: "Door & Window Work",
-
-paint_house: "House/Building Painting",
-paint_furniture: "Furniture & Wood Painting",
-paint_texture: "Texture & Decorative Painting",
-
-clean_house: "House Cleaning",
-clean_upholstery: "Sofa, Carpet & Upholstery Cleaning",
-clean_vehicle: "Vehicle Cleaning",
-
-app_washing: "Washing Machine",
-app_refrigerator: "Refrigerator",
-app_tv: "TV/LED",
-app_geyser: "Geyser/Water Heater",
-app_ro: "RO/Water Purifier",
-app_microwave: "Microwave/Oven",
-app_other: "Other Small Appliances",
-
-// ============================================================
-// SECTION 17: CONTACT SHARING CONFIRMATION MESSAGES
-// ============================================================
-confirm_request_contact_sharing: "Do you want to request contact information sharing? The other party will need to approve before details are visible.",
-confirm_share_contact_info: "Do you want to share your contact information with this person? Your phone number and address will become visible to them.",
-contact_info_shared_success: "Contact information shared successfully! Details are now visible to both parties.",
-
-// ============================================================
-// SECTION 18: SERVICE EXAMPLES (Tooltips)
-// ============================================================
-
-// Electrician Examples
-elec_installation_examples: "Fan installation, Light fitting, Switch/socket installation, Geyser connection, Doorbell installation, Appliance wiring",
-elec_repair_examples: "Fan not working, Switchboard issues, Light flickering, Short circuit, MCB tripping, Power socket problems",
-elec_wiring_examples: "Complete house wiring, Old wiring replacement, Distribution board setup, Under-construction electrical work, Adding new circuits",
-
-// Plumber Examples
-plumb_installation_examples: "Tap/faucet installation, Bathroom fitting, Kitchen sink setup, Water tank installation, Motor/pump installation, Pipeline laying",
-plumb_repair_examples: "Tap leaking, Pipe leakage, Toilet flush problems, Drain blockage, Basin clogged, Water overflow issues",
-plumb_new_work_examples: "Complete bathroom plumbing, Kitchen plumbing setup, Drainage system, Water supply lines, Under-construction plumbing work",
-
-// AC Services Examples
-ac_installation_examples: "New AC installation, AC uninstall & reinstall, Indoor/outdoor unit mounting, Piping & drainage setup, AC shifting",
-ac_repair_examples: "AC not cooling, AC cleaning, Filter cleaning, Strange noise, Water leakage, Compressor issues",
-ac_gas_examples: "Gas refilling, Low cooling due to gas, Gas leak repair, Pressure check, Cooling performance issues",
-
-// Carpenter Examples
-carp_repair_examples: "Bed repair, Chair/sofa fixing, Table repair, Drawer problems, Hinge replacement, Furniture polish touch-up",
-carp_custom_examples: "Custom wardrobe, Study table, TV unit, Shoe rack, Kitchen cabinets, Bookshelves",
-carp_door_examples: "Door installation/repair, Window frame work, Door lock fitting, Handles & latches, Sliding door tracks, Kitchen cabinet doors",
-
-// Painter Examples
-paint_house_examples: "Room painting, Full house painting, Exterior wall painting, Ceiling painting, Balcony painting, Boundary wall painting",
-paint_furniture_examples: "Door painting, Window frames, Wooden furniture, Cupboard painting, Railing painting, Wood varnish work",
-paint_texture_examples: "Textured walls, Designer finishes, Kids room designs, Stencil art, Accent walls, Special effects",
-
-// Cleaner Examples
-clean_house_examples: "Room cleaning, Kitchen deep clean, Bathroom cleaning, Floor mopping, Balcony cleaning, Full house cleaning",
-clean_upholstery_examples: "Sofa cleaning, Carpet shampooing, Mattress cleaning, Curtain cleaning, Chair upholstery, Fabric deep cleaning",
-clean_vehicle_examples: "Car washing, Bike cleaning, Car interior cleaning, Vehicle detailing, Dashboard cleaning, Seat shampooing",
-
-// Appliance Repair Examples
-app_washing_examples: "Not spinning, Water not draining, Not starting, Making noise, Door not closing, Drum problems",
-app_refrigerator_examples: "Not cooling, Freezer issues, Strange noise, Water leakage, Ice formation, Door seal problems",
-app_tv_examples: "No display, Screen flickering, No sound, Lines on screen, Remote not working, HDMI port issues",
-app_geyser_examples: "Not heating water, Thermostat issues, Leaking water, Gas ignition problem, Heating element fault, Pilot light issues",
-app_ro_examples: "Not purifying, Low water flow, Filter change, TDS issues, Leaking, Motor not working",
-app_microwave_examples: "Not heating, Turntable not rotating, Door latch broken, Display issues, Strange sounds, Sparking inside",
-app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problems, Cooler pump, Water pump, Chimney repair",
-
 
   },
   
@@ -5082,11 +3869,10 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     add_new_service: "नई सेवा जोड़ें",
     electrician: "बिजली मिस्त्री ",
     plumber: "पानी फिटिंग मिस्त्री ( प्लंबर )",
-    ac_services: "AC का काम",
+    ac_repair: "AC रिपेयर/ सर्विस",
     carpenter: "लकड़ी कारीगर ( बढ़ई )",
     painter: "पेंटर",
     cleaner: "सफाई वाला",
-    appliance_repair: "उपकरणों की मरम्मत",
     no_services_listed: "कोई सेवा नहीं",
     please_select_service: "कृपया जोड़ने के लिए एक सेवा चुनें",
     
@@ -5161,8 +3947,8 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     description: "पूरी जानकारी",
     urgency: "जरूरत",
     urgent: "बहुत जरूरी",
-    normal: "जरूरी",
-    low: "सामान्य",
+    normal: "सामान्य",
+    low: "कम जरूरी",
     use_different_location: "अगर सेवा किसी अन्य पते पर चाहिए तो यह टिक करें",
     create_request: "अनुरोध करें",
     max_requests_reached: "5 से ज्यादा मांगें नहीं हो सकती",
@@ -5579,137 +4365,10 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     location_access_denied_header: "स्थान पहुंच अस्वीकृत",
     gps_permission_denied_message: "\n\n❌ आपने स्थान पहुंच अस्वीकार कर दी। कृपया अपने ब्राउज़र सेटिंग्स में स्थान सक्षम करें:\n1. एड्रेस बार में लॉक आइकन पर क्लिक करें\n2. स्थान पहुंच की अनुमति दें\n3. पेज रिफ्रेश करें और फिर से प्रयास करें",
     gps_signal_unavailable: "\n\n❌ GPS सिग्नल उपलब्ध नहीं है। कृपया:\n1. सुनिश्चित करें कि आपके डिवाइस पर स्थान सेवाएं सक्षम हैं\n2. बेहतर GPS सिग्नल के लिए खुले क्षेत्र में जाने का प्रयास करें\n3. रिफ्रेश करें और फिर से प्रयास करें",
-    gps_timeout_message: "\n\n❌ GPS स्थान में बहुत समय लग रहा है। कृपया:\n1. अपना इंटरनेट कनेक्शन जांचें\n2. स्थान सेवाएं सक्षम करें\n3. फिर से प्रयास करें",
-
-    select_service_type: "सेवा का प्रकार चुने",
-    please_select_service_type: "कृपा सेवा का प्रकार चुने",
-
-   // ============================================================
-// SECTION 16: SERVICE TYPE TRANSLATIONS
-// ============================================================
-// Electrician
-electrician_installation: "इलेक्ट्रीशियन - इंस्टॉलेशन सेवाएं",
-electrician_repair: "इलेक्ट्रीशियन - मरम्मत सेवाएं",
-electrician_wiring: "इलेक्ट्रीशियन - नए घर की वायरिंग/री-वायरिंग",
-
-// Plumber
-plumber_installation: "प्लंबर - इंस्टॉलेशन सेवाएं",
-plumber_repair: "प्लंबर - मरम्मत सेवाएं",
-plumber_new_work: "प्लंबर - नए घर का प्लंबिंग काम",
-
-// AC Services
-ac_installation: "AC - इंस्टॉलेशन",
-ac_repair_service: "AC - मरम्मत और सर्विसिंग",
-ac_gas_filling: "AC - गैस फिलिंग",
-
-// Carpenter
-carpenter_repair: "बढ़ई - फर्नीचर की मरम्मत",
-carpenter_custom: "बढ़ई - फर्नीचर बनाना (कस्टम काम)",
-carpenter_door_window: "बढ़ई - दरवाजा और खिड़की का काम",
-
-// Painter
-painter_house: "पेंटर - घर/इमारत की पेंटिंग",
-painter_furniture: "पेंटर - फर्नीचर और लकड़ी की पेंटिंग",
-painter_texture: "पेंटर - टेक्सचर और डेकोरेटिव पेंटिंग",
-
-// Cleaner
-cleaner_house: "क्लीनर - घर की सफाई",
-cleaner_upholstery: "क्लीनर - सोफा, कारपेट और अपहोल्स्ट्री की सफाई",
-cleaner_vehicle: "क्लीनर - वाहन की सफाई",
-
-// Appliance Repair
-appliance_washing: "उपकरण मरम्मत - वॉशिंग मशीन",
-appliance_refrigerator: "उपकरण मरम्मत - रेफ्रिजरेटर",
-appliance_tv: "उपकरण मरम्मत - TV/LED",
-appliance_geyser: "उपकरण मरम्मत - गीजर/वॉटर हीटर",
-appliance_ro: "उपकरण मरम्मत - RO/वॉटर प्यूरीफायर",
-appliance_microwave: "उपकरण मरम्मत - माइक्रोवेव/ओवन",
-appliance_other: "उपकरण मरम्मत - अन्य छोटे उपकरण",
-
-// Short form service names (used in display)
-elec_installation: "लगाने की सेवाएं",
-elec_repair: "मरम्मत सेवाएं",
-elec_wiring: "नए घर की वायरिंग/दुबारा -वायरिंग",
-
-plumb_installation: "लगाने की सेवाएं",
-plumb_repair: "मरम्मत सेवाएं",
-plumb_new_work: "नए घर का प्लंबिंग काम",
-
-ac_installation: "AC लगाना",
-ac_repair_service: "AC मरम्मत और सर्विसिंग",
-ac_gas_filling: "AC गैस फिलिंग",
-
-carp_repair: "फर्नीचर की मरम्मत",
-carp_custom: "फर्नीचर बनाना (Order पर)",
-carp_door_window: "दरवाजा और खिड़की का काम",
-
-paint_house: "घर/इमारत की पेंटिंग",
-paint_furniture: "फर्नीचर और लकड़ी की पेंटिंग",
-paint_texture: "टेक्सचर और डेकोरेटिव पेंटिंग",
-
-clean_house: "घर की सफाई",
-clean_upholstery: "सोफा, कारपेट, पर्दे और अपहोल्स्ट्री की सफाई",
-clean_vehicle: "वाहन की सफाई",
-
-app_washing: "वॉशिंग मशीन",
-app_refrigerator: "फ्रिज/ रेफ्रिजरेटर",
-app_tv: "TV/LED",
-app_geyser: "गीजर/वॉटर हीटर",
-app_ro: "RO/वॉटर प्यूरीफायर",
-app_microwave: "माइक्रोवेव/ओवन",
-app_other: "अन्य छोटे उपकरण",
-
-// ============================================================
-// SECTION 17: CONTACT SHARING CONFIRMATION MESSAGES
-// ============================================================
-confirm_request_contact_sharing: "क्या आप संपर्क जानकारी साझा करने का अनुरोध करना चाहते हैं? दूसरे पक्ष को विवरण दिखने से पहले मंजूरी देनी होगी।",
-confirm_share_contact_info: "क्या आप इस व्यक्ति के साथ अपनी संपर्क जानकारी साझा करना चाहते हैं? आपका फोन नंबर और पता उन्हें दिखाई देगा।",
-contact_info_shared_success: "संपर्क जानकारी सफलतापूर्वक साझा की गई! विवरण अब दोनों पक्षों को दिखाई दे रहे हैं।", 
-
-// ============================================================
-// SECTION 18: SERVICE EXAMPLES (Tooltips)
-// ============================================================
-
-// Electrician Examples
-elec_installation_examples: "पंखा लगाना, लाइट फिटिंग, स्विच/सॉकेट लगाना, गीजर कनेक्शन, डोरबेल लगाना, उपकरण वायरिंग",
-elec_repair_examples: "पंखा काम नहीं कर रहा, स्विचबोर्ड की समस्या, लाइट टिमटिमाना, शॉर्ट सर्किट, MCB ट्रिप होना, बिजली सॉकेट की समस्या",
-elec_wiring_examples: "पूरे घर की वायरिंग, पुरानी वायरिंग बदलना, डिस्ट्रीब्यूशन बोर्ड सेटअप, निर्माणाधीन विद्युत कार्य, नए सर्किट जोड़ना",
-
-// Plumber Examples
-plumb_installation_examples: "नल लगाना, बाथरूम फिटिंग, किचन सिंक सेटअप, पानी की टंकी लगाना, मोटर/पंप लगाना, पाइपलाइन बिछाना",
-plumb_repair_examples: "नल से पानी रिसना, पाइप लीक, टॉयलेट फ्लश की समस्या, नाली बंद, बेसिन जाम, पानी ओवरफ्लो",
-plumb_new_work_examples: "पूरा बाथरूम प्लंबिंग, किचन प्लंबिंग सेटअप, ड्रेनेज सिस्टम, पानी की सप्लाई लाइन, निर्माणाधीन प्लंबिंग कार्य",
-
-// AC Services Examples
-ac_installation_examples: "नया AC लगाना, AC उतारना और फिर लगाना, इनडोर/आउटडोर यूनिट माउंटिंग, पाइपिंग और ड्रेनेज सेटअप, AC शिफ्टिंग",
-ac_repair_examples: "AC ठंडा नहीं कर रहा, AC की सफाई, फिल्टर सफाई, अजीब आवाज, पानी का रिसाव, कंप्रेसर की समस्या",
-ac_gas_examples: "गैस रिफिलिंग, गैस कम होने से ठंडक नहीं, गैस लीक की मरम्मत, प्रेशर चेक, कूलिंग परफॉर्मेंस की समस्या",
-
-// Carpenter Examples
-carp_repair_examples: "बिस्तर की मरम्मत, कुर्सी/सोफा ठीक करना, टेबल की मरम्मत, दराज की समस्या, कब्जे बदलना, फर्नीचर पॉलिश",
-carp_custom_examples: "कस्टम अलमारी, स्टडी टेबल, TV यूनिट, जूता रैक, किचन कैबिनेट, बुकशेल्फ",
-carp_door_examples: "दरवाजा लगाना/मरम्मत, खिड़की का फ्रेम, दरवाजे का ताला लगाना, हैंडल और कुंडी, स्लाइडिंग दरवाजे की पटरी, किचन कैबिनेट के दरवाजे",
-
-// Painter Examples
-paint_house_examples: "कमरे की पेंटिंग, पूरे घर की पेंटिंग, बाहरी दीवार की पेंटिंग, छत की पेंटिंग, बालकनी की पेंटिंग, बाउंड्री वॉल की पेंटिंग",
-paint_furniture_examples: "दरवाजे की पेंटिंग, खिड़की के फ्रेम, लकड़ी का फर्नीचर, अलमारी की पेंटिंग, रेलिंग की पेंटिंग, लकड़ी पर वार्निश",
-paint_texture_examples: "टेक्सचर वाली दीवारें, डिजाइनर फिनिश, बच्चों के कमरे की डिजाइन, स्टेंसिल आर्ट, एक्सेंट वॉल, विशेष प्रभाव",
-
-// Cleaner Examples
-clean_house_examples: "कमरे की सफाई, किचन की गहरी सफाई, बाथरूम की सफाई, फर्श पोछना, बालकनी की सफाई, पूरे घर की सफाई",
-clean_upholstery_examples: "सोफा की सफाई, कारपेट शैम्पू, गद्दे की सफाई, परदों की सफाई, कुर्सी का कपड़ा, कपड़े की गहरी सफाई",
-clean_vehicle_examples: "कार धोना, बाइक की सफाई, कार के अंदर की सफाई, वाहन डिटेलिंग, डैशबोर्ड की सफाई, सीट शैम्पू",
-
-// Appliance Repair Examples
-app_washing_examples: "स्पिन नहीं हो रहा, पानी नहीं निकल रहा, चालू नहीं हो रहा, आवाज आ रही है, दरवाजा बंद नहीं हो रहा, ड्रम की समस्या",
-app_refrigerator_examples: "ठंडा नहीं हो रहा, फ्रीजर की समस्या, अजीब आवाज, पानी का रिसाव, बर्फ जमना, दरवाजे की सील की समस्या",
-app_tv_examples: "डिस्प्ले नहीं आ रहा, स्क्रीन टिमटिमाना, आवाज नहीं आ रही, स्क्रीन पर लाइनें, रिमोट काम नहीं कर रहा, HDMI पोर्ट की समस्या",
-app_geyser_examples: "पानी गर्म नहीं हो रहा, थर्मोस्टेट की समस्या, पानी का रिसाव, गैस इग्निशन की समस्या, हीटिंग एलिमेंट की खराबी, पायलट लाइट की समस्या",
-app_ro_examples: "शुद्ध नहीं कर रहा, पानी का प्रवाह कम, फिल्टर बदलना, TDS की समस्या, रिसाव, मोटर काम नहीं कर रही",
-app_microwave_examples: "गर्म नहीं हो रहा, टर्नटेबल घूम नहीं रहा, दरवाजे का लैच टूटा, डिस्प्ले की समस्या, अजीब आवाजें, अंदर चिंगारी",
-app_other_examples: "पंखे की मरम्मत, मिक्सर काम नहीं कर रहा, ग्राइंडर की समस्या, प्रेस की समस्या, कूलर का पंप, पानी का पंप, चिमनी की मरम्मत",
-
+    gps_timeout_message: "\n\n❌ GPS स्थान में बहुत समय लग रहा है। कृपया:\n1. अपना इंटरनेट कनेक्शन जांचें\n2. स्थान सेवाएं सक्षम करें\n3. फिर से प्रयास करें"
   }
+
+
 };
 
 // ==================== END TRANSLATIONS ====================
@@ -5996,62 +4655,13 @@ let realtimeSubscriptions = {
 };
 
         const SERVICE_ICONS = {
-    // Electrician subcategories
-    electrician_installation: '🔌',
-    electrician_repair: '🔌',
-    electrician_wiring: '🔌',
-    
-    // Plumber subcategories
-    plumber_installation: '🚰',
-    plumber_repair: '🚰',
-    plumber_new_work: '🚰',
-    
-    // AC subcategories
-    ac_installation: '❄️',
-    ac_repair_service: '❄️',
-    ac_gas_filling: '❄️',
-    
-    // Carpenter subcategories
-    carpenter_repair: '🔨',
-    carpenter_custom: '🔨',
-    carpenter_door_window: '🔨',
-    
-    // Painter subcategories
-    painter_house: '🎨',
-    painter_furniture: '🎨',
-    painter_texture: '🎨',
-    
-    // Cleaner subcategories
-    cleaner_house: '🧹',
-    cleaner_upholstery: '🧹',
-    cleaner_vehicle: '🧹',
-    
-    // Appliance subcategories
-    appliance_washing: '🔧',
-    appliance_refrigerator: '🔧',
-    appliance_tv: '🔧',
-    appliance_geyser: '🔧',
-    appliance_ro: '🔧',
-    appliance_microwave: '🔧',
-    appliance_other: '🔧'
-};
-
-// Add this NEW function to handle subcategory icons
-function getServiceIcon(serviceId) {
-    // Try exact match first
-    if (SERVICE_ICONS[serviceId]) {
-        return SERVICE_ICONS[serviceId];
-    }
-    
-    // Try parent category match (e.g., electrician_installation -> electrician)
-    const parentCategory = serviceId.split('_')[0];
-    if (SERVICE_ICONS[parentCategory]) {
-        return SERVICE_ICONS[parentCategory];
-    }
-    
-    // Default fallback
-    return '🔧';
-}
+            electrician: '🔧',
+            plumber: '🚰',
+            ac_repair: '❄️',
+            carpenter: '🔨',
+            painter: '🎨',
+            cleaner: '🧹'
+        };
 
         window.addEventListener('DOMContentLoaded', async () => {
     console.log('Step 3: DOMContentLoaded fired');
@@ -6429,13 +5039,15 @@ function toggleDashboardMode() {
 }
         
         async function filterServiceDropdown() {
+    const serviceSelect = document.getElementById('serviceType');
+    
     // If user is not a provider, show all services
     if (!currentProfile.is_provider) {
         return;
     }
     
     try {
-        // Get provider's services (subcategories they already provide)
+        // Get provider's services
         const { data: providerServices, error } = await supabase
             .from('provider_services')
             .select('service_id')
@@ -6446,32 +5058,16 @@ function toggleDashboardMode() {
             return;
         }
         
-        // Get list of subcategory services the provider already provides
+        // Get list of services the provider already provides
         const providedServices = providerServices ? providerServices.map(s => s.service_id) : [];
         
-        // Hide subcategory items that the provider already offers
-        const accordion = document.getElementById('serviceAccordion');
-        if (!accordion) return;
+        // Get all options except the first one (Select Service)
+        const options = Array.from(serviceSelect.options).slice(1);
         
-        const subcategoryItems = accordion.querySelectorAll('.subcategory-item');
-        
-        subcategoryItems.forEach(item => {
-            const serviceValue = item.getAttribute('data-value');
-            if (providedServices.includes(serviceValue)) {
-                item.style.display = 'none';  // Hide this subcategory
-            } else {
-                item.style.display = '';  // Show this subcategory
-            }
-        });
-        
-        // Optional: Hide entire category if all its subcategories are hidden
-        const categories = accordion.querySelectorAll('.service-category');
-        categories.forEach(category => {
-            const visibleSubcategories = category.querySelectorAll('.subcategory-item:not([style*="display: none"])');
-            if (visibleSubcategories.length === 0) {
-                category.style.display = 'none';  // Hide entire category
-            } else {
-                category.style.display = '';  // Show category
+        // MOBILE FIX: Remove options instead of hiding them
+        options.forEach(option => {
+            if (providedServices.includes(option.value)) {
+                option.remove();  // Remove from DOM completely
             }
         });
         
@@ -6630,8 +5226,6 @@ await displayProfileStats();
     if (currentProfile.is_provider) {
         await loadCurrentServices();
     }
-    // ✅ ADD THIS LINE
-    initEditProfileServiceDropdown();
 }
 
 // Display Profile Stats (next to profile photo)
@@ -6728,57 +5322,19 @@ async function loadCurrentServices() {
         
         const container = document.getElementById('currentServicesList');
         
-	// Add this null check
-        if (!container) {
-            console.warn('currentServicesList element not found');
-            return;
-        }
-
         if (!services || services.length === 0) {
             container.innerHTML = `<p style="color: #999; font-style: italic;">${t('no_services_listed')}</p>`;
             return;
         }
         
         const serviceNames = {
-    // Electrician subcategories
-    electrician_installation: `🔌 ${t('electrician')} → ${t('elec_installation')}`,
-    electrician_repair: `🔌 ${t('electrician')} → ${t('elec_repair')}`,
-    electrician_wiring: `🔌 ${t('electrician')} → ${t('elec_wiring')}`,
-    
-    // Plumber subcategories
-    plumber_installation: `🚰 ${t('plumber')} → ${t('plumb_installation')}`,
-    plumber_repair: `🚰 ${t('plumber')} → ${t('plumb_repair')}`,
-    plumber_new_work: `🚰 ${t('plumber')} → ${t('plumb_new_work')}`,
-    
-    // AC subcategories
-    ac_installation: `❄️ ${t('ac_services')} → ${t('ac_installation')}`,
-    ac_repair_service: `❄️ ${t('ac_services')} → ${t('ac_repair_service')}`,
-    ac_gas_filling: `❄️ ${t('ac_services')} → ${t('ac_gas_filling')}`,
-    
-    // Carpenter subcategories
-    carpenter_repair: `🔨 ${t('carpenter')} → ${t('carp_repair')}`,
-    carpenter_custom: `🔨 ${t('carpenter')} → ${t('carp_custom')}`,
-    carpenter_door_window: `🔨 ${t('carpenter')} → ${t('carp_door_window')}`,
-    
-    // Painter subcategories
-    painter_house: `🎨 ${t('painter')} → ${t('paint_house')}`,
-    painter_furniture: `🎨 ${t('painter')} → ${t('paint_furniture')}`,
-    painter_texture: `🎨 ${t('painter')} → ${t('paint_texture')}`,
-    
-    // Cleaner subcategories
-    cleaner_house: `🧹 ${t('cleaner')} → ${t('clean_house')}`,
-    cleaner_upholstery: `🧹 ${t('cleaner')} → ${t('clean_upholstery')}`,
-    cleaner_vehicle: `🧹 ${t('cleaner')} → ${t('clean_vehicle')}`,
-    
-    // Appliance subcategories
-    appliance_washing: `🔧 ${t('appliance_repair')} → ${t('app_washing')}`,
-    appliance_refrigerator: `🔧 ${t('appliance_repair')} → ${t('app_refrigerator')}`,
-    appliance_tv: `🔧 ${t('appliance_repair')} → ${t('app_tv')}`,
-    appliance_geyser: `🔧 ${t('appliance_repair')} → ${t('app_geyser')}`,
-    appliance_ro: `🔧 ${t('appliance_repair')} → ${t('app_ro')}`,
-    appliance_microwave: `🔧 ${t('appliance_repair')} → ${t('app_microwave')}`,
-    appliance_other: `🔧 ${t('appliance_repair')} → ${t('app_other')}`
-};
+            electrician: `🔧 ${t('electrician')}`,
+            plumber: `🚰 ${t('plumber')}`,
+            ac_repair: `❄️ ${t('ac_repair')}`,
+            carpenter: `🔨 ${t('carpenter')}`,
+            painter: `🎨 ${t('painter')}`,
+            cleaner: `🧹 ${t('cleaner')}`
+        };
         
         container.innerHTML = services.map(s => `
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #f5f5f5; border-radius: 8px; margin-bottom: 10px;">
@@ -6792,261 +5348,12 @@ async function loadCurrentServices() {
     }
 }
 
-// =====================================================
-// CREATE REQUEST - Service Dropdown Functionality
-// =====================================================
-
-// Initialize dropdown behavior when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    initializeCreateRequestServiceDropdown();
-});
-
-function initializeCreateRequestServiceDropdown() {
-    const trigger = document.getElementById('serviceDropdownTrigger');
-    const accordion = document.getElementById('serviceAccordion');
-    const serviceTypeInput = document.getElementById('serviceType');
-    const serviceSubtypeInput = document.getElementById('serviceSubtype');
-    
-    if (!trigger || !accordion) return;
-    
-    // Click trigger to open/close dropdown
-    trigger.addEventListener('click', function() {
-        const isOpen = accordion.classList.contains('show');
-        
-        if (isOpen) {
-            // Close dropdown
-            accordion.classList.remove('show');
-            trigger.classList.remove('active');
-        } else {
-            // Open dropdown
-            accordion.classList.add('show');
-            trigger.classList.add('active');
-            
-            // Reset all categories to show (in case some were hidden)
-            document.querySelectorAll('#serviceAccordion .service-category').forEach(cat => {
-                cat.classList.remove('hidden');
-            });
-        }
-    });
-    
-    // Category header click - expand/collapse and hide others
-    document.querySelectorAll('#serviceAccordion .service-category-header').forEach(header => {
-        header.addEventListener('click', function(e) {
-            e.stopPropagation();
-            
-            const category = this.closest('.service-category');
-            const isExpanded = category.classList.contains('expanded');
-            
-            if (isExpanded) {
-                // Collapse this category and show all categories again
-                category.classList.remove('expanded');
-                document.querySelectorAll('#serviceAccordion .service-category').forEach(cat => {
-                    cat.classList.remove('hidden');
-                });
-            } else {
-                // Expand this category and hide others
-                document.querySelectorAll('#serviceAccordion .service-category').forEach(cat => {
-                    if (cat !== category) {
-                        cat.classList.add('hidden');
-                        cat.classList.remove('expanded');
-                    }
-                });
-                category.classList.add('expanded');
-            }
-        });
-    });
-    
-    // Subcategory click - select service
-    document.querySelectorAll('#serviceAccordion .subcategory-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.stopPropagation();
-            
-            const value = this.getAttribute('data-value');
-            const category = this.closest('.service-category').getAttribute('data-category');
-            
-            // Remove previous selection
-            document.querySelectorAll('#serviceAccordion .subcategory-item').forEach(i => {
-                i.classList.remove('selected');
-            });
-            
-            // Mark this as selected
-            this.classList.add('selected');
-            
-            // Update hidden inputs
-            serviceTypeInput.value = category;
-            serviceSubtypeInput.value = value;
-            
-            // Get the service name for display
-            const categoryIcon = this.closest('.service-category').querySelector('.category-icon').textContent;
-            const categoryName = this.closest('.service-category').querySelector('.category-title').textContent;
-            const subtypeName = this.querySelector('.subcategory-name').textContent;
-            
-            // Update trigger display
-            trigger.innerHTML = `
-                <span class="selected-service">${categoryIcon} ${categoryName} → ${subtypeName}</span>
-                <span class="dropdown-arrow">▼</span>
-            `;
-            
-            // Close dropdown
-            accordion.classList.remove('show');
-            trigger.classList.remove('active');
-            
-            // Reset categories visibility
-            document.querySelectorAll('#serviceAccordion .service-category').forEach(cat => {
-                cat.classList.remove('hidden', 'expanded');
-            });
-        });
-    });
-    
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!trigger.contains(e.target) && !accordion.contains(e.target)) {
-            accordion.classList.remove('show');
-            trigger.classList.remove('active');
-            
-            // Reset categories visibility
-            document.querySelectorAll('#serviceAccordion .service-category').forEach(cat => {
-                cat.classList.remove('hidden', 'expanded');
-            });
-        }
-    });
-}
-
-// =====================================================
-// EDIT PROFILE - Provider Add Service Dropdown
-// =====================================================
-
-function initializeProviderServiceDropdown() {
-    const trigger = document.getElementById('providerServiceDropdownTrigger');
-    const accordion = document.getElementById('providerServiceAccordion');
-    const addButton = document.getElementById('providerAddServiceBtn');
-    const categoryInput = document.getElementById('newServiceSelect');
-    const subtypeInput = document.getElementById('newServiceSubtype');
-    
-    if (!trigger || !accordion) return;
-    if (addButton) addButton.disabled = true;
-    // Click trigger to open/close dropdown
-    trigger.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const isOpen = accordion.classList.contains('show');
-        
-        if (isOpen) {
-            // Close dropdown
-            accordion.classList.remove('show');
-            trigger.classList.remove('active');
-        } else {
-            // Open dropdown
-            accordion.classList.add('show');
-            trigger.classList.add('active');
-            
-            // Reset all categories to show
-            document.querySelectorAll('#providerServiceAccordion .service-category').forEach(cat => {
-                cat.classList.remove('hidden');
-            });
-        }
-    });
-    
-    // Category header click - expand/collapse and hide others
-    document.querySelectorAll('#providerServiceAccordion .service-category-header').forEach(header => {
-        header.addEventListener('click', function(e) {
-            e.stopPropagation();
-            
-            const category = this.closest('.service-category');
-            const isExpanded = category.classList.contains('expanded');
-            
-            if (isExpanded) {
-                // Collapse and show all categories
-                category.classList.remove('expanded');
-                document.querySelectorAll('#providerServiceAccordion .service-category').forEach(cat => {
-                    cat.classList.remove('hidden');
-                });
-            } else {
-                // Expand this and hide others
-                document.querySelectorAll('#providerServiceAccordion .service-category').forEach(cat => {
-                    if (cat !== category) {
-                        cat.classList.add('hidden');
-                        cat.classList.remove('expanded');
-                    }
-                });
-                category.classList.add('expanded');
-            }
-        });
-    });
-    
-    // Subcategory click - select service
-    document.querySelectorAll('#providerServiceAccordion .subcategory-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.stopPropagation();
-            
-            const value = this.getAttribute('data-value');
-            const category = this.closest('.service-category').getAttribute('data-category');
-            
-            // Remove previous selection
-            document.querySelectorAll('#providerServiceAccordion .subcategory-item').forEach(i => {
-                i.classList.remove('selected');
-            });
-            
-            // Mark as selected
-            this.classList.add('selected');
-            
-            // Update hidden inputs
-            categoryInput.value = category;
-            subtypeInput.value = value;
-            
-            // Get service name for display
-            const categoryIcon = this.closest('.service-category').querySelector('.category-icon').textContent;
-            const categoryName = this.closest('.service-category').querySelector('.category-title').textContent;
-            const subtypeName = this.querySelector('.subcategory-name').textContent;
-            
-            // Update trigger display
-            trigger.innerHTML = `
-                <span class="selected-service">${categoryIcon} ${categoryName} → ${subtypeName}</span>
-                <span class="dropdown-arrow">▼</span>
-            `;
-            
-            // Enable add button
-            addButton.disabled = false;
-            
-            // Close dropdown
-            accordion.classList.remove('show');
-            trigger.classList.remove('active');
-            
-            // Reset categories
-            document.querySelectorAll('#providerServiceAccordion .service-category').forEach(cat => {
-                cat.classList.remove('hidden', 'expanded');
-            });
-        });
-    });
-    
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!trigger.contains(e.target) && !accordion.contains(e.target)) {
-            accordion.classList.remove('show');
-            trigger.classList.remove('active');
-            
-            // Reset categories
-            document.querySelectorAll('#providerServiceAccordion .service-category').forEach(cat => {
-                cat.classList.remove('hidden', 'expanded');
-            });
-        }
-    });
-}
-
-// Initialize when editing profile
-function initEditProfileServiceDropdown() {
-    // Call this when edit profile view is shown
-    setTimeout(() => {
-        initializeProviderServiceDropdown();
-    }, 100);
-}
-
-async function addProviderService() {
-    const categoryInput = document.getElementById('newServiceSelect');
-    const subtypeInput = document.getElementById('newServiceSubtype');
-    const serviceId = subtypeInput.value;
+async function addService() {
+    const select = document.getElementById('newServiceSelect');
+    const serviceId = select.value;
     
     if (!serviceId) {
-        alert('Please select a service to add');
+        alert(t('please_select_service'));
         return;
     }
     
@@ -7061,61 +5368,14 @@ async function addProviderService() {
         
         if (error) throw error;
         
-        alert('✅ Service added successfully!');
-        
-        // Clear selection
-        categoryInput.value = '';
-        subtypeInput.value = '';
-        
-        // Reset trigger display
-        const trigger = document.getElementById('providerServiceDropdownTrigger');
-        if (trigger) {
-            trigger.innerHTML = `
-                <span class="placeholder">Select Service to Add</span>
-                <span class="dropdown-arrow">▼</span>
-            `;
-        }
-        
-        // Disable add button
-        const addButton = document.getElementById('providerAddServiceBtn');
-        if (addButton) addButton.disabled = true;
-        
-        // Reload services list
+        alert(`✅ ${t('service_added')}`);
+        select.value = '';
         await loadCurrentServices();
         
     } catch (error) {
-        alert(`Error: ${error.message}`);
+        alert(`${t('error')}: ${error.message}`);
     }
 }
-
-// =====================================================
-// INFO TOOLTIP POSITIONING FIX
-// =====================================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    const infoBubbles = document.querySelectorAll('.info-bubble');
-    
-    infoBubbles.forEach(bubble => {
-        const tooltip = bubble.querySelector('.info-tooltip');
-        if (!tooltip) return;
-        
-        bubble.addEventListener('mouseenter', function(e) {
-            const bubbleRect = this.getBoundingClientRect();
-            
-            // Position tooltip to the left of the bubble
-            tooltip.style.right = 'auto';
-            tooltip.style.left = (bubbleRect.left - 240) + 'px';
-            tooltip.style.top = (bubbleRect.top + bubbleRect.height / 2) + 'px';
-            tooltip.style.transform = 'translateY(-50%)';
-            
-            tooltip.style.display = 'block';
-        });
-        
-        bubble.addEventListener('mouseleave', function() {
-            tooltip.style.display = 'none';
-        });
-    });
-});
 
 async function removeService(serviceId) {
     if (!confirm(t('confirm_remove_service'))) return;
@@ -7758,18 +6018,16 @@ console.log('✅ Verification email sent automatically by Supabase');
 
         console.log('🔵 STEP 6: Adding provider services (if applicable)...');
 
-        // ✅ STEP 4: If provider, create services (UPDATED FOR SUBCATEGORIES)
-if (formData.is_provider) {
-    const services = [];
-    // Collect all checked subcategory services
-    document.querySelectorAll('.signup-service-checkbox:checked').forEach(checkbox => {
-        services.push(checkbox.value);
-    });
-    
-    if (services.length === 0) {
-        showError('signupError', t('please_select_at_least_one_service'));
-        return;
-    }       
+        // ✅ STEP 4: If provider, create services
+        if (formData.is_provider) {
+            const services = [];
+            if (document.getElementById('service_electrician').checked) services.push('electrician');
+            if (document.getElementById('service_plumber').checked) services.push('plumber');
+            if (document.getElementById('service_ac_repair').checked) services.push('ac_repair');
+            if (document.getElementById('service_carpenter').checked) services.push('carpenter');
+            if (document.getElementById('service_painter').checked) services.push('painter');
+            if (document.getElementById('service_cleaner').checked) services.push('cleaner');
+            
             if (services.length > 0) {
                 const radius = parseInt(document.getElementById('signupRadius').value) || 10;
                 
@@ -10626,7 +8884,7 @@ if (currentRequestFilter === 'open' || currentRequestFilter === 'no_response') {
             let html = '';            
 
             for (let req of filteredRequests) {
-                const serviceIcon = SERVICE_ICONS[req.service_id] || '🔧';
+                const serviceIcon = SERVICE_ICONS[req.service_category] || '🔧';
                 const isReactivated = req.status === 'in_progress' && req.warranty_end_date;
                 
 		const reactivatedBadge = isReactivated ? '<span style="color: #dc3545; font-weight: 700; font-size: 11px; margin-left: 6px; background: #fee; padding: 2px 8px; border-radius: 4px;">' + t('reactivated') + '</span>' : '';
@@ -10808,7 +9066,7 @@ ${warrantyBadge || reactivateButton ? `
     <div class="request-description"><strong>${t('description')}:</strong> ${req.description}</div>
     <div class="request-location" style="margin-top: 8px;"><strong>${t('full_address')}:</strong> ${req.request_location_address}</div>
     <div class="request-meta" style="margin-top: 8px;">
-        <span class="meta-item">🔧 ${t('service_label')}: ${req.service_id}</span>
+        <span class="meta-item">🔧 ${t('service_label')}: ${req.service_category}</span>
         <span class="meta-item">⚡ ${t('urgency_label')}: ${t(req.urgency)}</span>
     </div>
    ${req.status === 'open' ? `
@@ -12930,57 +11188,25 @@ async function viewProviderProfile(providerId) {
                 .order('created_at', { ascending: false });
             
             if (ratings && ratings.length > 0) {
-    // Service type icons and names mapping - UPDATED TO SUBCATEGORIES
-    const serviceIcons = {
-        // Electrician subcategories
-        electrician_installation: `🔌 ${t('electrician')} → ${t('elec_installation')}`,
-        electrician_repair: `🔌 ${t('electrician')} → ${t('elec_repair')}`,
-        electrician_wiring: `🔌 ${t('electrician')} → ${t('elec_wiring')}`,
-        
-        // Plumber subcategories
-        plumber_installation: `🚰 ${t('plumber')} → ${t('plumb_installation')}`,
-        plumber_repair: `🚰 ${t('plumber')} → ${t('plumb_repair')}`,
-        plumber_new_work: `🚰 ${t('plumber')} → ${t('plumb_new_work')}`,
-        
-        // AC subcategories
-        ac_installation: `❄️ ${t('ac_services')} → ${t('ac_installation')}`,
-        ac_repair_service: `❄️ ${t('ac_services')} → ${t('ac_repair_service')}`,
-        ac_gas_filling: `❄️ ${t('ac_services')} → ${t('ac_gas_filling')}`,
-        
-        // Carpenter subcategories
-        carpenter_repair: `🔨 ${t('carpenter')} → ${t('carp_repair')}`,
-        carpenter_custom: `🔨 ${t('carpenter')} → ${t('carp_custom')}`,
-        carpenter_door_window: `🔨 ${t('carpenter')} → ${t('carp_door_window')}`,
-        
-        // Painter subcategories
-        painter_house: `🎨 ${t('painter')} → ${t('paint_house')}`,
-        painter_furniture: `🎨 ${t('painter')} → ${t('paint_furniture')}`,
-        painter_texture: `🎨 ${t('painter')} → ${t('paint_texture')}`,
-        
-        // Cleaner subcategories
-        cleaner_house: `🧹 ${t('cleaner')} → ${t('clean_house')}`,
-        cleaner_upholstery: `🧹 ${t('cleaner')} → ${t('clean_upholstery')}`,
-        cleaner_vehicle: `🧹 ${t('cleaner')} → ${t('clean_vehicle')}`,
-        
-        // Appliance subcategories
-        appliance_washing: `🔧 ${t('appliance_repair')} → ${t('app_washing')}`,
-        appliance_refrigerator: `🔧 ${t('appliance_repair')} → ${t('app_refrigerator')}`,
-        appliance_tv: `🔧 ${t('appliance_repair')} → ${t('app_tv')}`,
-        appliance_geyser: `🔧 ${t('appliance_repair')} → ${t('app_geyser')}`,
-        appliance_ro: `🔧 ${t('appliance_repair')} → ${t('app_ro')}`,
-        appliance_microwave: `🔧 ${t('appliance_repair')} → ${t('app_microwave')}`,
-        appliance_other: `🔧 ${t('appliance_repair')} → ${t('app_other')}`
-    };
-    
-    ratingDetailsHTML = `<hr style="margin: 20px 0;"><h3 style="margin-bottom: 15px;">${t('recent_reviews')}:</h3>`;
-    ratings.slice(0, 5).forEach(r => {  // Show last 5 ratings
-        const reviewStars = '⭐'.repeat(r.rating);
-        const reviewDate = new Date(r.created_at).toLocaleDateString();
-        
-        // Get service name with icon - now with subcategory support
-        const serviceName = r.service_type && serviceIcons[r.service_type] 
-            ? serviceIcons[r.service_type] 
-            : '🔧 Service';  // Fallback if service_type is missing
+                // ✅ NEW: Service type icons and names mapping
+                const serviceIcons = {
+                    electrician: `🔧 ${t('electrician')}`,
+                    plumber: `🚰 ${t('plumber')}`,
+                    ac_repair: `❄️ ${t('ac_repair')}`,
+                    carpenter: `🔨 ${t('carpenter')}`,
+                    painter: `🎨 ${t('painter')}`,
+                    cleaner: `🧹 ${t('cleaner')}`
+                };
+                
+                ratingDetailsHTML = `<hr style="margin: 20px 0;"><h3 style="margin-bottom: 15px;">${t('recent_reviews')}:</h3>`;
+                ratings.slice(0, 5).forEach(r => {  // ← CHANGED: Show last 5 ratings (was 3)
+                    const reviewStars = '⭐'.repeat(r.rating);
+                    const reviewDate = new Date(r.created_at).toLocaleDateString();
+                    
+                    // ✅ NEW: Get service name with icon
+                    const serviceName = r.service_type && serviceIcons[r.service_type] 
+                        ? serviceIcons[r.service_type] 
+                        : '🔧 Service';  // Fallback if service_type is missing
                     
                     ratingDetailsHTML += `
                         <div style="background: #f5f5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #667eea;">
@@ -13187,7 +11413,7 @@ async function displayProviderOpenRequests(data) {
         const req = item.request;
         if (!req) continue;
         
-        const icon = getServiceIcon(req.service_id);
+        const icon = SERVICE_ICONS[req.service_category] || '🔧';
         const timeAgo = getTimeAgo(new Date(item.created_at));
         const distance = calculateDistance(
             currentProfile.latitude,
@@ -13575,7 +11801,7 @@ for (let data of responsesData) {
     const req = data.request;
     if (!req) continue;
     
-    const icon = getServiceIcon(req.service_id);
+    const icon = SERVICE_ICONS[req.service_category] || '🔧';
     const timeAgo = getTimeAgo(new Date(data.created_at));
     
     // ✅ ADD THESE TWO LINES HERE:
@@ -13688,7 +11914,7 @@ if (req.status === 'completed') {
                     <div class="request-description"><strong>${t('description')}:</strong> ${req.description}</div>
                     <div class="request-location" style="margin-top: 8px;"><strong>${t('location')}:</strong> ${req.request_location_address}</div>
                     <div class="request-meta" style="margin-top: 8px;">
-                        <span class="meta-item">🔧 ${t('service')}: ${req.service_id}</span>
+                        <span class="meta-item">🔧 ${t('service')}: ${req.service_category}</span>
                     </div>
                 </div>
             </div>
@@ -13712,12 +11938,9 @@ async function loadNearbyRequests() {
         
         // Step 1: Get all open requests
         const { data: allRequests, error: reqError } = await supabase
-    .from('requests')
-    .select(`
-        *,
-        service:services!fk_requests_service(name)
-    `)
-    .eq('status', 'open');
+            .from('requests')
+            .select('*')
+            .eq('status', 'open');
         
         if (reqError) throw reqError;
         
@@ -13726,7 +11949,7 @@ async function loadNearbyRequests() {
             console.log('🔵 All open requests:', allRequests.map(r => ({
                 id: r.id,
                 title: r.title,
-                service: r.service_id,
+                service: r.service_category,
                 location: { lat: r.request_latitude, lng: r.request_longitude },
                 address: r.request_location_address
             })));
@@ -13797,25 +12020,24 @@ async function loadNearbyRequests() {
             console.log('📏 Distance:', distance, 'km');
             
             // Check if provider offers this service
-            const matchingService = providerServices.find(s => s.service_id === req.service_id);
+            const matchingService = providerServices.find(s => s.service_id === req.service_category);
             
             if (!matchingService) {
-    console.log('❌ SKIP: Provider does NOT offer service:', req.service_id);
-    continue;
-}
-
-console.log('✅ Provider offers this service:', req.service_id);
+                console.log('❌ SKIP: Provider does NOT offer service:', req.service_category);
+                continue;
+            }
+            
+            console.log('✅ Provider offers this service:', req.service_category);
             console.log('📍 Service radius:', matchingService.service_radius, 'km');
             
             // Check if within service radius
             if (distance <= matchingService.service_radius) {
                 console.log('✅ MATCH! Request is within radius:', distance, 'km <=', matchingService.service_radius, 'km');
                 nearby.push({
-    ...req,
-    distance: distance,
-    serviceRadius: matchingService.service_radius,
-    service_name: req.service?.name || req.service_id
-});
+                    ...req,
+                    distance: distance,
+                    serviceRadius: matchingService.service_radius
+                });
             } else {
                 console.log('❌ SKIP: Request is OUTSIDE radius:', distance, 'km >', matchingService.service_radius, 'km');
             }
@@ -14033,7 +12255,7 @@ tabsContainer.innerHTML = tabsHTML;
     let html = '';
     
     for (let req of filteredRequests) {
-        const icon = getServiceIcon(req.service_id);
+        const icon = SERVICE_ICONS[req.service_category] || '🔧';
         const timeAgo = getTimeAgo(new Date(req.created_at));                                         
         const newBadge = ((new Date() - new Date(req.created_at)) / (1000 * 60 * 60)) < 2 ? `<span class="info-badge">🆕 ${t('new_badge')}</span>` : '';
         
@@ -14051,8 +12273,8 @@ tabsContainer.innerHTML = tabsHTML;
     ${newBadge}
 </div>
                         <div class="request-summary" style="margin-top: 6px; color: #999;">
-    🕒 ${timeAgo} • 🔧 ${req.service_name || req.service_id}
-</div>
+                            🕒 ${timeAgo} • 🔧 ${req.service_category}
+                        </div>
                     </div>
                     <div class="request-card-right">
     ${window.currentWorkFilter === 'missed' 
@@ -14568,7 +12790,7 @@ async function changeProvider(requestId, currentProviderId) {
                 
                 // Populate form fields
                 document.getElementById('editRequestId').value = request.id;
-                document.getElementById('editServiceType').value = request.service_id;
+                document.getElementById('editServiceType').value = request.service_category;
                 document.getElementById('editRequestTitle').value = request.title;
                 document.getElementById('editRequestDescription').value = request.description;
                 
@@ -14639,15 +12861,7 @@ async function changeProvider(requestId, currentProviderId) {
         // Create Request
 document.getElementById('createRequestForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    // Validate service selection
-const serviceType = document.getElementById('serviceType').value;
-const serviceSubtype = document.getElementById('serviceSubtype').value;
-
-if (!serviceType || !serviceSubtype) {
-    showError('createRequestError', t('please_select_service_type'));
-    document.getElementById('serviceDropdownTrigger').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
-}
+    
     const errorDiv = document.getElementById('createRequestError');
     const infoDiv = document.getElementById('createRequestInfo');
     const submitBtn = document.getElementById('submitRequestBtn');
@@ -14713,7 +12927,7 @@ if (!serviceType || !serviceSubtype) {
             .from('requests')
             .insert([{
                 user_id: currentUser.id,
-                service_id: serviceSubtype,
+                service_category: serviceType,
                 title: title,
                 description: description,
                 urgency: urgency,
@@ -15435,45 +13649,13 @@ return cities;
             
             if (services && services.length > 0) {
                 const serviceNames = {
-    // Electrician subcategories
-    electrician_installation: `🔌 ${t('electrician')} → ${t('elec_installation')}`,
-    electrician_repair: `🔌 ${t('electrician')} → ${t('elec_repair')}`,
-    electrician_wiring: `🔌 ${t('electrician')} → ${t('elec_wiring')}`,
-    
-    // Plumber subcategories
-    plumber_installation: `🚰 ${t('plumber')} → ${t('plumb_installation')}`,
-    plumber_repair: `🚰 ${t('plumber')} → ${t('plumb_repair')}`,
-    plumber_new_work: `🚰 ${t('plumber')} → ${t('plumb_new_work')}`,
-    
-    // AC subcategories
-    ac_installation: `❄️ ${t('ac_services')} → ${t('ac_installation')}`,
-    ac_repair_service: `❄️ ${t('ac_services')} → ${t('ac_repair_service')}`,
-    ac_gas_filling: `❄️ ${t('ac_services')} → ${t('ac_gas_filling')}`,
-    
-    // Carpenter subcategories
-    carpenter_repair: `🔨 ${t('carpenter')} → ${t('carp_repair')}`,
-    carpenter_custom: `🔨 ${t('carpenter')} → ${t('carp_custom')}`,
-    carpenter_door_window: `🔨 ${t('carpenter')} → ${t('carp_door_window')}`,
-    
-    // Painter subcategories
-    painter_house: `🎨 ${t('painter')} → ${t('paint_house')}`,
-    painter_furniture: `🎨 ${t('painter')} → ${t('paint_furniture')}`,
-    painter_texture: `🎨 ${t('painter')} → ${t('paint_texture')}`,
-    
-    // Cleaner subcategories
-    cleaner_house: `🧹 ${t('cleaner')} → ${t('clean_house')}`,
-    cleaner_upholstery: `🧹 ${t('cleaner')} → ${t('clean_upholstery')}`,
-    cleaner_vehicle: `🧹 ${t('cleaner')} → ${t('clean_vehicle')}`,
-    
-    // Appliance subcategories
-    appliance_washing: `🔧 ${t('appliance_repair')} → ${t('app_washing')}`,
-    appliance_refrigerator: `🔧 ${t('appliance_repair')} → ${t('app_refrigerator')}`,
-    appliance_tv: `🔧 ${t('appliance_repair')} → ${t('app_tv')}`,
-    appliance_geyser: `🔧 ${t('appliance_repair')} → ${t('app_geyser')}`,
-    appliance_ro: `🔧 ${t('appliance_repair')} → ${t('app_ro')}`,
-    appliance_microwave: `🔧 ${t('appliance_repair')} → ${t('app_microwave')}`,
-    appliance_other: `🔧 ${t('appliance_repair')} → ${t('app_other')}`
-};
+                    electrician: `🔧 ${t('electrician')}`,
+                    plumber: `🚰 ${t('plumber')}`,
+                    ac_repair: `❄️ ${t('ac_repair')}`,
+                    carpenter: `🔨 ${t('carpenter')}`,
+                    painter: `🎨 ${t('painter')}`,
+                    cleaner: `🧹 ${t('cleaner')}`
+                };
                 servicesHTML = `<h3 style="margin-top: 20px; margin-bottom: 10px;">${t('services_provided')}:</h3><div style="display: flex; flex-wrap: wrap; gap: 8px;">`;
                 services.forEach(s => {
                     servicesHTML += `<span style="background: #667eea; color: white; padding: 6px 12px; border-radius: 20px; font-size: 13px;">${serviceNames[s.service_id] || s.service_id}</span>`;
@@ -15499,45 +13681,13 @@ if (partnerProfile.average_rating && partnerProfile.average_rating > 0 && partne
     if (ratings && ratings.length > 0) {
         // ✅ NEW: Service type icons and names mapping
         const serviceIcons = {
-    // Electrician subcategories
-    electrician_installation: `🔌 ${t('electrician')} → ${t('elec_installation')}`,
-    electrician_repair: `🔌 ${t('electrician')} → ${t('elec_repair')}`,
-    electrician_wiring: `🔌 ${t('electrician')} → ${t('elec_wiring')}`,
-    
-    // Plumber subcategories
-    plumber_installation: `🚰 ${t('plumber')} → ${t('plumb_installation')}`,
-    plumber_repair: `🚰 ${t('plumber')} → ${t('plumb_repair')}`,
-    plumber_new_work: `🚰 ${t('plumber')} → ${t('plumb_new_work')}`,
-    
-    // AC subcategories
-    ac_installation: `❄️ ${t('ac_services')} → ${t('ac_installation')}`,
-    ac_repair_service: `❄️ ${t('ac_services')} → ${t('ac_repair_service')}`,
-    ac_gas_filling: `❄️ ${t('ac_services')} → ${t('ac_gas_filling')}`,
-    
-    // Carpenter subcategories
-    carpenter_repair: `🔨 ${t('carpenter')} → ${t('carp_repair')}`,
-    carpenter_custom: `🔨 ${t('carpenter')} → ${t('carp_custom')}`,
-    carpenter_door_window: `🔨 ${t('carpenter')} → ${t('carp_door_window')}`,
-    
-    // Painter subcategories
-    painter_house: `🎨 ${t('painter')} → ${t('paint_house')}`,
-    painter_furniture: `🎨 ${t('painter')} → ${t('paint_furniture')}`,
-    painter_texture: `🎨 ${t('painter')} → ${t('paint_texture')}`,
-    
-    // Cleaner subcategories
-    cleaner_house: `🧹 ${t('cleaner')} → ${t('clean_house')}`,
-    cleaner_upholstery: `🧹 ${t('cleaner')} → ${t('clean_upholstery')}`,
-    cleaner_vehicle: `🧹 ${t('cleaner')} → ${t('clean_vehicle')}`,
-    
-    // Appliance subcategories
-    appliance_washing: `🔧 ${t('appliance_repair')} → ${t('app_washing')}`,
-    appliance_refrigerator: `🔧 ${t('appliance_repair')} → ${t('app_refrigerator')}`,
-    appliance_tv: `🔧 ${t('appliance_repair')} → ${t('app_tv')}`,
-    appliance_geyser: `🔧 ${t('appliance_repair')} → ${t('app_geyser')}`,
-    appliance_ro: `🔧 ${t('appliance_repair')} → ${t('app_ro')}`,
-    appliance_microwave: `🔧 ${t('appliance_repair')} → ${t('app_microwave')}`,
-    appliance_other: `🔧 ${t('appliance_repair')} → ${t('app_other')}`
-};
+            electrician: `🔧 ${t('electrician')}`,
+            plumber: `🚰 ${t('plumber')}`,
+            ac_repair: `❄️ ${t('ac_repair')}`,
+            carpenter: `🔨 ${t('carpenter')}`,
+            painter: `🎨 ${t('painter')}`,
+            cleaner: `🧹 ${t('cleaner')}`
+        };
         
         ratingsHTML += '<div style="margin-top: 10px;">';
         ratings.slice(0, 5).forEach(r => {  // ← CHANGED: Show last 5 ratings (was 3)
@@ -15632,13 +13782,13 @@ async function submitRating() {
         // ✅ NEW STEP 1: Get service_id from request first
         const { data: requestData, error: fetchError } = await supabase
             .from('requests')
-            .select('service_id, warranty_end_date')  // ← Added service_id here
+            .select('service_category, warranty_end_date')  // ← Added service_id here
             .eq('id', currentRatingData.requestId)
             .single();
         
         if (fetchError) throw fetchError;
         
-        const serviceType = requestData.service_id;  // ← Get service type
+        const serviceType = requestData.service_category;  // ← Get service type
         const warrantyEndDate = requestData.warranty_end_date;
         
         console.log('🔧 Service type:', serviceType);
@@ -16783,192 +14933,7 @@ if (nonDeselectedOpenRequests.length === 0) {
     }
 }
 
-// Service Accordion Functionality
-function initServiceAccordion() {
-  const categories = document.querySelectorAll('.service-category');
-  const serviceTypeInput = document.getElementById('serviceType');
-  const serviceSubtypeInput = document.getElementById('serviceSubtype');
-  const selectedDisplay = document.getElementById('selectedServiceDisplay');
 
-  categories.forEach(category => {
-    const header = category.querySelector('.service-category-header');
-    const subcategories = category.querySelectorAll('.subcategory-item');
-
-    // Toggle accordion
-    header.addEventListener('click', () => {
-      // Close all other categories
-      categories.forEach(c => {
-        if (c !== category) c.classList.remove('open');
-      });
-      // Toggle current category
-      category.classList.toggle('open');
-    });
-
-    // Subcategory selection
-    subcategories.forEach(sub => {
-      sub.addEventListener('click', (e) => {
-        // Don't trigger if clicking on info bubble
-        if (e.target.closest('.info-bubble')) return;
-
-        // Remove selection from all
-        document.querySelectorAll('.subcategory-item').forEach(s => s.classList.remove('selected'));
-        
-        // Add selection to clicked
-        sub.classList.add('selected');
-
-        // Get values
-        const categoryName = category.dataset.category;
-        const subtypeValue = sub.dataset.value;
-        const categoryTitle = category.querySelector('.category-title').textContent;
-        const subtypeName = sub.querySelector('.subcategory-name').textContent;
-
-        // Set hidden inputs
-        serviceTypeInput.value = categoryName;
-        serviceSubtypeInput.value = subtypeValue;
-
-        // Show selected service
-        selectedDisplay.textContent = `${categoryTitle} → ${subtypeName}`;
-        selectedDisplay.style.display = 'block';
-
-        // Close accordion after selection
-        category.classList.remove('open');
-      });
-    });
-  });
-
-  // Prevent info bubble click from propagating
-  document.querySelectorAll('.info-bubble').forEach(bubble => {
-    bubble.addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
-  });
-}
-
-// Provider Service Accordion Functionality
-function initProviderServiceAccordion() {
-    const container = document.getElementById('providerServiceAccordion');
-    if (!container) return;
-    
-    const categories = container.querySelectorAll('.service-category');
-    const serviceInput = document.getElementById('newServiceSelect');
-    const subtypeInput = document.getElementById('newServiceSubtype');
-    const selectedDisplay = document.getElementById('selectedProviderServiceDisplay');
-
-    categories.forEach(category => {
-        const header = category.querySelector('.service-category-header');
-        const subcategories = category.querySelectorAll('.subcategory-item');
-
-        // Toggle accordion
-        header.addEventListener('click', () => {
-            // Close all other categories in this accordion
-            categories.forEach(c => {
-                if (c !== category) c.classList.remove('open');
-            });
-            category.classList.toggle('open');
-        });
-
-        // Subcategory selection
-        subcategories.forEach(sub => {
-            sub.addEventListener('click', (e) => {
-                if (e.target.closest('.info-bubble')) return;
-
-                // Remove selection from all in this accordion
-                container.querySelectorAll('.subcategory-item').forEach(s => s.classList.remove('selected'));
-                
-                sub.classList.add('selected');
-
-                const categoryName = category.dataset.category;
-                const subtypeValue = sub.dataset.value;
-                const categoryTitle = category.querySelector('.category-title').textContent;
-                const subtypeName = sub.querySelector('.subcategory-name').textContent;
-
-                serviceInput.value = categoryName;
-                subtypeInput.value = subtypeValue;
-
-                selectedDisplay.textContent = `${categoryTitle} → ${subtypeName}`;
-                selectedDisplay.style.display = 'block';
-
-                category.classList.remove('open');
-            });
-        });
-    });
-
-    // Prevent info bubble click from propagating
-    container.querySelectorAll('.info-bubble').forEach(bubble => {
-        bubble.addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
-    });
-}
-
-// Separate function for event binding (can be called multiple times safely)
-function initProviderServiceAccordionEvents() {
-    const container = document.getElementById('providerServiceAccordion');
-    if (!container) return;
-    
-    const categories = container.querySelectorAll('.service-category');
-    const serviceInput = document.getElementById('newServiceSelect');
-    const subtypeInput = document.getElementById('newServiceSubtype');
-    const selectedDisplay = document.getElementById('selectedProviderServiceDisplay');
-
-    categories.forEach(category => {
-        const header = category.querySelector('.service-category-header');
-        const subcategories = category.querySelectorAll('.subcategory-item');
-
-        // Remove old listeners by cloning
-        const newHeader = header.cloneNode(true);
-        header.parentNode.replaceChild(newHeader, header);
-
-        // Toggle accordion
-        newHeader.addEventListener('click', () => {
-            categories.forEach(c => {
-                if (c !== category) c.classList.remove('open');
-            });
-            category.classList.toggle('open');
-        });
-
-        // Subcategory selection
-        subcategories.forEach(sub => {
-            const newSub = sub.cloneNode(true);
-            sub.parentNode.replaceChild(newSub, sub);
-            
-            newSub.addEventListener('click', (e) => {
-                if (e.target.closest('.info-bubble')) return;
-
-                container.querySelectorAll('.subcategory-item').forEach(s => s.classList.remove('selected'));
-                newSub.classList.add('selected');
-
-                const categoryName = category.dataset.category;
-                const subtypeValue = newSub.dataset.value;
-                const categoryTitle = category.querySelector('.category-title').textContent;
-                const subtypeName = newSub.querySelector('.subcategory-name').textContent;
-
-                serviceInput.value = categoryName;
-                subtypeInput.value = subtypeValue;
-
-                selectedDisplay.textContent = `${categoryTitle} → ${subtypeName}`;
-                selectedDisplay.style.display = 'block';
-
-                category.classList.remove('open');
-            });
-        });
-    });
-
-    // Prevent info bubble click from propagating
-    container.querySelectorAll('.info-bubble').forEach(bubble => {
-        const newBubble = bubble.cloneNode(true);
-        bubble.parentNode.replaceChild(newBubble, bubble);
-        newBubble.addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
-    });
-}
-
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-    initServiceAccordion();
-    initProviderServiceAccordion();
-});
 
 </script>
 
