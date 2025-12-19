@@ -2091,87 +2091,6 @@ body.dark-theme span[class*="status"] {
 #providerServiceAccordion .service-category.expanded .subcategory-item {
     display: flex;
 }
-
-/* =============================================================================
-   DARK THEME HINDI TEXT VISIBILITY FIXES
-   Add this CSS to your existing stylesheet or in a <style> tag in index.html
-   ============================================================================= */
-
-/* Fix 1: Service Type Dropdown Button Text - Main dropdown trigger */
-.service-dropdown-trigger,
-.service-dropdown-trigger.active {
-    color: #ffffff !important; /* White text for main dropdown */
-}
-
-/* Fix 2: Service Category Headers - Main category titles when expanded */
-.service-category-header,
-.service-category-header span {
-    color: #e8e8e8 !important; /* Light gray for category headers */
-}
-
-.service-category-header .category-icon,
-.service-category-header .expand-icon {
-    color: #ffffff !important; /* White icons */
-}
-
-/* Fix 3: Subcategory Items - The actual service options (MOST CRITICAL) */
-.subcategory-item,
-.subcategory-item span,
-.subcategory-name {
-    color: #f0f0f0 !important; /* Bright light gray for subcategory text */
-}
-
-/* Fix 4: Info Bubble Text */
-.info-bubble {
-    background-color: #4a5568 !important; /* Darker background for info */
-    color: #ffffff !important; /* White text */
-}
-
-/* Fix 5: Category Title in expanded state */
-.category-title {
-    color: #ffffff !important;
-}
-
-/* Fix 6: Ensure all text in service categories is visible */
-.service-category-content,
-.service-category-content * {
-    color: #e8e8e8 !important;
-}
-
-/* Fix 7: Override any inherited dark text colors in dark theme */
-body.dark-theme .service-dropdown-trigger,
-body.dark-theme .service-category-header,
-body.dark-theme .subcategory-item,
-body.dark-theme .subcategory-name {
-    color: #ffffff !important;
-}
-
-/* Fix 8: Specific fix for Hindi text rendering */
-[lang="hi"] .service-dropdown-trigger,
-[lang="hi"] .service-category-header,
-[lang="hi"] .subcategory-item,
-[lang="hi"] .subcategory-name {
-    color: #ffffff !important;
-    font-weight: 500; /* Slightly bolder for better visibility */
-}
-
-/* Fix 9: Hover states for better interaction visibility */
-.subcategory-item:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    color: #ffffff !important;
-}
-
-.service-category-header:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: #ffffff !important;
-}
-
-/* Fix 10: Active/Selected state */
-.service-category.expanded .service-category-header,
-.service-category.open .service-category-header {
-    color: #ffffff !important;
-    background-color: rgba(255, 255, 255, 0.05) !important;
-}
     </style>
 </head>
 <body>
@@ -5124,8 +5043,8 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     forgot_password: "Password भूल गए?",
     get_help: "मदद चाहिए",
     sign_up_link: "नए खाते के लिए साइन अप करें",
-    dont_have_account: "खाता नहीं है?",
-    invalid_credentials: "Email या Password गलत है",
+    dont_have_account: "नया खाता नहीं है?",
+    invalid_credentials: "गलत Email या Password",
     
     // ============================================================
     // SECTION 4: AUTHENTICATION - SIGNUP PAGE
@@ -5136,22 +5055,22 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     enter_correct_number: "सही नंबर डालें",
     invalid_phone: "सही मोबाइल नंबर डालें",
     house_number: "घर नंबर",
-    area_name: "मोहल्ला/ इलाका",
-    landmark: "कोई निशानी",
+    area_name: "इलाका",
+    landmark: "पास में क्या है",
     city: "शहर",
     state: "राज्य",
-    pin_code: "PIN कोड",
+    pin_code: "PIN Code",
     select_state: "राज्य चुनें",
     address_details: "पते की जानकारी",
     i_want_to_provide: "मैं सेवा देना चाहता हूं",
-    provider_settings: "सेवा प्रदाता की सेटिंग",
-    service_radius: "काम करने का क्षेत्र ",
+    provider_settings: "सेवा देने की सेटिंग",
+    service_radius: "कितनी दूर तक जाएंगे",
     services_i_provide: "मैं ये सेवाएं देता हूं",
     i_agree_to: "मैं मानता हूं",
     and: "और",
-    sign_up: "नया खाता बनाएं",
-    back_to_login: "लॉगिन पर जाएं",
-    already_have_account: "आपका खाता पहले से है?",
+    sign_up: "साइन अप करें",
+    back_to_login: "वापस लॉगिन पर जाएं",
+    already_have_account: "पहले से खाता है?",
     email_registered: "ये Email पहले से है",
     
     // ============================================================
@@ -5159,10 +5078,10 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     // ============================================================
     select_service: "सेवा चुनें",
     select_service_to_add: "जोड़ने के लिए सेवा चुनें",
-    add_service: "सेवा जोड़ें",
+    add_service: "जोड़ें",
     add_new_service: "नई सेवा जोड़ें",
     electrician: "बिजली मिस्त्री ",
-    plumber: "पानी फिटिंग ( प्लंबर )",
+    plumber: "पानी फिटिंग मिस्त्री ( प्लंबर )",
     ac_services: "AC का काम",
     carpenter: "लकड़ी कारीगर ( बढ़ई )",
     painter: "पेंटर",
@@ -5178,22 +5097,22 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     verify_email_message: "ऐप इस्तेमाल के लिए Email जांच जरूरी है",
     check_inbox: "अपना Inbox देखें",
     resend_email: "Email दोबारा भेजें",
-    verification_sent: "जांच के लिए Email भेजा गया है",
+    verification_sent: "जांच Email भेज दिया गया",
     check_spam: "Spam folder भी देखें",
-    please_verify_email: "कृपा Email सत्यापित करें",
-    verify_email: "Email सत्यापित करें",
-    verify_email_before_responding: "अनुरोध का जवाब देने से पहले अपना Email सत्यापित करें।\n\n📧 अपना Inbox देखें।",
-    account_created_verify_email: "खाता बन गया! लॉगिन करने से पहले अपना Email सत्यापित करें।",
+    please_verify_email: "पहले Email जांच करें",
+    verify_email: "Email जांचें",
+    verify_email_before_responding: "अनुरोध का जवाब देने से पहले अपना Email जांचें।\n\n📧 अपना Inbox देखें।",
+    account_created_verify_email: "खाता बन गया! लॉगिन करने से पहले अपना Email जांचें।",
     
     // ============================================================
     // SECTION 7: PASSWORD RESET
     // ============================================================
-    reset_password: "Password दुबारा बनाये",
+    reset_password: "Password रीसेट करें",
     new_password: "नया Password",
-    confirm_new_password: "नए Password की पुष्टि करें",
+    confirm_new_password: "नया Password पुष्टि करें",
     reset_password_btn: "Password रीसेट करें",
-    please_enter_email: "कृपया अपना Email ID दर्ज करें",
-    please_enter_valid_email: "कृपया एक मान्य Email ID दर्ज करें",
+    please_enter_email: "कृपया अपना Email पता दर्ज करें",
+    please_enter_valid_email: "कृपया एक मान्य Email पता दर्ज करें",
     password_reset_email_sent: "यदि यह Email पंजीकृत है, तो Password रीसेट लिंक भेजा गया है। कृपया अपना Inbox (और Spam folder) जांचें।",
     send_reset_link: "रीसेट लिंक भेजें",
     reset_password_intro: "अपना पंजीकृत Email पता दर्ज करें और हम आपको Password रीसेट लिंक भेजेंगे।",
@@ -5214,21 +5133,21 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     // ============================================================
     // SECTION 9: DASHBOARD SECTIONS (Main Tab Headings)
     // ============================================================
-    open_requests: "खुले अनुरोधं",
-    active_requests: "सक्रिय अनुरोध",
-    my_responses: "मेरे जवाब",
+    open_requests: "खुली मांगें",
+    active_requests: "चालू मांगें",
+    my_responses: "मेरी रुचि",
     work_opportunities: "काम  के अवसर ",
     
     // ============================================================
     // SECTION 10: DASHBOARD SUB-TABS (Filter Categories)
     // ============================================================
-    no_response: "बिना प्रतिक्रिया",
+    no_response: "अभी कोई जवाब नहीं",
     negotiating: "बातचीत जारी",
-    in_progress: "कार्य प्रगति में",
-    waiting: "समीक्षा बाकि",
-    review: "समीक्षा करें",
-    completed: "कार्य पूर्ण",
-    available_work: "काम उपलब्ध",
+    in_progress: "काम चल रहा है",
+    waiting: "समीक्षा में",
+    review: "समीक्षा",
+    completed: "पूरा हो गया",
+    available_work: "काम उपलब्ध है",
     missed_opportunities: "छूट गया",
     deselected: "हटाया गया",
     reactivated: "फिर से खुला",
@@ -5238,17 +5157,17 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     // ============================================================
     create_service_request: "सेवा के लिए अनुरोध करें",
     service_type: "किस काम की जरूरत है",
-    title: "काम का शीर्षक",
-    description: "काम की पूरी जानकारी",
+    title: "काम का नाम",
+    description: "पूरी जानकारी",
     urgency: "जरूरत",
     urgent: "बहुत जरूरी",
     normal: "जरूरी",
     low: "सामान्य",
-    use_different_location: "अगर सेवा किसी अन्य पते पर चाहिए तो इसे टिक करें",
-    create_request: "नए अनुरोध करें",
-    max_requests_reached: "5 से ज्यादा खुले अनुरोध नहीं हो सकते",
-    service_type_cannot_change: "अब सेवा का प्रकार नहीं बदला जा सकता",
-    location_cannot_change: "अब सेवा का स्थान व प्रकार नहीं बदला जा सकता। इन्हें बदलने के लिए, कृपया यह अनुरोध रद्द करें और नया बनाएं।",
+    use_different_location: "अगर सेवा किसी अन्य पते पर चाहिए तो यह टिक करें",
+    create_request: "अनुरोध करें",
+    max_requests_reached: "5 से ज्यादा मांगें नहीं हो सकती",
+    service_type_cannot_change: "अनुरोध बनने के बाद सेवा प्रकार नहीं बदला जा सकता",
+    location_cannot_change: "अनुरोध बनने के बाद स्थान और सेवा प्रकार नहीं बदला जा सकता। इन्हें बदलने के लिए, कृपया यह अनुरोध रद्द करें और नया बनाएं।",
     update_request: "अनुरोध अपडेट करें",
     creating: "बना रहे हैं...",
     creating_request: "अनुरोध बना रहे हैं...",
@@ -5256,16 +5175,16 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     // ============================================================
     // SECTION 12: EDIT REQUEST FORM
     // ============================================================
-    edit_service_request: "सेवा अनुरोध सुधारें",
+    edit_service_request: "सेवा अनुरोध संपादित करें",
     current_location: "वर्तमान स्थान",
-    cannot_edit_after_responses: "प्रदाताओं के जवाब देने के बाद अनुरोध को सुधारा नहीं जा सकता। कृपया रद्द करें और नया अनुरोध बनाएं।",
-    only_open_requests_editable: "केवल बिना प्रतिक्रिया के अनुरोधों को सुधारा किया जा सकता है।",
-    request_updated_success: "अनुरोध सफलतापूर्वक सुधारा गया!",
+    cannot_edit_after_responses: "प्रदाताओं के जवाब देने के बाद अनुरोध संपादित नहीं किया जा सकता। कृपया रद्द करें और नया अनुरोध बनाएं।",
+    only_open_requests_editable: "केवल खुले अनुरोधों को संपादित किया जा सकता है।",
+    request_updated_success: "अनुरोध सफलतापूर्वक अपडेट किया गया!",
     
     // ============================================================
     // SECTION 13: PROFILE & SETTINGS
     // ============================================================
-    edit_profile: "जानकारी में बदलाव करें",
+    edit_profile: "जानकारी बदलें",
     personal_information: "आपकी जानकारी",
     change_profile_photo: "फोटो बदलें",
     max_size_2mb: "2MB से कम। खाली छोड़ें तो पुरानी फोटो रहेगी",
@@ -5275,11 +5194,11 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     click_to_stop: "बंद करने के लिए दबाएं",
     click_to_start: "शुरू करने के लिए दबाएं",
     remove: "हटाएं",
-    save_changes: "बदलाव करें",
+    save_changes: "बदलाव सहेजें",
     rating: "रेटिंग",
     total_requests: "कुल अनुरोध",
     completed_services: "पूरी की गई सेवाएं",
-    member_since: "कब से जुड़े",
+    member_since: "जुड़े हुए",
     error_loading_profile: "जानकारी लोड करने में समस्या",
     profile_updated: "जानकारी बदल गई!",
     service_added: "सेवा जुड़ गई!",
@@ -5291,7 +5210,6 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     updating_location: "स्थान अपडेट हो रहा है...",
     saving_profile: "प्रोफाइल सहेजा जा रहा है...",
     no_services_added_update_profile: "आपने अभी तक कोई सेवा नहीं जोड़ी है। कृपया अपनी प्रोफाइल अपडेट करें।",
-    your_services: "आपकी सेवाएं",
     
     // ============================================================
     // SECTION 14: CHAT INTERFACE
@@ -5301,7 +5219,7 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     type_your_message: "संदेश लिखें...",
     send: "भेजें",
     attach: "फोटो जोड़ें",
-    quick_templates: "पहले से बने सवाल जवाब",
+    quick_templates: "पहले से बने जवाब",
     shared_photo: "फोटो भेजी",
     no_messages_yet: "अभी कोई संदेश नहीं है। बातचीत शुरू करें!",
     request_status: "अनुरोध की स्थिति",
@@ -5312,7 +5230,7 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     request_contact_sharing: "संपर्क साझा करने का अनुरोध करें",
     privacy_protected: "जानकारी सुरक्षित है",
     privacy_notice_text: "दोनों पक्षों की सहमति के बाद ही फोन नंबर और पते साझा होंगे।",
-    contact_sharing_request: "नंबर संझा का अनुरोध",
+    contact_sharing_request: "नंबर देने का अनुरोध",
     approve: "हां करें",
     decline: "ना करें",
     approved: "मंजूर",
@@ -5335,7 +5253,7 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     months_3: "3 महीने",
     months_6: "6 महीने",
     year_1: "1 साल",
-    confirm_completion: "पूर्ण होने की पुष्टि करें",
+    confirm_completion: "पुष्टि करें",
     accept_completion: "हां, पूरा हुआ",
     reject_continue_work: "नहीं, जारी रखें",
     reject_continue: "नहीं, जारी रखें",
@@ -5351,12 +5269,12 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     // ============================================================
     // SECTION 17: PROVIDER RESPONSES & SELECTION
     // ============================================================
-    providers_who_responded: "जवाब देने वाले प्रदाता",
-    providers_responded: "जवाब देने वाले प्रदाता",
+    providers_who_responded: "इच्छुक प्रदाता",
+    providers_responded: "इच्छुक प्रदाता",
     view_profile: "जानकारी देखें",
-    select_provider: "प्रदाता चुनें",
-    respond: "जवाब भेजे",
-    responded: "जवाब भेजे",
+    select_provider: "चुनें",
+    respond: "रुचि दिखाएं",
+    responded: "रुचि दिखाई",
     no_ratings: "अभी कोई रेटिंग नहीं",
     km_away: "किमी दूर",
     away: "दूर",
@@ -5367,7 +5285,7 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     pending: "रुका हुआ",
     pending_approval: "जवाब का इंतज़ार",
     checking: "जांच रहे हैं...",
-    already_responded: "आपने पहले ही इस अनुरोध का जवाब दे दिया है!",
+    already_responded: "आपने पहले ही इस अनुरोध का जवाब दिया है!",
     response_sent_success: "जवाब सफलतापूर्वक भेजा गया! आप अब चैट कर सकते हैं।",
     
     // ============================================================
@@ -5378,7 +5296,7 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     status_completed: "पूरा हो गया",
     status_pending: "लंबित",
     status_pending_approval: "मंजूरी का इंतजार",
-    status_readonly: "केवल देखने के लिए",
+    status_readonly: "सिर्फ देखने के लिए",
     status_assigned_other: "अन्य प्रदाता को चुना गया",
     status_warranty_expired: "वारंटी खत्म",
     keep_existing_warranty: "मौजूदा वारंटी रखें",
@@ -15493,6 +15411,7 @@ return cities;
         }
 
 	async function openChatPartnerProfile() {
+    alert('🔥 UPDATED CODE IS RUNNING!'); // ← THIS LINE
     try {
         // Get partner's full profile
         const { data: partnerProfile, error } = await supabase
@@ -16908,8 +16827,8 @@ function initServiceAccordion() {
         serviceSubtypeInput.value = subtypeValue;
 
         // Show selected service
-// selectedDisplay.textContent = `${categoryTitle} → ${subtypeName}`;
-// selectedDisplay.style.display = 'block';
+        selectedDisplay.textContent = `${categoryTitle} → ${subtypeName}`;
+        selectedDisplay.style.display = 'block';
 
         // Close accordion after selection
         category.classList.remove('open');
