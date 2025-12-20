@@ -14,8 +14,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script> <!-- 🆕 ADD THIS LINE -->
-    
-<style>
+    <style>
 
 body.dark-theme {
     background-color: #1a1a2e !important;
@@ -383,27 +382,6 @@ body.dark-theme .row textarea {
     border: 2px solid #4a4a6c !important;
 }
 
-/* ========================================
-   Provider Profile - Dropdown Width Fixes
-   ======================================== */
-
-/* Fix 1: Work Area Dropdown - Prevent overflow (TOO WIDE issue) */
-#providerSettings select,
-.provider-settings select,
-select[id*="radius"],
-select[name*="radius"] {
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-/* Dropdown options should also be contained */
-#providerSettings select option,
-.provider-settings select option {
-    width: 100% !important;
-    max-width: 100% !important;
-}
-
 /* Dark Theme - Ensure all form text is visible */
 body.dark-theme form,
 body.dark-theme .form-group {
@@ -700,7 +678,7 @@ body.dark-theme #providerSettings input::placeholder {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 100000;
+    z-index: 10000;
     background: white;
 }
 #chatView.hidden {
@@ -2119,74 +2097,81 @@ body.dark-theme span[class*="status"] {
    Add this CSS to your existing stylesheet or in a <style> tag in index.html
    ============================================================================= */
 
-/* Light Theme: Service dropdown should have DARK text */
+/* Fix 1: Service Type Dropdown Button Text - Main dropdown trigger */
 .service-dropdown-trigger,
 .service-dropdown-trigger.active {
-    color: #333333; /* Dark text for light theme */
+    color: #ffffff !important; /* White text for main dropdown */
 }
 
-/* Dark Theme: Service dropdown should have BRIGHT text */
-body.dark-theme .service-dropdown-trigger,
-body.dark-theme .service-dropdown-trigger.active {
-    color: #ffffff !important; /* White text for dark theme */
-}
-
-/* Light Theme: Category headers should have DARK text */
+/* Fix 2: Service Category Headers - Main category titles when expanded */
 .service-category-header,
 .service-category-header span {
-    color: #1f2937 !important; /* Dark text for light theme */
+    color: #e8e8e8 !important; /* Light gray for category headers */
 }
 
 .service-category-header .category-icon,
 .service-category-header .expand-icon {
-    color: #1f2937 !important; /* Dark icons for light theme */
+    color: #ffffff !important; /* White icons */
 }
 
-.service-category-header .category-title {
-    color: #1f2937 !important; /* Dark title for light theme */
-}
-
-/* Dark Theme: Category headers should have BRIGHT text */
-body.dark-theme .service-category-header,
-body.dark-theme .service-category-header span {
-    color: #e8e8e8 !important; /* Light gray for category headers */
-}
-
-body.dark-theme .service-category-header .category-icon,
-body.dark-theme .service-category-header .expand-icon {
-    color: #ffffff !important; /* White icons for dark theme */
-}
-
-body.dark-theme .service-category-header .category-title {
-    color: #ffffff !important; /* White title for dark theme */
-}
-
-/* Light Theme: Subcategory items should have DARK text */
+/* Fix 3: Subcategory Items - The actual service options (MOST CRITICAL) */
 .subcategory-item,
 .subcategory-item span,
 .subcategory-name {
-    color: #374151 !important; /* Dark gray for subcategory text in light theme */
+    color: #f0f0f0 !important; /* Bright light gray for subcategory text */
 }
 
-/* Dark Theme: Subcategory items should have BRIGHT text */
-body.dark-theme .subcategory-item,
-body.dark-theme .subcategory-item span,
-body.dark-theme .subcategory-name {
-    color: #f0f0f0 !important; /* Bright light gray for subcategory text in dark theme */
-}
-
-/* Info bubble - Blue background and white icon for BOTH themes */
+/* Fix 4: Info Bubble Text */
 .info-bubble {
-    background-color: #3b82f6 !important; /* Blue background for both themes */
-    color: #ffffff !important; /* White icon/text for both themes */
+    background-color: #4a5568 !important; /* Darker background for info */
+    color: #ffffff !important; /* White text */
 }
 
-/* Keep the same blue in dark theme too */
-body.dark-theme .info-bubble {
-    background-color: #3b82f6 !important; /* Same blue in dark theme */
-    color: #ffffff !important; /* White icon/text */
+/* Fix 5: Category Title in expanded state */
+.category-title {
+    color: #ffffff !important;
 }
 
+/* Fix 6: Ensure all text in service categories is visible */
+.service-category-content,
+.service-category-content * {
+    color: #e8e8e8 !important;
+}
+
+/* Fix 7: Override any inherited dark text colors in dark theme */
+body.dark-theme .service-dropdown-trigger,
+body.dark-theme .service-category-header,
+body.dark-theme .subcategory-item,
+body.dark-theme .subcategory-name {
+    color: #ffffff !important;
+}
+
+/* Fix 8: Specific fix for Hindi text rendering */
+[lang="hi"] .service-dropdown-trigger,
+[lang="hi"] .service-category-header,
+[lang="hi"] .subcategory-item,
+[lang="hi"] .subcategory-name {
+    color: #ffffff !important;
+    font-weight: 500; /* Slightly bolder for better visibility */
+}
+
+/* Fix 9: Hover states for better interaction visibility */
+.subcategory-item:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+.service-category-header:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+}
+
+/* Fix 10: Active/Selected state */
+.service-category.expanded .service-category-header,
+.service-category.open .service-category-header {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
     </style>
 </head>
 <body>
@@ -5106,61 +5091,7 @@ app_ro_examples: "Not purifying, Low water flow, Filter change, TDS issues, Leak
 app_microwave_examples: "Not heating, Turntable not rotating, Door latch broken, Display issues, Strange sounds, Sparking inside",
 app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problems, Cooler pump, Water pump, Chimney repair",
 
-// Seeker Templates
-'templates.seeker.initial_contact.title': '💬 Initial Contact',
-'templates.seeker.initial_contact.item1': 'Hi! Can you provide more details about the service?',
-'templates.seeker.initial_contact.item2': 'What is your availability for this work?',
-'templates.seeker.initial_contact.item3': 'Can you share your experience with similar work?',
 
-'templates.seeker.scheduling.title': '📅 Scheduling',
-'templates.seeker.scheduling.item1': 'When can you start the work?',
-'templates.seeker.scheduling.item2': 'How long will it take to complete?',
-'templates.seeker.scheduling.item3': 'Can you come today or tomorrow?',
-
-'templates.seeker.pricing.title': '💰 Pricing',
-'templates.seeker.pricing.item1': 'What will be the estimated cost?',
-'templates.seeker.pricing.item2': 'Do you charge for inspection/visit?',
-'templates.seeker.pricing.item3': 'Is this price negotiable?',
-
-'templates.seeker.additional_info.title': 'ℹ️ Additional Info',
-'templates.seeker.additional_info.item1': 'Do you have the necessary tools and equipment?',
-'templates.seeker.additional_info.item2': 'Will you provide materials or should I arrange them?',
-'templates.seeker.additional_info.item3': 'Can you share photos of previous work?',
-'templates.seeker.additional_info.item4': 'Do you offer any warranty on your work?',
-
-'templates.seeker.contact_finalization.title': '🤝 Contact & Finalization',
-'templates.seeker.contact_finalization.item1': 'Let\'s finalize this deal. Can we exchange contact details?',
-'templates.seeker.contact_finalization.item2': 'I\'d like to proceed with you. When can we meet?',
-'templates.seeker.contact_finalization.item3': 'Sounds good! Please share your contact number.',
-
-// Provider Templates
-'templates.provider.response.title': '👋 Response',
-'templates.provider.response.item1': 'Hi! I\'m available and interested in this work.',
-'templates.provider.response.item2': 'I have experience in this type of work. Happy to help!',
-'templates.provider.response.item3': 'I can start immediately. Let me know if you\'d like to proceed.',
-
-'templates.provider.pricing.title': '💰 Pricing',
-'templates.provider.pricing.item1': 'The estimated cost will be around ₹XXX.',
-'templates.provider.pricing.item2': 'I can provide a detailed quote after inspection.',
-'templates.provider.pricing.item3': 'No charges for initial visit and inspection.',
-
-'templates.provider.information_requests.title': 'ℹ️ Information Requests',
-'templates.provider.information_requests.item1': 'Can you share more details or photos of the problem?',
-'templates.provider.information_requests.item2': 'What is your preferred time for the visit?',
-'templates.provider.information_requests.item3': 'Are there any specific requirements I should know about?',
-
-'templates.provider.contact_finalization.title': '🤝 Contact & Finalization',
-'templates.provider.contact_finalization.item1': 'I\'m ready to start. Can we exchange contact details?',
-'templates.provider.contact_finalization.item2': 'Please share your address so I can visit.',
-'templates.provider.contact_finalization.item3': 'Let\'s finalize the schedule. Here\'s my contact number.',
-
-'templates.provider.service_completion.title': '✅ Service Completion',
-'templates.provider.service_completion.item1': 'Work completed successfully. Please check and confirm.',
-'templates.provider.service_completion.item2': 'Everything is done. Let me know if you need any adjustments.',
-'templates.provider.service_completion.item3': 'The service is complete. Feel free to contact me during warranty period.',
-
-'sys_selected': '🎉 Congratulations! You have been selected for this service request',
-'sys_selected_description': 'The customer has chosen you to complete this work. Please proceed with the service and keep the customer updated on your progress.',
   },
   
   // ============================================================
@@ -5551,7 +5482,7 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     request_created: "अनुरोध बन गया!",
     response_sent: "जवाब भेज दिया!",
     provider_selected: "चुन लिया!",
-    provider_selected_success: "प्रदाता चुना गया! बातचीत खोली जा रही है...",
+    provider_selected_success: "प्रदाता चुना गया! चैट खोला जा रहा है...",
     work_completed: "काम पूरा!",
     request_cancelled_success: "अनुरोध सफलतापूर्वक रद्द कर दिया गया",
     
@@ -5569,16 +5500,16 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
     // SECTION 26: CONFIRMATION DIALOGS
     // ============================================================
     confirm_cancel_request: "क्या वाकई मांग रद्द करनी है?",
-    confirm_logout: "क्या आप वाकई बाहर निकलना चाहते हैं?",
+    confirm_logout: "क्या आप वाकई लॉगआउट करना चाहते हैं?",
     permanent_delete: "ये मांग हमेशा के लिए हट जाएगी",
     change_provider_confirm: "सेवा देने वाला बदलना है?",
-    change_provider_warning: "यह होगा:\n• वर्तमान प्रदाता को हटा दिया जाएगा\n• अनुरोध 'खुला' स्थिति में वापस जाएगा\n• वर्तमान प्रदाता को सूचित किया जाएगा\n• अन्य प्रदाताओं के साथ चैट फिर से सक्रिय होगी\n\nक्या आप बदलना चाहते हैं?",
+    change_provider_warning: "यह होगा:\n• वर्तमान प्रदाता को हटा दिया जाएगा\n• अनुरोध 'खुला' स्थिति में वापस जाएगा\n• वर्तमान प्रदाता को सूचित किया जाएगा\n• अन्य प्रदाताओं के साथ चैट फिर से सक्रिय होगी\n\nक्या आप जारी रखना चाहते हैं?",
     provider_changed_success: "प्रदाता सफलतापूर्वक बदल दिया गया!\n\nअनुरोध अब फिर से खुला है।",
     reactivate_confirm: "फिर से खोलना है?",
     reactivate_warning: "प्रदाता को सूचित किया जाएगा कि आपको वारंटी अवधि के भीतर फिर से सेवा की आवश्यकता है।",
     request_not_found: "अनुरोध नहीं मिला",
     request_reactivated_success: "अनुरोध फिर से सक्रिय! प्रदाता को सूचित कर दिया गया है।",
-    select_provider_confirm: "इस प्रदाता को चुनें? यह अनुरोध की स्थिति को 'प्रगति में' में बदल देगा और बातचीत खोल देगा।",
+    select_provider_confirm: "इस प्रदाता को चुनें? यह अनुरोध की स्थिति को 'प्रगति में' में बदल देगा और चैट खोल देगा।",
     
     // ============================================================
     // SECTION 27: FEEDBACK FORM
@@ -5860,61 +5791,6 @@ app_ro_examples: "शुद्ध नहीं कर रहा, पानी �
 app_microwave_examples: "गर्म नहीं हो रहा, टर्नटेबल घूम नहीं रहा, दरवाजे का लैच टूटा, डिस्प्ले की समस्या, अजीब आवाजें, अंदर चिंगारी",
 app_other_examples: "पंखे की मरम्मत, मिक्सर काम नहीं कर रहा, ग्राइंडर की समस्या, प्रेस की समस्या, कूलर का पंप, पानी का पंप, चिमनी की मरम्मत",
 
-// Seeker Templates
-'templates.seeker.initial_contact.title': '💬 प्रारंभिक संपर्क',
-'templates.seeker.initial_contact.item1': 'नमस्ते! क्या आप सेवा के बारे में अधिक जानकारी दे सकते हैं?',
-'templates.seeker.initial_contact.item2': 'इस काम के लिए आपकी उपलब्धता क्या है?',
-'templates.seeker.initial_contact.item3': 'क्या आप इसी तरह के काम का अनुभव साझा कर सकते हैं?',
-
-'templates.seeker.scheduling.title': '📅 समय निर्धारण',
-'templates.seeker.scheduling.item1': 'आप काम कब शुरू कर सकते हैं?',
-'templates.seeker.scheduling.item2': 'इसे पूरा होने में कितना समय लगेगा?',
-'templates.seeker.scheduling.item3': 'क्या आप आज या कल आ सकते हैं?',
-
-'templates.seeker.pricing.title': '💰 मूल्य निर्धारण',
-'templates.seeker.pricing.item1': 'अनुमानित लागत क्या होगी?',
-'templates.seeker.pricing.item2': 'क्या आप निरीक्षण/विजिट के लिए शुल्क लेते हैं?',
-'templates.seeker.pricing.item3': 'क्या यह कीमत पर बातचीत की जा सकती है?',
-
-'templates.seeker.additional_info.title': 'ℹ️ अतिरिक्त जानकारी',
-'templates.seeker.additional_info.item1': 'क्या आपके पास आवश्यक उपकरण और औजार हैं?',
-'templates.seeker.additional_info.item2': 'क्या आप सामग्री प्रदान करेंगे या मुझे व्यवस्था करनी होगी?',
-'templates.seeker.additional_info.item3': 'क्या आप पिछले काम की तस्वीरें साझा कर सकते हैं?',
-'templates.seeker.additional_info.item4': 'क्या आप अपने काम पर वारंटी देते हैं?',
-
-'templates.seeker.contact_finalization.title': '🤝 संपर्क और अंतिम रूप',
-'templates.seeker.contact_finalization.item1': 'चलिए इस सौदे को अंतिम रूप दें। क्या हम संपर्क विवरण साझा कर सकते हैं?',
-'templates.seeker.contact_finalization.item2': 'मैं आपके साथ आगे बढ़ना चाहूंगा। हम कब मिल सकते हैं?',
-'templates.seeker.contact_finalization.item3': 'अच्छा लगा! कृपया अपना संपर्क नंबर साझा करें।',
-
-// Provider Templates
-'templates.provider.response.title': '👋 प्रतिक्रिया',
-'templates.provider.response.item1': 'नमस्ते! मैं उपलब्ध हूं और इस काम में रुचि रखता हूं।',
-'templates.provider.response.item2': 'मुझे इस प्रकार के काम का अनुभव है। मदद करने में खुशी होगी!',
-'templates.provider.response.item3': 'मैं तुरंत शुरू कर सकता हूं। बताएं अगर आगे बढ़ना चाहते हैं।',
-
-'templates.provider.pricing.title': '💰 मूल्य निर्धारण',
-'templates.provider.pricing.item1': 'अनुमानित लागत लगभग ₹XXX होगी।',
-'templates.provider.pricing.item2': 'मैं निरीक्षण के बाद विस्तृत कोटेशन दे सकता हूं।',
-'templates.provider.pricing.item3': 'प्रारंभिक विजिट और निरीक्षण के लिए कोई शुल्क नहीं।',
-
-'templates.provider.information_requests.title': 'ℹ️ जानकारी अनुरोध',
-'templates.provider.information_requests.item1': 'क्या आप समस्या के बारे में अधिक विवरण या फोटो साझा कर सकते हैं?',
-'templates.provider.information_requests.item2': 'विजिट के लिए आपका पसंदीदा समय क्या है?',
-'templates.provider.information_requests.item3': 'क्या कोई विशेष आवश्यकताएं हैं जिनके बारे में मुझे पता होना चाहिए?',
-
-'templates.provider.contact_finalization.title': '🤝 संपर्क और अंतिम रूप',
-'templates.provider.contact_finalization.item1': 'मैं शुरू करने के लिए तैयार हूं। क्या हम संपर्क विवरण साझा कर सकते हैं?',
-'templates.provider.contact_finalization.item2': 'कृपया अपना पता साझा करें ताकि मैं विजिट कर सकूं।',
-'templates.provider.contact_finalization.item3': 'चलिए शेड्यूल फाइनल करते हैं। यह रहा मेरा संपर्क नंबर।',
-
-'templates.provider.service_completion.title': '✅ सेवा पूर्णता',
-'templates.provider.service_completion.item1': 'काम सफलतापूर्वक पूरा हो गया। कृपया जांचें और पुष्टि करें।',
-'templates.provider.service_completion.item2': 'सब कुछ हो गया। अगर कोई बदलाव चाहिए तो बताएं।',
-'templates.provider.service_completion.item3': 'सेवा पूर्ण हो गई है। वारंटी अवधि के दौरान मुझसे संपर्क करें।',
-
-'sys_selected': '🎉 बधाई हो! आपको इस सेवा अनुरोध के लिए चुना गया है',
-'sys_selected_description': 'ग्राहक ने आपको यह काम पूरा करने के लिए चुना है। कृपया सेवा के साथ आगे बढ़ें और ग्राहक को अपनी प्रगति के बारे में अपडेट करते रहें।',
   }
 };
 
@@ -6741,32 +6617,11 @@ if (modeToggleBtn) modeToggleBtn.style.display = currentProfile.is_provider ? 'f
 if (createRequestBtn && currentDashboardMode === 'seeker') createRequestBtn.style.display = 'block';
 
 // Navigate back based on origin
-console.log('🔍 DEBUG smartBack - chatOpenedFrom value:', chatOpenedFrom);
-console.log('🔍 DEBUG smartBack - checking if equals "responses-modal":', chatOpenedFrom === 'responses-modal');
-
 if (chatOpenedFrom === 'responses-modal') {
-    console.log('✅ Returning to responses modal');
-    
-    // Make sure dashboard is visible (modal needs it as background)
-    const dashboardView = document.getElementById('dashboardView');
-    if (dashboardView) {
-        dashboardView.classList.remove('hidden');
-        dashboardView.style.display = 'block';
-    }
-    
     // Show responses modal (don't close it, keep it open)
-    const responsesModal = document.getElementById('responsesModal');
-    if (responsesModal) {
-        responsesModal.classList.add('active');
-        responsesModal.style.display = 'flex'; // Ensure modal is visible
-    }
-    
-    // Reload dashboard data in background (to refresh badges)
-    loadDashboardData();
-    
+    document.getElementById('responsesModal').classList.add('active');
     chatOpenedFrom = null;
 } else {
-    console.log('✅ Returning to dashboard');
     showDashboard();
     chatOpenedFrom = null;
 }
@@ -10890,26 +10745,14 @@ let newResponsesCount = 0;
 let totalUnreadFromProviders = 0;
 
 if (req.status === 'open') {
-    // 🆕 STEP 1: Get deselected providers for this request
-    const { data: deselectedProviders } = await supabase
-        .from('request_rejected_providers')
-        .select('provider_id')
-        .eq('request_id', req.id)
-        .eq('rejection_reason', 'deselected');
-    
-    const deselectedSet = new Set((deselectedProviders || []).map(d => d.provider_id));
-    
-    // 🆕 STEP 2: Filter responses to exclude deselected providers
-    const allResponses = window.cachedResponsesByRequest[req.id] || [];
-    const responses = allResponses.filter(r => !deselectedSet.has(r.provider_id));
-    
-    // 🆕 STEP 3: Use filtered count
-    responseCount = responses.length; // ✅ NOW EXCLUDES DESELECTED
+    responseCount = responseCountMap[req.id] || 0;
     showResponses = responseCount > 0;
     
+    // Use cached data instead of queries!
+    const responses = window.cachedResponsesByRequest[req.id] || [];
     const normalizeToUTC = window.cachedNormalizeToUTC;
     
-    // Calculate NEW responses count (Badge 1) - FROM FILTERED RESPONSES
+    // Calculate NEW responses count (Badge 1) - FROM CACHE
     if (responseCount > 0 && req.seeker_last_viewed_responses_at) {
         const viewedTime = normalizeToUTC(req.seeker_last_viewed_responses_at);
         newResponsesCount = responses.filter(r => 
@@ -10919,7 +10762,7 @@ if (req.status === 'open') {
         newResponsesCount = responseCount;
     }
     
-    // Calculate total unread messages from ACTIVE providers only (Badge 2)
+    // Calculate total unread messages from ALL providers (Badge 2) - FROM CACHE
     if (responseCount > 0) {
         for (let response of responses) {
             const chatKey = `${req.id}_${response.provider_id}`;
@@ -11042,38 +10885,35 @@ ${warrantyBadge || reactivateButton ? `
 ` : ''}
     ${reactivateButton}
 </div>
-
-</div>
-    <div class="request-details" id="details-${req.id}">
-        <div class="request-description"><strong>${t('description')}:</strong> ${req.description}</div>
-        <div class="request-location" style="margin-top: 8px;"><strong>${t('full_address')}:</strong> ${req.request_location_address}</div>
-        <div class="request-meta" style="margin-top: 8px;">
-            <span class="meta-item">🔧 ${t('service_label')}: ${req.service_id}</span>
-            <span class="meta-item">⚡ ${t('urgency_label')}: ${t(req.urgency)}</span>
-        </div>
-        
-        ${req.status === 'open' ? `
-            <div style="display: flex; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0f0f0;">
-                ${responseCount === 0 ? `
-                    <button class="btn" style="flex: 1; background: #128C7E; color: white;" onclick="editRequest('${req.id}')">✏️ ${t('btn_edit_request')}</button>
-                ` : ''}
-                <button class="btn btn-cancel" style="flex: 1;" onclick="cancelRequest('${req.id}')">❌ ${t('btn_cancel_request')}</button>
-            </div>
-        ` : ''}
-        
-        ${(req.status === 'in_progress' || req.status === 'pending_completion') && req.selected_provider_id ? `
-            <div style="display: flex; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0f0f0;">
-                <button class="btn" style="flex: 1; background: #ff9800; color: white;" onclick="changeProvider('${req.id}', '${req.selected_provider_id}')">🔄 ${t('btn_change_provider')}</button>
-            </div>
-        ` : ''}
+                        </div>
+                        <div class="request-details" id="details-${req.id}">
+    <div class="request-description"><strong>${t('description')}:</strong> ${req.description}</div>
+    <div class="request-location" style="margin-top: 8px;"><strong>${t('full_address')}:</strong> ${req.request_location_address}</div>
+    <div class="request-meta" style="margin-top: 8px;">
+        <span class="meta-item">🔧 ${t('service_label')}: ${req.service_id}</span>
+        <span class="meta-item">⚡ ${t('urgency_label')}: ${t(req.urgency)}</span>
     </div>
-</div>
-`;
+   ${req.status === 'open' ? `
+        <div style="display: flex; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0f0f0;">
+            <button class="btn" style="flex: 1; background: #128C7E; color: white;" onclick="editRequest('${req.id}')">✏️ ${t('btn_edit_request')}</button>
+            <button class="btn btn-cancel" style="flex: 1;" onclick="cancelRequest('${req.id}')">❌ ${t('btn_cancel_request')}</button>
+        </div>
+    ` : ''}
+
+${(req.status === 'in_progress' || req.status === 'pending_completion') && req.selected_provider_id ? `
+    <div style="display: flex; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0f0f0;">
+        <button class="btn" style="flex: 1; background: #ff9800; color: white;" onclick="changeProvider('${req.id}', '${req.selected_provider_id}')">🔄 ${t('btn_change_provider')}</button>
+    </div>
+` : ''}
+                        </div>
+                    </div>
+                `;
             }
             
             if (container) {
                 container.innerHTML = html;
-            } else {
+            } 
+	else {
                 console.error('Container still null after rendering. Filter:', currentRequestFilter);
             }
         }
@@ -11223,15 +11063,11 @@ async function openChat(requestId, providerId, isReadOnly = false) {
         const chatSource = (currentProfile.user_id === providerId) ? 'myResponses' : 'myRequests';
         // Check if we're opening chat from responses modal
 	const responsesModalOpen = document.getElementById('responsesModal').classList.contains('active');
-console.log('🔵 openChat - responsesModal is active?', responsesModalOpen);
 if (responsesModalOpen) {
     chatOpenedFrom = 'responses-modal';  // ✅ Set ONLY when coming from modal
-    console.log('🔵 openChat - SET chatOpenedFrom to:', chatOpenedFrom);
 } else {
     chatOpenedFrom = null;  // ✅ Clear otherwise
-    console.log('🔵 openChat - CLEARED chatOpenedFrom (set to null)');
 }
-console.log('🔵 openChat - FINAL chatOpenedFrom value:', chatOpenedFrom);
         // ✅ CRITICAL FIX: Determine if current user is provider or seeker
 const isCurrentUserTheSeeker = currentProfile.user_id === request.user_id;
 const isCurrentUserTheProvider = currentProfile.user_id === providerId;
@@ -12197,92 +12033,92 @@ document.addEventListener('keydown', function(event) {
         }
 
         // Template Data
-const seekerTemplatesData = [
-    {
-        title: t('templates.seeker.initial_contact.title'),
-        items: [
-            t('templates.seeker.initial_contact.item1'),
-            t('templates.seeker.initial_contact.item2'),
-            t('templates.seeker.initial_contact.item3')
-        ]
-    },
-    {
-        title: t('templates.seeker.scheduling.title'),
-        items: [
-            t('templates.seeker.scheduling.item1'),
-            t('templates.seeker.scheduling.item2'),
-            t('templates.seeker.scheduling.item3')
-        ]
-    },
-    {
-        title: t('templates.seeker.pricing.title'),
-        items: [
-            t('templates.seeker.pricing.item1'),
-            t('templates.seeker.pricing.item2'),
-            t('templates.seeker.pricing.item3')
-        ]
-    },
-    {
-        title: t('templates.seeker.additional_info.title'),
-        items: [
-            t('templates.seeker.additional_info.item1'),
-            t('templates.seeker.additional_info.item2'),
-            t('templates.seeker.additional_info.item3'),
-            t('templates.seeker.additional_info.item4')
-        ]
-    },
-    {
-        title: t('templates.seeker.contact_finalization.title'),
-        items: [
-            t('templates.seeker.contact_finalization.item1'),
-            t('templates.seeker.contact_finalization.item2'),
-            t('templates.seeker.contact_finalization.item3')
-        ]
-    }
-];
+        const seekerTemplatesData = [
+            {
+                title: '💬 Initial Contact',
+                items: [
+                    'Hi! Can you provide more details about the service?',
+                    'What is your availability for this work?',
+                    'Can you share your experience with similar work?'
+                ]
+            },
+            {
+                title: '📅 Scheduling',
+                items: [
+                    'When can you start the work?',
+                    'How long will it take to complete?',
+                    'Can you come today or tomorrow?'
+                ]
+            },
+            {
+                title: '💰 Pricing',
+                items: [
+                    'What will be the estimated cost?',
+                    'Do you charge for inspection/visit?',
+                    'Is this price negotiable?'
+                ]
+            },
+            {
+                title: 'ℹ️ Additional Info',
+                items: [
+                    'Do you have the necessary tools and equipment?',
+                    'Will you provide materials or should I arrange them?',
+                    'Can you share photos of previous work?',
+                    'Do you offer any warranty on your work?'
+                ]
+            },
+            {
+                title: '🤝 Contact & Finalization',
+                items: [
+                    'Let\'s finalize this deal. Can we exchange contact details?',
+                    'I\'d like to proceed with you. When can we meet?',
+                    'Sounds good! Please share your contact number.'
+                ]
+            }
+        ];
 
-const providerTemplatesData = [
-    {
-        title: t('templates.provider.response.title'),
-        items: [
-            t('templates.provider.response.item1'),
-            t('templates.provider.response.item2'),
-            t('templates.provider.response.item3')
-        ]
-    },
-    {
-        title: t('templates.provider.pricing.title'),
-        items: [
-            t('templates.provider.pricing.item1'),
-            t('templates.provider.pricing.item2'),
-            t('templates.provider.pricing.item3')
-        ]
-    },
-    {
-        title: t('templates.provider.information_requests.title'),
-        items: [
-            t('templates.provider.information_requests.item1'),
-            t('templates.provider.information_requests.item2'),
-            t('templates.provider.information_requests.item3')
-        ]
-    },
-    {
-        title: t('templates.provider.contact_finalization.title'),
-        items: [
-            t('templates.provider.contact_finalization.item1'),
-            t('templates.provider.contact_finalization.item2'),
-            t('templates.provider.contact_finalization.item3')
-        ]
-    },
-    {
-        title: t('templates.provider.service_completion.title'),
-        items: [
-            t('templates.provider.service_completion.item1'),
-            t('templates.provider.service_completion.item2'),
-            t('templates.provider.service_completion.item3')
-        ]
-    }
-];
+        const providerTemplatesData = [
+            {
+                title: '👋 Response',
+                items: [
+                    'Hi! I\'m available and interested in this work.',
+                    'I have experience in this type of work. Happy to help!',
+                    'I can start immediately. Let me know if you\'d like to proceed.'
+                ]
+            },
+            {
+                title: '💰 Pricing',
+                items: [
+                    'The estimated cost will be around ₹XXX.',
+                    'I can provide a detailed quote after inspection.',
+                    'No charges for initial visit and inspection.'
+                ]
+            },
+            {
+                title: 'ℹ️ Information Requests',
+                items: [
+                    'Can you share more details or photos of the problem?',
+                    'What is your preferred time for the visit?',
+                    'Are there any specific requirements I should know about?'
+                ]
+            },
+            {
+                title: '🤝 Contact & Finalization',
+                items: [
+                    'I\'m ready to start. Can we exchange contact details?',
+                    'Please share your address so I can visit.',
+                    'Let\'s finalize the schedule. Here\'s my contact number.'
+                ]
+            },
+            {
+                title: '✅ Service Completion',
+                items: [
+                    'Work completed successfully. Please check and confirm.',
+                    'Everything is done. Let me know if you need any adjustments.',
+                    'The service is complete. Feel free to contact me during warranty period.'
+                ]
+            }
+        ];
 
         // Request Contact Sharing
        async function requestContactSharing() {
@@ -12943,7 +12779,7 @@ async function rejectCompletionFromChat(messageIndex) {
 }
 
         // View Responses
-async function viewResponses(requestId) {
+        async function viewResponses(requestId) {
     selectedResponseRequest = requestId;
     
     try {
@@ -12960,40 +12796,20 @@ async function viewResponses(requestId) {
             .eq('request_id', requestId);
         
         if (error) throw error;
-        
-        // 🆕 FILTER OUT DESELECTED PROVIDERS
-        // Fetch list of rejected/deselected providers for this request
-        const { data: rejectedProviders, error: rejError } = await supabase
-            .from('request_rejected_providers')
-            .select('provider_id')
-            .eq('request_id', requestId)
-            .eq('rejection_reason', 'deselected');
-        
-        if (rejError) throw rejError;
-        
-        // Create a Set of rejected provider IDs for fast lookup
-        const rejectedProviderIds = new Set(
-            (rejectedProviders || []).map(r => r.provider_id)
-        );
-        
-        // Filter out deselected providers from responses
-        const activeResponses = responses.filter(
-            response => !rejectedProviderIds.has(response.provider_id)
-        );
-        
-        if (!activeResponses || activeResponses.length === 0) {
-            document.getElementById('responsesList').innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-text">${t('no_responses_yet')}</div>
-                </div>
-            `;
-            document.getElementById('responsesModal').classList.add('active');
-            return;
-        }
+                
+                if (!responses || responses.length === 0) {
+                    document.getElementById('responsesList').innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-text">${t('no_responses_yet')}</div>
+                        </div>
+                    `;
+                    document.getElementById('responsesModal').classList.add('active');
+                    return;
+                }
 
-        // ✅ SORT PROVIDERS BY RATING (HIGHEST FIRST)
+	// ✅ SORT PROVIDERS BY RATING (HIGHEST FIRST)
         // First, fetch provider profiles with ratings for all responses
-        const providerIds = activeResponses.map(r => r.provider_id);
+        const providerIds = responses.map(r => r.provider_id);
         const { data: providersData, error: provError } = await supabase
             .from('profiles')
             .select('user_id, average_rating, total_ratings')
@@ -13008,146 +12824,145 @@ async function viewResponses(requestId) {
         });
         
         // Sort responses by provider rating (highest first)
-        activeResponses.sort((a, b) => {
+        responses.sort((a, b) => {
             const ratingA = ratingMap[a.provider_id] || 0;
             const ratingB = ratingMap[b.provider_id] || 0;
             return ratingB - ratingA; // Descending order
         });
-        
-        let html = '';
-        
-        for (let response of activeResponses) {
-            const { data: provider } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('user_id', response.provider_id)
-                .single();
-            
-            let ratingDisplay = t('no_ratings');
-            if (provider.average_rating && provider.average_rating > 0 && provider.total_ratings > 0) {
-                const stars = '⭐'.repeat(Math.round(provider.average_rating));
-                const ratingWord = provider.total_ratings === 1 ? t('rating') : t('ratings');
-                ratingDisplay = `${stars} ${provider.average_rating}/5 (${provider.total_ratings} ${ratingWord})`;
-            }
-    
-            // ✅ NEW: Calculate unread messages from THIS specific provider
-            let providerUnreadCount = 0;
-            const { data: providerChat } = await supabase
-                .from('chats')
-                .select('messages, seeker_last_viewed_at')
-                .eq('request_id', requestId)
-                .eq('provider_id', response.provider_id)
-                .maybeSingle();
-
-            if (providerChat && providerChat.messages) {
-                const lastViewedAt = providerChat.seeker_last_viewed_at;
                 
-                const normalizeToUTC = (timestamp) => {
-                    if (!timestamp) return null;
-                    let normalized = timestamp;
-                    if (typeof timestamp === 'string' && !timestamp.endsWith('Z') && !timestamp.includes('+')) {
-                        normalized = timestamp + 'Z';
-                    }
-                    return new Date(normalized).getTime();
-                };
+                let html = '';
                 
-                providerUnreadCount = providerChat.messages.filter(m => {
-                    if (m.sender_id === currentUser.id) return false;
-                    if (!lastViewedAt) return true;
+                for (let response of responses) {
+                    const { data: provider } = await supabase
+                        .from('profiles')
+                        .select('*')
+                        .eq('user_id', response.provider_id)
+                        .single();
                     
-                    const messageTime = normalizeToUTC(m.timestamp);
-                    const viewedTime = normalizeToUTC(lastViewedAt);
-                    
-                    return messageTime > viewedTime;
-                }).length;
-            }            
-            
-            const { data: request } = await supabase
-                .from('requests')
-                .select('request_latitude, request_longitude')
-                .eq('id', requestId)
-                .single();
-            
-            const distance = calculateDistance(
-                provider.latitude,          // ← Provider first
-                provider.longitude,
-                request.request_latitude,   // ← Request second
-                request.request_longitude
-            );
-            
-            // ✅ NEW: Calculate "Member since" date from provider's account creation
-            const memberSinceDate = new Date(provider.created_at);
-            const memberSinceText = memberSinceDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-            
-            const photoHTML = provider.profile_photo 
-                ? `<img src="${provider.profile_photo}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 3px solid #667eea; margin-bottom: 12px; cursor: pointer; transition: transform 0.2s;" onclick="openImagePreview('${provider.profile_photo}')" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" title="${t('click_to_view_full_size')}">`
-                : `<div style="width: 60px; height: 60px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 12px;">👤</div>`;
-
-            // Check if this provider is selected
-            const { data: requestDetails } = await supabase
-                .from('requests')
-                .select('selected_provider_id, status')
-                .eq('id', requestId)
-                .single();
-            
-            const isSelected = requestDetails?.selected_provider_id === response.provider_id;
-            const requestStatus = requestDetails?.status;
-            
-            // Show different buttons based on selection status
-            let actionButtons = '';
-
-            // ✅ NEW: Build chat button with unread badge
-            const chatButtonHTML = providerUnreadCount > 0 
-                ? `<div class="chat-btn-wrapper" style="display: inline-block; position: relative;">
-                        <button class="btn btn-chat" onclick="chatOpenedFrom='responses-modal'; openChat('${requestId}', '${response.provider_id}')">${t('chat')}</button>
-                        <span class="chat-unread-badge">${providerUnreadCount}</span>
-                   </div>`
-                : `<button class="btn btn-chat" onclick="chatOpenedFrom='responses-modal'; openChat('${requestId}', '${response.provider_id}')">${t('chat')}</button>`;
-
-            if (isSelected) {
-                // Selected provider - always show chat button
-                actionButtons = `
-                    <button class="btn btn-view-profile" onclick="viewProviderProfile('${response.provider_id}')">${t('view_profile')}</button>
-                    ${chatButtonHTML}
-                `;
-            } else {
-                // Not selected - show view profile and select button
-                actionButtons = `
-                    <button class="btn btn-view-profile" onclick="viewProviderProfile('${response.provider_id}')">${t('view_profile')}</button>
-                    ${chatButtonHTML}
-                    <button class="btn btn-select" onclick="selectProvider('${requestId}', '${response.provider_id}')">${t('select_provider')}</button>
-                `;
-            }
-            
-            html += `
-                <div class="provider-card">
-                    <div style="display: flex; align-items: flex-start; gap: 15px;">
-                        <div style="flex-shrink: 0;">${photoHTML}</div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div class="provider-name" style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                                <span>${provider.name}</span>
-                                <span class="rating-display" style="margin: 0; font-size: 13px;">${ratingDisplay}</span>
-                                ${isSelected ? `<span style="color: #667eea; font-weight: bold; font-size: 12px;">✓ ${t('selected')}</span>` : ''}
-                            </div>
-                            <div class="provider-info">📍 ${distance} km ${t('away')}</div>
-                            <div class="provider-info">📅 ${t('member_since')} ${memberSinceText}</div>
-                        </div>
-                    </div>
-                    <div class="provider-actions" style="margin-top: 12px;">
-                        ${actionButtons}
-                    </div>
-                </div>
-            `;
-        }
-        
-        document.getElementById('responsesList').innerHTML = html;
-
-        // Mark that we're in responses modal
-        document.getElementById('responsesModal').classList.add('active');
-    } catch (error) {
-        alert(`${t('error_loading_responses')}: ${error.message}`);
+                    let ratingDisplay = t('no_ratings');
+    if (provider.average_rating && provider.average_rating > 0 && provider.total_ratings > 0) {
+        const stars = '⭐'.repeat(Math.round(provider.average_rating));
+        const ratingWord = provider.total_ratings === 1 ? t('rating') : t('ratings');
+        ratingDisplay = `${stars} ${provider.average_rating}/5 (${provider.total_ratings} ${ratingWord})`;
     }
+        
+// ✅ NEW: Calculate unread messages from THIS specific provider
+let providerUnreadCount = 0;
+const { data: providerChat } = await supabase
+    .from('chats')
+    .select('messages, seeker_last_viewed_at')
+    .eq('request_id', requestId)
+    .eq('provider_id', response.provider_id)
+    .maybeSingle();
+
+if (providerChat && providerChat.messages) {
+    const lastViewedAt = providerChat.seeker_last_viewed_at;
+    
+    const normalizeToUTC = (timestamp) => {
+        if (!timestamp) return null;
+        let normalized = timestamp;
+        if (typeof timestamp === 'string' && !timestamp.endsWith('Z') && !timestamp.includes('+')) {
+            normalized = timestamp + 'Z';
+        }
+        return new Date(normalized).getTime();
+    };
+    
+    providerUnreadCount = providerChat.messages.filter(m => {
+        if (m.sender_id === currentUser.id) return false;
+        if (!lastViewedAt) return true;
+        
+        const messageTime = normalizeToUTC(m.timestamp);
+        const viewedTime = normalizeToUTC(lastViewedAt);
+        
+        return messageTime > viewedTime;
+    }).length;
+}            
+                    const { data: request } = await supabase
+                        .from('requests')
+                        .select('request_latitude, request_longitude')
+                        .eq('id', requestId)
+                        .single();
+                    
+                    const distance = calculateDistance(
+    provider.latitude,          // ← Provider first
+    provider.longitude,
+    request.request_latitude,   // ← Request second
+    request.request_longitude
+);
+                    
+                    // ✅ NEW: Calculate "Member since" date from provider's account creation
+const memberSinceDate = new Date(provider.created_at);
+const memberSinceText = memberSinceDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                    
+                   const photoHTML = provider.profile_photo 
+    ? `<img src="${provider.profile_photo}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 3px solid #667eea; margin-bottom: 12px; cursor: pointer; transition: transform 0.2s;" onclick="openImagePreview('${provider.profile_photo}')" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" title="${t('click_to_view_full_size')}">`
+    : `<div style="width: 60px; height: 60px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 12px;">👤</div>`;
+
+// Check if this provider is selected
+                    const { data: requestDetails } = await supabase
+                        .from('requests')
+                        .select('selected_provider_id, status')
+                        .eq('id', requestId)
+                        .single();
+                    
+                    const isSelected = requestDetails?.selected_provider_id === response.provider_id;
+                    const requestStatus = requestDetails?.status;
+                    
+                    // Show different buttons based on selection status
+let actionButtons = '';
+
+// ✅ NEW: Build chat button with unread badge
+const chatButtonHTML = providerUnreadCount > 0 
+    ? `<div class="chat-btn-wrapper" style="display: inline-block; position: relative;">
+            <button class="btn btn-chat" onclick="chatOpenedFrom='responses-modal'; closeResponsesModal(); openChat('${requestId}', '${response.provider_id}')">${t('chat')}</button>
+            <span class="chat-unread-badge">${providerUnreadCount}</span>
+       </div>`
+    : `<button class="btn btn-chat" onclick="chatOpenedFrom='responses-modal'; closeResponsesModal(); openChat('${requestId}', '${response.provider_id}')">${t('chat')}</button>`;
+
+if (isSelected) {
+    // Selected provider - always show chat button
+    actionButtons = `
+        <button class="btn btn-view-profile" onclick="viewProviderProfile('${response.provider_id}')">${t('view_profile')}</button>
+        ${chatButtonHTML}
+    `;
+} else {
+    // Not selected - show view profile and select button
+    actionButtons = `
+        <button class="btn btn-view-profile" onclick="viewProviderProfile('${response.provider_id}')">${t('view_profile')}</button>
+        ${chatButtonHTML}
+        <button class="btn btn-select" onclick="selectProvider('${requestId}', '${response.provider_id}')">${t('select_provider')}</button>
+    `;
 }
+                    
+                    html += `
+    <div class="provider-card">
+        <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <div style="flex-shrink: 0;">${photoHTML}</div>
+            <div style="flex: 1; min-width: 0;">
+                <div class="provider-name" style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span>${provider.name}</span>
+                    <span class="rating-display" style="margin: 0; font-size: 13px;">${ratingDisplay}</span>
+                    ${isSelected ? `<span style="color: #667eea; font-weight: bold; font-size: 12px;">✓ ${t('selected')}</span>` : ''}
+                </div>
+                <div class="provider-info">📍 ${distance} km ${t('away')}</div>
+                <div class="provider-info">📅 ${t('member_since')} ${memberSinceText}</div>
+            </div>
+        </div>
+        <div class="provider-actions" style="margin-top: 12px;">
+            ${actionButtons}
+        </div>
+    </div>
+`;
+                }
+                
+                document.getElementById('responsesList').innerHTML = html;
+
+// Mark that we're in responses modal
+document.getElementById('responsesModal').classList.add('active');
+            } catch (error) {
+                alert(`${t('error_loading_responses')}: ${error.message}`);
+            }
+        }
 
         // Calculate Distance
         function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -13328,38 +13143,6 @@ async function selectProvider(requestId, providerId) {
         if (updateError) throw updateError;
         
         console.log('✅ Request status updated to in_progress');
-        
-        // 🆕 STEP 2.5: Send system message to SELECTED provider
-        try {
-            const { data: selectedChat } = await supabase
-                .from('chats')
-                .select('messages')
-                .eq('request_id', requestId)
-                .eq('provider_id', providerId)
-                .maybeSingle();
-            
-            if (selectedChat) {
-                let messages = selectedChat.messages || [];
-                messages.push({
-                    sender_id: currentUser.id,
-                    sender_name: currentProfile.name,
-                    message: `🎉 ${t('sys_selected')}\n\n${t('sys_selected_description')}`,
-                    message_type: 'system',
-                    timestamp: new Date().toISOString()
-                });
-                
-                await supabase
-                    .from('chats')
-                    .update({ messages: messages })
-                    .eq('request_id', requestId)
-                    .eq('provider_id', providerId);
-                
-                console.log(`✅ Selection notification sent to provider ${providerId}`);
-            }
-        } catch (error) {
-            console.error(`❌ Error sending selection notification:`, error);
-            // Continue even if notification fails
-        }
         
         // STEP 3: Process rejection refunds for non-selected providers
         if (allResponses && allResponses.length > 0) {
@@ -14472,7 +14255,7 @@ async function respondToRequest(requestId) {
     } catch (error) {
         alert(`❌ ${t('error')}: ${error.message}`);
         respondBtn.disabled = false;
-        respondBtn.textContent = t('');
+        respondBtn.textContent = t('respond');
     }
 }
 
