@@ -1247,30 +1247,6 @@ div#activeRequestsList div.request-card-left div.request-summary:nth-of-type(1) 
 .contact-details-card.collapsed {
     display: none;
 }
-
-/* Z-INDEX HIERARCHY FIX - CORRECTED */
-
-/* Response Modal - Base level */
-#responsesModal,
-.modal {
-    z-index: 99999 !important;
-}
-
-/* Chat View - Above response modal */
-#chatView {
-    z-index: 100000 !important;
-}
-
-/* Contact Details Modal - MUST BE ABOVE CHAT VIEW */
-#contactDetailsModal {
-    z-index: 100002 !important;
-}
-
-/* Profile Modal - Above chat view */
-#profileModal,
-.profile-modal {
-    z-index: 100001 !important;
-}
 	.chat-input-wrapper { display: flex; gap: 8px; align-items: center; }
         .chat-input-wrapper textarea { flex: 1; min-height: 42px; max-height: 120px; padding: 10px 14px; border: none; border-radius: 21px; font-family: inherit; font-size: 15px; resize: none; background: white; transition: all 0.2s; }
         .chat-input-wrapper textarea:focus { outline: none; box-shadow: 0 0 2px rgba(0, 0, 0, 0.1); }
@@ -2117,210 +2093,6 @@ body.dark-theme span[class*="status"] {
     overflow: hidden;
     transition: max-height 0.3s ease-out;
     padding: 0;
-}
-
-/* =============================================================================
-   SIGNUP SERVICE ACCORDION - Checkbox-based Multi-Select
-   ============================================================================= */
-
-/* Signup accordion container - always visible, not a dropdown */
-#signupServiceAccordion {
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
-    overflow: hidden;
-    background: white;
-}
-
-/* Signup category styling */
-#signupServiceAccordion .service-category {
-    border-bottom: 1px solid #e5e7eb;
-    margin-bottom: 0;
-}
-
-#signupServiceAccordion .service-category:last-child {
-    border-bottom: none;
-}
-
-/* Signup category header */
-#signupServiceAccordion .service-category-header {
-    background: #f9fafb;
-    padding: 14px 16px;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-#signupServiceAccordion .service-category-header:hover {
-    background: #f3f4f6;
-}
-
-#signupServiceAccordion .category-icon {
-    font-size: 20px;
-    margin-right: 12px;
-}
-
-#signupServiceAccordion .category-title {
-    flex: 1;
-    font-weight: 600;
-    color: #1f2937;
-    font-size: 15px;
-}
-
-#signupServiceAccordion .expand-icon {
-    font-size: 14px;
-    color: #6b7280;
-    transition: transform 0.3s;
-}
-
-/* Signup category content - hidden by default */
-#signupServiceAccordion .service-category-content {
-    display: none;
-    background: white;
-    padding: 0;
-}
-
-#signupServiceAccordion .service-category.expanded .service-category-content {
-    display: block;
-    padding: 8px 0;
-}
-
-#signupServiceAccordion .service-category.expanded .expand-icon {
-    transform: rotate(180deg);
-}
-
-/* Signup subcategory items with checkboxes */
-#signupServiceAccordion .subcategory-item {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px 12px 48px;
-    border-bottom: 1px solid #f3f4f6;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-#signupServiceAccordion .subcategory-item:last-child {
-    border-bottom: none;
-}
-
-#signupServiceAccordion .subcategory-item:hover {
-    background: #f9fafb;
-}
-
-/* Checkbox styling */
-#signupServiceAccordion .signup-service-checkbox {
-    width: 18px;
-    height: 18px;
-    margin-right: 12px;
-    cursor: pointer;
-    flex-shrink: 0;
-    accent-color: #667eea;
-}
-
-/* Subcategory name */
-#signupServiceAccordion .subcategory-name {
-    flex: 1;
-    font-size: 14px;
-    font-weight: 500;
-    color: #374151;
-    cursor: pointer;
-    margin: 0;
-}
-
-/* Info bubble in signup accordion */
-#signupServiceAccordion .info-bubble {
-    width: 20px;
-    height: 20px;
-    background: #3b82f6;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: help;
-    flex-shrink: 0;
-    margin-left: 8px;
-}
-
-#signupServiceAccordion .info-bubble:hover {
-    background: #2563eb;
-}
-
-/* Highlight selected/checked items */
-#signupServiceAccordion .signup-service-checkbox:checked + label.subcategory-name {
-    color: #667eea;
-    font-weight: 600;
-}
-
-#signupServiceAccordion .subcategory-item:has(.signup-service-checkbox:checked) {
-    background: #eff6ff;
-    border-left: 3px solid #667eea;
-}
-
-/* =============================================================================
-   DARK THEME - SIGNUP SERVICE ACCORDION
-   ============================================================================= */
-
-/* Dark theme: Signup accordion background */
-body.dark-theme #signupServiceAccordion {
-    background: #2d2d44;
-    border-color: #4a4a6c;
-}
-
-body.dark-theme #signupServiceAccordion .service-category {
-    border-bottom-color: #4a4a6c;
-}
-
-/* Dark theme: Category header */
-body.dark-theme #signupServiceAccordion .service-category-header {
-    background: #3a3a5c;
-}
-
-body.dark-theme #signupServiceAccordion .service-category-header:hover {
-    background: #4a4a6c;
-}
-
-body.dark-theme #signupServiceAccordion .category-title {
-    color: #ffffff !important;
-}
-
-body.dark-theme #signupServiceAccordion .category-icon,
-body.dark-theme #signupServiceAccordion .expand-icon {
-    color: #e0e0e0 !important;
-}
-
-/* Dark theme: Category content */
-body.dark-theme #signupServiceAccordion .service-category-content {
-    background: #2d2d44;
-}
-
-/* Dark theme: Subcategory items */
-body.dark-theme #signupServiceAccordion .subcategory-item {
-    border-bottom-color: #4a4a6c;
-}
-
-body.dark-theme #signupServiceAccordion .subcategory-item:hover {
-    background: #3a3a5c;
-}
-
-body.dark-theme #signupServiceAccordion .subcategory-name {
-    color: #f0f0f0 !important;
-}
-
-/* Dark theme: Checked items */
-body.dark-theme #signupServiceAccordion .subcategory-item:has(.signup-service-checkbox:checked) {
-    background: #1e3a5f;
-    border-left-color: #667eea;
-}
-
-body.dark-theme #signupServiceAccordion .signup-service-checkbox:checked + label.subcategory-name {
-    color: #93b5ff !important;
-}
-
-/* Dark theme: Info bubble - keep blue for visibility */
-body.dark-theme #signupServiceAccordion .info-bubble {
-    background: #3b82f6 !important;
-    color: white !important;
 }
 
 .service-category.expanded .service-category-content {
@@ -7592,60 +7364,6 @@ async function removeService(serviceId) {
     }
 }
 
-// =====================================================
-// SIGNUP - Service Accordion with Checkboxes
-// =====================================================
-
-function initializeSignupServiceAccordion() {
-    const accordion = document.getElementById('signupServiceAccordion');
-    
-    if (!accordion) return;
-    
-    const categoryHeaders = accordion.querySelectorAll('.service-category-header');
-    
-    categoryHeaders.forEach(header => {
-        header.addEventListener('click', function(e) {
-            e.stopPropagation();
-            
-            const category = this.closest('.service-category');
-            const content = category.querySelector('.service-category-content');
-            const expandIcon = this.querySelector('.expand-icon');
-            
-            const isExpanded = category.classList.contains('expanded');
-            
-            if (isExpanded) {
-                category.classList.remove('expanded');
-                content.style.display = 'none';
-                expandIcon.textContent = '▼';
-            } else {
-                category.classList.add('expanded');
-                content.style.display = 'block';
-                expandIcon.textContent = '▲';
-            }
-        });
-    });
-    
-    const checkboxes = accordion.querySelectorAll('.signup-service-checkbox');
-    
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            updateSignupServicesSelected();
-        });
-    });
-    
-    updateSignupServicesSelected();
-}
-
-function updateSignupServicesSelected() {
-    const checkboxes = document.querySelectorAll('.signup-service-checkbox:checked');
-    const selectedValues = Array.from(checkboxes).map(cb => cb.value);
-    
-    const hiddenInput = document.getElementById('signupServicesSelected');
-    if (hiddenInput) {
-        hiddenInput.value = selectedValues.join(',');
-    }
-}
-
 function backFromChat() {
     if (currentChatData && currentChatData.isPreSelection) {
         // If chatting before selection, go back to responses
@@ -7855,20 +7573,9 @@ function backFromChat() {
 }
 
         function toggleProviderFieldsSignup() {
-    const checkbox = document.getElementById('isProvider');
-    const providerFields = document.getElementById('signupProviderFields');
-    
-    if (checkbox.checked) {
-        providerFields.classList.remove('hidden');
-        
-        // Initialize the accordion when provider fields are shown
-        setTimeout(() => {
-            initializeSignupServiceAccordion();
-        }, 100);
-    } else {
-        providerFields.classList.add('hidden');
-    }
-}
+            const checked = document.getElementById('isProvider').checked;
+            document.getElementById('signupProviderFields').classList.toggle('hidden', !checked);
+        }
 
 function updateProviderButton() {
     const btn = document.getElementById('toggleProviderBtn');
@@ -8278,7 +7985,7 @@ console.log('✅ Verification email sent automatically by Supabase');
 
         console.log('🔵 STEP 6: Adding provider services (if applicable)...');
 
-        // ✅ STEP 6: If provider, create services (UPDATED FOR SUBCATEGORIES)
+        // ✅ STEP 4: If provider, create services (UPDATED FOR SUBCATEGORIES)
 if (formData.is_provider) {
     const services = [];
     // Collect all checked subcategory services
@@ -8287,35 +7994,27 @@ if (formData.is_provider) {
     });
     
     if (services.length === 0) {
-        errorDiv.textContent = t('please_select_at_least_one_service');
-        errorDiv.classList.remove('hidden');
-        submitBtn.disabled = false;
-        submitBtn.textContent = t('sign_up');
+        showError('signupError', t('please_select_at_least_one_service'));
         return;
     }       
-    if (services.length > 0) {
-        const radius = parseInt(document.getElementById('signupRadius').value) || 10;
-        
-        const serviceData = services.map(serviceId => ({
-            provider_id: authData.user.id,  // ✅ FIXED: Use authData instead of session
-            service_id: serviceId,
-            service_radius: radius
-        }));
-        
-        const { error: serviceError } = await supabase.from('provider_services').insert(serviceData);
-        console.log('✅ STEP 6 COMPLETE: Provider services added:', serviceError);
-        
-        if (serviceError) {
-            console.error('❌ Error adding provider services:', serviceError);
-            throw serviceError;
+            if (services.length > 0) {
+                const radius = parseInt(document.getElementById('signupRadius').value) || 10;
+                
+                const serviceData = services.map(serviceId => ({
+                    provider_id: session.user.id,
+                    service_id: serviceId,
+                    service_radius: radius
+                }));
+                
+                const { error: serviceError } = await supabase.from('provider_services').insert(serviceData);
+                console.log('✅ STEP 6 COMPLETE: Provider services added:', serviceError);
+                
+                // Update profile with radius
+                await supabase.from('profiles').update({ radius_km: radius }).eq('user_id', session.user.id);
+            }
+        } else {
+            console.log('✅ STEP 6 SKIPPED: Not a provider');
         }
-        
-        // Update profile with radius
-        await supabase.from('profiles').update({ radius_km: radius }).eq('user_id', authData.user.id);  // ✅ FIXED
-    }
-} else {
-    console.log('✅ STEP 6 SKIPPED: Not a provider');
-}
 
 // ✅ LOGOUT the user immediately after signup
 console.log('🔵 Logging out user after signup...');
@@ -10595,101 +10294,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 let isVerificationInProgress = false;  // NEW
-
-// =====================================================
-// REFERRAL BONUS - Award credits when referred user verifies email
-// =====================================================
-
-async function awardReferralVerificationBonus(newUserId) {
-    try {
-        console.log('🎁 Checking for referral bonus...');
-        
-        // Check if this user was referred by someone
-        const { data: referralData, error: referralError } = await supabase
-            .from('referrals')
-            .select('referrer_id, bonus_awarded')
-            .eq('referred_user_id', newUserId)
-            .maybeSingle();
-        
-        if (referralError) {
-            console.error('❌ Error checking referral:', referralError);
-            return;
-        }
-        
-        // If no referral exists, or bonus already awarded, skip
-        if (!referralData) {
-            console.log('ℹ️ No referral found for this user');
-            return;
-        }
-        
-        if (referralData.bonus_awarded) {
-            console.log('ℹ️ Referral bonus already awarded');
-            return;
-        }
-        
-        console.log('✅ Referral found! Referrer:', referralData.referrer_id);
-        
-        // Award bonus credits to the referrer
-        const REFERRAL_BONUS = 50; // 50 credits bonus
-        
-        // Get referrer's current credits
-        const { data: referrerProfile, error: profileError } = await supabase
-            .from('profiles')
-            .select('credits')
-            .eq('user_id', referralData.referrer_id)
-            .single();
-        
-        if (profileError) {
-            console.error('❌ Error fetching referrer profile:', profileError);
-            return;
-        }
-        
-        // Update referrer's credits
-        const newCredits = (referrerProfile.credits || 0) + REFERRAL_BONUS;
-        
-        const { error: updateError } = await supabase
-            .from('profiles')
-            .update({ credits: newCredits })
-            .eq('user_id', referralData.referrer_id);
-        
-        if (updateError) {
-            console.error('❌ Error updating referrer credits:', updateError);
-            return;
-        }
-        
-        // Mark bonus as awarded
-        const { error: markError } = await supabase
-            .from('referrals')
-            .update({ bonus_awarded: true })
-            .eq('referred_user_id', newUserId);
-        
-        if (markError) {
-            console.error('❌ Error marking bonus as awarded:', markError);
-            return;
-        }
-        
-        // Log the transaction
-        const { error: txError } = await supabase
-            .from('credit_transactions')
-            .insert({
-                user_id: referralData.referrer_id,
-                amount: REFERRAL_BONUS,
-                transaction_type: 'referral_bonus',
-                description: `Referral bonus - User verified email`,
-                balance_after: newCredits
-            });
-        
-        if (txError) {
-            console.error('❌ Error logging transaction:', txError);
-        }
-        
-        console.log(`✅ Awarded ${REFERRAL_BONUS} credits to referrer!`);
-        
-    } catch (error) {
-        console.error('❌ Error in awardReferralVerificationBonus:', error);
-        // Don't throw - we don't want to break email verification if bonus fails
-    }
-}
 
 // Handle email verification callback
 async function handleEmailVerification() {
