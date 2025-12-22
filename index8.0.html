@@ -1134,11 +1134,6 @@ div#activeRequestsList div.request-card-left div.request-summary:nth-of-type(1) 
     display: flex !important; 
     visibility: visible !important;
 }
-
-/* Rating Modal - Above chat */
-#ratingModal.active {
-    z-index: 100001 !important;
-}
         .modal-content { background: white; border-radius: 20px; padding: 30px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .modal-title { font-size: 24px; font-weight: 600; color: #333; }
@@ -1254,18 +1249,16 @@ div#activeRequestsList div.request-card-left div.request-summary:nth-of-type(1) 
 }
 
 /* Z-INDEX HIERARCHY FIX - CORRECTED */
+
 /* Response Modal - Base level */
 #responsesModal,
 .modal {
     z-index: 99999 !important;
 }
+
 /* Chat View - Above response modal */
 #chatView {
     z-index: 100000 !important;
-}
-/* Rating Modal - Above everything including chat */
-#ratingModal {
-    z-index: 100001 !important;
 }
 
 /* Contact Details Modal - MUST BE ABOVE CHAT VIEW */
@@ -4557,6 +4550,8 @@ body.dark-theme .info-bubble {
                 </div>
             </div>
         </div>
+
+	
 
 	<!-- Feedback Modal -->
 <div id="feedbackModal" class="modal">
@@ -14900,15 +14895,14 @@ async function loadNearbyRequests() {
             lng: currentProfile.longitude
         });
         
-        // Step 1: Get all open requests (sorted by latest first)
-const { data: allRequests, error: reqError } = await supabase
+        // Step 1: Get all open requests
+        const { data: allRequests, error: reqError } = await supabase
     .from('requests')
     .select(`
         *,
         service:services!fk_requests_service(name)
     `)
-    .eq('status', 'open')
-    .order('created_at', { ascending: false });  // ✅ NEW: Sort by latest first
+    .eq('status', 'open');
         
         if (reqError) throw reqError;
         
@@ -15017,10 +15011,9 @@ console.log('✅ Provider offers this service:', req.service_id);
 
         // Continue with rest of function (missed opportunities, etc.)
         const { data: allRespondedRequests, error: allReqError } = await supabase
-    .from('requests')
-    .select('*')
-    .in('id', Array.from(respondedIds))
-    .order('created_at', { ascending: false });  // ✅ NEW: Sort by latest first
+            .from('requests')
+            .select('*')
+            .in('id', Array.from(respondedIds));
 
         if (allReqError) throw allReqError;
 
