@@ -4110,7 +4110,7 @@ body.dark-theme .info-bubble {
     <!-- Add New Service Section -->
     <div class="provider-add-service-section">
         <div class="provider-add-service-header">
-            <span data-i18n="add_new_service">Add New Service</span>
+            ➕ <span data-i18n="add_new_service">Add New Service</span>
         </div>
         
         <div class="provider-service-add-row">
@@ -5389,15 +5389,6 @@ app_other_examples: "Fan repair, Mixer not working, Grinder issues, Iron problem
 
 'sys_selected': '🎉 Congratulations! You have been selected for this service request',
 'sys_selected_description': 'The customer has chosen you to complete this work. Please proceed with the service and keep the customer updated on your progress.',
-
-// Provider Stopped Service - Read-Only Chat
-read_only_provider_stopped: "Provider has stopped providing this service. Please select another provider.",
-status_readonly_provider_stopped: "Provider Stopped Service",
-service_no_longer_available: "Service No Longer Available",
-
-// System notification messages (for chat)
-provider_stopped_notification: "{providerName} has stopped providing {serviceName} and cannot complete your request. Please select another provider.",
-
   },
   
   // ============================================================
@@ -6152,15 +6143,6 @@ app_other_examples: "पंखे की मरम्मत, मिक्सर 
 
 'sys_selected': '🎉 बधाई हो! आपको इस सेवा अनुरोध के लिए चुना गया है',
 'sys_selected_description': 'ग्राहक ने आपको यह काम पूरा करने के लिए चुना है। कृपया सेवा के साथ आगे बढ़ें और ग्राहक को अपनी प्रगति के बारे में अपडेट करते रहें।',
-
-// Provider Stopped Service - Read-Only Chat
-read_only_provider_stopped: "प्रदाता ने यह सेवा देना बंद कर दिया है। कृपया दूसरा प्रदाता चुनें।",
-status_readonly_provider_stopped: "प्रदाता ने सेवा बंद कर दी",
-service_no_longer_available: "सेवा अब उपलब्ध नहीं है",
-
-// System notification messages (for chat)
-provider_stopped_notification: "{providerName} ने {serviceName} देना बंद कर दिया है और आपका अनुरोध पूरा नहीं कर सकते। कृपया दूसरा प्रदाता चुनें।",
-
   }
 };
 
@@ -6426,8 +6408,6 @@ if (messaging) {
         }
     });
 }
-// Track services to be removed (deleted on Save Changes)
-let servicesToRemove = [];
 let currentUser = null;
 let currentProfile = null;
 let currentDashboardMode = null;
@@ -6944,7 +6924,7 @@ function toggleDashboardMode() {
 }
 
 // Smart back function - goes to previous page or dashboard
-async function smartBack() {
+function smartBack() {
     if (chatRefreshInterval) {
         clearInterval(chatRefreshInterval);
         chatRefreshInterval = null;
@@ -6980,18 +6960,19 @@ async function smartBack() {
     }
     
     // Restore header controls hidden by chat
-    const userMenu = document.querySelector('.user-menu');
-    const modeToggleBtn = document.getElementById('modeToggleBtn');
-    const createRequestBtn = document.getElementById('createRequestBtn');
-    if (userMenu) userMenu.style.display = 'flex';
-    if (modeToggleBtn) modeToggleBtn.style.display = currentProfile.is_provider ? 'flex' : 'none';
-    if (createRequestBtn && currentDashboardMode === 'seeker') createRequestBtn.style.display = 'block';
-    
-    // Navigate back based on origin
-    console.log('🔍 DEBUG smartBack - chatOpenedFrom value:', chatOpenedFrom);
-    console.log('🔍 DEBUG smartBack - checking if equals "responses-modal":', chatOpenedFrom === 'responses-modal');
-    
-    if (chatOpenedFrom === 'responses-modal') {
+const userMenu = document.querySelector('.user-menu');
+const modeToggleBtn = document.getElementById('modeToggleBtn');
+const createRequestBtn = document.getElementById('createRequestBtn');
+
+if (userMenu) userMenu.style.display = 'flex';
+if (modeToggleBtn) modeToggleBtn.style.display = currentProfile.is_provider ? 'flex' : 'none';
+if (createRequestBtn && currentDashboardMode === 'seeker') createRequestBtn.style.display = 'block';
+
+// Navigate back based on origin
+console.log('🔍 DEBUG smartBack - chatOpenedFrom value:', chatOpenedFrom);
+console.log('🔍 DEBUG smartBack - checking if equals "responses-modal":', chatOpenedFrom === 'responses-modal');
+
+if (chatOpenedFrom === 'responses-modal') {
     console.log('✅ Returning to responses modal');
     
     // Make sure dashboard is visible (modal needs it as background)
@@ -7001,25 +6982,11 @@ async function smartBack() {
         dashboardView.style.display = 'block';
     }
     
-    // ✅ FIX: Reload responses to update unread counts
-    if (selectedResponseRequest) {
-        await viewResponses(selectedResponseRequest);
-    }
-    
-    // Show responses modal (it's already shown by viewResponses, but ensure it's visible)
+    // Show responses modal (don't close it, keep it open)
     const responsesModal = document.getElementById('responsesModal');
     if (responsesModal) {
         responsesModal.classList.add('active');
-        responsesModal.style.display = 'flex';
-        
-        // Re-attach close button event
-        setTimeout(() => {
-            const closeBtn = responsesModal.querySelector('.close-btn');
-            if (closeBtn) {
-                closeBtn.onclick = closeResponsesModal;
-                console.log('✅ Close button event re-attached');
-            }
-        }, 100);
+        responsesModal.style.display = 'flex'; // Ensure modal is visible
     }
     
     // Reload dashboard data in background (to refresh badges)
@@ -7027,10 +6994,11 @@ async function smartBack() {
     
     chatOpenedFrom = null;
 } else {
-        console.log('✅ Returning to dashboard');
-        showDashboard();
-        chatOpenedFrom = null;
-    }
+    console.log('✅ Returning to dashboard');
+    showDashboard();
+    chatOpenedFrom = null;
+}
+
 }
 
 async function showEditProfile() {
@@ -7208,72 +7176,71 @@ async function loadCurrentServices() {
     try {
         const { data: services, error } = await supabase
             .from('provider_services')
-            .select('service_id, service_radius')
+            .select('service_id')
             .eq('provider_id', currentProfile.user_id);
-
-        if (error) throw error;
-
-        // Filter out services marked for removal
-        let displayServices = services || [];
-        if (servicesToRemove && servicesToRemove.length > 0) {
-            displayServices = displayServices.filter(service => 
-                !servicesToRemove.includes(service.service_id)
-            );
-            console.log('🔍 Filtered services:', displayServices.length);
-        }
-
-        const servicesList = document.getElementById('currentServicesList');
         
-        if (!displayServices || displayServices.length === 0) {
-            servicesList.innerHTML = '<p class="no-services-text">No services listed</p>';
-            
-            const toggleContainer = document.querySelector('.provider-toggle-container');
-            if (toggleContainer) {
-                toggleContainer.style.display = 'none';
-            }
-        } else {
-            const toggleContainer = document.querySelector('.provider-toggle-container');
-            if (toggleContainer) {
-                toggleContainer.style.display = 'flex';
-            }
-            
-            servicesList.innerHTML = displayServices.map(service => `
-                <div class="service-item" style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 12px;
-                    background: #f8f9fa;
-                    border-radius: 8px;
-                    margin-bottom: 10px;
-                ">
-                    <div class="service-info" style="flex: 1;">
-    <div style="font-weight: 600; color: #fff; margin-bottom: 4px;">
-        ${getServiceDisplayName(service.service_id)}
-    </div>
-</div>
-                    <button type="button" onclick="removeService('${service.service_id}')" style="
-                        background: #dc3545;
-                        color: white;
-                        border: none;
-                        padding: 8px 16px;
-                        border-radius: 6px;
-                        cursor: pointer;
-                        font-size: 13px;
-                        font-weight: 600;
-                        display: flex;
-                        align-items: center;
-                        gap: 6px;
-                        transition: all 0.2s;
-                        box-shadow: 0 2px 4px rgba(220,53,69,0.2);
-                    " onmouseover="this.style.background='#c82333'; this.style.transform='scale(1.05)'" 
-                       onmouseout="this.style.background='#dc3545'; this.style.transform='scale(1)'">
-                        <span style="font-size: 16px; line-height: 1;">✖</span>
-                        <span>${currentLanguage === 'hi' ? 'हटाएं' : 'Remove'}</span>
-                    </button>
-                </div>
-            `).join('');
+        if (error) throw error;
+        
+        const container = document.getElementById('currentServicesList');
+        
+	// Add this null check
+        if (!container) {
+            console.warn('currentServicesList element not found');
+            return;
         }
+
+        if (!services || services.length === 0) {
+            container.innerHTML = `<p style="color: #999; font-style: italic;">${t('no_services_listed')}</p>`;
+            return;
+        }
+        
+        const serviceNames = {
+    // Electrician subcategories
+    electrician_installation: `🔌 ${t('electrician')} → ${t('elec_installation')}`,
+    electrician_repair: `🔌 ${t('electrician')} → ${t('elec_repair')}`,
+    electrician_wiring: `🔌 ${t('electrician')} → ${t('elec_wiring')}`,
+    
+    // Plumber subcategories
+    plumber_installation: `🚰 ${t('plumber')} → ${t('plumb_installation')}`,
+    plumber_repair: `🚰 ${t('plumber')} → ${t('plumb_repair')}`,
+    plumber_new_work: `🚰 ${t('plumber')} → ${t('plumb_new_work')}`,
+    
+    // AC subcategories
+    ac_installation: `❄️ ${t('ac_services')} → ${t('ac_installation')}`,
+    ac_repair_service: `❄️ ${t('ac_services')} → ${t('ac_repair_service')}`,
+    ac_gas_filling: `❄️ ${t('ac_services')} → ${t('ac_gas_filling')}`,
+    
+    // Carpenter subcategories
+    carpenter_repair: `🔨 ${t('carpenter')} → ${t('carp_repair')}`,
+    carpenter_custom: `🔨 ${t('carpenter')} → ${t('carp_custom')}`,
+    carpenter_door_window: `🔨 ${t('carpenter')} → ${t('carp_door_window')}`,
+    
+    // Painter subcategories
+    painter_house: `🎨 ${t('painter')} → ${t('paint_house')}`,
+    painter_furniture: `🎨 ${t('painter')} → ${t('paint_furniture')}`,
+    painter_texture: `🎨 ${t('painter')} → ${t('paint_texture')}`,
+    
+    // Cleaner subcategories
+    cleaner_house: `🧹 ${t('cleaner')} → ${t('clean_house')}`,
+    cleaner_upholstery: `🧹 ${t('cleaner')} → ${t('clean_upholstery')}`,
+    cleaner_vehicle: `🧹 ${t('cleaner')} → ${t('clean_vehicle')}`,
+    
+    // Appliance subcategories
+    appliance_washing: `🔧 ${t('appliance_repair')} → ${t('app_washing')}`,
+    appliance_refrigerator: `🔧 ${t('appliance_repair')} → ${t('app_refrigerator')}`,
+    appliance_tv: `🔧 ${t('appliance_repair')} → ${t('app_tv')}`,
+    appliance_geyser: `🔧 ${t('appliance_repair')} → ${t('app_geyser')}`,
+    appliance_ro: `🔧 ${t('appliance_repair')} → ${t('app_ro')}`,
+    appliance_microwave: `🔧 ${t('appliance_repair')} → ${t('app_microwave')}`,
+    appliance_other: `🔧 ${t('appliance_repair')} → ${t('app_other')}`
+};
+        
+        container.innerHTML = services.map(s => `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #f5f5f5; border-radius: 8px; margin-bottom: 10px;">
+                <span>${serviceNames[s.service_id] || s.service_id}</span>
+                <button type="button" class="btn btn-cancel" onclick="removeService('${s.service_id}')">${t('remove')}</button>
+            </div>
+        `).join('');
         
     } catch (error) {
         console.error('Error loading services:', error);
@@ -7606,431 +7573,23 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 async function removeService(serviceId) {
+    if (!confirm(t('confirm_remove_service'))) return;
+    
     try {
-        console.log('🗑️ Marking service for removal:', serviceId);
+        const { error } = await supabase
+            .from('provider_services')
+            .delete()
+            .eq('provider_id', currentProfile.user_id)
+            .eq('service_id', serviceId);
         
-        // STEP 1: Check for existing requests FIRST
-        const existingRequests = await checkExistingRequests(serviceId, currentProfile.user_id);
+        if (error) throw error;
         
-        console.log('📊 Existing requests found:', existingRequests.length);
-        
-        // STEP 2A: No existing requests - Simple confirmation
-        if (existingRequests.length === 0) {
-            const simpleConfirm = confirm(
-                currentLanguage === 'hi' 
-                ? `⚠️ इस सेवा को हटाएं?\n\nआप Seeker मोड में बदल जाएंगे।\n\nफिर से सेवाएं देने के लिए, Edit Profile में जाकर सेवाएं जोड़ें।`
-                : `⚠️ Remove this service?\n\nYou will be converted to Seeker mode.\n\nTo provide services again, go to Edit Profile and add services.`
-            );
-            
-            if (!simpleConfirm) {
-                console.log('❌ User cancelled removal (no existing requests)');
-                return;
-            }
-            
-            // ✅ NEW: Only mark for removal, don't delete from database yet
-            if (!servicesToRemove.includes(serviceId)) {
-                servicesToRemove.push(serviceId);
-                console.log('✅ Service marked for removal:', serviceId);
-                console.log('📋 Services to remove on save:', servicesToRemove);
-            }
-            
-            // Remove from UI list immediately
-            await loadCurrentServices();
-            
-            return;
-        }
-        
-        // STEP 2B: Has existing requests - Show choice dialog
-        console.log('⚠️ Has existing requests - showing choice dialog');
-        
-        const providerChoice = await showProviderChoiceDialog(serviceId, existingRequests);
-        
-        console.log('👤 Provider chose:', providerChoice);
-        
-        // User cancelled
-        if (providerChoice === 'cancel') {
-            console.log('❌ User cancelled removal');
-            return;
-        }
-        
-        // ✅ NEW: Mark service for removal (will be deleted on Save Changes)
-        if (!servicesToRemove.includes(serviceId)) {
-            servicesToRemove.push(serviceId);
-            console.log('✅ Service marked for removal:', serviceId);
-        }
-        
-        // ✅ NEW: Track the provider's choice for this service
-        if (!window.serviceRemovalChoices) {
-            window.serviceRemovalChoices = {};
-        }
-        window.serviceRemovalChoices[serviceId] = {
-            choice: providerChoice,
-            existingRequests: existingRequests
-        };
-        
-        console.log('📋 Stored choice for service:', serviceId, '→', providerChoice);
-        
-        // Remove from UI list immediately
+        alert(`✅ ${t('service_removed')}`);
         await loadCurrentServices();
         
-        console.log('✅ Service removal marked (will be saved on Save Changes)');
-        
     } catch (error) {
-        console.error('❌ Error marking service for removal:', error);
-        alert(
-            currentLanguage === 'hi'
-            ? `❌ त्रुटि: ${error.message}`
-            : `❌ Error: ${error.message}`
-        );
+        alert(`${t('error')}: ${error.message}`);
     }
-}
-
-// ✅ NEW FUNCTION: Check if provider has existing requests for a service
-async function checkExistingRequests(serviceId, providerId) {
-    try {
-        console.log('🔍 Checking existing requests for service:', serviceId);
-        
-        // Step 1: Get all requests where provider has responded
-        const { data: providerResponses, error: responseError } = await supabase
-            .from('request_responses')
-            .select('request_id')
-            .eq('provider_id', providerId);
-        
-        if (responseError) throw responseError;
-        
-        if (!providerResponses || providerResponses.length === 0) {
-            console.log('✅ No responses found - provider has no existing requests');
-            return [];
-        }
-        
-        const respondedRequestIds = providerResponses.map(r => r.request_id);
-        console.log('📋 Provider has responded to', respondedRequestIds.length, 'requests');
-        
-        // Step 2: Get full request details for those responses
-        const { data: requests, error: requestError } = await supabase
-            .from('requests')
-            .select('*')
-            .in('id', respondedRequestIds)
-            .eq('service_id', serviceId)
-            .in('status', ['open', 'in_progress', 'pending_completion']); // Active statuses only
-        
-        if (requestError) throw requestError;
-        
-        console.log('✅ Found', requests?.length || 0, 'existing requests for this service');
-        
-        return requests || [];
-        
-    } catch (error) {
-        console.error('❌ Error checking existing requests:', error);
-        return [];
-    }
-}
-
-// ✅ NEW FUNCTION: Show dialog for provider to choose action
-async function showProviderChoiceDialog(serviceId, existingRequests) {
-    return new Promise((resolve) => {
-        
-        // Get service name for display
-        const serviceName = getServiceDisplayName(serviceId);
-        
-        // Build request list HTML
-        let requestListHTML = '';
-        existingRequests.forEach(req => {
-            const statusText = req.status === 'open' ? t('status_pending') : 
-                             req.status === 'in_progress' ? t('status_in_progress') :
-                             req.status === 'pending_completion' ? t('status_pending_approval') : req.status;
-            
-            requestListHTML += `
-                <div style="background: #f8f9fa; padding: 10px; border-radius: 6px; margin: 5px 0; display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 13px;">${req.title}</span>
-                    <span style="background: #007bff; color: white; padding: 3px 10px; border-radius: 12px; font-size: 11px;">${statusText}</span>
-                </div>
-            `;
-        });
-        
-        // Create dialog HTML
-        const dialogHTML = `
-            <div id="providerChoiceDialog" style="
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.6);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                z-index: 10000;
-                padding: 20px;
-            ">
-                <div style="
-                    background: white;
-                    border-radius: 12px;
-                    max-width: 500px;
-                    width: 100%;
-                    max-height: 90vh;
-                    overflow-y: auto;
-                    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-                ">
-                    <!-- Header -->
-                    <div style="padding: 20px; border-bottom: 1px solid #e0e0e0;">
-                        <h3 style="margin: 0; font-size: 18px; color: #333;">
-                            ⚠️ ${t('remove')} ${serviceName}?
-                        </h3>
-                    </div>
-                    
-                    <!-- Content -->
-                    <div style="padding: 20px;">
-                        <!-- Important Notice -->
-                        <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin-bottom: 15px; border-radius: 4px;">
-                            <strong style="color: #856404;">⚠️ ${currentLanguage === 'hi' ? 'महत्वपूर्ण' : 'IMPORTANT'}:</strong>
-                            <p style="margin: 5px 0 0 0; color: #856404; font-size: 13px;">
-                                ${currentLanguage === 'hi' 
-                                    ? 'यह सेवा आपकी प्रोफ़ाइल से तुरंत हटा दी जाएगी। आपको इस सेवा के लिए नए अनुरोध नहीं मिलेंगे।'
-                                    : 'This service will be removed from your profile immediately. You will NOT receive new requests for this service.'
-                                }
-                            </p>
-                        </div>
-                        
-                        <!-- Existing Requests -->
-                        <p style="margin: 10px 0; font-weight: 600; color: #333;">
-                            ${currentLanguage === 'hi' 
-                                ? `आपके पास इस सेवा के लिए ${existingRequests.length} मौजूदा अनुरोध हैं:`
-                                : `You have ${existingRequests.length} existing request(s) for this service:`
-                            }
-                        </p>
-                        
-                        <div style="max-height: 150px; overflow-y: auto; margin-bottom: 15px;">
-                            ${requestListHTML}
-                        </div>
-                        
-                        <!-- Question -->
-                        <p style="font-size: 15px; font-weight: 600; color: #333; margin: 15px 0 10px 0;">
-                            ${currentLanguage === 'hi' 
-                                ? '❓ क्या आप इन मौजूदा अनुरोधों को पूरा करना चाहते हैं?'
-                                : '❓ Do you want to complete these existing requests?'
-                            }
-                        </p>
-                        
-                        <!-- Choice 1: Complete Existing Work -->
-                        <div style="border: 2px solid #28a745; border-radius: 8px; padding: 15px; margin-bottom: 12px; background: #f8fff9;">
-                            <div style="display: flex; align-items: flex-start; margin-bottom: 8px;">
-                                <span style="font-size: 24px; margin-right: 10px;">✅</span>
-                                <strong style="font-size: 15px; color: #28a745;">
-                                    ${currentLanguage === 'hi' ? 'हाँ - मौजूदा काम पूरा करूंगा' : 'YES - Complete Existing Work'}
-                                </strong>
-                            </div>
-                            <ul style="margin: 5px 0 0 34px; padding: 0; font-size: 13px; color: #555; line-height: 1.6;">
-                                <li>${currentLanguage === 'hi' ? 'ग्राहकों को सूचना नहीं भेजी जाएगी' : 'No customer notifications sent'}</li>
-                                <li>${currentLanguage === 'hi' ? 'आप ये अनुरोध पूरे कर सकते हैं' : 'You can finish these requests'}</li>
-                                <li>${currentLanguage === 'hi' ? 'इस सेवा के नए अनुरोध नहीं मिलेंगे' : 'No NEW requests for this service'}</li>
-                            </ul>
-                        </div>
-                        
-                        <!-- Choice 2: Stop Immediately -->
-                        <div style="border: 2px solid #dc3545; border-radius: 8px; padding: 15px; background: #fff5f5;">
-                            <div style="display: flex; align-items: flex-start; margin-bottom: 8px;">
-                                <span style="font-size: 24px; margin-right: 10px;">❌</span>
-                                <strong style="font-size: 15px; color: #dc3545;">
-                                    ${currentLanguage === 'hi' ? 'नहीं - तुरंत बंद करें' : 'NO - Stop Immediately'}
-                                </strong>
-                            </div>
-                            <ul style="margin: 5px 0 0 34px; padding: 0; font-size: 13px; color: #555; line-height: 1.6;">
-                                <li>${currentLanguage === 'hi' ? 'ग्राहकों को सूचित किया जाएगा' : 'Customers will be notified'}</li>
-                                <li>${currentLanguage === 'hi' ? 'वे अन्य प्रदाता चुन सकते हैं' : 'They can select other providers'}</li>
-                                <li>${currentLanguage === 'hi' ? 'आप ये अनुरोध पूरे नहीं करेंगे' : 'You won\'t complete these requests'}</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <!-- Buttons -->
-                    <div style="padding: 15px 20px; background: #f8f9fa; border-top: 1px solid #e0e0e0; display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button onclick="handleProviderChoice('complete_existing')" style="
-                            flex: 1;
-                            min-width: 140px;
-                            padding: 12px 20px;
-                            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-                            color: white;
-                            border: none;
-                            border-radius: 8px;
-                            font-size: 14px;
-                            font-weight: 600;
-                            cursor: pointer;
-                            transition: transform 0.2s;
-                        " onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
-                            ${currentLanguage === 'hi' ? '✅ मौजूदा काम पूरा करूंगा' : '✅ Complete Existing Work'}
-                        </button>
-                        
-                        <button onclick="handleProviderChoice('stop_immediately')" style="
-                            flex: 1;
-                            min-width: 140px;
-                            padding: 12px 20px;
-                            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-                            color: white;
-                            border: none;
-                            border-radius: 8px;
-                            font-size: 14px;
-                            font-weight: 600;
-                            cursor: pointer;
-                            transition: transform 0.2s;
-                        " onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
-                            ${currentLanguage === 'hi' ? '❌ तुरंत बंद करें' : '❌ Stop Immediately'}
-                        </button>
-                        
-                        <button onclick="handleProviderChoice('cancel')" style="
-                            width: 100%;
-                            padding: 10px 20px;
-                            background: #6c757d;
-                            color: white;
-                            border: none;
-                            border-radius: 8px;
-                            font-size: 13px;
-                            cursor: pointer;
-                            transition: transform 0.2s;
-                        " onmouseover="this.style.transform='scale(1.01)'" onmouseout="this.style.transform='scale(1)'">
-                            ${t('cancel')}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        // Add dialog to page
-        document.body.insertAdjacentHTML('beforeend', dialogHTML);
-        
-        // Handle button clicks
-        window.handleProviderChoice = (choice) => {
-            document.getElementById('providerChoiceDialog').remove();
-            delete window.handleProviderChoice;
-            resolve(choice);
-        };
-    });
-}
-
-// ✅ NEW FUNCTION: Notify affected customers via chat
-async function notifyAffectedCustomers(serviceId, providerId, existingRequests) {
-    try {
-        console.log('📧 Starting customer notifications for service:', serviceId);
-        console.log('📋 Affected requests:', existingRequests.length);
-        
-        if (!existingRequests || existingRequests.length === 0) {
-            console.log('ℹ️ No customers to notify');
-            return;
-        }
-        
-        // Get provider name for the message
-        const { data: providerProfile, error: profileError } = await supabase
-            .from('profiles')
-            .select('name')
-            .eq('user_id', providerId)
-            .single();
-        
-        if (profileError) {
-            console.error('Error fetching provider profile:', profileError);
-            return;
-        }
-        
-        const providerName = providerProfile.name;
-        const serviceName = getServiceDisplayName(serviceId);
-        
-        console.log('👤 Provider:', providerName);
-        console.log('🔧 Service:', serviceName);
-        
-        // Notification messages (bilingual using translation keys)
-     const message = `⚠️ ${t('provider_stopped_notification')
-    .replace('{providerName}', providerName)
-    .replace('{serviceName}', serviceName)}`;
-        
-        // Send notification to each affected customer
-        let successCount = 0;
-        let failCount = 0;
-        
-        for (const request of existingRequests) {
-            try {
-                console.log(`📨 Sending notification for request: ${request.id.substring(0, 8)}...`);
-                
-                // Get existing chat
-                const { data: existingChat, error: fetchError } = await supabase
-                    .from('chats')
-                    .select('messages')
-                    .eq('request_id', request.id)
-                    .eq('provider_id', providerId)
-                    .single();
-                
-                let messages = existingChat?.messages || [];
-                
-                // Add system message in user's language
-messages.push({
-    sender_id: 'system',
-    sender_name: 'System',
-    message: message,
-    timestamp: new Date().toISOString(),
-    is_system_message: true
-});
-                
-                // Upsert chat with new messages AND mark as read-only
-const { error: upsertError } = await supabase
-    .from('chats')
-    .upsert({
-        request_id: request.id,
-        provider_id: providerId,
-        messages: messages,
-        is_read_only: true,
-        read_only_reason: 'provider_stopped_service'
-    }, { onConflict: 'request_id,provider_id' });
-                
-                if (upsertError) {
-                    console.error(`❌ Failed to notify for request ${request.id}:`, upsertError);
-                    failCount++;
-                } else {
-                    console.log(`✅ Notification sent for request ${request.id.substring(0, 8)}...`);
-                    successCount++;
-                }
-                
-            } catch (requestError) {
-                console.error(`❌ Error processing request ${request.id}:`, requestError);
-                failCount++;
-            }
-        }
-        
-        console.log(`✅ Notification Summary: ${successCount} sent, ${failCount} failed`);
-        
-    } catch (error) {
-        console.error('❌ Error in notifyAffectedCustomers:', error);
-    }
-}
-
-// ✅ HELPER FUNCTION: Get service display name
-function getServiceDisplayName(serviceId) {
-    const serviceNames = {
-        electrician_installation: `${t('electrician')} - ${t('elec_installation')}`,
-        electrician_repair: `${t('electrician')} - ${t('elec_repair')}`,
-        electrician_wiring: `${t('electrician')} - ${t('elec_wiring')}`,
-        plumber_installation: `${t('plumber')} - ${t('plumb_installation')}`,
-        plumber_repair: `${t('plumber')} - ${t('plumb_repair')}`,
-        plumber_new_work: `${t('plumber')} - ${t('plumb_new_work')}`,
-        ac_installation: `${t('ac_services')} - ${t('ac_installation')}`,
-        ac_repair_service: `${t('ac_services')} - ${t('ac_repair_service')}`,
-        ac_gas_filling: `${t('ac_services')} - ${t('ac_gas_filling')}`,
-        carpenter_repair: `${t('carpenter')} - ${t('carp_repair')}`,
-        carpenter_custom: `${t('carpenter')} - ${t('carp_custom')}`,
-        carpenter_door_window: `${t('carpenter')} - ${t('carp_door_window')}`,
-        painter_house: `${t('painter')} - ${t('paint_house')}`,
-        painter_furniture: `${t('painter')} - ${t('paint_furniture')}`,
-        painter_texture: `${t('painter')} - ${t('paint_texture')}`,
-        cleaner_house: `${t('cleaner')} - ${t('clean_house')}`,
-        cleaner_upholstery: `${t('cleaner')} - ${t('clean_upholstery')}`,
-        cleaner_vehicle: `${t('cleaner')} - ${t('clean_vehicle')}`,
-        appliance_washing: `${t('appliance_repair')} - ${t('app_washing')}`,
-        appliance_refrigerator: `${t('appliance_repair')} - ${t('app_refrigerator')}`,
-        appliance_tv: `${t('appliance_repair')} - ${t('app_tv')}`,
-        appliance_geyser: `${t('appliance_repair')} - ${t('app_geyser')}`,
-        appliance_ro: `${t('appliance_repair')} - ${t('app_ro')}`,
-        appliance_microwave: `${t('appliance_repair')} - ${t('app_microwave')}`,
-        appliance_other: `${t('appliance_repair')} - ${t('app_other')}`
-    };
-    
-    return serviceNames[serviceId] || serviceId;
 }
 
 // =====================================================
@@ -11946,7 +11505,7 @@ function toggleRequestDetails(event, requestId) {
     }
 }
 
-// Open Chat
+        // Open Chat
 async function openChat(requestId, providerId, isReadOnly = false) {
     try {
         if (!currentUser || !currentProfile) {
@@ -12187,35 +11746,15 @@ if (currentChatData.isProvider) {
     }
 }
 
-// ✅ NEW: Check if chat is marked as read-only (provider stopped service)
-const { data: chatReadOnlyCheck } = await supabase
-    .from('chats')
-    .select('is_read_only, read_only_reason')
-    .eq('request_id', requestId)
-    .eq('provider_id', providerId)
-    .maybeSingle();
-
-const isProviderStoppedService = chatReadOnlyCheck?.is_read_only && 
-                                  chatReadOnlyCheck?.read_only_reason === 'provider_stopped_service';
-
-console.log('🔍 Read-only check:', {
-    isReadOnly,
-    isNonSelectedProvider,
-    isDeselectedProvider,
-    isProviderStoppedService,
-    reason: chatReadOnlyCheck?.read_only_reason
-});
-
-// ✅ Store read-only state in currentChatData
-currentChatData.isReadOnly = isReadOnly || isProviderStoppedService || false;
+// ✅ NEW: Store read-only state in currentChatData
+currentChatData.isReadOnly = isReadOnly || false;
 currentChatData.isNonSelectedProvider = isNonSelectedProvider || false;
 currentChatData.isDeselectedProvider = isDeselectedProvider || false;
-currentChatData.isProviderStoppedService = isProviderStoppedService || false;
 
 // ✅ FIX: Reload chat messages NOW that read-only state is set
 await loadChatMessages();
 
-if (isNonSelectedProvider || isReadOnly || isDeselectedProvider || isProviderStoppedService) {
+if (isNonSelectedProvider || isReadOnly || isDeselectedProvider) {
     // ✅ DETERMINE THE REASON FOR READ-ONLY MODE
     let readOnlyReason = '';
     let statusText = '';
@@ -12225,11 +11764,6 @@ if (isNonSelectedProvider || isReadOnly || isDeselectedProvider || isProviderSto
         readOnlyReason = t('read_only_deselected');
         statusText = t('status_readonly_deselected');
         console.log('⚠️ Read-only mode enabled (deselected provider)');
-    } else if (isProviderStoppedService) {
-        // Provider stopped providing this service
-        readOnlyReason = t('read_only_provider_stopped');
-        statusText = t('status_readonly_provider_stopped');
-        console.log('⚠️ Read-only mode enabled (provider stopped service)');
     } else if (isNonSelectedProvider) {
         // This is a missed opportunity (another provider was selected)
         readOnlyReason = t('read_only_assigned_other');
@@ -12798,6 +12332,7 @@ container.innerHTML = html;
         }
     }
 }
+
 
 // Open Image Preview (Full Screen)
 function openImagePreview(imageUrl) {
@@ -14314,9 +13849,7 @@ async function selectProvider(requestId, providerId) {
 
         // Close Modals
 function closeResponsesModal() {
-    const modal = document.getElementById('responsesModal');
-    modal.classList.remove('active');
-    modal.style.display = 'none';  // ✅ ADD THIS LINE
+    document.getElementById('responsesModal').classList.remove('active');
     chatOpenedFrom = null;  // ✅ Clear the state
     selectedResponseRequest = null;  // ✅ Clear selected request
 }
@@ -14740,34 +14273,11 @@ for (let data of responsesData) {
     const icon = getServiceIcon(req.service_id);
     const timeAgo = getTimeAgo(new Date(data.created_at));
     
-    // ✅ Line 1: Reactivated check
+    // ✅ ADD THESE TWO LINES HERE:
     const isReactivated = req.status === 'in_progress' && req.warranty_end_date;
     const reactivatedBadge = isReactivated ? `<span style="color: #dc3545; font-weight: 700; font-size: 11px; margin-left: 6px; background: #fee; padding: 2px 8px; border-radius: 4px;">${t('reactivated')}</span>` : '';
-
-    // ✅ Line 2: Declare isReadOnlyChat FIRST
-    let isReadOnlyChat = false;
-
-    // ✅ Line 3: Check if provider stopped service (uses isReadOnlyChat)
-    //let hasStoppedService = false;
-    let serviceStoppedBadge = '';
     
-    // Only check if this is the current provider's response
-    if (currentProfile.user_id === data.provider_id) {
-        const { data: chatCheck } = await supabase
-            .from('chats')
-            .select('is_read_only, read_only_reason')
-            .eq('request_id', req.id)
-            .eq('provider_id', currentProfile.user_id)
-            .maybeSingle();
-        
-        hasStoppedService = chatCheck?.is_read_only && 
-                           chatCheck?.read_only_reason === 'provider_stopped_service';
-        
-        if (hasStoppedService) {
-            serviceStoppedBadge = `<span style="color: #856404; font-weight: 700; font-size: 11px; margin-left: 6px; background: #fff3cd; padding: 2px 8px; border-radius: 4px;">⚠️ ${t('service_no_longer_available')}</span>`;
-            isReadOnlyChat = true; // Mark chat as read-only
-        }
-    }
+    let isReadOnlyChat = false;
 
 	// Determine status
         let statusBadge = '';
@@ -14805,13 +14315,13 @@ if (req.status === 'completed') {
     chatButton = `<div class="chat-btn-wrapper"><button class="btn ${isReadOnlyChat ? 'btn-view-profile' : 'btn-chat'} action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}', ${isReadOnlyChat})">${isReadOnlyChat ? t('view_chat') : t('chat')}</button>${isReadOnlyChat ? '' : unreadBadgeHTML}</div>`;
     } else if (req.status === 'pending_completion' && req.selected_provider_id === currentProfile.user_id) {
                 statusBadge = `<span class="status-badge" style="background: #fff3cd; color: #856404;">⏳ ${t('status_pending_approval')}</span>`;
-                chatButton = `<div class="chat-btn-wrapper"><button class="btn ${hasStoppedService ? 'btn-view-profile' : 'btn-chat'} action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}', ${hasStoppedService})">${hasStoppedService ? t('view_chat') : t('chat')}</button>${hasStoppedService ? '' : unreadBadgeHTML}</div>`;
+                chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">${t('chat')}</button>${unreadBadgeHTML}</div>`;
             } else if (req.status === 'in_progress' && req.selected_provider_id === currentProfile.user_id) {
                 statusBadge = `<span class="status-badge" style="background: #cce5ff; color: #004085;">🔄 ${t('status_in_progress')}</span>`;
-                chatButton = `<div class="chat-btn-wrapper"><button class="btn ${hasStoppedService ? 'btn-view-profile' : 'btn-chat'} action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}', ${hasStoppedService})">${hasStoppedService ? t('view_chat') : t('chat')}</button>${hasStoppedService ? '' : unreadBadgeHTML}</div>`;
+                chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">${t('chat')}</button>${unreadBadgeHTML}</div>`;
             } else if (req.status === 'open') {
                 statusBadge = `<span class="status-badge status-open">⏳ ${t('status_pending')}</span>`;
-                chatButton = `<div class="chat-btn-wrapper"><button class="btn ${hasStoppedService ? 'btn-view-profile' : 'btn-chat'} action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}', ${hasStoppedService})">${hasStoppedService ? t('view_chat') : t('chat')}</button>${hasStoppedService ? '' : unreadBadgeHTML}</div>`;
+                chatButton = `<div class="chat-btn-wrapper"><button class="btn btn-chat action-btn-compact" onclick="openChat('${req.id}', '${currentProfile.user_id}')">${t('chat')}</button>${unreadBadgeHTML}</div>`;
             }
         }
         
@@ -14856,7 +14366,7 @@ if (req.status === 'completed') {
             <div class="request-card-left">
                 <div class="request-title-compact" onclick="toggleRequestDetails(event, 'resp-${req.id}')">
                     <span class="urgency-bubble ${req.urgency}"></span>
-                    <span class="request-title-text">${icon} ${req.title}${reactivatedBadge}${serviceStoppedBadge}</span>
+                    <span class="request-title-text">${icon} ${req.title}${reactivatedBadge}</span>
                     <span class="request-chevron" id="chevron-resp-${req.id}">▼</span>
                 </div>
                 <div class="request-summary" style="display: flex !important; justify-content: space-between !important; width: 100% !important; align-items: center !important;">
@@ -16042,104 +15552,22 @@ submitBtn.disabled = false;
 submitBtn.textContent = `💾 ${t('save_changes')}`;
 infoDiv.classList.add('hidden');
 
-// ✅ NEW: Delete services marked for removal
-if (servicesToRemove && servicesToRemove.length > 0) {
-    console.log('🗑️ Deleting marked services:', servicesToRemove);
-    
-    for (const serviceId of servicesToRemove) {
-        console.log('Deleting service:', serviceId);
-        
-        // Delete from database
-        const { error: deleteError } = await supabase
-            .from('provider_services')
-            .delete()
-            .eq('provider_id', currentProfile.user_id)
-            .eq('service_id', serviceId);
-        
-        if (deleteError) {
-            console.error('Error deleting service:', serviceId, deleteError);
-        } else {
-            console.log('✅ Service deleted:', serviceId);
-        }
-        
-        // Handle customer notifications based on choice
-        if (window.serviceRemovalChoices && window.serviceRemovalChoices[serviceId]) {
-            const { choice, existingRequests } = window.serviceRemovalChoices[serviceId];
-            
-            if (choice === 'stop_immediately' && existingRequests.length > 0) {
-                console.log('⚠️ Notifying customers for service:', serviceId);
-                await notifyAffectedCustomers(serviceId, currentProfile.user_id, existingRequests);
-            } else {
-                console.log('ℹ️ No notifications needed - provider completing existing work');
-            }
-        }
-    }
-    
-    // Clear the tracking arrays
-    servicesToRemove = [];
-    window.serviceRemovalChoices = {};
-    console.log('✅ All marked services processed');
-}
-
 // Reload profile data silently (without showing loading screen)
 const { data, error } = await supabase.from('profiles').select('*').eq('user_id', currentUser.id).single();
 if (!error) {
     currentProfile = data;
 }
 
-// ✅ NEW: Check remaining services and convert to seeker if needed
-console.log('🔍 Checking remaining services...');
-
-const { data: remainingServices, error: servicesError } = await supabase
-    .from('provider_services')
-    .select('id')
-    .eq('provider_id', currentProfile.user_id);
-
-if (!servicesError) {
-    console.log('📊 Remaining services count:', remainingServices?.length || 0);
-    
-    // If user is provider but has no services, convert to seeker
-    if (currentProfile.is_provider && (!remainingServices || remainingServices.length === 0)) {
-        console.log('⚠️ No services remaining - converting to seeker');
-        
-        const { error: updateError } = await supabase
-            .from('profiles')
-            .update({ 
-                is_provider: false,
-                radius_km: null
-            })
-            .eq('user_id', currentProfile.user_id);
-        
-        if (!updateError) {
-            currentProfile.is_provider = false;
-            currentProfile.radius_km = null;
-            console.log('✅ Converted to seeker mode');
-            
-            // Clear dashboard mode
-            sessionStorage.removeItem('dashboardMode');
-            console.log('✅ Cleared dashboard mode');
-        }
-    }
-}
-
-// Close edit profile view
+// ✅ CRITICAL: Hide edit profile view explicitly
 const editView = document.getElementById('editProfileView');
 if (editView) {
     editView.classList.add('hidden');
     editView.style.display = 'none';
 }
 
-// Force seeker dashboard if not provider
-if (!currentProfile.is_provider) {
-    console.log('🔄 User is now seeker - forcing seeker view');
-    sessionStorage.setItem('dashboardMode', 'seeker');
-    
-    // Reload the entire page to ensure clean state
-    window.location.reload();
-} else {
-    // Still provider - just reload dashboard normally
-    showDashboard();
-}       
+// Go back to dashboard
+showDashboard();
+        
     } catch (error) {
         errorDiv.textContent = error.message;
         errorDiv.classList.remove('hidden');
