@@ -7,9 +7,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpBuddy - Service Marketplace</title>
-    <link rel="manifest" href="site.webmanifest">
-<link rel="apple-touch-icon" href="icon-152x152.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <!-- Apple Touch Icons -->
+<link rel="apple-touch-icon" sizes="72x72" href="/icon-72x72.png">
+<link rel="apple-touch-icon" sizes="96x96" href="/icon-96x96.png">
+<link rel="apple-touch-icon" sizes="128x128" href="/icon-128x128.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/icon-152x152.png">
+<link rel="apple-touch-icon" sizes="192x192" href="/icon-192x192.png">
+<!-- PWA Meta Tags -->
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="HelpBuddy">
+<meta name="description" content="Connect with local service providers in your area">
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
     
     <!-- ==================== FIREBASE SDK FOR PUSH NOTIFICATIONS ==================== -->
@@ -2424,215 +2437,6 @@ body.dark-theme .info-bubble {
     color: #ffffff !important; /* White icon/text */
 }
 
-/* ===== CREATE REQUEST VIEW - FULL SCREEN OVERLAY ===== */
-#createRequestView {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: white;
-    z-index: 100000;
-    overflow-y: auto;
-    display: none;
-    padding: 0;
-}
-
-#createRequestView.hidden {
-    display: none !important;
-}
-
-#createRequestView:not(.hidden) {
-    display: block !important;
-}
-
-/* Dark theme support */
-body.dark-theme #createRequestView {
-    background: #1a1a2e;
-}
-
-/* Create Request Header */
-.create-request-header {
-    position: sticky;
-    top: 0;
-    background: white;
-    padding: 16px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    border-bottom: 2px solid #f0f0f0;
-}
-
-body.dark-theme .create-request-header {
-    background: #2d2d44;
-    border-bottom-color: #4a4a6c;
-}
-
-.create-request-header-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #333;
-}
-
-body.dark-theme .create-request-header-title {
-    color: #e0e0e0;
-}
-
-.create-request-back-btn {
-    background: #34495e;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s;
-}
-
-.create-request-back-btn:hover {
-    background: #128C7E;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(18, 140, 126, 0.3);
-}
-
-.create-request-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Form fields container - initially hidden */
-#formFieldsContainer {
-    display: none;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.4s ease-out;
-}
-
-#formFieldsContainer.active {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Initially hide all form fields except service selection */
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Service categories - show all expanded by default */
-#serviceAccordion {
-    display: block;  /* ← REMOVED !important */
-    margin-bottom: 0;
-}
-
-#serviceAccordion .service-category {
-    border-bottom: 1px solid #e0e0e0;
-}
-
-#serviceAccordion .service-category:last-child {
-    border-bottom: none;
-}
-
-/* Main category headers - always visible initially */
-.service-category-header {
-    cursor: pointer;
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    transition: background-color 0.2s;
-}
-
-.service-category-header:hover {
-    background-color: #f8f9fa;
-}
-
-/* Hide subcategories by default */
-.service-category-content {
-    display: none;
-    padding: 0 16px 16px 56px;
-}
-
-.service-category.expanded .service-category-content {
-    display: block;
-    animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        max-height: 0;
-    }
-    to {
-        opacity: 1;
-        max-height: 500px;
-    }
-}
-
-/* Rotate arrow when expanded */
-.service-category.expanded .expand-icon {
-    transform: rotate(180deg);
-}
-
-.expand-icon {
-    margin-left: auto;
-    transition: transform 0.3s;
-}
-
-/* Selected subcategory highlight */
-.subcategory-item.selected {
-    background-color: #667eea;
-    color: white;
-    border-radius: 8px;
-    padding: 12px;
-}
-
-.subcategory-item.selected .subcategory-name {
-    color: white;
-    font-weight: 600;
-}
-
-/* Hide collapsed categories */
-.service-category.collapsed {
-    display: none;
-}
-
-/* Hide dropdown trigger when in step-by-step mode */
-#serviceDropdownTrigger {
-    display: none;
-}
-
-/* Progress indicator */
-.step-indicator {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 20px;
-    padding: 12px;
-    background: #f0f4ff;
-    border-radius: 8px;
-    font-size: 14px;
-    color: #667eea;
-}
-
-.step-indicator .step-number {
-    background: #667eea;
-    color: white;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 12px;
-}
-
     </style>
 </head>
 <body>
@@ -3780,26 +3584,18 @@ body.dark-theme .create-request-header-title {
 </div>
 
             <div id="createRequestView" class="hidden">
-    <!-- Header with Back Button -->
-    <div class="create-request-header">
-    <h2 class="create-request-header-title">Service Type</h2>
-    <button class="create-request-back-btn" onclick="backToDashboard()">← Back</button>
-</div>
-
-<!-- Content Container -->
-<div class="create-request-container">
-
-<!-- Step Indicator -->
-<div class="step-indicator" id="stepIndicator" style="display: none;">
-    <div class="step-number">2</div>
-    <span id="stepText">Fill in the request details</span>
-</div>
-
-<div id="createRequestError" class="error hidden"></div>
-<div id="createRequestInfo" class="info hidden"></div>
-
-<form id="createRequestForm">
-    <div class="mb-4">
+    <!-- Header with Back Button on Right -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 20px 20px 0 20px;">
+        <h2 style="margin: 0; color: #667eea; font-size: 24px;"><span data-i18n="create_service_request">Create Service Request</span></h2>
+        <button class="btn btn-secondary" onclick="showDashboard()" style="margin: 0;">← <span data-i18n="back">Back</span></button>
+    </div>
+    
+    <div id="createRequestError" class="error hidden"></div>
+    <div id="createRequestInfo" class="info hidden"></div>
+    
+    <form id="createRequestForm">
+        <div class="mb-4">
+  <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="serviceType">Service Type</label>
   <input type="hidden" id="serviceType" name="serviceType" required>
   <input type="hidden" id="serviceSubtype" name="serviceSubtype">
   
@@ -4040,12 +3836,9 @@ body.dark-theme .create-request-header-title {
     </div>
 
   </div>
-</div> <!-- Close create-request-container -->
-</div> <!-- Close createRequestView -->
   <p id="selectedServiceDisplay" class="mt-2 text-sm text-blue-600 font-medium" style="display:none;"></p>
 </div>
-      <!-- Form fields container - hidden until service selected -->
-<div id="formFieldsContainer" class="create-request-step">  
+        
         <div class="form-group">
             <label><span data-i18n="title">Title</span> <span class="required">*</span></label>
             <input type="text" id="requestTitle" required minlength="10" maxlength="100">
@@ -4115,7 +3908,6 @@ body.dark-theme .create-request-header-title {
         
         <!-- ✅ THIS IS THE MISSING SUBMIT BUTTON -->
         <button type="submit" class="btn btn-full" id="submitRequestBtn"><span data-i18n="create_request">Create Request</span></button>
-</div> <!-- End formFieldsContainer -->
     </form>
 </div> <!-- ✅ CLOSES createRequestView -->
 
@@ -6515,14 +6307,23 @@ document.addEventListener('DOMContentLoaded', updateLanguageUI);
         console.error('❌ Firebase initialization error:', error);
     }
 
-// ==================== REGISTER SERVICE WORKER ====================
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/firebase-messaging-sw.js')
+    // Register main service worker for PWA
+    navigator.serviceWorker.register('/service-worker.js')
         .then((registration) => {
-            console.log('✅ Service Worker registered:', registration);
+            console.log('✅ PWA Service Worker registered:', registration);
         })
         .catch((error) => {
-            console.error('❌ Service Worker registration failed:', error);
+            console.error('❌ PWA Service Worker registration failed:', error);
+        });
+    
+    // Register Firebase messaging service worker for push notifications
+    navigator.serviceWorker.register('/firebase-messaging-sw.js')
+        .then((registration) => {
+            console.log('✅ Firebase Service Worker registered:', registration);
+        })
+        .catch((error) => {
+            console.error('❌ Firebase Service Worker registration failed:', error);
         });
 }
 
@@ -6765,9 +6566,6 @@ function getServiceIcon(serviceId) {
     
     setupCharCounters();
     setupCityAutocomplete();
-    
-    // ✅ NEW: Initialize service selection UX
-    initServiceSelection();
 });
 
         function hideAllViews() {
@@ -7074,134 +6872,43 @@ function toggleDashboardMode() {
     showDashboard();
 }
         function showLoading() { hideAllViews(); document.getElementById('loadingView').classList.remove('hidden'); }
-       function showCreateRequestForm() {
-    document.getElementById('dashboardView').classList.add('hidden');
-document.getElementById('createRequestView').classList.remove('hidden');
-document.getElementById('createRequestView').style.display = 'block';
+        async function showCreateRequestForm() { 
+    hideAllViews(); 
     
-    // Reset form
-    document.getElementById('createRequestForm').reset();
-    document.getElementById('createRequestError').classList.add('hidden');
-    document.getElementById('createRequestInfo').classList.add('hidden');
+    // Hide dashboard sections
+    const seekerSection = document.getElementById('seekerSection');
+    const providerSection = document.getElementById('providerSection');
+    const createRequestBtn = document.getElementById('createRequestBtn');
+    const userMenu = document.querySelector('.user-menu');
     
-    // Reset service selection UI
-    resetServiceSelection();
+    if (seekerSection) seekerSection.style.display = 'none';
+    if (providerSection) providerSection.style.display = 'none';
+    if (createRequestBtn) createRequestBtn.style.display = 'none';
+    if (userMenu) userMenu.style.display = 'none';
     
-    // Hide form fields initially
-    document.getElementById('formFieldsContainer').classList.remove('active');
-    document.getElementById('stepIndicator').style.display = 'none';
+    // Show create request form
+    document.getElementById('createRequestView').classList.remove('hidden'); 
+    document.getElementById('createRequestView').style.display = 'block';
     
-    // Show all service categories expanded
-    document.querySelectorAll('.service-category').forEach(category => {
-        category.classList.remove('collapsed', 'expanded');
-    });
+    // ✅ Reset the form
+    document.getElementById('createRequestForm').reset(); 
+    document.getElementById('titleCounter').textContent = '0';
+    document.getElementById('descCounter').textContent = '0';
     
-    // Remove any previous selections
-    document.querySelectorAll('.subcategory-item').forEach(item => {
-        item.classList.remove('selected');
-    });
-}
-
-// Handle main category click
-function handleCategoryClick(categoryElement) {
-    const isExpanded = categoryElement.classList.contains('expanded');
+    // ✅ CRITICAL FIX: Reset "Use different location" checkbox and hide custom fields
+    const differentLocationCheckbox = document.getElementById('differentLocation');
+    const customLocationFields = document.getElementById('customLocationFields');
     
-    if (!isExpanded) {
-        // Collapse all other categories
-        document.querySelectorAll('.service-category').forEach(cat => {
-            if (cat !== categoryElement) {
-                cat.classList.add('collapsed');
-                cat.classList.remove('expanded');
-            }
-        });
-        
-        // Expand clicked category
-        categoryElement.classList.add('expanded');
-        categoryElement.classList.remove('collapsed');
+    if (differentLocationCheckbox) {
+        differentLocationCheckbox.checked = false; // Uncheck the checkbox
     }
-}
-
-// Handle subcategory selection
-function handleSubcategoryClick(subcategoryElement) {
-    const category = subcategoryElement.getAttribute('data-value');
-    const categoryMain = subcategoryElement.closest('.service-category').getAttribute('data-category');
-    console.log('🔍 Service selected, showing form fields...');
-    // Remove previous selection
-    document.querySelectorAll('.subcategory-item').forEach(item => {
-        item.classList.remove('selected');
-    });
     
-    // Mark as selected
-    subcategoryElement.classList.add('selected');
+    if (customLocationFields) {
+        customLocationFields.classList.add('hidden'); // Hide the custom location fields
+    }
     
-    // Set hidden form values
-    document.getElementById('serviceType').value = categoryMain;
-    document.getElementById('serviceSubtype').value = category;
-
-    // Hide the service accordion after selection
-const serviceAccordion = document.getElementById('serviceAccordion');
-serviceAccordion.style.display = 'none';
-
-// Show selected service in header
-const headerTitle = document.querySelector('.create-request-header-title');
-if (headerTitle) {
-    const serviceName = subcategoryElement.querySelector('.subcategory-name').textContent;
-    headerTitle.textContent = serviceName;
-}
-
-// Show form fields with animation
-    
-    // Show form fields with animation
-    const formFields = document.getElementById('formFieldsContainer');
-console.log('📝 formFields element:', formFields);
-console.log('📝 formFields display before:', formFields.style.display);
-    formFields.classList.add('active');
-    console.log('📝 formFields classList after adding active:', formFields.classList);
-console.log('📝 formFields display after:', formFields.style.display);
-    // Show step indicator
-    const stepIndicator = document.getElementById('stepIndicator');
-    stepIndicator.style.display = 'flex';
-    
-    // Scroll to form fields smoothly
-    setTimeout(() => {
-        formFields.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 300);
-}
-
-// Initialize service selection behavior
-function initServiceSelection() {
-    // Add click handlers to category headers
-    document.querySelectorAll('.service-category-header').forEach(header => {
-        header.addEventListener('click', function(e) {
-            // Don't trigger if clicking info bubble
-            if (e.target.closest('.info-bubble')) return;
-            
-            const category = this.closest('.service-category');
-            handleCategoryClick(category);
-        });
-    });
-    
-    // Add click handlers to subcategory items
-    document.querySelectorAll('.subcategory-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-            // Don't trigger if clicking info bubble
-            if (e.target.closest('.info-bubble')) return;
-            
-            handleSubcategoryClick(this);
-        });
-    });
-}
-
-// Reset service selection
-function resetServiceSelection() {
-    document.getElementById('serviceType').value = '';
-    document.getElementById('serviceSubtype').value = '';
-    document.querySelectorAll('.service-category').forEach(cat => {
-        cat.classList.remove('collapsed', 'expanded');
-    });
-    document.querySelectorAll('.subcategory-item').forEach(item => {
-        item.classList.remove('selected');
-    });
+    // Filter services based on provider's existing services
+    await filterServiceDropdown();
 }
         
         async function filterServiceDropdown() {
@@ -7254,92 +6961,6 @@ function resetServiceSelection() {
     } catch (error) {
         console.error('Error filtering services:', error);
     }
-}
-
-// Handle main category click
-function handleCategoryClick(categoryElement) {
-    const isExpanded = categoryElement.classList.contains('expanded');
-    
-    if (!isExpanded) {
-        // Collapse all other categories
-        document.querySelectorAll('.service-category').forEach(cat => {
-            if (cat !== categoryElement) {
-                cat.classList.add('collapsed');
-                cat.classList.remove('expanded');
-            }
-        });
-        
-        // Expand clicked category
-        categoryElement.classList.add('expanded');
-        categoryElement.classList.remove('collapsed');
-    }
-}
-
-// Handle subcategory selection
-function handleSubcategoryClick(subcategoryElement) {
-    const category = subcategoryElement.getAttribute('data-value');
-    const categoryMain = subcategoryElement.closest('.service-category').getAttribute('data-category');
-    
-    // Remove previous selection
-    document.querySelectorAll('.subcategory-item').forEach(item => {
-        item.classList.remove('selected');
-    });
-    
-    // Mark as selected
-    subcategoryElement.classList.add('selected');
-    
-    // Set hidden form values
-    document.getElementById('serviceType').value = categoryMain;
-    document.getElementById('serviceSubtype').value = category;
-    
-    // Show form fields with animation
-    const formFields = document.getElementById('formFieldsContainer');
-    formFields.classList.add('active');
-    
-    // Show step indicator
-    const stepIndicator = document.getElementById('stepIndicator');
-    stepIndicator.style.display = 'flex';
-    
-    // Scroll to form fields smoothly
-    setTimeout(() => {
-        formFields.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 300);
-}
-
-// Initialize service selection behavior
-function initServiceSelection() {
-    // Add click handlers to category headers
-    document.querySelectorAll('.service-category-header').forEach(header => {
-        header.addEventListener('click', function(e) {
-            // Don't trigger if clicking info bubble
-            if (e.target.closest('.info-bubble')) return;
-            
-            const category = this.closest('.service-category');
-            handleCategoryClick(category);
-        });
-    });
-    
-    // Add click handlers to subcategory items
-    document.querySelectorAll('.subcategory-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-            // Don't trigger if clicking info bubble
-            if (e.target.closest('.info-bubble')) return;
-            
-            handleSubcategoryClick(this);
-        });
-    });
-}
-
-// Reset service selection
-function resetServiceSelection() {
-    document.getElementById('serviceType').value = '';
-    document.getElementById('serviceSubtype').value = '';
-    document.querySelectorAll('.service-category').forEach(cat => {
-        cat.classList.remove('collapsed', 'expanded');
-    });
-    document.querySelectorAll('.subcategory-item').forEach(item => {
-        item.classList.remove('selected');
-    });
 }
         function backToDashboard() { 
     // Clear chat refresh interval
@@ -8903,6 +8524,28 @@ async function rejectCompletionFromChat(messageIndex) {
                 }
                 
 await loadProfile();
+
+// ✅ DEBUG: Log all referral-related values
+console.log('🔍 REFERRAL BONUS CHECK:', {
+    hasCurrentUser: !!currentUser,
+    hasCurrentProfile: !!currentProfile,
+    email_verified: currentProfile?.email_verified,
+    referral_bonus_awarded: currentProfile?.referral_bonus_awarded,
+    referred_by: currentProfile?.referred_by,
+    user_id: currentUser?.id
+});
+
+// Check and award referral bonus on first verified login
+if (currentUser && currentProfile && currentProfile.email_verified && !currentProfile.referral_bonus_awarded && currentProfile.referred_by) {
+    console.log('✅ All conditions met! Awarding referral bonus...');
+    await awardReferralBonus(currentUser.id);
+} else {
+    console.log('⏭️ Referral bonus conditions NOT met:', {
+        reason: !currentProfile?.email_verified ? 'email not verified' :
+                currentProfile?.referral_bonus_awarded ? 'bonus already awarded' :
+                !currentProfile?.referred_by ? 'no referrer (referred_by is null)' : 'unknown'
+    });
+}
             } catch (error) {
                 errorDiv.textContent = error.message;
                 errorDiv.classList.remove('hidden');
@@ -10172,6 +9815,154 @@ if (currentUser && currentUser.id === userId) {
     if (typeof loadReferralData === 'function') {
         await loadReferralData();
     }
+}
+
+}
+
+// Award referral bonus to both users
+async function awardReferralBonus(userId) {
+    try {
+        console.log('🎁 Checking for pending referral bonus for user:', userId);
+        
+        // Get user's profile to check for pending referral
+        const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('referred_by, referral_bonus_awarded, name, credits')
+            .eq('user_id', userId)
+            .single();
+        
+        // ✅ DEBUG: Log what was fetched
+        console.log('🔍 DEBUG awardReferralBonus - Profile fetched:', {
+            profile: profile,
+            error: profileError
+        });
+        
+        if (profileError) {
+            console.error('❌ Error fetching profile:', profileError);
+            return;
+        }
+        
+        // Check if bonus already awarded or no referrer
+        if (!profile.referred_by) {
+            console.log('ℹ️ No referrer found for this user');
+            return;
+        }
+        
+        if (profile.referral_bonus_awarded) {
+            console.log('ℹ️ Referral bonus already awarded');
+            return;
+        }
+        
+        console.log('🎁 Awarding referral bonuses...');
+        
+        // Step 1: Create referral record
+const { error: referralError } = await supabase.from('referrals').insert([{
+    referrer_id: profile.referred_by,
+    referred_id: userId,
+    status: 'completed',
+    credits_awarded_first_request: false  // ✅ ADD THIS!
+}]);
+        
+        if (referralError) {
+            console.error('❌ Error creating referral record:', referralError);
+            // Continue anyway - bonus is more important
+        } else {
+            console.log('✅ Referral record created');
+        }
+        
+        // Step 2: Award bonus to NEW USER (+20 credits)
+        await addCredits(
+            userId, 
+            20, 
+            'Signup bonus: You signed up using a referral code', 
+            null, 
+            'completed', 
+            null
+        );
+        console.log('✅ +20 credits awarded to new user');
+        
+        // Step 3: Award bonus to REFERRER (+50 credits)
+console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+console.log('🎁 AWARDING REFERRER BONUS');
+console.log('   Referrer ID:', profile.referred_by);
+console.log('   New user name:', profile.name);
+console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+try {
+    const newUserName = profile.name || 'A new user';
+    
+    await addCredits(
+        profile.referred_by, 
+        50, 
+        `Referral bonus: ${newUserName} signed up using your referral code`, 
+        null, 
+        'completed', 
+        null
+    );
+    
+    console.log('✅ Referrer bonus awarded successfully');
+    
+} catch (referrerBonusError) {
+    console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.error('💥 FAILED TO AWARD REFERRER BONUS!');
+    console.error('   Error:', referrerBonusError);
+    console.error('   This is a CRITICAL issue - referrer did not receive credits!');
+    console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    // Don't throw - let the process continue for the new user
+}
+
+// Verify provider credits were updated
+console.log('🔍 Verifying referrer credits...');
+const { data: verifyProvider, error: verifyError } = await supabase
+    .from('profiles')
+    .select('credits, name')
+    .eq('user_id', profile.referred_by)
+    .single();
+
+if (verifyError) {
+    console.error('❌ Error verifying provider credits:', verifyError);
+} else {
+    console.log('✅ Referrer verification result:');
+    console.log('   Name:', verifyProvider.name);
+    console.log('   Credits:', verifyProvider.credits);
+}
+        
+        // Step 4: Mark bonus as awarded
+        const { error: updateError } = await supabase
+            .from('profiles')
+            .update({ referral_bonus_awarded: true })
+            .eq('user_id', userId);
+        
+        if (updateError) {
+            console.error('❌ Error updating referral_bonus_awarded flag:', updateError);
+        } else {
+            console.log('✅ Referral bonus marked as awarded');
+	    // After referral bonus awarded successfully, reload the profile to update UI
+            await loadProfile(currentUser.id);
+            displayCreditBalance(); // Call your function that updates the credit display
+        }
+        
+        console.log('🎉 Referral bonus process completed successfully!');
+        
+    } catch (error) {
+        console.error('❌ Error in awardReferralBonus:', error);
+    }
+
+// Step 4: Mark bonus as awarded
+const { error: updateError } = await supabase
+    .from('profiles')
+    .update({ referral_bonus_awarded: true })
+    .eq('user_id', userId);
+
+if (updateError) {
+    console.error('❌ Error updating referral_bonus_awarded flag:', updateError);
+} else {
+    console.log('✅ Referral bonus marked as awarded');
+    await loadProfile(currentUser.id);
+    displayCreditBalance();
+    
+    // ✅ ALSO reload referral data
+    await loadReferralData();
 }
 
 }
