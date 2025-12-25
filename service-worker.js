@@ -1,14 +1,13 @@
 // ==================== SERVICE WORKER FOR PWA ====================
 // ✅ FIXED: All paths now match actual file locations
-const CACHE_NAME = 'helpbuddy-v1.0.2';
+const CACHE_NAME = 'helpbuddy-v1.0.3';
 
 const STATIC_ASSETS = [
     '/',
     '/index.html',
-    '/manifest.json',                                    // ✅ FIXED: Root directory, not /public/
-    '/public/offline.html',                             // ✅ CORRECT: In public folder
-    '/public/icon-192x192.png',                         // ✅ CORRECT: In public folder
-    '/public/icon-512x512.png',                         // ✅ CORRECT: In public folder
+    '/site.webmanifest',                                // ✅ FIXED: Correct filename
+    '/icon-192x192.png',                                // ✅ FIXED: Icons are in root
+    '/icon-512x512.png',                                // ✅ FIXED: Icons are in root
     'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js'
 ];
 
