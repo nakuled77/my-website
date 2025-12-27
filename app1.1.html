@@ -6555,83 +6555,21 @@ function getServiceIcon(serviceId) {
         window.addEventListener('DOMContentLoaded', async () => {
     console.log('Step 3: DOMContentLoaded fired');
     
-    // ⭐ STEP 1: Check URL parameters FIRST (highest priority)
-    const params = new URLSearchParams(window.location.search);
-    const view = params.get("mode");
-    
-    console.log("🔍 ROUTER CHECK:");
-    console.log("Mode param:", view);
-    
-    // Setup form helpers (needed for signup/login)
-    setupCharCounters();
-    setupCityAutocomplete();
-    
-    // Handle explicit mode requests
-    if (view === "signup") {
-        console.log("→ SIGNUP requested");
-        
-        // Check if already logged in
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-            console.log("→ User already logged in, redirecting to dashboard");
-            currentUser = user;
-            await loadProfile();
-        } else {
-            console.log("→ Showing signup page");
-            showSignup();
-        }
-        return; // ← Stop here
-    }
-    
-    if (view === "login") {
-        console.log("→ LOGIN requested");
-        
-        // Check if already logged in
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-            console.log("→ User already logged in, redirecting to dashboard");
-            currentUser = user;
-            await loadProfile();
-        } else {
-            console.log("→ Showing login page");
-            showLogin();
-        }
-        return; // ← Stop here
-    }
-    
-    if (view === "terms") {
-        showTerms();
-        return;
-    }
-    
-    if (view === "privacy") {
-        showPrivacy();
-        return;
-    }
-    
-    if (view === "help") {
-        openGetHelpModal();
-        return;
-    }
-    
-    // ⭐ STEP 2: No explicit mode - continue with normal flow
-    console.log("→ No mode parameter, continuing normal flow");
-    
-    // Check email verification
+    // FIRST: Check if user is returning from email verification
     const isVerifying = await handleEmailVerification();
     if (isVerifying) {
         console.log('✅ Email verification handled');
         return;
     }
     
-    // Check password reset
+    // ⭐ NEW: Check if user is resetting password
     const isResettingPassword = await handlePasswordReset();
     if (isResettingPassword) {
         console.log('✅ Password reset handled');
         return;
     }
     
-    // Check if user is already logged in
+    // THEN: Check if user is already logged in
     const { data: { user } } = await supabase.auth.getUser();
     console.log('Step 4: Checked user:', user);
     
@@ -6641,6 +6579,9 @@ function getServiceIcon(serviceId) {
     } else { 
         showLogin(); 
     }
+    
+    setupCharCounters();
+    setupCityAutocomplete();
 });
 
         function hideAllViews() {
@@ -6691,7 +6632,7 @@ function getServiceIcon(serviceId) {
     
     console.log('✅ Login view now visible');
 }
-        function showSignup() {
+        function showSignup() { 
     hideAllViews(); 
     
     // Explicitly hide login view
@@ -6708,102 +6649,6 @@ function getServiceIcon(serviceId) {
         signupView.style.visibility = 'visible';
         console.log('✅ Signup view now visible');
     }
-    
-    // ⭐ NEW: Auto-fill referral code if present in URL
-    autoFillReferralCode();
-}
-
-// ⭐ NEW: Auto-fill referral code from URL
-function autoFillReferralCode() {
-    // Check URL for referral parameter
-    const params = new URLSearchParams(window.location.search);
-    const referralCode = params.get('referral');
-    
-    if (referralCode) {
-        console.log('🎁 Referral code detected:', referralCode);
-        
-        // Find the referral code input field
-        const referralInput = document.getElementById('signupReferralCode');
-        
-        if (referralInput) {
-            // Auto-fill the code
-            referralInput.value = referralCode.toUpperCase();
-            
-            // Make it look special (highlighted)
-            referralInput.style.background = 'linear-gradient(135deg, #e8f5e9, #c8e6c9)';
-            referralInput.style.border = '2px solid #4caf50';
-            referralInput.style.fontWeight = '700';
-            
-            // Store in localStorage (so it persists if user refreshes)
-            localStorage.setItem('pendingReferralCode', referralCode);
-            
-            // Show success message
-            showReferralBanner(referralCode);
-            
-            console.log('✅ Referral code auto-filled:', referralCode);
-        }
-    } else {
-        // Check if we have a stored referral code
-        const storedCode = localStorage.getItem('pendingReferralCode');
-        if (storedCode) {
-            const referralInput = document.getElementById('signupReferralCode');
-            if (referralInput && !referralInput.value) {
-                referralInput.value = storedCode.toUpperCase();
-                referralInput.style.background = 'linear-gradient(135deg, #e8f5e9, #c8e6c9)';
-                referralInput.style.border = '2px solid #4caf50';
-                referralInput.style.fontWeight = '700';
-                showReferralBanner(storedCode);
-            }
-        }
-    }
-}
-
-// ⭐ NEW: Show "Referred by friend" banner
-function showReferralBanner(code) {
-    // Check if banner already exists
-    if (document.getElementById('referralBanner')) return;
-    
-    // Create banner
-    const banner = document.createElement('div');
-    banner.id = 'referralBanner';
-    banner.style.cssText = `
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(135deg, #4caf50, #45a049);
-        color: white;
-        padding: 15px 30px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
-        z-index: 9999;
-        font-weight: 600;
-        text-align: center;
-        animation: slideDown 0.5s ease;
-    `;
-    
-    banner.innerHTML = `
-        🎁 You were referred by a friend!<br>
-        <span style="font-size: 0.9em; opacity: 0.9;">Bonus credits will be applied after signup</span>
-    `;
-    
-    document.body.appendChild(banner);
-    
-    // Add animation
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideDown {
-            from { top: -100px; opacity: 0; }
-            to { top: 20px; opacity: 1; }
-        }
-    `;
-    document.head.appendChild(style);
-    
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-        banner.style.animation = 'slideDown 0.5s ease reverse';
-        setTimeout(() => banner.remove(), 500);
-    }, 5000);
 }
 
 // ✅ Function to resend verification email
@@ -8962,10 +8807,6 @@ if (formData.is_provider) {
     console.log('✅ STEP 6 SKIPPED: Not a provider');
 }
 
-// ✅ NEW: Clear stored referral code after successful signup
-console.log('🔵 Clearing stored referral code...');
-localStorage.removeItem('pendingReferralCode');
-
 // ✅ LOGOUT the user immediately after signup
 console.log('🔵 Logging out user after signup...');
 await supabase.auth.signOut();
@@ -10318,6 +10159,7 @@ function copyReferralCode() {
     });
 }
 
+// Share referral code via WhatsApp or native share
 function shareReferralCode() {
     const code = currentProfile?.referral_code;
     if (!code) {
@@ -10325,17 +10167,14 @@ function shareReferralCode() {
         return;
     }
     
-    // ⭐ NEW: Create referral URL with code in it
-    const referralUrl = `${window.location.origin}/app.html?mode=signup&referral=${code}`;
-    
-    const message = `🎁 Join HelpBuddy and get ₹200 bonus credits!\n\n👉 Sign up using my link:\n${referralUrl}\n\n✅ Your referral bonus will be automatically applied!`;
+    const message = `🎁 Join HelpBuddy and get bonus credits!\n\nUse my referral code: ${code}\n\nDownload now: ${window.location.origin}`;
     
     // Try native share first (mobile)
     if (navigator.share) {
         navigator.share({
-            title: 'Join HelpBuddy - Get ₹200 Free!',
+            title: 'Join HelpBuddy',
             text: message,
-            url: referralUrl
+            url: window.location.origin
         }).catch(err => console.log('Share cancelled'));
     } else {
         // Fallback to WhatsApp
@@ -17965,73 +17804,68 @@ if (dashboardHeader) dashboardHeader.style.display = 'flex';
     }
 }
 
-// FIXED: Show Privacy Policy
+// Show Privacy Policy
 function showPrivacy() {
     console.log('🔵 Opening Privacy Policy...');
     
     // Hide all main views first
     hideAllViews();
     
-    // ✅ FIX 1: Hide ALL views explicitly
-    const viewsToHide = [
-        'loadingView',
-        'loginView', 
-        'signupView',
-        'termsView',
-        'editProfileView',
-        'createRequestView',
-        'chatView',
-        'passwordResetView'
-    ];
+    // ✅ CRITICAL FIX: Explicitly hide ALL other views INCLUDING EDIT PROFILE
+    const loadingView = document.getElementById('loadingView');
+    const loginView = document.getElementById('loginView');
+    const signupView = document.getElementById('signupView');
+    const termsView = document.getElementById('termsView');
+    const editProfileView = document.getElementById('editProfileView'); // ← 🆕 ADDED
+    const createRequestView = document.getElementById('createRequestView'); // ← 🆕 ADDED
+    const chatView = document.getElementById('chatView'); // ← 🆕 ADDED
     
-    viewsToHide.forEach(viewId => {
-        const view = document.getElementById(viewId);
-        if (view) {
-            view.classList.add('hidden');
-            view.style.display = 'none';
-            view.style.visibility = 'hidden';
-        }
-    });
+    if (loadingView) {
+        loadingView.classList.add('hidden');
+        loadingView.style.display = 'none';
+    }
+    if (loginView) {
+        loginView.classList.add('hidden');
+        loginView.style.display = 'none';
+    }
+    if (signupView) {
+        signupView.classList.add('hidden');
+        signupView.style.display = 'none';
+    }
+    if (termsView) {
+        termsView.classList.add('hidden');
+        termsView.style.display = 'none';
+    }
+    // ← 🆕 HIDE EDIT PROFILE VIEW
+    if (editProfileView) {
+        editProfileView.classList.add('hidden');
+        editProfileView.style.display = 'none';
+    }
+    // ← 🆕 HIDE CREATE REQUEST VIEW
+    if (createRequestView) {
+        createRequestView.classList.add('hidden');
+        createRequestView.style.display = 'none';
+    }
+    // ← 🆕 HIDE CHAT VIEW
+    if (chatView) {
+        chatView.classList.add('hidden');
+        chatView.style.display = 'none';
+    }
     
-    // ✅ FIX 2: Hide ALL dashboard UI elements (use querySelectorAll for duplicate IDs)
-    const dashboardHeaders = document.querySelectorAll('[id="dashboardHeader"]');
-    dashboardHeaders.forEach(header => {
-        header.style.display = 'none';
-        header.style.visibility = 'hidden';
-    });
+    // Hide dashboard UI elements (but keep dashboardView container)
+    const seekerSection = document.getElementById('seekerSection');
+    const providerSection = document.getElementById('providerSection');
+    const dashboardHeader = document.getElementById('dashboardHeader');
+    const createRequestBtn = document.getElementById('createRequestBtn');
+    const userMenu = document.querySelector('.user-menu');
+    const appLogo = document.getElementById('appLogo');
     
-    // Hide other dashboard components
-    const dashboardElements = [
-        'seekerSection',
-        'providerSection', 
-        'createRequestBtn',
-        'modeToggleBtn',
-        'appLogo'
-    ];
-    
-    dashboardElements.forEach(elemId => {
-        const elem = document.getElementById(elemId);
-        if (elem) {
-            elem.style.display = 'none';
-            elem.style.visibility = 'hidden';
-        }
-    });
-    
-    // Hide user menu
-    const userMenus = document.querySelectorAll('.user-menu');
-    userMenus.forEach(menu => {
-        menu.style.display = 'none';
-        menu.style.visibility = 'hidden';
-    });
-    
-    // ✅ FIX 3: Hide any floating/sticky buttons (Provider toggle at bottom)
-    const floatingButtons = document.querySelectorAll('.btn, button[onclick*="toggleDashboardMode"]');
-    floatingButtons.forEach(btn => {
-        if (btn.textContent.includes('Provider') || btn.textContent.includes('Seeker')) {
-            btn.style.display = 'none';
-            btn.style.visibility = 'hidden';
-        }
-    });
+    if (seekerSection) seekerSection.style.display = 'none';
+    if (providerSection) providerSection.style.display = 'none';
+    if (createRequestBtn) createRequestBtn.style.display = 'none';
+    if (dashboardHeader) dashboardHeader.style.display = 'none';
+    if (userMenu) userMenu.style.display = 'none';
+    if (appLogo) appLogo.style.display = 'none';
     
     // Keep dashboardView visible (because privacyView is inside it)
     const dashboardView = document.getElementById('dashboardView');
@@ -18047,14 +17881,12 @@ function showPrivacy() {
         privacyView.classList.remove('hidden');
         privacyView.style.display = 'block';
         privacyView.style.visibility = 'visible';
-        privacyView.style.position = 'relative'; // Ensure it's in normal flow
-        privacyView.style.zIndex = '1000'; // Bring to front
     }
     
     console.log('✅ Privacy Policy should now be visible (full-screen)');
 }
 
-// FIXED: Close Privacy Policy
+// Close Privacy Policy
 function closePrivacyView() {
     console.log('🔵 Closing Privacy Policy...');
     
@@ -18062,7 +17894,6 @@ function closePrivacyView() {
     if (privacyView) {
         privacyView.classList.add('hidden');
         privacyView.style.display = 'none';
-        privacyView.style.visibility = 'hidden';
     }
     
     // ✅ CRITICAL FIX: Hide loading view when closing
@@ -18070,67 +17901,33 @@ function closePrivacyView() {
     if (loadingView) {
         loadingView.classList.add('hidden');
         loadingView.style.display = 'none';
-        loadingView.style.visibility = 'hidden';
     }
 
-    // ✅ FIX 4: Restore ALL dashboard headers properly
-    const dashboardHeaders = document.querySelectorAll('[id="dashboardHeader"]');
-    dashboardHeaders.forEach(header => {
-        header.style.display = 'flex';
-        header.style.visibility = 'visible';
-    });
+const dashboardHeader = document.getElementById('dashboardHeader');
+if (dashboardHeader) dashboardHeader.style.display = 'flex';
     
     // If user is logged in, restore dashboard
     if (currentUser && currentProfile) {
         console.log('✅ User logged in - showing dashboard');
         
         // Show dashboard UI elements again
-        const dashboardElements = [
-            'seekerSection',
-            'providerSection',
-            'createRequestBtn',
-            'modeToggleBtn',
-            'appLogo'
-        ];
+        const seekerSection = document.getElementById('seekerSection');
+        const providerSection = document.getElementById('providerSection');
+        const createRequestBtn = document.getElementById('createRequestBtn');
+        const userMenu = document.querySelector('.user-menu');
         
-        dashboardElements.forEach(elemId => {
-            const elem = document.getElementById(elemId);
-            if (elem) {
-                elem.style.display = 'block';
-                elem.style.visibility = 'visible';
-            }
-        });
+        if (seekerSection) seekerSection.style.display = 'block';
+        if (providerSection && currentProfile.is_provider) providerSection.style.display = 'block';
+        if (createRequestBtn) createRequestBtn.style.display = 'block';
+        if (userMenu) userMenu.style.display = 'flex';
         
-        const userMenus = document.querySelectorAll('.user-menu');
-        userMenus.forEach(menu => {
-            menu.style.display = 'flex';
-            menu.style.visibility = 'visible';
-        });
-        
-        // Restore floating buttons
-        const floatingButtons = document.querySelectorAll('.btn, button[onclick*="toggleDashboardMode"]');
-        floatingButtons.forEach(btn => {
-            if (btn.textContent.includes('Provider') || btn.textContent.includes('Seeker')) {
-                btn.style.display = 'flex';
-                btn.style.visibility = 'visible';
-            }
-        });
-        
-        // Show dashboard
+        // Show dashboard (which will handle the rest)
         showDashboard();
     } else {
         // If not logged in, go to login
         console.log('✅ User not logged in - showing login');
         
-        // Hide dashboard view completely
-        const dashboardView = document.getElementById('dashboardView');
-        if (dashboardView) {
-            dashboardView.classList.add('hidden');
-            dashboardView.style.display = 'none';
-            dashboardView.style.visibility = 'hidden';
-        }
-        
-        // Show login view
+        // ✅ Explicitly show login view
         const loginView = document.getElementById('loginView');
         if (loginView) {
             loginView.classList.remove('hidden');
@@ -18138,16 +17935,6 @@ function closePrivacyView() {
             loginView.style.visibility = 'visible';
         }
     }
-}
-
-// BONUS FIX: Also fix showPrivacyFromDropdown for consistency
-function showPrivacyFromDropdown() {
-    // Close dropdown first
-    const dropdown = document.getElementById('userDropdown');
-    if (dropdown) dropdown.classList.remove('show');
-    
-    // Then show privacy
-    showPrivacy();
 }
 
 // Load Provider's Open Requests (Negotiating)
@@ -18499,14 +18286,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initServiceAccordion();
     initProviderServiceAccordion();
 });
-
-// Add this FIRST before everything else
-function isUserLoggedIn() {
-    // Check if user token exists in localStorage
-    const token = localStorage.getItem('userToken');
-    const userId = localStorage.getItem('userId');
-    return !!(token && userId); // Returns true if both exist
-}
 
 </script>
 

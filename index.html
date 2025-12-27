@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HelpBuddy - Connect with Local Service Providers</title>
+    <meta name="description" content="HelpBuddy - Connect with local service providers. Zero commission. Direct contact. Find electricians, plumbers, carpenters and more.">
+    <title>HelpBuddy - Tension Mat Lo, Buddy Hai Na!</title>
     <style>
         * {
             margin: 0;
@@ -12,12 +13,14 @@
         }
 
         :root {
-            --primary: #667eea;
-            --secondary: #764ba2;
-            --accent: #f093fb;
+            --primary: #4285F4;
+            --purple: #667eea;
+            --purple-dark: #764ba2;
+            --green: #25D366;
             --dark: #1a202c;
             --light: #f7fafc;
             --gray: #718096;
+            --yellow: #ffc107;
         }
 
         body {
@@ -27,14 +30,41 @@
             overflow-x: hidden;
         }
 
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .lang-toggle:hover {
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%);
             color: white;
-            padding: 80px 20px 100px;
+            padding: 80px 20px 120px;
             text-align: center;
             position: relative;
             overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .hero::before {
@@ -57,41 +87,58 @@
         .hero-content {
             position: relative;
             z-index: 1;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
         .logo {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 800;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            letter-spacing: -1px;
         }
 
         .tagline {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            font-weight: 600;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
         }
 
         .subtitle {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             opacity: 0.95;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+            line-height: 1.8;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .cta-button {
+        /* CTA Buttons Container */
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 60px;
+        }
+
+        /* Primary CTA (Signup) */
+        .cta-primary {
             display: inline-block;
-            background: white;
-            color: var(--primary);
-            padding: 18px 50px;
+            background: linear-gradient(135deg, #25D366 0%, #20BA5A 100%);
+            color: white;
+            padding: 22px 50px;
             border-radius: 50px;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: 700;
             text-decoration: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
             transition: all 0.3s ease;
             animation: pulse 2s ease-in-out infinite;
+            border: 3px solid rgba(255,255,255,0.3);
         }
 
         @keyframes pulse {
@@ -99,33 +146,129 @@
             50% { transform: scale(1.05); }
         }
 
-        .cta-button:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        .cta-primary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.5);
             animation: none;
         }
 
-        .lang-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
+        /* Secondary CTA (Login) */
+        .cta-secondary {
+    display: inline-block;
+    color: #4285F4;
+    background: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: underline;
+    transition: all 0.3s ease;
+    padding: 12px 25px;
+    border-radius: 25px;
+    box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+}
+
+.cta-secondary:hover {
+    color: #1a73e8;
+    background: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255,255,255,0.4);
+    text-decoration: underline;
+}
+
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+        }
+
+        .badge-text {
+            font-size: 0.95rem;
             font-weight: 600;
+        }
+
+        /* Dual Audience Section */
+        .dual-section {
+            padding: 80px 20px;
+            background: var(--light);
+        }
+
+        .dual-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .audience-card {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
         }
 
-        .lang-toggle:hover {
-            background: rgba(255,255,255,0.3);
+        .audience-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(102,126,234,0.2);
+        }
+
+        .audience-icon {
+            font-size: 4rem;
+            margin-bottom: 25px;
+        }
+
+        .audience-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .audience-desc {
+            color: var(--gray);
+            font-size: 1.05rem;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .benefits-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .benefits-list li {
+            padding: 12px 0;
+            color: var(--dark);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .benefits-list li::before {
+            content: '✓';
+            color: var(--green);
+            font-weight: bold;
+            font-size: 1.3rem;
         }
 
         /* Services Section */
         .services {
             padding: 80px 20px;
-            background: var(--light);
+            background: white;
         }
 
         .section-title {
@@ -133,7 +276,7 @@
             font-size: 2.5rem;
             font-weight: 800;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--purple), var(--purple-dark));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -151,48 +294,44 @@
 
         .service-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
         .service-card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(102,126,234,0.05), rgba(118,75,162,0.05));
+            padding: 30px 20px;
+            border-radius: 15px;
             text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
             cursor: pointer;
+            border: 2px solid transparent;
         }
 
         .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(102,126,234,0.2);
+            transform: translateY(-5px);
+            border-color: var(--purple);
+            background: white;
+            box-shadow: 0 10px 25px rgba(102,126,234,0.15);
         }
 
         .service-icon {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
+            font-size: 3rem;
+            margin-bottom: 15px;
         }
 
         .service-name {
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--dark);
-            margin-bottom: 10px;
-        }
-
-        .service-desc {
-            color: var(--gray);
-            font-size: 0.95rem;
         }
 
         /* How It Works */
         .how-it-works {
             padding: 80px 20px;
-            background: white;
+            background: linear-gradient(135deg, rgba(102,126,234,0.05), rgba(118,75,162,0.05));
         }
 
         .steps {
@@ -209,22 +348,22 @@
         }
 
         .step-number {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--purple), var(--purple-dark));
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 800;
             margin: 0 auto 25px;
             box-shadow: 0 5px 20px rgba(102,126,234,0.3);
         }
 
         .step-title {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 700;
             margin-bottom: 15px;
             color: var(--dark);
@@ -233,90 +372,293 @@
         .step-desc {
             color: var(--gray);
             line-height: 1.8;
+            font-size: 1.05rem;
         }
 
-        /* Features */
-        .features {
+        .step-highlight {
+            color: var(--green);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            display: block;
+        }
+
+/* Workflow Diagram */
+.workflow-diagram {
+    max-width: 1400px;
+    margin: 0 auto 80px;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.08);
+}
+
+.workflow-track {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.workflow-lane {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.lane-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 25px;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
+.provider-header {
+    background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1));
+    border-left: 5px solid var(--purple);
+}
+
+.seeker-header {
+    background: linear-gradient(135deg, rgba(37,211,102,0.1), rgba(32,186,90,0.1));
+    border-left: 5px solid var(--green);
+}
+
+.lane-icon {
+    font-size: 2rem;
+}
+
+.lane-title {
+    font-size: 1.4rem;
+    color: var(--dark);
+    margin: 0;
+}
+
+.workflow-steps-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 20px 10px;
+}
+
+.workflow-step {
+    background: linear-gradient(135deg, rgba(102,126,234,0.05), rgba(118,75,162,0.05));
+    border: 2px solid rgba(102,126,234,0.2);
+    border-radius: 15px;
+    padding: 20px;
+    min-width: 180px;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.workflow-step:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(102,126,234,0.2);
+    border-color: var(--purple);
+}
+
+.workflow-step-final {
+    background: linear-gradient(135deg, rgba(37,211,102,0.1), rgba(32,186,90,0.1));
+    border: 2px solid var(--green);
+    font-weight: 700;
+}
+
+.workflow-step-final:hover {
+    border-color: var(--green);
+    box-shadow: 0 8px 20px rgba(37,211,102,0.3);
+}
+
+.workflow-step-number {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.workflow-step-content h4 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    color: var(--dark);
+}
+
+.workflow-step-content p {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin: 0;
+}
+
+.workflow-arrow {
+    font-size: 2rem;
+    color: var(--purple);
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* Responsive Workflow */
+@media (max-width: 768px) {
+    .workflow-steps-container {
+        justify-content: flex-start;
+    }
+    
+    .workflow-step {
+        min-width: 150px;
+        padding: 15px;
+    }
+    
+    .lane-title {
+        font-size: 1.1rem;
+    }
+    
+    .workflow-arrow {
+        font-size: 1.5rem;
+    }
+}
+
+        /* Why Section */
+        .why-section {
             padding: 80px 20px;
-            background: linear-gradient(135deg, rgba(102,126,234,0.05), rgba(118,75,162,0.05));
+            background: white;
         }
 
-        .feature-grid {
+        .why-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        .feature {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        .why-card {
+            background: linear-gradient(135deg, rgba(102,126,234,0.05), rgba(118,75,162,0.05));
+            padding: 40px 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
         }
 
-        .feature-icon {
-            font-size: 2.5rem;
+        .why-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102,126,234,0.15);
+        }
+
+        .why-icon {
+            font-size: 3rem;
             margin-bottom: 20px;
         }
 
-        .feature-title {
-            font-size: 1.4rem;
+        .why-title {
+            font-size: 1.3rem;
             font-weight: 700;
             margin-bottom: 15px;
             color: var(--dark);
         }
 
-        .feature-desc {
+        .why-desc {
             color: var(--gray);
             line-height: 1.8;
         }
 
-        /* CTA Section */
-        .cta-section {
+        /* Bonus Section */
+        .bonus-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, var(--yellow) 0%, #ffeb3b 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bonus-section::before {
+            content: '🎁';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .bonus-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bonus-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .bonus-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .bonus-amount {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--green);
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .bonus-desc {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .bonus-highlight {
+            font-size: 1.1rem;
+            color: #d84315;
+            font-weight: 700;
+            margin-top: 20px;
+        }
+
+        /* Final CTA */
+        .final-cta {
             padding: 100px 20px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%);
             color: white;
             text-align: center;
         }
 
-        .cta-title {
+        .final-cta-title {
             font-size: 2.5rem;
             font-weight: 800;
             margin-bottom: 20px;
         }
 
-        .cta-desc {
+        .final-cta-desc {
             font-size: 1.2rem;
             margin-bottom: 40px;
             opacity: 0.95;
-        }
-
-        .cta-button-secondary {
-            display: inline-block;
-            background: white;
-            color: var(--primary);
-            padding: 18px 50px;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-decoration: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-            margin: 0 10px;
-        }
-
-        .cta-button-secondary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
         }
 
         /* Footer */
         .footer {
             background: var(--dark);
             color: white;
-            padding: 40px 20px;
+            padding: 50px 20px 30px;
             text-align: center;
         }
 
@@ -325,11 +667,23 @@
             margin: 0 auto;
         }
 
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .footer-tagline {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
         .footer-links {
             display: flex;
             justify-content: center;
             gap: 30px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             flex-wrap: wrap;
         }
 
@@ -338,6 +692,7 @@
             text-decoration: none;
             opacity: 0.8;
             transition: opacity 0.3s ease;
+            font-size: 0.95rem;
         }
 
         .footer-link:hover {
@@ -347,300 +702,625 @@
         .copyright {
             opacity: 0.6;
             font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            margin-top: 20px;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             .hero {
                 padding: 60px 20px 80px;
+                min-height: auto;
             }
 
             .logo {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
 
             .tagline {
-                font-size: 1.2rem;
+                font-size: 1.5rem;
             }
 
             .subtitle {
                 font-size: 1rem;
             }
 
+            .cta-primary {
+                padding: 18px 35px;
+                font-size: 1.2rem;
+            }
+
+            .cta-secondary {
+                font-size: 1rem;
+            }
+
+            .trust-badges {
+                gap: 25px;
+            }
+
+            .badge-text {
+                font-size: 0.85rem;
+            }
+
             .section-title {
                 font-size: 2rem;
             }
 
-            .cta-title {
+            .audience-card {
+                padding: 40px 30px;
+            }
+
+            .audience-title {
+                font-size: 1.5rem;
+            }
+
+            .service-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 20px;
+            }
+
+            .service-icon {
+                font-size: 2.5rem;
+            }
+
+            .service-name {
+                font-size: 1rem;
+            }
+
+            .final-cta-title {
                 font-size: 2rem;
             }
 
-            .service-grid,
-            .steps,
-            .feature-grid {
-                grid-template-columns: 1fr;
+            .bonus-amount {
+                font-size: 2.5rem;
+            }
+
+            .bonus-title {
+                font-size: 2rem;
+            }
+
+            .lang-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .service-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cta-buttons {
+                width: 100%;
+            }
+
+            .cta-primary {
+                width: 90%;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Language Toggle -->
+    <div class="lang-toggle" onclick="toggleLanguage()" style="cursor: pointer;">
+        <span id="langText">🇬🇧 View in English</span>
+    </div>
+
     <!-- Hero Section -->
     <section class="hero">
-        <div class="lang-toggle" onclick="toggleLanguage()">
-            <span id="langText">हिंदी में देखें</span>
-        </div>
         <div class="hero-content">
             <h1 class="logo" id="logo">HelpBuddy</h1>
-            <p class="tagline" id="tagline">Your Local Service Connection Platform</p>
-            <p class="subtitle" id="subtitle">Connect directly with trusted electricians, plumbers, carpenters, and more in your area. 100% Free. No Commission.</p>
-            <a href="app.html" class="cta-button" id="ctaBtn">Launch App Now</a>
+            <p class="tagline" id="tagline">Tension Mat Lo, Buddy Hai Na!</p>
+            <p class="subtitle" id="subtitle">Apne area mein electrician, plumber, carpenter aur har service dhundein. Seedha connect karen. 100% FREE. Zero Commission.</p>
+            
+            <!-- CTA Buttons -->
+            <div class="cta-buttons">
+                <a href="app.html?mode=signup" class="cta-primary" id="ctaPrimary">
+                    <span id="ctaPrimaryText">🆕 Sign Up Free - ₹200 Credits Payen!</span>
+                </a>
+                <a href="app.html?mode=login" class="cta-secondary" id="ctaSecondary">
+                    <span id="ctaSecondaryText">🔐 Pehle Se Member Hain? Login Karen →</span>
+                </a>
+            </div>
+            
+            <div class="trust-badges">
+                <div class="badge">
+                    <div class="badge-icon">💯</div>
+                    <div class="badge-text" id="badge1">100% FREE</div>
+                </div>
+                <div class="badge">
+                    <div class="badge-icon">₹</div>
+                    <div class="badge-text" id="badge2">0% Commission</div>
+                </div>
+                <div class="badge">
+                    <div class="badge-icon">📞</div>
+                    <div class="badge-text" id="badge3">Seedha Contact</div>
+                </div>
+                <div class="badge">
+                    <div class="badge-icon">🎁</div>
+                    <div class="badge-text" id="badge4">₹200 Bonus</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dual Audience Section -->
+    <section class="dual-section">
+        <div class="dual-grid">
+            <!-- For Providers -->
+            <div class="audience-card">
+                <div class="audience-icon">🔧</div>
+                <h2 class="audience-title" id="providerTitle">Service Providers Ke Liye</h2>
+                <p class="audience-desc" id="providerDesc">Apna kaam badhao, zyada kamao. Bilkul FREE!</p>
+                <ul class="benefits-list">
+                    <li id="providerBenefit1">₹0 Commission - Poora Paisa Aapka</li>
+                    <li id="providerBenefit2">Seedha Customer Se Baat Karen</li>
+                    <li id="providerBenefit3">Apne Area Mein Kaam Dhundein</li>
+                    <li id="providerBenefit4">Apni Professional Profile Banayen</li>
+                    <li id="providerBenefit5">Unlimited Service Opportunities</li>
+                </ul>
+            </div>
+
+            <!-- For Seekers -->
+            <div class="audience-card">
+                <div class="audience-icon">🏠</div>
+                <h2 class="audience-title" id="seekerTitle">Service Dhundne Walon Ke Liye</h2>
+                <p class="audience-desc" id="seekerDesc">Har zaroorat ka solution, ek hi jagah!</p>
+                <ul class="benefits-list">
+                    <li id="seekerBenefit1">Multiple Providers Ek Saath Milenge</li>
+                    <li id="seekerBenefit2">Compare Karke Best Choose Karen</li>
+                    <li id="seekerBenefit3">Direct Chat Ya Call - Aap Decide Karen</li>
+                    <li id="seekerBenefit4">Ratings Aur Reviews Dekhen</li>
+                    <li id="seekerBenefit5">Koi Hidden Charges Nahi</li>
+                </ul>
+            </div>
         </div>
     </section>
 
     <!-- Services Section -->
     <section class="services">
-        <h2 class="section-title" id="servicesTitle">Our Services</h2>
-        <p class="section-subtitle" id="servicesSubtitle">Find skilled professionals for every home service need</p>
+        <h2 class="section-title" id="servicesTitle">Hamare Services</h2>
+        <p class="section-subtitle" id="servicesSubtitle">Har ghar ki zaroorat ke liye skilled professionals</p>
         <div class="service-grid">
             <div class="service-card">
                 <div class="service-icon">⚡</div>
-                <h3 class="service-name" id="service1">Electrician</h3>
-                <p class="service-desc" id="serviceDesc1">Wiring, repairs, installations</p>
+                <div class="service-name" id="service1">Electrician</div>
             </div>
             <div class="service-card">
                 <div class="service-icon">🔧</div>
-                <h3 class="service-name" id="service2">Plumber</h3>
-                <p class="service-desc" id="serviceDesc2">Pipe repairs, installations, leaks</p>
+                <div class="service-name" id="service2">Plumber</div>
             </div>
             <div class="service-card">
                 <div class="service-icon">❄️</div>
-                <h3 class="service-name" id="service3">AC Repair</h3>
-                <p class="service-desc" id="serviceDesc3">AC servicing and maintenance</p>
+                <div class="service-name" id="service3">AC Repair</div>
             </div>
             <div class="service-card">
                 <div class="service-icon">🪚</div>
-                <h3 class="service-name" id="service4">Carpenter</h3>
-                <p class="service-desc" id="serviceDesc4">Furniture, doors, woodwork</p>
+                <div class="service-name" id="service4">Carpenter</div>
             </div>
             <div class="service-card">
                 <div class="service-icon">🎨</div>
-                <h3 class="service-name" id="service5">Painter</h3>
-                <p class="service-desc" id="serviceDesc5">Interior & exterior painting</p>
+                <div class="service-name" id="service5">Painter</div>
             </div>
             <div class="service-card">
                 <div class="service-icon">🧹</div>
-                <h3 class="service-name" id="service6">Cleaner</h3>
-                <p class="service-desc" id="serviceDesc6">Home & office cleaning</p>
+                <div class="service-name" id="service6">Cleaner</div>
             </div>
             <div class="service-card">
                 <div class="service-icon">🔨</div>
-                <h3 class="service-name" id="service7">Appliance Repair</h3>
-                <p class="service-desc" id="serviceDesc7">Fix washing machines, fridges, etc.</p>
+                <div class="service-name" id="service7">Appliance Repair</div>
             </div>
         </div>
     </section>
 
     <!-- How It Works -->
-    <section class="how-it-works">
-        <h2 class="section-title" id="howTitle">How It Works</h2>
-        <p class="section-subtitle" id="howSubtitle">Get connected in three simple steps</p>
-        <div class="steps">
-            <div class="step">
-                <div class="step-number">1</div>
-                <h3 class="step-title" id="step1Title">Choose Service</h3>
-                <p class="step-desc" id="step1Desc">Select the service you need from our wide range of options</p>
+<section class="how-it-works">
+    <h2 class="section-title" id="howTitle">Kaise Kaam Karta Hai?</h2>
+    <p class="section-subtitle" id="howSubtitle">Teen aasan steps mein shuru karen</p>
+    
+    <!-- Workflow Diagram -->
+    <div class="workflow-diagram">
+        <div class="workflow-track">
+            <!-- Provider Track -->
+            <div class="workflow-lane">
+                <div class="lane-header provider-header">
+                    <span class="lane-icon">🔧</span>
+                    <h3 class="lane-title" id="providerTrack">Service Provider</h3>
+                </div>
+                <div class="workflow-steps-container">
+                    <div class="workflow-step">
+                        <div class="workflow-step-number">1</div>
+                        <div class="workflow-step-content">
+                            <h4 id="providerStep1">साइन अप करें</h4>
+                            <p id="providerStep1Desc">फ्री अकाउंट बनाएं</p>
+                        </div>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <div class="workflow-step-number">2</div>
+                        <div class="workflow-step-content">
+                            <h4 id="providerStep2">प्रोफाइल बनाएं</h4>
+                            <p id="providerStep2Desc">अपनी स्किल्स लिस्ट करें</p>
+                        </div>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <div class="workflow-step-number">3</div>
+                        <div class="workflow-step-content">
+                            <h4 id="providerStep3">रिक्वेस्ट मिलें</h4>
+                            <p id="providerStep3Desc">कस्टमर्स से कनेक्ट करें</p>
+                        </div>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step workflow-step-final">
+                        <div class="workflow-step-content">
+                            <h4 id="providerStep4">💰 कमाएं!</h4>
+                            <p id="providerStep4Desc">0% कमीशन</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <h3 class="step-title" id="step2Title">Browse Providers</h3>
-                <p class="step-desc" id="step2Desc">View profiles, ratings, and contact information of local professionals</p>
+
+            <!-- Seeker Track -->
+            <div class="workflow-lane">
+                <div class="lane-header seeker-header">
+                    <span class="lane-icon">🏠</span>
+                    <h3 class="lane-title" id="seekerTrack">Service Seeker</h3>
+                </div>
+                <div class="workflow-steps-container">
+                    <div class="workflow-step">
+                        <div class="workflow-step-number">1</div>
+                        <div class="workflow-step-content">
+                            <h4 id="seekerStep1">साइन अप करें</h4>
+                            <p id="seekerStep1Desc">फ्री अकाउंट बनाएं</p>
+                        </div>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <div class="workflow-step-number">2</div>
+                        <div class="workflow-step-content">
+                            <h4 id="seekerStep2">सर्विस पोस्ट करें</h4>
+                            <p id="seekerStep2Desc">अपनी जरूरत बताएं</p>
+                        </div>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <div class="workflow-step-number">3</div>
+                        <div class="workflow-step-content">
+                            <h4 id="seekerStep3">रिस्पांस देखें</h4>
+                            <p id="seekerStep3Desc">बेस्ट चूज़ करें</p>
+                        </div>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step workflow-step-final">
+                        <div class="workflow-step-content">
+                            <h4 id="seekerStep4">✅ काम हो गया!</h4>
+                            <p id="seekerStep4Desc">हैप्पी कस्टमर</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <h3 class="step-title" id="step3Title">Connect Directly</h3>
-                <p class="step-desc" id="step3Desc">Call or message providers directly. No middleman, no commission!</p>
+        </div>
+    </div>
+
+    <!-- Original Steps (Keep as backup/detailed explanation) -->
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <h3 class="step-title" id="step1Title">साइन अप करें</h3>
+            <p class="step-desc" id="step1Desc">फ्री में अकाउंट बनाएं। प्रोवाइडर या सीकर - जो भी बनना है चूज़ करें।</p>
+            <span class="step-highlight" id="step1Highlight">🎁 ₹200 क्रेडिट्स फ्री मिलेंगे!</span>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <h3 class="step-title" id="step2Title">सर्विस पोस्ट या ढूंढें</h3>
+            <p class="step-desc" id="step2Desc">प्रोवाइडर: अपनी स्किल्स लिस्ट करें। सीकर: अपनी जरूरत पोस्ट करें और रिस्पांस देखें।</p>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <h3 class="step-title" id="step3Title">सीधा कनेक्ट करें</h3>
+            <p class="step-desc" id="step3Desc">डायरेक्ट चैट या कॉल करें। रेट डिसाइड करें। काम शुरू करें। बीच में कोई नहीं!</p>
+        </div>
+    </div>
+</section>
+
+    <!-- Why Section -->
+    <section class="why-section">
+        <h2 class="section-title" id="whyTitle">HelpBuddy Kyun Choose Karen?</h2>
+        <div class="why-grid">
+            <div class="why-card">
+                <div class="why-icon">💰</div>
+                <h3 class="why-title" id="why1Title">₹0 Commission</h3>
+                <p class="why-desc" id="why1Desc">Providers ka poora paisa unke paas rehta hai. Hum beech mein se kuch nahi lete.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">🤝</div>
+                <h3 class="why-title" id="why2Title">Direct Connection</h3>
+                <p class="why-desc" id="why2Desc">Koi middleman nahi. Seedha baat karo, better rates pao, trust banao.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">📍</div>
+                <h3 class="why-title" id="why3Title">Local Focus</h3>
+                <p class="why-desc" id="why3Desc">Aapke area ke liye specially banaya gaya. Chhote shahron aur gaon ke liye perfect.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">⚡</div>
+                <h3 class="why-title" id="why4Title">Dual Role Support</h3>
+                <p class="why-desc" id="why4Desc">Provider bhi ban sakte ho, seeker bhi. Ek account, dono features. Flexibility hai!</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">🎁</div>
+                <h3 class="why-title" id="why5Title">Rewards System</h3>
+                <p class="why-desc" id="why5Desc">Signup bonus, referral rewards, completion bonuses. Har action pe benefits milenge.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">🇮🇳</div>
+                <h3 class="why-title" id="why6Title">Hindi + English</h3>
+                <p class="why-desc" id="why6Desc">Dono languages mein available. Jo comfortable ho, use karen. Sabke liye hai!</p>
             </div>
         </div>
     </section>
 
-    <!-- Features -->
-    <section class="features">
-        <h2 class="section-title" id="featuresTitle">Why Choose HelpBuddy?</h2>
-        <div class="feature-grid">
-            <div class="feature">
-                <div class="feature-icon">💯</div>
-                <h3 class="feature-title" id="feature1Title">100% Free</h3>
-                <p class="feature-desc" id="feature1Desc">No subscription fees, no hidden charges. Completely free for both seekers and providers.</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🎯</div>
-                <h3 class="feature-title" id="feature2Title">Direct Connection</h3>
-                <p class="feature-desc" id="feature2Desc">Connect directly with service providers. No platform commission means better rates for you.</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">📍</div>
-                <h3 class="feature-title" id="feature3Title">Local Professionals</h3>
-                <p class="feature-desc" id="feature3Desc">Find trusted professionals in your area. Support local businesses in your community.</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">⭐</div>
-                <h3 class="feature-title" id="feature4Title">Verified Ratings</h3>
-                <p class="feature-desc" id="feature4Desc">Read reviews and ratings from real customers to make informed decisions.</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">💼</div>
-                <h3 class="feature-title" id="feature5Title">For Providers</h3>
-                <p class="feature-desc" id="feature5Desc">Service providers can list their services free and connect with customers directly.</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">📱</div>
-                <h3 class="feature-title" id="feature6Title">Mobile Friendly</h3>
-                <p class="feature-desc" id="feature6Desc">Works perfectly on all devices. Access from anywhere, anytime.</p>
-            </div>
+    <!-- Bonus Section -->
+    <section class="bonus-section">
+        <div class="bonus-content">
+            <div class="bonus-icon">🎉</div>
+            <h2 class="bonus-title" id="bonusTitle">Signup Bonus Payen!</h2>
+            <div class="bonus-amount" id="bonusAmount">₹200 FREE</div>
+            <p class="bonus-desc" id="bonusDesc">Abhi sign up karen aur turant ₹200 credits apne account mein payen!</p>
+            <p class="bonus-highlight" id="bonusHighlight">+ Referral code use karein ya doston ko invite karen aur EXTRA bonus credits payen! 🚀</p>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <h2 class="cta-title" id="ctaTitle">Ready to Get Started?</h2>
-        <p class="cta-desc" id="ctaDesc">Join thousands of happy customers and service providers</p>
-        <a href="app.html" class="cta-button-secondary" id="ctaBtn2">Launch HelpBuddy</a>
-    </section>
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2 class="final-cta-title" id="finalCtaTitle">Shuru Karne Ke Liye Taiyar Hain?</h2>
+        <p class="final-cta-desc" id="finalCtaDesc">HelpBuddy community mein shamil hon aur apni zarooratein poori karen ya paisa kamayein!</p>
+        
+        <!-- Repeat CTA Buttons -->
+<div class="cta-buttons">
+    <a href="app.html?mode=signup" class="cta-primary">
+        <span id="finalCtaPrimaryText">🆕 फ्री साइन अप करें - ₹200 क्रेडिट्स पाएं!</span>
+    </a>
+    <a href="app.html?mode=login" class="cta-secondary">
+        <span id="finalCtaSecondaryText">🔐 पहले से मेंबर हैं? लॉगिन करें →</span>
+    </a>
+</div>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
+            <div class="footer-logo">HelpBuddy</div>
+            <p class="footer-tagline" id="footerTagline">Tension Mat Lo, Buddy Hai Na!</p>
             <div class="footer-links">
-                <a href="#" class="footer-link" id="footerAbout">About</a>
-                <a href="#" class="footer-link" id="footerContact">Contact</a>
-                <a href="#" class="footer-link" id="footerPrivacy">Privacy Policy</a>
-                <a href="#" class="footer-link" id="footerTerms">Terms of Service</a>
-            </div>
-            <p class="copyright" id="copyright">© 2024 HelpBuddy. All rights reserved. Connecting communities, empowering locals.</p>
+    <a href="app.html?mode=help" class="footer-link" id="footerAbout">Get Help</a>
+    <a href="app.html?mode=contact" class="footer-link" id="footerContact">Contact</a>
+    <a href="app.html?mode=privacy" class="footer-link" id="footerPrivacy">Privacy Policy</a>
+    <a href="app.html?mode=terms" class="footer-link" id="footerTerms">Terms & Conditions</a>
+</div>
+            <p class="copyright" id="copyright">© 2024 HelpBuddy. Sarvaadhikaar Surakshit. Samuday ko jodna, sthaaniya logon ko sashakt banana.</p>
         </div>
     </footer>
 
     <script>
-        let isHindi = false;
+        let currentLanguage = 'hi'; // Default to Hindi
 
         const translations = {
-            en: {
-                langText: 'हिंदी में देखें',
-                logo: 'HelpBuddy',
-                tagline: 'Your Local Service Connection Platform',
-                subtitle: 'Connect directly with trusted electricians, plumbers, carpenters, and more in your area. 100% Free. No Commission.',
-                ctaBtn: 'Launch App Now',
-                servicesTitle: 'Our Services',
-                servicesSubtitle: 'Find skilled professionals for every home service need',
-                service1: 'Electrician',
-                serviceDesc1: 'Wiring, repairs, installations',
-                service2: 'Plumber',
-                serviceDesc2: 'Pipe repairs, installations, leaks',
-                service3: 'AC Repair',
-                serviceDesc3: 'AC servicing and maintenance',
-                service4: 'Carpenter',
-                serviceDesc4: 'Furniture, doors, woodwork',
-                service5: 'Painter',
-                serviceDesc5: 'Interior & exterior painting',
-                service6: 'Cleaner',
-                serviceDesc6: 'Home & office cleaning',
-                service7: 'Appliance Repair',
-                serviceDesc7: 'Fix washing machines, fridges, etc.',
-                howTitle: 'How It Works',
-                howSubtitle: 'Get connected in three simple steps',
-                step1Title: 'Choose Service',
-                step1Desc: 'Select the service you need from our wide range of options',
-                step2Title: 'Browse Providers',
-                step2Desc: 'View profiles, ratings, and contact information of local professionals',
-                step3Title: 'Connect Directly',
-                step3Desc: 'Call or message providers directly. No middleman, no commission!',
-                featuresTitle: 'Why Choose HelpBuddy?',
-                feature1Title: '100% Free',
-                feature1Desc: 'No subscription fees, no hidden charges. Completely free for both seekers and providers.',
-                feature2Title: 'Direct Connection',
-                feature2Desc: 'Connect directly with service providers. No platform commission means better rates for you.',
-                feature3Title: 'Local Professionals',
-                feature3Desc: 'Find trusted professionals in your area. Support local businesses in your community.',
-                feature4Title: 'Verified Ratings',
-                feature4Desc: 'Read reviews and ratings from real customers to make informed decisions.',
-                feature5Title: 'For Providers',
-                feature5Desc: 'Service providers can list their services free and connect with customers directly.',
-                feature6Title: 'Mobile Friendly',
-                feature6Desc: 'Works perfectly on all devices. Access from anywhere, anytime.',
-                ctaTitle: 'Ready to Get Started?',
-                ctaDesc: 'Join thousands of happy customers and service providers',
-                ctaBtn2: 'Launch HelpBuddy',
-                footerAbout: 'About',
-                footerContact: 'Contact',
-                footerPrivacy: 'Privacy Policy',
-                footerTerms: 'Terms of Service',
-                copyright: '© 2024 HelpBuddy. All rights reserved. Connecting communities, empowering locals.'
-            },
-            hi: {
-                langText: 'View in English',
-                logo: 'HelpBuddy',
-                tagline: 'आपका स्थानीय सेवा कनेक्शन प्लेटफॉर्म',
-                subtitle: 'अपने क्षेत्र में विश्वसनीय इलेक्ट्रीशियन, प्लंबर, बढ़ई और अन्य से सीधे जुड़ें। 100% मुफ्त। कोई कमीशन नहीं।',
-                ctaBtn: 'ऐप अभी लॉन्च करें',
-                servicesTitle: 'हमारी सेवाएं',
-                servicesSubtitle: 'हर घरेलू सेवा की जरूरत के लिए कुशल पेशेवर खोजें',
-                service1: 'इलेक्ट्रीशियन',
-                serviceDesc1: 'वायरिंग, मरम्मत, इंस्टॉलेशन',
-                service2: 'प्लंबर',
-                serviceDesc2: 'पाइप मरम्मत, इंस्टॉलेशन, लीक',
-                service3: 'AC मरम्मत',
-                serviceDesc3: 'AC सर्विसिंग और रखरखाव',
-                service4: 'बढ़ई',
-                serviceDesc4: 'फर्नीचर, दरवाजे, लकड़ी का काम',
-                service5: 'पेंटर',
-                serviceDesc5: 'आंतरिक और बाहरी पेंटिंग',
-                service6: 'क्लीनर',
-                serviceDesc6: 'घर और ऑफिस की सफाई',
-                service7: 'उपकरण मरम्मत',
-                serviceDesc7: 'वॉशिंग मशीन, फ्रिज आदि ठीक करें',
-                howTitle: 'यह कैसे काम करता है',
-                howSubtitle: 'तीन सरल चरणों में जुड़ें',
-                step1Title: 'सेवा चुनें',
-                step1Desc: 'हमारे विकल्पों में से आपको जो सेवा चाहिए वह चुनें',
-                step2Title: 'प्रदाताओं को ब्राउज़ करें',
-                step2Desc: 'स्थानीय पेशेवरों की प्रोफाइल, रेटिंग और संपर्क जानकारी देखें',
-                step3Title: 'सीधे जुड़ें',
-                step3Desc: 'प्रदाताओं को सीधे कॉल या मैसेज करें। कोई बिचौलिया नहीं, कोई कमीशन नहीं!',
-                featuresTitle: 'HelpBuddy क्यों चुनें?',
-                feature1Title: '100% मुफ्त',
-                feature1Desc: 'कोई सब्सक्रिप्शन फीस नहीं, कोई छिपा हुआ शुल्क नहीं। सभी के लिए पूरी तरह से मुफ्त।',
-                feature2Title: 'सीधा कनेक्शन',
-                feature2Desc: 'सेवा प्रदाताओं से सीधे जुड़ें। कोई प्लेटफॉर्म कमीशन नहीं मतलब आपके लिए बेहतर दरें।',
-                feature3Title: 'स्थानीय पेशेवर',
-                feature3Desc: 'अपने क्षेत्र में विश्वसनीय पेशेवर खोजें। अपने समुदाय में स्थानीय व्यवसायों का समर्थन करें।',
-                feature4Title: 'सत्यापित रेटिंग',
-                feature4Desc: 'सूचित निर्णय लेने के लिए वास्तविक ग्राहकों की समीक्षाएं और रेटिंग पढ़ें।',
-                feature5Title: 'प्रदाताओं के लिए',
-                feature5Desc: 'सेवा प्रदाता अपनी सेवाओं को मुफ्त में सूचीबद्ध कर सकते हैं और ग्राहकों से सीधे जुड़ सकते हैं।',
-                feature6Title: 'मोबाइल फ्रेंडली',
-                feature6Desc: 'सभी उपकरणों पर पूरी तरह से काम करता है। कहीं से भी, कभी भी एक्सेस करें।',
-                ctaTitle: 'शुरू करने के लिए तैयार हैं?',
-                ctaDesc: 'हजारों खुश ग्राहकों और सेवा प्रदाताओं में शामिल हों',
-                ctaBtn2: 'HelpBuddy लॉन्च करें',
-                footerAbout: 'के बारे में',
-                footerContact: 'संपर्क करें',
-                footerPrivacy: 'गोपनीयता नीति',
-                footerTerms: 'सेवा की शर्तें',
-                copyright: '© 2024 HelpBuddy. सर्वाधिकार सुरक्षित। समुदायों को जोड़ना, स्थानीय लोगों को सशक्त बनाना।'
-            }
-        };
+    hi: {
+        langText: '🇬🇧 View in English',
+        logo: 'HelpBuddy',
+        tagline: 'टेंशन मत लो, Buddy है ना!',
+        subtitle: 'अपने एरिया में इलेक्ट्रीशियन, प्लंबर, कारपेंटर और हर सर्विस ढूंढें। सीधा कनेक्ट करें। 100% फ्री। जीरो कमीशन।',
+        ctaPrimaryText: '🆕 फ्री साइन अप करें - ₹200 क्रेडिट्स पाएं!',
+        ctaSecondaryText: '🔐 पहले से मेंबर हैं? लॉगिन करें →',
+        badge1: '100% फ्री',
+        badge2: '0% कमीशन',
+        badge3: 'डायरेक्ट कॉन्टैक्ट',
+        badge4: '₹200 बोनस',
+        providerTitle: 'सर्विस प्रोवाइडर्स के लिए',
+        providerDesc: 'अपना काम बढ़ाओ, ज्यादा कमाओ। बिल्कुल फ्री!',
+        providerBenefit1: '₹0 कमीशन - पूरा पैसा आपका',
+        providerBenefit2: 'सीधा कस्टमर से बात करें',
+        providerBenefit3: 'अपने एरिया में काम ढूंढें',
+        providerBenefit4: 'अपनी प्रोफेशनल प्रोफाइल बनाएं',
+        providerBenefit5: 'अनलिमिटेड सर्विस ऑपर्च्युनिटीज़',
+        seekerTitle: 'सर्विस ढूंढने वालों के लिए',
+        seekerDesc: 'हर जरूरत का सॉल्यूशन, एक ही जगह!',
+        seekerBenefit1: 'मल्टिपल प्रोवाइडर्स एक साथ मिलेंगे',
+        seekerBenefit2: 'कंपेयर करके बेस्ट चूज़ करें',
+        seekerBenefit3: 'डायरेक्ट चैट या कॉल - आप डिसाइड करें',
+        seekerBenefit4: 'रेटिंग्स और रिव्यूज़ देखें',
+        seekerBenefit5: 'कोई हिडन चार्जेस नहीं',
+        servicesTitle: 'हमारी सर्विसेज़',
+        servicesSubtitle: 'हर घर की जरूरत के लिए स्किल्ड प्रोफेशनल्स',
+        service1: 'इलेक्ट्रीशियन',
+        service2: 'प्लंबर',
+        service3: 'AC रिपेयर',
+        service4: 'कारपेंटर',
+        service5: 'पेंटर',
+        service6: 'क्लीनर',
+        service7: 'अप्लायंस रिपेयर',
+        howTitle: 'कैसे काम करता है?',
+        howSubtitle: 'तीन आसान स्टेप्स में शुरू करें',
+        providerTrack: 'सर्विस प्रोवाइडर',
+        providerStep1: 'साइन अप करें',
+        providerStep1Desc: 'फ्री अकाउंट बनाएं',
+        providerStep2: 'प्रोफाइल बनाएं',
+        providerStep2Desc: 'अपनी स्किल्स लिस्ट करें',
+        providerStep3: 'रिक्वेस्ट मिलें',
+        providerStep3Desc: 'कस्टमर्स से कनेक्ट करें',
+        providerStep4: '💰 कमाएं!',
+        providerStep4Desc: '0% कमीशन',
+        seekerTrack: 'सर्विस सीकर',
+        seekerStep1: 'साइन अप करें',
+        seekerStep1Desc: 'फ्री अकाउंट बनाएं',
+        seekerStep2: 'सर्विस पोस्ट करें',
+        seekerStep2Desc: 'अपनी जरूरत बताएं',
+        seekerStep3: 'रिस्पांस देखें',
+        seekerStep3Desc: 'बेस्ट चूज़ करें',
+        seekerStep4: '✅ काम हो गया!',
+        seekerStep4Desc: 'हैप्पी कस्टमर',
+        step1Title: 'साइन अप करें',
+        step1Desc: 'फ्री में अकाउंट बनाएं। प्रोवाइडर या सीकर - जो भी बनना है चूज़ करें।',
+        step1Highlight: '🎁 ₹200 क्रेडिट्स फ्री मिलेंगे!',
+        step2Title: 'सर्विस पोस्ट या ढूंढें',
+        step2Desc: 'प्रोवाइडर: अपनी स्किल्स लिस्ट करें। सीकर: अपनी जरूरत पोस्ट करें और रिस्पांस देखें।',
+        step3Title: 'सीधा कनेक्ट करें',
+        step3Desc: 'डायरेक्ट चैट या कॉल करें। रेट डिसाइड करें। काम शुरू करें। बीच में कोई नहीं!',
+        whyTitle: 'HelpBuddy क्यों चूज़ करें?',
+        why1Title: '₹0 कमीशन',
+        why1Desc: 'प्रोवाइडर्स का पूरा पैसा उनके पास रहता है। हम बीच में से कुछ नहीं लेते।',
+        why2Title: 'डायरेक्ट कनेक्शन',
+        why2Desc: 'कोई मिडलमैन नहीं। सीधा बात करो, बेटर रेट्स पाओ, ट्रस्ट बनाओ।',
+        why3Title: 'लोकल फोकस',
+        why3Desc: 'आपके एरिया के लिए स्पेशली बनाया गया। छोटे शहरों और गांव के लिए परफेक्ट।',
+        why4Title: 'ड्यूल रोल सपोर्ट',
+        why4Desc: 'प्रोवाइडर भी बन सकते हो, सीकर भी। एक अकाउंट, दोनों फीचर्स। फ्लेक्सिबिलिटी है!',
+        why5Title: 'रिवॉर्ड्स सिस्टम',
+        why5Desc: 'साइनअप बोनस, रेफरल रिवॉर्ड्स, कम्प्लीशन बोनस। हर एक्शन पे बेनिफिट्स मिलेंगे।',
+        why6Title: 'हिंदी + English',
+        why6Desc: 'दोनों लैंग्वेजेज़ में अवेलेबल। जो कम्फर्टेबल हो, यूज़ करें। सबके लिए है!',
+        bonusTitle: 'साइनअप बोनस पाएं!',
+        bonusAmount: '₹200 फ्री',
+        bonusDesc: 'अभी साइन अप करें और तुरंत ₹200 क्रेडिट्स अपने अकाउंट में पाएं!',
+        bonusHighlight: '+ रेफरल कोड यूज़ करें या दोस्तों को इनवाइट करें और एक्स्ट्रा बोनस क्रेडिट्स पाएं! 🚀',
+        finalCtaTitle: 'शुरू करने के लिए तैयार हैं?',
+        finalCtaDesc: 'HelpBuddy कम्यूनिटी में शामिल हों और अपनी जरूरतें पूरी करें या पैसा कमाएं!',
+        finalCtaPrimaryText: '🆕 फ्री साइन अप करें - ₹200 क्रेडिट्स पाएं!',
+        finalCtaSecondaryText: '🔐 पहले से मेंबर हैं? लॉगिन करें →',
+        footerTagline: 'टेंशन मत लो, Buddy है ना!',
+        footerAbout: 'हेल्प लें',
+        footerContact: 'Contact',
+        footerPrivacy: 'Privacy Policy',
+        footerTerms: 'Terms & Conditions',
+        copyright: '© 2024 HelpBuddy. सर्वाधिकार सुरक्षित। कम्यूनिटी को जोड़ना, लोकल लोगों को empower करना।'
+    },
+    en: {
+        langText: '🇮🇳 हिंदी में देखें',
+        logo: 'HelpBuddy',
+        tagline: 'Don\'t Worry, Buddy\'s Here!',
+        subtitle: 'Find electricians, plumbers, carpenters, and all services in your area. Connect directly. 100% FREE. Zero Commission.',
+        ctaPrimaryText: '🆕 Sign Up Free - Get ₹200 Credits!',
+        ctaSecondaryText: '🔐 Already a Member? Login →',
+        badge1: '100% FREE',
+        badge2: '0% Commission',
+        badge3: 'Direct Contact',
+        badge4: '₹200 Bonus',
+        providerTitle: 'For Service Providers',
+        providerDesc: 'Grow your business, earn more. Completely FREE!',
+        providerBenefit1: '₹0 Commission - Keep All Your Paisa',
+        providerBenefit2: 'Talk Directly with Customers',
+        providerBenefit3: 'Find Kaam in Your Area',
+        providerBenefit4: 'Create Your Professional Profile',
+        providerBenefit5: 'Unlimited Service Opportunities',
+        seekerTitle: 'For Service Seekers',
+        seekerDesc: 'Every zaroorat solved, all in one place!',
+        seekerBenefit1: 'Get Multiple Providers at Once',
+        seekerBenefit2: 'Compare and Choose the Best',
+        seekerBenefit3: 'Direct Chat or Call - You Decide',
+        seekerBenefit4: 'Check Ratings and Reviews',
+        seekerBenefit5: 'No Hidden Charges',
+        servicesTitle: 'Our Services',
+        servicesSubtitle: 'Skilled professionals for every household need',
+        service1: 'Electrician',
+        service2: 'Plumber',
+        service3: 'AC Repair',
+        service4: 'Carpenter',
+        service5: 'Painter',
+        service6: 'Cleaner',
+        service7: 'Appliance Repair',
+        howTitle: 'How Does It Work?',
+        howSubtitle: 'Get started in three aasan steps',
+        providerTrack: 'Service Provider',
+        providerStep1: 'Sign Up',
+        providerStep1Desc: 'Create free account',
+        providerStep2: 'Build Profile',
+        providerStep2Desc: 'List your skills',
+        providerStep3: 'Get Requests',
+        providerStep3Desc: 'Connect with customers',
+        providerStep4: '💰 Earn Paisa!',
+        providerStep4Desc: '0% Commission',
+        seekerTrack: 'Service Seeker',
+        seekerStep1: 'Sign Up',
+        seekerStep1Desc: 'Create free account',
+        seekerStep2: 'Post Service',
+        seekerStep2Desc: 'Tell your need',
+        seekerStep3: 'See Responses',
+        seekerStep3Desc: 'Choose the best',
+        seekerStep4: '✅ Kaam Done!',
+        seekerStep4Desc: 'Happy customer',
+        step1Title: 'Sign Up',
+        step1Desc: 'Create a free account. Choose to be a Provider or Seeker - jo bhi banana hai!',
+        step1Highlight: '🎁 Get ₹200 credits FREE!',
+        step2Title: 'Post or Find Services',
+        step2Desc: 'Providers: List your skills. Seekers: Post your zaroorat and see responses.',
+        step3Title: 'Connect Directly',
+        step3Desc: 'Chat or call seedha. Negotiate rates. Start kaam. No middleman!',
+        whyTitle: 'Why Choose HelpBuddy?',
+        why1Title: '₹0 Commission',
+        why1Desc: 'Providers keep all their paisa. We don\'t take anything in between.',
+        why2Title: 'Direct Connection',
+        why2Desc: 'No middleman. Talk directly, get better rates, build trust.',
+        why3Title: 'Local Focus',
+        why3Desc: 'Built specially for your area. Perfect for small towns and villages.',
+        why4Title: 'Dual Role Support',
+        why4Desc: 'Be a provider and seeker dono. One account, both features. Total flexibility!',
+        why5Title: 'Rewards System',
+        why5Desc: 'Signup bonus, referral rewards, completion bonuses. Benefits on every action.',
+        why6Title: 'Hindi + English',
+        why6Desc: 'Available in both languages. Jo comfortable ho, use that. For everyone!',
+        bonusTitle: 'Get Signup Bonus!',
+        bonusAmount: '₹200 FREE',
+        bonusDesc: 'Sign up now and instantly get ₹200 credits in your account!',
+        bonusHighlight: '+ Use referral code or invite dost for EXTRA bonus credits! 🚀',
+        finalCtaTitle: 'Ready to Get Started?',
+        finalCtaDesc: 'Join the HelpBuddy community and fulfill your needs or earn paisa!',
+        finalCtaPrimaryText: '🆕 Sign Up Free - Get ₹200 Credits!',
+        finalCtaSecondaryText: '🔐 Already a Member? Login →',
+        footerTagline: 'Don\'t Worry, Buddy\'s Here!',
+        footerAbout: 'Get Help',
+        footerContact: 'Contact',
+        footerPrivacy: 'Privacy Policy',
+        footerTerms: 'Terms & Conditions',
+        copyright: '© 2024 HelpBuddy. All Rights Reserved. Connecting communities, empowering locals.'
+    }
+};
 
         function toggleLanguage() {
-            isHindi = !isHindi;
-            const lang = isHindi ? 'hi' : 'en';
+            currentLanguage = currentLanguage === 'hi' ? 'en' : 'hi';
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const t = translations[currentLanguage];
             
-            Object.keys(translations[lang]).forEach(key => {
+            // Update all text elements
+            for (const [key, value] of Object.entries(t)) {
                 const element = document.getElementById(key);
                 if (element) {
-                    element.textContent = translations[lang][key];
+                    element.textContent = value;
                 }
-            });
+            }
+
+            // Update HTML lang attribute
+            document.documentElement.lang = currentLanguage;
         }
+
+        // Initialize with Hindi
+        updateLanguage();
     </script>
+<script>
+// Temporary debug code
+document.addEventListener('click', function(e) {
+    if (e.target.closest('a[href*="signup"]')) {
+        console.log('Sign Up clicked!');
+        console.log('Link href:', e.target.closest('a').href);
+    }
+});
+</script>
 </body>
 </html>
