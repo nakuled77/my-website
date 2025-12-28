@@ -717,7 +717,7 @@ body.light-theme {
     line-height: 1.6;
 }
 	.info { background: #e3f2fd; border: 1px solid #90caf9; color: #1976d2; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
-        .hidden { display: none; }
+        .hidden { display: none !important; }
 	/* Chat View Overlay */
 #chatView {
     position: fixed;
@@ -2528,7 +2528,7 @@ body.dark-theme .info-bubble {
 </head>
 <body>
     <div class="container">
-        <h1 id="appLogo">🛠️ HelpBuddy</h1>
+        <h1 id="appLogo">HelpBuddy</h1>
         
        <!-- Login View -->
 <div id="loginView" class="hidden auth-page-container">
@@ -3340,17 +3340,30 @@ body.dark-theme .info-bubble {
 <!-- App Logo Header (Dashboard Only) -->
 <div id="dashboardHeader" style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
     <h1 style="margin: 0; color: white; font-size: 28px; font-weight: bold;">
-        🛠️ HelpBuddy
+         HelpBuddy
     </h1>
 </div>
     <!-- Row 2: Create Request (LEFT) + User Profile (MIDDLE) + Profile Photo/Back (RIGHT) -->
-<div id="dashboardHeader" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 20px 20px 0 20px;">
+<div id="dashboardHeader" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 20px 20px 0 0;">
     <!-- LEFT: Toggle Button + Language Button + Create Request Button -->
-    <div style="display: flex; align-items: center; gap: 15px;">
-        <button id="modeToggleBtn" class="btn" onclick="toggleDashboardMode()" style="margin: 0; display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-            <span id="modeToggleIcon">🔧</span>
-            <span id="modeToggleText">Provider</span>
-            <span style="opacity: 0.7;">↔️</span>
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <button id="modeToggleBtn" class="btn" onclick="toggleDashboardMode()" 
+                style="margin: 0; 
+                       display: flex; 
+                       flex-direction: column; 
+                       align-items: center; 
+                       padding: 10px 16px 8px 16px; 
+                       font-size: 14px; 
+                       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                       cursor: pointer;
+                       transition: all 0.3s ease;
+                       gap: 2px;"
+                title="Click to switch mode"
+                onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)';"
+                onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)';">
+            <span id="modeToggleIcon" style="display: none;">🔧</span>
+            <span id="modeToggleText" style="font-weight: 600;">Provider</span>
+            <span style="font-size: 10px; opacity: 0.8;">⇄</span>
         </button>
     </div>
     
