@@ -1,13 +1,19 @@
 // ==================== SERVICE WORKER FOR PWA ====================
-// ✅ FIXED: All paths now match actual file locations
-const CACHE_NAME = 'helpbuddy-v1.8.3';
+// ✅ UPDATED: Now uses version.js for centralized version management
+
+// Import version configuration
+importScripts('version.js');
+
+// Use version from config file
+const CACHE_NAME = APP_CONFIG.cacheName;
 
 const STATIC_ASSETS = [
     '/',
     '/index.html',
-    '/site.webmanifest',                                // ✅ FIXED: Correct filename
-    '/icon-192x192.png',                                // ✅ FIXED: Icons are in root
-    '/icon-512x512.png',                                // ✅ FIXED: Icons are in root
+    '/version.js',                                      // ✅ NEW: Cache version file
+    '/site.webmanifest',
+    '/icon-192x192.png',
+    '/icon-512x512.png',
     'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js'
 ];
 

@@ -1317,114 +1317,15 @@ div#activeRequestsList div.request-card-left div.request-summary:nth-of-type(1) 
 .btn-send.show { display: inline-flex; align-items: center; justify-content: center; }
 .btn-send:hover { background: #0d6b5f; }
         
-        /* Warranty Form - MODAL POPUP */
-.warranty-form { 
-    display: none; /* Hidden by default */
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
-    z-index: 10000; 
-    align-items: center; 
-    justify-content: center;
-    overflow-y: auto; /* Make overlay scrollable */
-}
-
-.warranty-form-content {
-    background: linear-gradient(135deg, #f0f4ff 0%, #f8f9fa 100%); 
-    padding: 24px; 
-    border-radius: 12px; 
-    border: 2px solid #e8ecff;
-    max-width: 500px;
-    width: 90%;
-    max-height: 85vh; /* Maximum height */
-    overflow-y: auto; /* Scrollable content */
-    position: relative;
-    margin: 20px auto; /* Center with margin */
-}
-
-.warranty-form-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.warranty-form-close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #666;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.2s;
-}
-
-.warranty-form-close:hover {
-    background: rgba(0, 0, 0, 0.1);
-    color: #333;
-}
-
-.warranty-form h3 { 
-    margin: 0; 
-    color: #333; 
-    font-size: 18px; 
-    font-weight: 700; 
-}
-
-.warranty-form.hidden {
-    display: none !important;
-}
-
-.warranty-options { 
-    display: flex; 
-    gap: 10px; 
-    flex-wrap: wrap; 
-    margin-top: 16px;
-}
-
-.warranty-option { 
-    flex: 1; 
-    min-width: 110px; 
-}
-
-.warranty-option input[type="radio"] { 
-    display: none; 
-}
-
-.warranty-option label { 
-    display: block; 
-    padding: 12px; 
-    border: 2px solid #e0e0e0; 
-    border-radius: 8px; 
-    text-align: center; 
-    cursor: pointer; 
-    transition: all 0.2s; 
-    font-weight: 600; 
-    font-size: 13px; 
-    color: #555; 
-}
-
-.warranty-option input[type="radio"]:checked + label { 
-    border-color: #667eea; 
-    background: linear-gradient(135deg, #f0f4ff 0%, #e9ecff 100%); 
-    color: #667eea; 
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2); 
-}
-
-.warranty-form .btn { 
-    margin-top: 16px; 
-    font-size: 14px; 
-    width: 100%;
-}
+        /* Warranty Form */
+        .warranty-form { background: linear-gradient(135deg, #f0f4ff 0%, #f8f9fa 100%); padding: 18px; border-radius: 12px; margin-top: 16px; border: 2px solid #e8ecff; }
+        .warranty-form h3 { margin-top: 0; margin-bottom: 16px; color: #333; font-size: 15px; font-weight: 700; }
+        .warranty-options { display: flex; gap: 10px; flex-wrap: wrap; }
+        .warranty-option { flex: 1; min-width: 110px; }
+        .warranty-option input[type="radio"] { display: none; }
+        .warranty-option label { display: block; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.2s; font-weight: 600; font-size: 13px; color: #555; }
+        .warranty-option input[type="radio"]:checked + label { border-color: #667eea; background: linear-gradient(135deg, #f0f4ff 0%, #e9ecff 100%); color: #667eea; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2); }
+        .warranty-form .btn { margin-top: 16px; font-size: 14px; }
         
 /* Template Modal Styles */
         .template-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100000; align-items: center; justify-content: center; }
@@ -2546,41 +2447,8 @@ body.dark-theme .info-bubble {
     color: #ffffff !important; /* White icon/text */
 }
 
-/* Hide form fields until service is selected */
-.form-fields-hidden {
-    display: none !important;
-}
-
-/* Selected service badge */
-.selected-service-badge {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 600;
-}
-
-.change-service-btn {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: all 0.2s;
-}
-
-.change-service-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
-
 <!-- CSS for Modal (Add to your <style> section) -->
-
+<style>
 .modal {
     display: none;
     position: fixed;
@@ -2654,76 +2522,7 @@ body.dark-theme .info-bubble {
         transform: translateY(0);
     }
 }
-
-/* ============================================
-   APP GUIDE MODAL STYLES
-   ============================================ */
-
-/* Tab buttons styling */
-.guide-tab {
-    background: none;
-    border: none;
-    padding: 15px 20px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #666;
-    border-bottom: 3px solid transparent;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    font-weight: 500;
-}
-
-.guide-tab:hover {
-    background: rgba(102, 126, 234, 0.1);
-    color: #667eea;
-}
-
-.guide-tab.active {
-    color: #667eea;
-    border-bottom-color: #667eea;
-    font-weight: 600;
-}
-
-/* Tab content styling */
-.guide-content {
-    display: none;
-}
-
-.guide-content.active {
-    display: block;
-}
-
-/* Dark mode support for modal */
-body.dark-theme #appGuideModal .guide-tab {
-    color: #ccc;
-}
-
-body.dark-theme #appGuideModal .guide-tab.active {
-    color: #8b9eff;
-    border-bottom-color: #8b9eff;
-}
-
-body.dark-theme #appGuideModal > div > div:first-child {
-    background: #2d2d44 !important;
-}
-
-body.dark-theme #appGuideModal > div > div:nth-child(2) {
-    background: white !important;
-    color: #1a1a2e;
-}
-
-body.dark-theme #appGuideModal h3,
-body.dark-theme #appGuideModal h4 {
-    color: #667eea !important;
-}
-
-body.dark-theme #appGuideModal p {
-    color: #555 !important;
-}
-
-body.dark-theme #appGuideModal > div > div:last-child {
-    background: white !important;
-}
+</style>
 
 </style>
 </head>
@@ -3611,14 +3410,8 @@ body.dark-theme #appGuideModal > div > div:last-child {
     <div class="dropdown-item" onclick="openGetHelpModalForLoggedInUser(); toggleUserDropdown();">
         ❓ <span data-i18n="need_help">Need Help</span>
     </div>
-    <div class="dropdown-item" onclick="openAppGuideModal(); toggleUserDropdown();">
-    📚 <span data-i18n="app_guide">App Guide</span>
-    </div>
     <div class="dropdown-separator"></div>
     
-    <div class="dropdown-item" onclick="openAboutModal()">
-    <span>ℹ️</span> About App
-    </div>
     <!-- Group 3: Legal & Feedback -->
     <div class="dropdown-item" onclick="showTermsFromDropdown(); toggleUserDropdown();">
         📜 <span data-i18n="terms_conditions">Terms & Conditions</span>
@@ -3681,7 +3474,7 @@ body.dark-theme #appGuideModal > div > div:last-child {
         </div>
     </div>
 </div>
-</div>
+
 
 <!-- Transactions Modal -->
 <div id="transactionsModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; display: none; align-items: center; justify-content: center;">
@@ -3711,480 +3504,6 @@ body.dark-theme #appGuideModal > div > div:last-child {
     </div>
 </div>
 
-<!-- App Guide Modal -->
-<div id="appGuideModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 99999; display: none; align-items: center; justify-content: center;">
-    <div style="background: white; border-radius: 20px; max-width: 800px; width: 95%; max-height: 90vh; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
-        
-        <!-- Header -->
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
-            <h2 style="margin: 0; font-size: 22px;">📚 <span data-i18n="app_guide_title">App Guide</span></h2>
-            <button onclick="closeAppGuideModal()" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer;">✕</button>
-        </div>
-        
-        <!-- Tab Navigation -->
-        <div style="display: flex; background: #f8f9fa; border-bottom: 2px solid #e0e0e0; overflow-x: auto; flex-shrink: 0;">
-            <button class="guide-tab active" onclick="switchGuideTab('getting-started')" data-tab="getting-started">
-                🚀 <span data-i18n="guide_tab_getting_started">Getting Started</span>
-            </button>
-            <button class="guide-tab" onclick="switchGuideTab('for-seekers')" data-tab="for-seekers">
-                👤 <span data-i18n="guide_tab_for_seekers">For Seekers</span>
-            </button>
-            <button class="guide-tab" onclick="switchGuideTab('for-providers')" data-tab="for-providers">
-                🔧 <span data-i18n="guide_tab_for_providers">For Providers</span>
-            </button>
-            <button class="guide-tab" onclick="switchGuideTab('credits-rewards')" data-tab="credits-rewards">
-                💳 <span data-i18n="guide_tab_credits">Credits & Rewards</span>
-            </button>
-            <button class="guide-tab" onclick="switchGuideTab('app-features')" data-tab="app-features">
-                ⚙️ <span data-i18n="guide_tab_features">App Features</span>
-            </button>
-        </div>
-        
-        <!-- Tab Content Container -->
-        <div style="padding: 25px; overflow-y: auto; flex: 1;">
-            
-            <!-- TAB 1: Getting Started -->
-            <div id="guide-getting-started" class="guide-content active">
-                <h3 style="color: #667eea; margin-bottom: 15px;">
-                    <span data-i18n="guide_welcome_title">Welcome to HelpBuddy! 👋</span>
-                </h3>
-                <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
-                    <span data-i18n="guide_welcome_desc">HelpBuddy connects customers (Seekers) with service providers (Providers) in your local area. Here's everything you need to know to get started!</span>
-                </p>
-                
-                <div style="background: #f0f4ff; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #667eea;">
-                    <h4 style="color: #667eea; margin-bottom: 10px;">
-                        💰 <span data-i18n="guide_signup_credits_title">Initial Signup Credits</span>
-                    </h4>
-                    <p style="color: #555; margin: 5px 0;">
-                        • <span data-i18n="guide_signup_normal">Normal signup: 200 credits</span>
-                    </p>
-                    <p style="color: #555; margin: 5px 0;">
-                        • <span data-i18n="guide_signup_referral">With referral code: 220 credits (200 + 20 bonus)</span>
-                    </p>
-                </div>
-                
-                <div style="background: #fff4e6; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #ffa726;">
-                    <h4 style="color: #f57c00; margin-bottom: 10px;">
-                        🎁 <span data-i18n="guide_referral_system_title">Referral System - Earn 75 Credits!</span>
-                    </h4>
-                    <p style="color: #555; margin: 8px 0;">
-                        <strong data-i18n="guide_referral_step1">Step 1:</strong> <span data-i18n="guide_referral_step1_desc">Share your referral code with friends</span>
-                    </p>
-                    <p style="color: #555; margin: 8px 0;">
-                        <strong data-i18n="guide_referral_step2">Step 2:</strong> <span data-i18n="guide_referral_step2_desc">When they sign up, you get +50 credits instantly</span>
-                    </p>
-                    <p style="color: #555; margin: 8px 0;">
-                        <strong data-i18n="guide_referral_step3">Step 3:</strong> <span data-i18n="guide_referral_step3_desc">When they complete their first request, you get +25 more credits</span>
-                    </p>
-                    <p style="color: #667eea; margin-top: 10px; font-weight: 600;">
-                        <span data-i18n="guide_referral_total">Total earnings per referral: 75 credits (50 + 25)</span>
-                    </p>
-                </div>
-            </div>
-            
-            <!-- TAB 2: For Seekers -->
-            <div id="guide-for-seekers" class="guide-content" style="display: none;">
-                <h3 style="color: #667eea; margin-bottom: 15px;">
-                    <span data-i18n="guide_seekers_title">How to Use HelpBuddy as a Seeker 👤</span>
-                </h3>
-                
-                <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #667eea; margin-bottom: 10px;">
-                        📝 <span data-i18n="guide_seekers_create_title">Step 1: Create a Request (-25 credits)</span>
-                    </h4>
-                    <p style="color: #555; line-height: 1.6;">
-                        <span data-i18n="guide_seekers_create_desc">Click "+ Create Request", describe your service need, add location, and submit. Your request becomes visible to nearby providers.</span>
-                    </p>
-                </div>
-                
-                <div style="background: #e8f5e9; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #4caf50; margin-bottom: 10px;">
-                        📂 <span data-i18n="guide_seekers_stages_title">Request Stages & Tabs:</span>
-                    </h4>
-                    
-                    <p style="color: #555; margin: 8px 0;">
-                        <strong style="color: #2196f3;">1️⃣ Open Requests</strong>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <strong data-i18n="guide_seekers_no_response">No Response:</strong> <span data-i18n="guide_seekers_no_response_desc">Waiting for providers to respond</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <strong data-i18n="guide_seekers_negotiating">Negotiating:</strong> <span data-i18n="guide_seekers_negotiating_desc">Providers have responded, you can chat and negotiate prices</span>
-                    </p>
-                    
-                    <p style="color: #555; margin: 15px 0 8px 0;">
-                        <strong style="color: #2196f3;">2️⃣ Active Requests</strong>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <strong data-i18n="guide_seekers_in_progress">In Progress:</strong> <span data-i18n="guide_seekers_in_progress_desc">Provider is working on your request</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <strong data-i18n="guide_seekers_review">Review:</strong> <span data-i18n="guide_seekers_review_desc">Provider completed work, awaiting your approval</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <strong data-i18n="guide_seekers_completed">Completed:</strong> <span data-i18n="guide_seekers_completed_desc">Work finished and approved</span>
-                    </p>
-                </div>
-                
-                <div style="background: #fff3e0; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #f57c00; margin-bottom: 10px;">
-                        ⭐ <span data-i18n="guide_seekers_select_title">Step 2: Select Best Provider</span>
-                    </h4>
-                    <p style="color: #555; line-height: 1.6;">
-                        <span data-i18n="guide_seekers_select_desc">Review all responses, negotiate terms, check ratings, then select the best provider for your work.</span>
-                    </p>
-                </div>
-                
-                <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #1976d2; margin-bottom: 10px;">
-                        ✅ <span data-i18n="guide_seekers_review_title">Step 3: Review & Rate</span>
-                    </h4>
-                    <p style="color: #555; line-height: 1.6;">
-                        <span data-i18n="guide_seekers_review_work">When provider marks work complete, review it. If satisfied, accept and rate. If not, reject with remarks for provider to fix.</span>
-                    </p>
-                </div>
-                
-                <div style="background: #fce4ec; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #c2185b; margin-bottom: 10px;">
-                        🔄 <span data-i18n="guide_seekers_special_title">Special Options:</span>
-                    </h4>
-                    <p style="color: #555; margin: 5px 0;">
-                        • <strong data-i18n="guide_seekers_change_provider">Change Provider:</strong> <span data-i18n="guide_seekers_change_provider_desc">If provider isn't responding, you can change them. Request goes back to "Open".</span>
-                    </p>
-                    <p style="color: #555; margin: 5px 0;">
-                        • <strong data-i18n="guide_seekers_warranty">Warranty Reactivation:</strong> <span data-i18n="guide_seekers_warranty_desc">If issue occurs during warranty period, reactivate the request.</span>
-                    </p>
-                </div>
-                
-                <div style="background: #e8f5e9; padding: 15px; border-radius: 10px; border-left: 4px solid #4caf50;">
-                    <h4 style="color: #2e7d32; margin-bottom: 10px;">
-                        💰 <span data-i18n="guide_seekers_credits_title">Credit Costs & Bonuses:</span>
-                    </h4>
-                    <p style="color: #555; margin: 5px 0;">
-                        • <span data-i18n="guide_seekers_credit_cost">Creating request: -25 credits</span>
-                    </p>
-                    <p style="color: #555; margin: 5px 0;">
-                        • <span data-i18n="guide_seekers_credit_bonus1">Completion bonus: +5 credits (after warranty)</span>
-                    </p>
-                    <p style="color: #555; margin: 5px 0;">
-                        • <span data-i18n="guide_seekers_credit_bonus2">Rating bonus: +10 credits (after warranty)</span>
-                    </p>
-                    <p style="color: #2e7d32; margin-top: 8px; font-weight: 600;">
-                        <span data-i18n="guide_seekers_credit_net">Net cost per completed request: 10 credits (25 - 15)</span>
-                    </p>
-                </div>
-            </div>
-            
-            <!-- TAB 3: For Providers -->
-            <div id="guide-for-providers" class="guide-content" style="display: none;">
-                <h3 style="color: #667eea; margin-bottom: 15px;">
-                    <span data-i18n="guide_providers_title">How to Use HelpBuddy as a Provider 🔧</span>
-                </h3>
-                
-                <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #667eea; margin-bottom: 10px;">
-                        🔔 <span data-i18n="guide_providers_step1_title">Step 1: Receive Notifications</span>
-                    </h4>
-                    <p style="color: #555; line-height: 1.6;">
-                        <span data-i18n="guide_providers_step1_desc">New requests matching your services and within your service radius appear in "Work Opportunities → Available Work".</span>
-                    </p>
-                </div>
-                
-                <div style="background: #e8f5e9; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #4caf50; margin-bottom: 10px;">
-                        📂 <span data-i18n="guide_providers_tabs_title">Provider Tabs Structure:</span>
-                    </h4>
-                    
-                    <p style="color: #555; margin: 8px 0;">
-                        <strong style="color: #2196f3;">1️⃣ Open Requests</strong>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        <span data-i18n="guide_providers_open_desc">All open requests you haven't responded to yet</span>
-                    </p>
-                    
-                    <p style="color: #555; margin: 15px 0 8px 0;">
-                        <strong style="color: #2196f3;">2️⃣ Work Opportunities</strong>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <strong data-i18n="guide_providers_available">Available Work:</strong> <span data-i18n="guide_providers_available_desc">New requests you haven't responded to</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <strong data-i18n="guide_providers_missed">Missed Opportunities:</strong> <span data-i18n="guide_providers_missed_desc">Requests where you weren't selected or got de-selected</span>
-                    </p>
-                    
-                    <p style="color: #555; margin: 15px 0 8px 0;">
-                        <strong style="color: #2196f3;">3️⃣ Active Requests</strong>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <strong data-i18n="guide_providers_in_progress">In Progress:</strong> <span data-i18n="guide_providers_in_progress_desc">You're currently working on these requests</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <strong data-i18n="guide_providers_waiting">Waiting:</strong> <span data-i18n="guide_providers_waiting_desc">You marked work complete, awaiting customer approval</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <strong data-i18n="guide_providers_completed">Completed:</strong> <span data-i18n="guide_providers_completed_desc">Customer approved your work</span>
-                    </p>
-                </div>
-                
-                <div style="background: #fff3e0; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #f57c00; margin-bottom: 10px;">
-                        💬 <span data-i18n="guide_providers_step2_title">Step 2: Respond to Requests (-50 credits)</span>
-                    </h4>
-                    <p style="color: #555; line-height: 1.6;">
-                        <span data-i18n="guide_providers_step2_desc">If interested in a request, click "Respond". You can negotiate terms and pricing with the customer via chat.</span>
-                    </p>
-                </div>
-                
-                <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #1976d2; margin-bottom: 10px;">
-                        🛠️ <span data-i18n="guide_providers_step3_title">Step 3: Get Selected & Start Work</span>
-                    </h4>
-                    <p style="color: #555; line-height: 1.6;">
-                        <span data-i18n="guide_providers_step3_desc">If customer selects you, request moves to "Active Requests → In Progress". Complete the work professionally.</span>
-                    </p>
-                </div>
-                
-                <div style="background: #f3e5f5; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #7b1fa2; margin-bottom: 10px;">
-                        ✅ <span data-i18n="guide_providers_step4_title">Step 4: Mark Complete & Offer Warranty</span>
-                    </h4>
-                    <p style="color: #555; line-height: 1.6;">
-                        <span data-i18n="guide_providers_step4_desc">When finished, mark work as complete. You can offer a warranty period (optional). Request moves to "Waiting" for customer approval.</span>
-                    </p>
-                </div>
-                
-                <div style="background: #e8f5e9; padding: 15px; border-radius: 10px; border-left: 4px solid #4caf50;">
-                    <h4 style="color: #2e7d32; margin-bottom: 10px;">
-                        💰 <span data-i18n="guide_providers_credits_title">Credit Costs & Earnings:</span>
-                    </h4>
-                    <p style="color: #555; margin: 5px 0;">
-                        • <span data-i18n="guide_providers_credit_respond">Responding to request: -50 credits</span>
-                    </p>
-                    <p style="color: #555; margin: 5px 0;">
-                        • <span data-i18n="guide_providers_credit_rejected">If NOT selected: +40 credits refunded (10 credits platform fee)</span>
-                    </p>
-                    <p style="color: #555; margin: 5px 0;">
-                        • <span data-i18n="guide_providers_credit_selected">If selected: All 50 credits consumed</span>
-                    </p>
-                    <p style="color: #555; margin: 10px 0 5px 0;">
-                        <strong data-i18n="guide_providers_rating_bonus">Rating-based bonuses (after warranty):</strong>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        ⭐⭐⭐⭐⭐ <span data-i18n="guide_providers_5star">4.5+ avg: +20 credits</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        ⭐⭐⭐⭐ <span data-i18n="guide_providers_4star">3.5-4.4 avg: +10 credits</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        ⭐⭐⭐ <span data-i18n="guide_providers_3star">2.5-3.4 avg: +5 credits</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        ⭐⭐ / ⭐ <span data-i18n="guide_providers_lowstar">Below 2.5: 0 credits</span>
-                    </p>
-                </div>
-            </div>
-            
-            <!-- TAB 4: Credits & Rewards -->
-            <div id="guide-credits-rewards" class="guide-content" style="display: none;">
-                <h3 style="color: #667eea; margin-bottom: 15px;">
-                    <span data-i18n="guide_credits_title">Understanding Credits & Rewards 💳</span>
-                </h3>
-                
-                <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #1976d2; margin-bottom: 10px;">
-                        ❓ <span data-i18n="guide_credits_what_title">What are Credits?</span>
-                    </h4>
-                    <p style="color: #555; line-height: 1.6;">
-                        <span data-i18n="guide_credits_what_desc">Credits are HelpBuddy's virtual currency used to manage requests on the platform. No real money is exchanged on the app - all service payments happen directly between seekers and providers offline.</span>
-                    </p>
-                </div>
-                
-                <div style="background: #f1f8e9; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #558b2f; margin-bottom: 10px;">
-                        💵 <span data-i18n="guide_credits_payment_title">Payment System</span>
-                    </h4>
-                    <p style="color: #555; line-height: 1.6;">
-                        <span data-i18n="guide_credits_payment_desc">HelpBuddy does NOT handle money transactions. Seekers and providers negotiate prices via chat and exchange payment directly when the provider visits. The platform only uses credits for request management.</span>
-                    </p>
-                </div>
-                
-                <div style="background: #fff3e0; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #f57c00; margin-bottom: 10px;">
-                        📊 <span data-i18n="guide_credits_structure_title">Complete Credit Structure</span>
-                    </h4>
-                    
-                    <p style="color: #555; margin: 10px 0 5px 0;">
-                        <strong data-i18n="guide_credits_seeker_costs">For Seekers (Customers):</strong>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <span data-i18n="guide_credits_seeker_create">Create request: -25 credits</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <span data-i18n="guide_credits_seeker_complete">Completion bonus: +5 credits (after warranty)</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <span data-i18n="guide_credits_seeker_rating">Rating bonus: +10 credits (after warranty)</span>
-                    </p>
-                    <p style="color: #2e7d32; margin-left: 20px; font-weight: 600;">
-                        → <span data-i18n="guide_credits_seeker_net">Net cost: 10 credits per completed request</span>
-                    </p>
-                    
-                    <p style="color: #555; margin: 15px 0 5px 0;">
-                        <strong data-i18n="guide_credits_provider_costs">For Providers:</strong>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <span data-i18n="guide_credits_provider_respond">Respond to request: -50 credits</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <span data-i18n="guide_credits_provider_refund">Not selected: +40 credits refund (10 credits fee)</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <span data-i18n="guide_credits_provider_selected">Selected: 50 credits consumed</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <span data-i18n="guide_credits_provider_bonus">Rating bonus: 0-20 credits (based on ratings)</span>
-                    </p>
-                </div>
-                
-                <div style="background: #fce4ec; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #c2185b; margin-bottom: 10px;">
-                        🛡️ <span data-i18n="guide_credits_warranty_title">Warranty & Pending Credits</span>
-                    </h4>
-                    <p style="color: #555; line-height: 1.6;">
-                        <span data-i18n="guide_credits_warranty_desc">When a provider completes work, they can offer a warranty period. During this time, all earned credits remain "pending". If the seeker reactivates the request (due to issues), work continues. After warranty expires, pending credits become available.</span>
-                    </p>
-                </div>
-                
-                <div style="background: #e8f5e9; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #2e7d32; margin-bottom: 10px;">
-                        🎁 <span data-i18n="guide_credits_referral_title">Referral Rewards - Detailed Breakdown</span>
-                    </h4>
-                    <p style="color: #555; margin: 5px 0;">
-                        <strong data-i18n="guide_credits_referral_new">New user signs up with your code:</strong>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <span data-i18n="guide_credits_referral_new_gets">New user gets: 220 credits (200 + 20 bonus)</span>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <span data-i18n="guide_credits_referral_you_get1">You get: +50 credits immediately</span>
-                    </p>
-                    
-                    <p style="color: #555; margin: 10px 0 5px 0;">
-                        <strong data-i18n="guide_credits_referral_complete">When they complete first request:</strong>
-                    </p>
-                    <p style="color: #666; margin-left: 20px;">
-                        • <span data-i18n="guide_credits_referral_you_get2">You get: +25 additional credits</span>
-                    </p>
-                    
-                    <p style="color: #2e7d32; margin-top: 10px; font-weight: 600; font-size: 16px;">
-                        🎉 <span data-i18n="guide_credits_referral_total">Total: 75 credits per successful referral!</span>
-                    </p>
-                </div>
-                
-                <div style="background: #fff9c4; padding: 15px; border-radius: 10px; border-left: 4px solid #f9a825;">
-                    <h4 style="color: #f57f17; margin-bottom: 10px;">
-                        🆘 <span data-i18n="guide_credits_support_title">Low Credit Support</span>
-                    </h4>
-                    <p style="color: #555; line-height: 1.6;">
-                        <span data-i18n="guide_credits_support_desc">If your credits fall below 25 (seekers) or 50 (providers), you'll automatically receive +10 bonus credits weekly to keep using the platform.</span>
-                    </p>
-                </div>
-            </div>
-            
-            <!-- TAB 5: App Features -->
-            <div id="guide-app-features" class="guide-content" style="display: none;">
-                <h3 style="color: #667eea; margin-bottom: 15px;">
-                    <span data-i18n="guide_features_title">App Features & Settings ⚙️</span>
-                </h3>
-                
-                <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                    <h4 style="color: #667eea; margin-bottom: 10px;">
-                        🌓<span data-i18n="guide_features_theme_title">Dark/Light Theme</span>
-</h4>
-<p style="color: #555; line-height: 1.6;">
-<span data-i18n="guide_features_theme_desc">Toggle between dark and light themes using the ☀️/🌙 switch in the dropdown menu (top-right corner) for comfortable viewing.</span>
-</p>
-</div><div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                <h4 style="color: #1976d2; margin-bottom: 10px;">
-                    🌐 <span data-i18n="guide_features_language_title">Language Toggle (English ↔ Hindi)</span>
-                </h4>
-                <p style="color: #555; line-height: 1.6;">
-                    <span data-i18n="guide_features_language_desc">Switch between English and Hindi using the EN/हि toggle at the top of the dropdown menu.</span>
-                </p>
-            </div>
-            
-            <div style="background: #f3e5f5; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                <h4 style="color: #7b1fa2; margin-bottom: 10px;">
-                    📱 <span data-i18n="guide_features_pwa_title">Install as Mobile App (PWA)</span>
-                </h4>
-                <p style="color: #555; line-height: 1.6; margin-bottom: 10px;">
-                    <span data-i18n="guide_features_pwa_desc">HelpBuddy works as a Progressive Web App (PWA). You can install it on your phone for a native app experience!</span>
-                </p>
-                
-                <p style="color: #555; margin: 10px 0 5px 0;">
-                    <strong data-i18n="guide_features_android_title">📱 For Android (Chrome):</strong>
-                </p>
-                <p style="color: #666; margin-left: 20px;">
-                    1. <span data-i18n="guide_features_android_step1">Open HelpBuddy in Chrome browser</span>
-                </p>
-                <p style="color: #666; margin-left: 20px;">
-                    2. <span data-i18n="guide_features_android_step2">Tap the menu icon (⋮) at top-right</span>
-                </p>
-                <p style="color: #666; margin-left: 20px;">
-                    3. <span data-i18n="guide_features_android_step3">Select "Add to Home screen"</span>
-                </p>
-                <p style="color: #666; margin-left: 20px;">
-                    4. <span data-i18n="guide_features_android_step4">Confirm and the app icon will appear on your home screen</span>
-                </p>
-                
-                <p style="color: #555; margin: 15px 0 5px 0;">
-                    <strong data-i18n="guide_features_ios_title">📱 For iOS (Safari):</strong>
-                </p>
-                <p style="color: #666; margin-left: 20px;">
-                    1. <span data-i18n="guide_features_ios_step1">Open HelpBuddy in Safari browser</span>
-                </p>
-                <p style="color: #666; margin-left: 20px;">
-                    2. <span data-i18n="guide_features_ios_step2">Tap the Share button (□↑) at the bottom</span>
-                </p>
-                <p style="color: #666; margin-left: 20px;">
-                    3. <span data-i18n="guide_features_ios_step3">Scroll down and tap "Add to Home Screen"</span>
-                </p>
-                <p style="color: #666; margin-left: 20px;">
-                    4. <span data-i18n="guide_features_ios_step4">Name it and tap "Add"</span>
-                </p>
-            </div>
-            
-            <div style="background: #e8f5e9; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                <h4 style="color: #2e7d32; margin-bottom: 10px;">
-                    💬 <span data-i18n="guide_features_support_title">Contact Support</span>
-                </h4>
-                <p style="color: #555; line-height: 1.6;">
-                    <span data-i18n="guide_features_support_desc">Need help? Click "❓ Get Help" in the dropdown menu to access FAQs and contact support via email or phone.</span>
-                </p>
-            </div>
-            
-            <div style="background: #fff3e0; padding: 15px; border-radius: 10px;">
-                <h4 style="color: #f57c00; margin-bottom: 10px;">
-                    🎯 <span data-i18n="guide_features_tips_title">Pro Tips</span>
-                </h4>
-                <p style="color: #555; margin: 5px 0;">
-                    • <span data-i18n="guide_features_tip1">Enable notifications to never miss new requests or responses</span>
-                </p>
-                <p style="color: #555; margin: 5px 0;">
-                    • <span data-i18n="guide_features_tip2">Keep your profile updated with accurate services and location</span>
-                </p>
-                <p style="color: #555; margin: 5px 0;">
-                    • <span data-i18n="guide_features_tip3">Respond quickly to requests for better chances of selection</span>
-                </p>
-                <p style="color: #555; margin: 5px 0;">
-                    • <span data-i18n="guide_features_tip4">Maintain good ratings for bonus credits and more opportunities</span>
-                </p>
-            </div>
-        </div>
-      </div>  
-    </div>
-</div>
     
     <!-- Profile Photo (LEFT) + Back Button (RIGHT) - for edit profile page -->
 <div id="profileHeaderSection" style="display: none; justify-content: space-between; align-items: center; width: 100%;">
@@ -4193,6 +3512,7 @@ body.dark-theme #appGuideModal > div > div:last-child {
         <div id="headerProfilePhotoLargePlaceholder" style="width: 80px; height: 80px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #999;">👤</div>
     </div>
     <button class="btn btn-secondary" onclick="smartBack()" style="margin: 0;">← Back</button>
+</div>
 </div>
     
     <div class="two-column">
@@ -4390,16 +3710,10 @@ body.dark-theme #appGuideModal > div > div:last-child {
   <input type="hidden" id="serviceType" name="serviceType" required>
   <input type="hidden" id="serviceSubtype" name="serviceSubtype">
   
-  <!-- Selected Service Display (shown after selection) -->
-<div id="serviceSelectionDisplay" style="display: none; margin-bottom: 20px;">
+  <!-- Dropdown Trigger Button -->
   <div class="service-dropdown-trigger" id="serviceDropdownTrigger">
     <span class="placeholder" data-i18n="select_service_type">Select Service Type</span>
     <span class="dropdown-arrow">▼</span>
-  </div>
-</div>
-
-<!-- Dropdown Trigger Button (hidden after selection) -->
-<div id="serviceAccordionWrapper">
   </div>
   
   <!-- Accordion (Hidden by default) -->
@@ -4631,88 +3945,77 @@ body.dark-theme #appGuideModal > div > div:last-child {
         </div>
       </div>
     </div>
-</div>
-</div>
-<!-- Close serviceAccordionWrapper -->
-        
-        <!-- Selected Service Badge (initially hidden) -->
-<div id="selectedServiceBadge" class="selected-service-badge" style="display: none;">
-    <div>
-        <span style="opacity: 0.8;">Selected Service:</span>
-        <span id="selectedServiceName" style="font-size: 16px; margin-left: 8px;"></span>
-    </div>
-    <button type="button" class="change-service-btn" onclick="changeService()">Change</button>
-</div>
 
-<!-- Form fields wrapper (hidden until service selected) -->
-<div id="formFieldsWrapper" class="form-fields-hidden">
-    <div class="form-group">
-        <label><span data-i18n="title">Title</span> <span class="required">*</span></label>
-        <input type="text" id="requestTitle" required minlength="10" maxlength="100">
-        <div class="char-counter"><span id="titleCounter">0</span>/100</div>
-    </div>
-    
-    <div class="form-group">
-        <label><span data-i18n="description">Description</span> <span class="required">*</span></label>
-        <textarea id="requestDescription" required minlength="20" maxlength="500"></textarea>
-        <div class="char-counter"><span id="descCounter">0</span>/500</div>
-    </div>
-    
-    <div class="form-group">
-        <label><span data-i18n="urgency">Urgency</span> <span class="required">*</span></label>
-        <div class="urgency-group">
-            <div class="urgency-option">
-                <input type="radio" name="urgency" id="urgentRadio" value="urgent" required>
-                <label for="urgentRadio" class="urgency-label">🔴 <span data-i18n="urgent">Urgent</span></label>
-            </div>
-            <div class="urgency-option">
-                <input type="radio" name="urgency" id="normalRadio" value="normal" required>
-                <label for="normalRadio" class="urgency-label">🟡 <span data-i18n="normal">Normal</span></label>
-            </div>
-            <div class="urgency-option">
-                <input type="radio" name="urgency" id="lowRadio" value="low" required>
-                <label for="lowRadio" class="urgency-label">🟢 <span data-i18n="low">Low</span></label>
-            </div>
-        </div>
-    </div>
-    
-    <div class="checkbox-group">
-        <input type="checkbox" id="differentLocation" onchange="toggleLocationFields()">
-        <label for="differentLocation" style="margin: 0;"><span data-i18n="use_different_location">Use different location for this service</span></label>
-    </div>
-    
-    <div id="customLocationFields" class="hidden">
-        <div class="form-group">
-            <label><span data-i18n="area_name">Area Name</span> <span class="required">*</span></label>
-            <input type="text" id="customAreaName">
-        </div>
-        <div class="form-group">
-            <label><span data-i18n="landmark">Landmark</span></label>
-            <input type="text" id="customLandmark">
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <label><span data-i18n="city">City</span> <span class="required">*</span></label>
-                <input type="text" id="customCity" placeholder="Type to search city..." autocomplete="off">
-                <div id="customCitySuggestions" class="autocomplete-suggestions"></div>
-            </div>
-            <div class="form-group">
-                <label><span data-i18n="state">State</span> <span class="required">*</span></label>
-                <select id="customState">
-                    <option value="" data-i18n="select_state">Select State</option>
-                    <option value="Andhra Pradesh">Andhra Pradesh</option>
-                    <option value="Karnataka">Karnataka</option>
-                    <option value="Maharashtra">Maharashtra</option>
-                    <!-- Add all other states here -->
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label><span data-i18n="pin_code">PIN Code</span> <span class="required">*</span></label>
-            <input type="text" id="customPinCode" pattern="[0-9]{6}">
-        </div>
-    </div>
+  </div>
+  <p id="selectedServiceDisplay" class="mt-2 text-sm text-blue-600 font-medium" style="display:none;"></p>
 </div>
+        
+        <div class="form-group">
+            <label><span data-i18n="title">Title</span> <span class="required">*</span></label>
+            <input type="text" id="requestTitle" required minlength="10" maxlength="100">
+            <div class="char-counter"><span id="titleCounter">0</span>/100</div>
+        </div>
+        
+        <div class="form-group">
+            <label><span data-i18n="description">Description</span> <span class="required">*</span></label>
+            <textarea id="requestDescription" required minlength="20" maxlength="500"></textarea>
+            <div class="char-counter"><span id="descCounter">0</span>/500</div>
+        </div>
+        
+        <div class="form-group">
+            <label><span data-i18n="urgency">Urgency</span> <span class="required">*</span></label>
+            <div class="urgency-group">
+                <div class="urgency-option">
+                    <input type="radio" name="urgency" id="urgentRadio" value="urgent" required>
+                    <label for="urgentRadio" class="urgency-label">🔴 <span data-i18n="urgent">Urgent</span></label>
+                </div>
+                <div class="urgency-option">
+                    <input type="radio" name="urgency" id="normalRadio" value="normal" required>
+                    <label for="normalRadio" class="urgency-label">🟡 <span data-i18n="normal">Normal</span></label>
+                </div>
+                <div class="urgency-option">
+                    <input type="radio" name="urgency" id="lowRadio" value="low" required>
+                    <label for="lowRadio" class="urgency-label">🟢 <span data-i18n="low">Low</span></label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="checkbox-group">
+            <input type="checkbox" id="differentLocation" onchange="toggleLocationFields()">
+            <label for="differentLocation" style="margin: 0;"><span data-i18n="use_different_location">Use different location for this service</span></label>
+        </div>
+        
+        <div id="customLocationFields" class="hidden">
+            <div class="form-group">
+                <label><span data-i18n="area_name">Area Name</span> <span class="required">*</span></label>
+                <input type="text" id="customAreaName">
+            </div>
+            <div class="form-group">
+                <label><span data-i18n="landmark">Landmark</span></label>
+                <input type="text" id="customLandmark">
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label><span data-i18n="city">City</span> <span class="required">*</span></label>
+                    <input type="text" id="customCity" placeholder="Type to search city..." autocomplete="off">
+                    <div id="customCitySuggestions" class="autocomplete-suggestions"></div>
+                </div>
+                <div class="form-group">
+                    <label><span data-i18n="state">State</span> <span class="required">*</span></label>
+                    <select id="customState">
+                        <option value="" data-i18n="select_state">Select State</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <!-- Add all other states here -->
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label><span data-i18n="pin_code">PIN Code</span> <span class="required">*</span></label>
+                <input type="text" id="customPinCode" pattern="[0-9]{6}">
+            </div>
+        </div>
         
         <!-- ✅ THIS IS THE MISSING SUBMIT BUTTON -->
         <button type="submit" class="btn btn-full" id="submitRequestBtn"><span data-i18n="create_request">Create Request</span></button>
@@ -5256,53 +4559,48 @@ body.dark-theme #appGuideModal > div > div:last-child {
 </div>
 
 <div id="warrantyForm" class="warranty-form hidden">
-    <div class="warranty-form-content">
-        <div class="warranty-form-header">
-            <h3><span data-i18n="select_warranty_period">Select Warranty Period</span></h3>
-            <button class="warranty-form-close" onclick="closeWarrantyForm()">×</button>
-        </div>
-        
-        <!-- NEW: Keep Existing Warranty Option -->
-        <div id="keepExistingWarrantyOption" class="warranty-option" style="display: none; margin-bottom: 12px;">
-            <input type="radio" name="warranty" id="warrantyExisting" value="existing">
-            <label for="warrantyExisting" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border-color: #28a745;">
-                🔄 <span id="keepExistingWarrantyText">Keep Existing Warranty</span>
-            </label>
-        </div>
-        
-        <!-- Separator -->
-        <div id="newWarrantyDivider" style="display: none; text-align: center; margin: 12px 0; color: #666; font-size: 13px;">
-            — OR provide new warranty —
-        </div>
-        
-        <div class="warranty-options">
-            <div class="warranty-option">
-                <input type="radio" name="warranty" id="warranty0" value="0">
-                <label for="warranty0"><span data-i18n="no_warranty">No Warranty</span></label>
-            </div>
-            <div class="warranty-option">
-                <input type="radio" name="warranty" id="warranty15" value="15">
-                <label for="warranty15"><span data-i18n="15_days">15 Days</span></label>
-            </div>
-            <div class="warranty-option">
-                <input type="radio" name="warranty" id="warranty30" value="30">
-                <label for="warranty30"><span data-i18n="1_month">1 Month</span></label>
-            </div>
-            <div class="warranty-option">
-                <input type="radio" name="warranty" id="warranty90" value="90">
-                <label for="warranty90"><span data-i18n="3_months">3 Months</span></label>
-            </div>
-            <div class="warranty-option">
-                <input type="radio" name="warranty" id="warranty180" value="180">
-                <label for="warranty180"><span data-i18n="6_months">6 Months</span></label>
-            </div>
-            <div class="warranty-option">
-                <input type="radio" name="warranty" id="warranty365" value="365">
-                <label for="warranty365"><span data-i18n="1_year">1 Year</span></label>
-            </div>
-        </div>
-        <button class="btn" onclick="completeWork()"><span data-i18n="send_completion_request">Send Completion Request</span></button>
+    <h3><span data-i18n="select_warranty_period">Select Warranty Period</span></h3>
+    
+    <!-- NEW: Keep Existing Warranty Option (shown only for reactivated requests) -->
+    <div id="keepExistingWarrantyOption" class="warranty-option" style="display: none; margin-bottom: 12px;">
+        <input type="radio" name="warranty" id="warrantyExisting" value="existing">
+        <label for="warrantyExisting" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border-color: #28a745;">
+            🔄 <span id="keepExistingWarrantyText">Keep Existing Warranty</span>
+        </label>
     </div>
+    
+    <!-- NEW: Separator for new warranty options -->
+    <div id="newWarrantyDivider" style="display: none; text-align: center; margin: 12px 0; color: #666; font-size: 13px;">
+        — OR provide new warranty —
+    </div>
+    
+    <div class="warranty-options">
+        <div class="warranty-option">
+            <input type="radio" name="warranty" id="warranty0" value="0">
+            <label for="warranty0"><span data-i18n="no_warranty">No Warranty</span></label>
+        </div>
+        <div class="warranty-option">
+            <input type="radio" name="warranty" id="warranty15" value="15">
+            <label for="warranty15"><span data-i18n="15_days">15 Days</span></label>
+        </div>
+        <div class="warranty-option">
+            <input type="radio" name="warranty" id="warranty30" value="30">
+            <label for="warranty30"><span data-i18n="1_month">1 Month</span></label>
+        </div>
+        <div class="warranty-option">
+            <input type="radio" name="warranty" id="warranty90" value="90">
+            <label for="warranty90"><span data-i18n="3_months">3 Months</span></label>
+        </div>
+        <div class="warranty-option">
+            <input type="radio" name="warranty" id="warranty180" value="180">
+            <label for="warranty180"><span data-i18n="6_months">6 Months</span></label>
+        </div>
+        <div class="warranty-option">
+            <input type="radio" name="warranty" id="warranty365" value="365">
+            <label for="warranty365"><span data-i18n="1_year">1 Year</span></label>
+        </div>
+    </div>
+    <button class="btn" onclick="completeWork()"><span data-i18n="send_completion_request">Send Completion Request</span></button>
 </div>
                     <div class="chat-input-wrapper">
                         <button class="plus-button" onclick="showAttachmentOptions()" title="Attach">+</button>
@@ -6231,173 +5529,6 @@ service_no_longer_available: "Service No Longer Available",
 // System notification messages (for chat)
 provider_stopped_notification: "{providerName} has stopped providing {serviceName} and cannot complete your request. Please select another provider.",
 
-"confirm_send_completion_request": "Are you sure you want to mark this request as completed? This will notify the customer to review and confirm.",
-
-// ============================================================
-// SECTION: APP GUIDE MODAL
-// ============================================================
-
-// Modal & Tab Headers
-app_guide: "App Guide",
-app_guide_title: "App Guide",
-guide_tab_getting_started: "Getting Started",
-guide_tab_for_seekers: "For Seekers",
-guide_tab_for_providers: "For Providers",
-guide_tab_credits: "Credits & Rewards",
-guide_tab_features: "App Features",
-
-// TAB 1: Getting Started
-guide_welcome_title: "Welcome to HelpBuddy! 👋",
-guide_welcome_desc: "HelpBuddy connects customers (Seekers) with service providers (Providers) in your local area. Here's everything you need to know to get started!",
-guide_signup_credits_title: "Initial Signup Credits",
-guide_signup_normal: "Normal signup: 200 credits",
-guide_signup_referral: "With referral code: 220 credits (200 + 20 bonus)",
-guide_referral_system_title: "Referral System - Earn 75 Credits!",
-guide_referral_step1: "Step 1:",
-guide_referral_step1_desc: "Share your referral code with friends",
-guide_referral_step2: "Step 2:",
-guide_referral_step2_desc: "When they sign up, you get +50 credits instantly",
-guide_referral_step3: "Step 3:",
-guide_referral_step3_desc: "When they complete their first request, you get +25 more credits",
-guide_referral_total: "Total earnings per referral: 75 credits (50 + 25)",
-
-// TAB 2: For Seekers
-guide_seekers_title: "How to Use HelpBuddy as a Seeker 👤",
-guide_seekers_create_title: "Step 1: Create a Request (-25 credits)",
-guide_seekers_create_desc: "Click \"+ Create Request\", describe your service need, add location, and submit. Your request becomes visible to nearby providers.",
-guide_seekers_stages_title: "Request Stages & Tabs:",
-guide_seekers_no_response: "No Response:",
-guide_seekers_no_response_desc: "Waiting for providers to respond",
-guide_seekers_negotiating: "Negotiating:",
-guide_seekers_negotiating_desc: "Providers have responded, you can chat and negotiate prices",
-guide_seekers_in_progress: "In Progress:",
-guide_seekers_in_progress_desc: "Provider is working on your request",
-guide_seekers_review: "Review:",
-guide_seekers_review_desc: "Provider completed work, awaiting your approval",
-guide_seekers_completed: "Completed:",
-guide_seekers_completed_desc: "Work finished and approved",
-guide_seekers_select_title: "Step 2: Select Best Provider",
-guide_seekers_select_desc: "Review all responses, negotiate terms, check ratings, then select the best provider for your work.",
-guide_seekers_review_title: "Step 3: Review & Rate",
-guide_seekers_review_work: "When provider marks work complete, review it. If satisfied, accept and rate. If not, reject with remarks for provider to fix.",
-guide_seekers_special_title: "Special Options:",
-guide_seekers_change_provider: "Change Provider:",
-guide_seekers_change_provider_desc: "If provider isn't responding, you can change them. Request goes back to \"Open\".",
-guide_seekers_warranty: "Warranty Reactivation:",
-guide_seekers_warranty_desc: "If issue occurs during warranty period, reactivate the request.",
-guide_seekers_credits_title: "Credit Costs & Bonuses:",
-guide_seekers_credit_cost: "Creating request: -25 credits",
-guide_seekers_credit_bonus1: "Completion bonus: +5 credits (after warranty)",
-guide_seekers_credit_bonus2: "Rating bonus: +10 credits (after warranty)",
-guide_seekers_credit_net: "Net cost per completed request: 10 credits (25 - 15)",
-
-// TAB 3: For Providers
-guide_providers_title: "How to Use HelpBuddy as a Provider 🔧",
-guide_providers_step1_title: "Step 1: Receive Notifications",
-guide_providers_step1_desc: "New requests matching your services and within your service radius appear in \"Work Opportunities → Available Work\".",
-guide_providers_tabs_title: "Provider Tabs Structure:",
-guide_providers_open_desc: "All open requests you haven't responded to yet",
-guide_providers_available: "Available Work:",
-guide_providers_available_desc: "New requests you haven't responded to",
-guide_providers_missed: "Missed Opportunities:",
-guide_providers_missed_desc: "Requests where you weren't selected or got de-selected",
-guide_providers_in_progress: "In Progress:",
-guide_providers_in_progress_desc: "You're currently working on these requests",
-guide_providers_waiting: "Waiting:",
-guide_providers_waiting_desc: "You marked work complete, awaiting customer approval",
-guide_providers_completed: "Completed:",
-guide_providers_completed_desc: "Customer approved your work",
-guide_providers_step2_title: "Step 2: Respond to Requests (-50 credits)",
-guide_providers_step2_desc: "If interested in a request, click \"Respond\". You can negotiate terms and pricing with the customer via chat.",
-guide_providers_step3_title: "Step 3: Get Selected & Start Work",
-guide_providers_step3_desc: "If customer selects you, request moves to \"Active Requests → In Progress\". Complete the work professionally.",
-guide_providers_step4_title: "Step 4: Mark Complete & Offer Warranty",
-guide_providers_step4_desc: "When finished, mark work as complete. You can offer a warranty period (optional). Request moves to \"Waiting\" for customer approval.",
-guide_providers_credits_title: "Credit Costs & Earnings:",
-guide_providers_credit_respond: "Responding to request: -50 credits",
-guide_providers_credit_rejected: "If NOT selected: +40 credits refunded (10 credits platform fee)",
-guide_providers_credit_selected: "If selected: All 50 credits consumed",
-guide_providers_rating_bonus: "Rating-based bonuses (after warranty):",
-guide_providers_5star: "4.5+ avg: +20 credits",
-guide_providers_4star: "3.5-4.4 avg: +10 credits",
-guide_providers_3star: "2.5-3.4 avg: +5 credits",
-guide_providers_lowstar: "Below 2.5: 0 credits",
-
-// TAB 4: Credits & Rewards
-guide_credits_title: "Understanding Credits & Rewards 💳",
-guide_credits_what_title: "What are Credits?",
-guide_credits_what_desc: "Credits are HelpBuddy's virtual currency used to manage requests on the platform. No real money is exchanged on the app - all service payments happen directly between seekers and providers offline.",
-guide_credits_payment_title: "Payment System",
-guide_credits_payment_desc: "HelpBuddy does NOT handle money transactions. Seekers and providers negotiate prices via chat and exchange payment directly when the provider visits. The platform only uses credits for request management.",
-guide_credits_structure_title: "Complete Credit Structure",
-guide_credits_seeker_costs: "For Seekers (Customers):",
-guide_credits_seeker_create: "Create request: -25 credits",
-guide_credits_seeker_complete: "Completion bonus: +5 credits (after warranty)",
-guide_credits_seeker_rating: "Rating bonus: +10 credits (after warranty)",
-guide_credits_seeker_net: "Net cost: 10 credits per completed request",
-guide_credits_provider_costs: "For Providers:",
-guide_credits_provider_respond: "Respond to request: -50 credits",
-guide_credits_provider_refund: "Not selected: +40 credits refund (10 credits fee)",
-guide_credits_provider_selected: "Selected: 50 credits consumed",
-guide_credits_provider_bonus: "Rating bonus: 0-20 credits (based on ratings)",
-guide_credits_warranty_title: "Warranty & Pending Credits",
-guide_credits_warranty_desc: "When a provider completes work, they can offer a warranty period. During this time, all earned credits remain \"pending\". If the seeker reactivates the request (due to issues), work continues. After warranty expires, pending credits become available.",
-guide_credits_referral_title: "Referral Rewards - Detailed Breakdown",
-guide_credits_referral_new: "New user signs up with your code:",
-guide_credits_referral_new_gets: "New user gets: 220 credits (200 + 20 bonus)",
-guide_credits_referral_you_get1: "You get: +50 credits immediately",
-guide_credits_referral_complete: "When they complete first request:",
-guide_credits_referral_you_get2: "You get: +25 additional credits",
-guide_credits_referral_total: "Total: 75 credits per successful referral!",
-guide_credits_support_title: "Low Credit Support",
-guide_credits_support_desc: "If your credits fall below 25 (seekers) or 50 (providers), you'll automatically receive +10 bonus credits weekly to keep using the platform.",
-
-// TAB 5: App Features
-guide_features_title: "App Features & Settings ⚙️",
-guide_features_theme_title: "Dark/Light Theme",
-guide_features_theme_desc: "Toggle between dark and light themes using the ☀️/🌙 switch in the dropdown menu (top-right corner) for comfortable viewing.",
-guide_features_language_title: "Language Toggle (English ↔ Hindi)",
-guide_features_language_desc: "Switch between English and Hindi using the EN/हि toggle at the top of the dropdown menu.",
-guide_features_pwa_title: "Install as Mobile App (PWA)",
-guide_features_pwa_desc: "HelpBuddy works as a Progressive Web App (PWA). You can install it on your phone for a native app experience!",
-guide_features_android_title: "📱 For Android (Chrome):",
-guide_features_android_step1: "Open HelpBuddy in Chrome browser",
-guide_features_android_step2: "Tap the menu icon (⋮) at top-right",
-guide_features_android_step3: "Select \"Add to Home screen\"",
-guide_features_android_step4: "Confirm and the app icon will appear on your home screen",
-guide_features_ios_title: "📱 For iOS (Safari):",
-guide_features_ios_step1: "Open HelpBuddy in Safari browser",
-guide_features_ios_step2: "Tap the Share button (□↑) at the bottom",
-guide_features_ios_step3: "Scroll down and tap \"Add to Home Screen\"",
-guide_features_ios_step4: "Name it and tap \"Add\"",
-guide_features_support_title: "Contact Support",
-guide_features_support_desc: "Need help? Click \"❓ Get Help\" in the dropdown menu to access FAQs and contact support via email or phone.",
-guide_features_tips_title: "Pro Tips",
-guide_features_tip1: "Enable notifications to never miss new requests or responses",
-guide_features_tip2: "Keep your profile updated with accurate services and location",
-guide_features_tip3: "Respond quickly to requests for better chances of selection",
-guide_features_tip4: "Maintain good ratings for bonus credits and more opportunities",
-
-// ==================== ABOUT APP TRANSLATIONS (ENGLISH) ====================
-// Add these to your existing translations.en = { ... } object
-
-about_title: "About HelpBuddy",
-about_version: "Version",
-about_build: "Build",
-about_date: "Date",
-about_check_updates: "Check for Updates",
-about_checking: "🔄 Checking...",
-about_up_to_date: "✅ Up to date!",
-about_check_failed: "❌ Check Failed",
-about_whats_new: "What's New in v",
-
-// Changelog v1.8.4
-changelog_v184_item1: "Enhanced UI/UX with improved appearance",
-changelog_v184_item2: "Added comprehensive App Guide for new users",
-changelog_v184_item3: "Better onboarding experience for first-time users",
-changelog_v184_item4: "Performance optimizations across the platform",
-changelog_v184_item5: "Bug fixes and stability improvements",
-
   },
   
   // ============================================================
@@ -7160,173 +6291,6 @@ service_no_longer_available: "सेवा अब उपलब्ध नही�
 
 // System notification messages (for chat)
 provider_stopped_notification: "{providerName} ने {serviceName} देना बंद कर दिया है और आपका अनुरोध पूरा नहीं कर सकते। कृपया दूसरा प्रदाता चुनें।",
-
-"confirm_send_completion_request": "क्या आप वाकई इस अनुरोध को पूर्ण के रूप में चिह्नित करना चाहते हैं? इससे ग्राहक को समीक्षा और पुष्टि के लिए सूचित किया जाएगा।",
-
-// ============================================================
-// SECTION: APP GUIDE MODAL - CORRECTED TRANSLATIONS
-// ============================================================
-
-// Modal & Tab Headers
-app_guide: "ऐप गाइड",
-app_guide_title: "ऐप गाइड",
-guide_tab_getting_started: "शुरुआत करें",
-guide_tab_for_seekers: "उपभोक्ताओं के लिए",
-guide_tab_for_providers: "सेवा प्रदाताओं के लिए",
-guide_tab_credits: "क्रेडिट और पुरस्कार",
-guide_tab_features: "ऐप की सुविधाएं",
-
-// TAB 1: Getting Started
-guide_welcome_title: "HelpBuddy में आपका स्वागत है! 👋",
-guide_welcome_desc: "HelpBuddy आपके स्थानीय क्षेत्र में ग्राहकों (उपभोक्ताओं) को सेवा प्रदाताओं से जोड़ता है। यहां वह सब कुछ है जो आपको शुरुआत करने के लिए जानना आवश्यक है!",
-guide_signup_credits_title: "शुरुआती साइनअप क्रेडिट",
-guide_signup_normal: "सामान्य साइनअप: 200 क्रेडिट",
-guide_signup_referral: "रेफरल कोड के साथ: 220 क्रेडिट (200 + 20 बोनस)",
-guide_referral_system_title: "रेफरल सिस्टम - 75 क्रेडिट कमाएं!",
-guide_referral_step1: "चरण 1:",
-guide_referral_step1_desc: "अपने दोस्तों के साथ अपना रेफरल कोड शेयर करें",
-guide_referral_step2: "चरण 2:",
-guide_referral_step2_desc: "जब वे साइन अप करते हैं, तो आपको तुरंत +50 क्रेडिट मिलते हैं",
-guide_referral_step3: "चरण 3:",
-guide_referral_step3_desc: "जब वे अपना पहला अनुरोध पूरा करते हैं, तो आपको +25 और क्रेडिट मिलते हैं",
-guide_referral_total: "प्रति रेफरल कुल कमाई: 75 क्रेडिट (50 + 25)",
-
-// TAB 2: For Seekers
-guide_seekers_title: "उपभोक्ता के रूप में HelpBuddy का उपयोग कैसे करें 👤",
-guide_seekers_create_title: "चरण 1: अनुरोध बनाएं (-25 क्रेडिट)",
-guide_seekers_create_desc: '+ अनुरोध बनाएं पर क्लिक करें, अपनी सेवा की आवश्यकता का वर्णन करें, स्थान जोड़ें और जमा करें। आपका अनुरोध नजदीकी प्रदाताओं को दिखाई देगा।',
-guide_seekers_stages_title: "अनुरोध के चरण और टैब:",
-guide_seekers_no_response: "कोई प्रतिक्रिया नहीं:",
-guide_seekers_no_response_desc: "प्रदाताओं की प्रतिक्रिया का इंतजार",
-guide_seekers_negotiating: "बातचीत:",
-guide_seekers_negotiating_desc: "प्रदाताओं ने जवाब दिया है, आप चैट कर सकते हैं और कीमतों पर बातचीत कर सकते हैं",
-guide_seekers_in_progress: "प्रगति में:",
-guide_seekers_in_progress_desc: "प्रदाता आपके अनुरोध पर काम कर रहा है",
-guide_seekers_review: "समीक्षा:",
-guide_seekers_review_desc: "प्रदाता ने काम पूरा कर लिया है, आपकी स्वीकृति का इंतजार है",
-guide_seekers_completed: "पूर्ण:",
-guide_seekers_completed_desc: "काम समाप्त और स्वीकृत",
-guide_seekers_select_title: "चरण 2: सर्वश्रेष्ठ प्रदाता चुनें",
-guide_seekers_select_desc: "सभी प्रतिक्रियाओं की समीक्षा करें, शर्तों पर बातचीत करें, रेटिंग जांचें, फिर अपने काम के लिए सबसे अच्छा प्रदाता चुनें।",
-guide_seekers_review_title: "चरण 3: समीक्षा करें और रेटिंग दें",
-guide_seekers_review_work: "जब प्रदाता काम पूरा कर लेता है, तो इसकी समीक्षा करें। यदि संतुष्ट हैं, तो स्वीकार करें और रेटिंग दें। यदि नहीं, तो प्रदाता को सुधारने के लिए टिप्पणी के साथ अस्वीकार करें।",
-guide_seekers_special_title: "विशेष विकल्प:",
-guide_seekers_change_provider: "प्रदाता बदलें:",
-guide_seekers_change_provider_desc: 'यदि प्रदाता जवाब नहीं दे रहा है, तो आप उन्हें बदल सकते हैं। अनुरोध वापस खुला हो जाता है।',
-guide_seekers_warranty: "वारंटी पुनः सक्रियण:",
-guide_seekers_warranty_desc: "यदि वारंटी अवधि के दौरान समस्या होती है, तो अनुरोध को फिर से सक्रिय करें।",
-guide_seekers_credits_title: "क्रेडिट लागत और बोनस:",
-guide_seekers_credit_cost: "अनुरोध बनाना: -25 क्रेडिट",
-guide_seekers_credit_bonus1: "पूर्णता बोनस: +5 क्रेडिट (वारंटी के बाद)",
-guide_seekers_credit_bonus2: "रेटिंग बोनस: +10 क्रेडिट (वारंटी के बाद)",
-guide_seekers_credit_net: "प्रति पूर्ण अनुरोध शुद्ध लागत: 10 क्रेडिट (25 - 15)",
-
-// TAB 3: For Providers
-guide_providers_title: "सेवा प्रदाता के रूप में HelpBuddy का उपयोग कैसे करें 🔧",
-guide_providers_step1_title: "चरण 1: सूचनाएं प्राप्त करें",
-guide_providers_step1_desc: 'आपकी सेवाओं से मेल खाने वाले और आपके सेवा क्षेत्र में नए अनुरोध कार्य अवसर → उपलब्ध कार्य में दिखाई देते हैं।',
-guide_providers_tabs_title: "प्रदाता टैब संरचना:",
-guide_providers_open_desc: "सभी खुले अनुरोध जिनका आपने अभी तक जवाब नहीं दिया है",
-guide_providers_available: "उपलब्ध कार्य:",
-guide_providers_available_desc: "नए अनुरोध जिनका आपने जवाब नहीं दिया है",
-guide_providers_missed: "छूटे हुए अवसर:",
-guide_providers_missed_desc: "अनुरोध जहां आप चयनित नहीं हुए या अचयनित हो गए",
-guide_providers_in_progress: "प्रगति में:",
-guide_providers_in_progress_desc: "आप वर्तमान में इन अनुरोधों पर काम कर रहे हैं",
-guide_providers_waiting: "प्रतीक्षा में:",
-guide_providers_waiting_desc: "आपने काम पूरा कर लिया है, ग्राहक की स्वीकृति का इंतजार है",
-guide_providers_completed: "पूर्ण:",
-guide_providers_completed_desc: "ग्राहक ने आपके काम को मंजूरी दे दी है",
-guide_providers_step2_title: "चरण 2: अनुरोधों का जवाब दें (-50 क्रेडिट)",
-guide_providers_step2_desc: 'यदि किसी अनुरोध में रुचि है, तो जवाब दें पर क्लिक करें। आप चैट के माध्यम से ग्राहक के साथ शर्तों और मूल्य निर्धारण पर बातचीत कर सकते हैं।',
-guide_providers_step3_title: "चरण 3: चयनित हों और काम शुरू करें",
-guide_providers_step3_desc: 'यदि ग्राहक आपको चुनता है, तो अनुरोध सक्रिय अनुरोध → प्रगति में चला जाता है। काम को पेशेवर तरीके से पूरा करें।',
-guide_providers_step4_title: "चरण 4: पूर्ण चिह्नित करें और वारंटी दें",
-guide_providers_step4_desc: 'समाप्त होने पर, काम को पूर्ण के रूप में चिह्नित करें। आप वारंटी अवधि (वैकल्पिक) की पेशकश कर सकते हैं। अनुरोध ग्राहक की स्वीकृति के लिए प्रतीक्षा में चला जाता है।',
-guide_providers_credits_title: "क्रेडिट लागत और कमाई:",
-guide_providers_credit_respond: "अनुरोध का जवाब देना: -50 क्रेडिट",
-guide_providers_credit_rejected: "यदि चयनित नहीं: +40 क्रेडिट वापस (10 क्रेडिट प्लेटफ़ॉर्म शुल्क)",
-guide_providers_credit_selected: "यदि चयनित: सभी 50 क्रेडिट उपयोग किए गए",
-guide_providers_rating_bonus: "रेटिंग-आधारित बोनस (वारंटी के बाद):",
-guide_providers_5star: "4.5+ औसत: +20 क्रेडिट",
-guide_providers_4star: "3.5-4.4 औसत: +10 क्रेडिट",
-guide_providers_3star: "2.5-3.4 औसत: +5 क्रेडिट",
-guide_providers_lowstar: "2.5 से कम: 0 क्रेडिट",
-
-// TAB 4: Credits & Rewards
-guide_credits_title: "क्रेडिट और पुरस्कार को समझना 💳",
-guide_credits_what_title: "क्रेडिट क्या हैं?",
-guide_credits_what_desc: "क्रेडिट HelpBuddy की आभासी मुद्रा है जिसका उपयोग प्लेटफ़ॉर्म पर अनुरोधों को प्रबंधित करने के लिए किया जाता है। ऐप पर कोई वास्तविक पैसा नहीं लिया जाता है - सभी सेवा भुगतान उपभोक्ताओं और प्रदाताओं के बीच ऑफलाइन सीधे होते हैं।",
-guide_credits_payment_title: "भुगतान प्रणाली",
-guide_credits_payment_desc: "HelpBuddy पैसे के लेन-देन को संभालता नहीं है। उपभोक्ता और प्रदाता चैट के माध्यम से कीमतों पर बातचीत करते हैं और जब प्रदाता आता है तो सीधे भुगतान का आदान-प्रदान करते हैं। प्लेटफ़ॉर्म केवल अनुरोध प्रबंधन के लिए क्रेडिट का उपयोग करता है।",
-guide_credits_structure_title: "पूर्ण क्रेडिट संरचना",
-guide_credits_seeker_costs: "उपभोक्ताओं के लिए (ग्राहक):",
-guide_credits_seeker_create: "अनुरोध बनाना: -25 क्रेडिट",
-guide_credits_seeker_complete: "पूर्णता बोनस: +5 क्रेडिट (वारंटी के बाद)",
-guide_credits_seeker_rating: "रेटिंग बोनस: +10 क्रेडिट (वारंटी के बाद)",
-guide_credits_seeker_net: "शुद्ध लागत: प्रति पूर्ण अनुरोध 10 क्रेडिट",
-guide_credits_provider_costs: "सेवा प्रदाताओं के लिए:",
-guide_credits_provider_respond: "अनुरोध का जवाब देना: -50 क्रेडिट",
-guide_credits_provider_refund: "चयनित नहीं: +40 क्रेडिट वापसी (10 क्रेडिट शुल्क)",
-guide_credits_provider_selected: "चयनित: 50 क्रेडिट उपयोग किए गए",
-guide_credits_provider_bonus: "रेटिंग बोनस: 0-20 क्रेडिट (रेटिंग के आधार पर)",
-guide_credits_warranty_title: "वारंटी और लंबित क्रेडिट",
-guide_credits_warranty_desc: 'जब कोई प्रदाता काम पूरा करता है, तो वे वारंटी अवधि की पेशकश कर सकते हैं। इस दौरान, सभी अर्जित क्रेडिट लंबित रहते हैं। यदि उपभोक्ता अनुरोध को (समस्याओं के कारण) फिर से सक्रिय करता है, तो काम जारी रहता है। वारंटी समाप्त होने के बाद, लंबित क्रेडिट उपलब्ध हो जाते हैं।',
-guide_credits_referral_title: "रेफरल पुरस्कार - विस्तृत विवरण",
-guide_credits_referral_new: "नया उपयोगकर्ता आपके कोड के साथ साइन अप करता है:",
-guide_credits_referral_new_gets: "नए उपयोगकर्ता को मिलता है: 220 क्रेडिट (200 + 20 बोनस)",
-guide_credits_referral_you_get1: "आपको मिलता है: +50 क्रेडिट तुरंत",
-guide_credits_referral_complete: "जब वे पहला अनुरोध पूरा करते हैं:",
-guide_credits_referral_you_get2: "आपको मिलता है: +25 अतिरिक्त क्रेडिट",
-guide_credits_referral_total: "कुल: प्रति सफल रेफरल 75 क्रेडिट!",
-guide_credits_support_title: "कम क्रेडिट सहायता",
-guide_credits_support_desc: "यदि आपके क्रेडिट 25 (उपभोक्ता) या 50 (प्रदाता) से नीचे आते हैं, तो आपको प्लेटफ़ॉर्म का उपयोग जारी रखने के लिए स्वचालित रूप से साप्ताहिक +10 बोनस क्रेडिट प्राप्त होंगे।",
-
-// TAB 5: App Features
-guide_features_title: "ऐप की सुविधाएं और सेटिंग्स ⚙️",
-guide_features_theme_title: "डार्क/लाइट थीम",
-guide_features_theme_desc: "आरामदायक देखने के लिए ड्रॉपडाउन मेनू (ऊपर-दाएं कोने) में ☀️/🌙 स्विच का उपयोग करके डार्क और लाइट थीम के बीच टॉगल करें।",
-guide_features_language_title: "भाषा टॉगल (English ↔ हिंदी)",
-guide_features_language_desc: "ड्रॉपडाउन मेनू के शीर्ष पर EN/हि टॉगल का उपयोग करके अंग्रेजी और हिंदी के बीच स्विच करें।",
-guide_features_pwa_title: "मोबाइल ऐप के रूप में इंस्टॉल करें (PWA)",
-guide_features_pwa_desc: "HelpBuddy एक प्रोग्रेसिव वेब ऐप (PWA) के रूप में काम करता है। आप इसे अपने फोन पर नेटिव ऐप अनुभव के लिए इंस्टॉल कर सकते हैं!",
-guide_features_android_title: "📱 Android के लिए (Chrome):",
-guide_features_android_step1: "Chrome browser में HelpBuddy खोलें",
-guide_features_android_step2: "ऊपर-दाएं पर मेनू आइकन (⋮) टैप करें",
-guide_features_android_step3: 'होम स्क्रीन पर जोड़ें चुनें',
-guide_features_android_step4: "पुष्टि करें और ऐप आइकन आपकी होम स्क्रीन पर दिखाई देगा",
-guide_features_ios_title: "📱 iOS के लिए (Safari):",
-guide_features_ios_step1: "Safari browser में HelpBuddy खोलें",
-guide_features_ios_step2: "नीचे शेयर बटन (□↑) टैप करें",
-guide_features_ios_step3: 'नीचे स्क्रॉल करें और होम स्क्रीन पर जोड़ें टैप करें',
-guide_features_ios_step4: 'इसे नाम दें और जोड़ें टैप करें',
-guide_features_support_title: "सहायता से संपर्क करें",
-guide_features_support_desc: 'मदद चाहिए? FAQ तक पहुंचने और ईमेल या फोन के माध्यम से सहायता से संपर्क करने के लिए ड्रॉपडाउन मेनू में ❓ मदद चाहिए पर क्लिक करें।',
-guide_features_tips_title: "प्रो टिप्स",
-guide_features_tip1: "नए अनुरोधों या प्रतिक्रियाओं को कभी न चूकने के लिए सूचनाएं सक्षम करें",
-guide_features_tip2: "अपनी प्रोफ़ाइल को सटीक सेवाओं और स्थान के साथ अपडेट रखें",
-guide_features_tip3: "चयन की बेहतर संभावनाओं के लिए अनुरोधों का जल्दी जवाब दें",
-guide_features_tip4: "बोनस क्रेडिट और अधिक अवसरों के लिए अच्छी रेटिंग बनाए रखें",
-
-// ==================== ABOUT APP TRANSLATIONS (HINDI) ====================
-// Add these to your existing translations.hi = { ... } object
-
-about_title: "HelpBuddy के बारे में",
-about_version: "संस्करण",
-about_build: "बिल्ड",
-about_date: "तारीख",
-about_check_updates: "अपडेट जांचें",
-about_checking: "🔄 जांच रहे हैं...",
-about_up_to_date: "✅ अप टू डेट है!",
-about_check_failed: "❌ जांच विफल",
-about_whats_new: "v में नया क्या है",
-
-// Changelog v1.8.4
-changelog_v184_item1: "बेहतर दिखावट के साथ UI/UX में सुधार",
-changelog_v184_item2: "नए उपयोगकर्ताओं के लिए विस्तृत ऐप गाइड जोड़ी गई",
-changelog_v184_item3: "पहली बार उपयोग करने वालों के लिए बेहतर अनुभव",
-changelog_v184_item4: "प्लेटफ़ॉर्म में प्रदर्शन अनुकूलन",
-changelog_v184_item5: "बग फिक्स और स्थिरता में सुधार",
 
   }
 };
@@ -8175,81 +7139,46 @@ function toggleDashboardMode() {
         function showLoading() { hideAllViews(); document.getElementById('loadingView').classList.remove('hidden'); }
 
 async function showCreateRequestForm() { 
-    // DON'T call hideAllViews() - it hides dashboardView which contains createRequestView!
-    // Instead, hide specific views manually
+    hideAllViews(); 
     
-    const viewsToHide = ['loginView', 'signupView', 'editProfileView', 'editRequestView', 'chatView'];
-    viewsToHide.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) element.classList.add('hidden');
-    });
-    
-    // Make sure dashboardView is VISIBLE (because createRequestView is inside it)
-    const dashboardView = document.getElementById('dashboardView');
-    if (dashboardView) {
-        dashboardView.classList.remove('hidden');
-        dashboardView.style.display = 'block';
-        dashboardView.style.visibility = 'visible';
-    }
-    
-    // Hide dashboard sections (but keep dashboardView itself visible)
+    // Hide dashboard sections
     const seekerSection = document.getElementById('seekerSection');
     const providerSection = document.getElementById('providerSection');
     const createRequestBtn = document.getElementById('createRequestBtn');
     const userMenu = document.querySelector('.user-menu');
-    const dashboardHeader = document.getElementById('dashboardHeader');
     
     if (seekerSection) seekerSection.style.display = 'none';
     if (providerSection) providerSection.style.display = 'none';
     if (createRequestBtn) createRequestBtn.style.display = 'none';
     if (userMenu) userMenu.style.display = 'none';
-    if (dashboardHeader) dashboardHeader.style.display = 'none';
+
+// Hide dashboard logo when Create Request form opens
+const dashboardHeader = document.getElementById('dashboardHeader');
+if (dashboardHeader) dashboardHeader.style.display = 'none';
     
     // Show create request form
-    const createRequestView = document.getElementById('createRequestView');
-    if (createRequestView) {
-        createRequestView.classList.remove('hidden');
-        createRequestView.style.display = 'block';
-        createRequestView.style.visibility = 'visible';
-    }
+    document.getElementById('createRequestView').classList.remove('hidden'); 
+    document.getElementById('createRequestView').style.display = 'block';
     
     // ✅ Reset the form
-    const createRequestForm = document.getElementById('createRequestForm');
-    if (createRequestForm) createRequestForm.reset();
+    document.getElementById('createRequestForm').reset(); 
+    document.getElementById('titleCounter').textContent = '0';
+    document.getElementById('descCounter').textContent = '0';
     
-    const titleCounter = document.getElementById('titleCounter');
-    const descCounter = document.getElementById('descCounter');
-    if (titleCounter) titleCounter.textContent = '0';
-    if (descCounter) descCounter.textContent = '0';
-    
-    // ✅ Reset "Use different location" checkbox and hide custom fields
+    // ✅ CRITICAL FIX: Reset "Use different location" checkbox and hide custom fields
     const differentLocationCheckbox = document.getElementById('differentLocation');
     const customLocationFields = document.getElementById('customLocationFields');
     
     if (differentLocationCheckbox) {
-        differentLocationCheckbox.checked = false;
+        differentLocationCheckbox.checked = false; // Uncheck the checkbox
     }
     
     if (customLocationFields) {
-        customLocationFields.classList.add('hidden');
+        customLocationFields.classList.add('hidden'); // Hide the custom location fields
     }
-
-    // Reset service selection flow
-const serviceAccordion = document.getElementById('serviceAccordion');
-const formWrapper = document.getElementById('formFieldsWrapper');
-const badge = document.getElementById('selectedServiceBadge');
-
-if (serviceAccordion) serviceAccordion.style.display = 'block';
-if (formWrapper) {
-    formWrapper.classList.add('form-fields-hidden');
-    formWrapper.style.display = 'none';
-}
-if (badge) badge.style.display = 'none';
     
     // Filter services based on provider's existing services
     await filterServiceDropdown();
-    
-    console.log('✅ Create Request form should now be visible');
 }
         
         async function filterServiceDropdown() {
@@ -8311,58 +7240,6 @@ if (badge) badge.style.display = 'none';
     }
     
     showDashboard(); 
-}
-
-// Function to show form after service selection
-function showFormFields(serviceName) {
-    // Hide the service accordion
-    const serviceAccordion = document.getElementById('serviceAccordion');
-    if (serviceAccordion) serviceAccordion.style.display = 'none';
-    
-    // Show selected service badge
-    const badge = document.getElementById('selectedServiceBadge');
-    const serviceNameSpan = document.getElementById('selectedServiceName');
-    if (badge && serviceNameSpan) {
-        serviceNameSpan.textContent = serviceName;
-        badge.style.display = 'flex';
-    }
-    
-    // Show form fields
-    const formWrapper = document.getElementById('formFieldsWrapper');
-    if (formWrapper) {
-        formWrapper.classList.remove('form-fields-hidden');
-        formWrapper.style.display = 'block';
-    }
-    
-    // Scroll to form fields smoothly
-    setTimeout(() => {
-        formWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
-}
-
-// Function to change service selection
-function changeService() {
-    // Show service accordion again
-    const serviceAccordion = document.getElementById('serviceAccordion');
-    if (serviceAccordion) serviceAccordion.style.display = 'block';
-    
-    // Hide selected service badge
-    const badge = document.getElementById('selectedServiceBadge');
-    if (badge) badge.style.display = 'none';
-    
-    // Hide form fields
-    const formWrapper = document.getElementById('formFieldsWrapper');
-    if (formWrapper) {
-        formWrapper.classList.add('form-fields-hidden');
-        formWrapper.style.display = 'none';
-    }
-    
-    // Clear service selection
-    document.getElementById('serviceType').value = '';
-    document.getElementById('serviceSubtype').value = '';
-    
-    // Scroll to top
-    serviceAccordion.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // Smart back function - goes to previous page or dashboard
@@ -8767,50 +7644,46 @@ function initializeCreateRequestServiceDropdown() {
     });
     
     // Subcategory click - select service
-document.querySelectorAll('#serviceAccordion .subcategory-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-        e.stopPropagation();
-        
-        const value = this.getAttribute('data-value');
-        const category = this.closest('.service-category').getAttribute('data-category');
-        
-        // Remove previous selection
-        document.querySelectorAll('#serviceAccordion .subcategory-item').forEach(i => {
-            i.classList.remove('selected');
+    document.querySelectorAll('#serviceAccordion .subcategory-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            const value = this.getAttribute('data-value');
+            const category = this.closest('.service-category').getAttribute('data-category');
+            
+            // Remove previous selection
+            document.querySelectorAll('#serviceAccordion .subcategory-item').forEach(i => {
+                i.classList.remove('selected');
+            });
+            
+            // Mark this as selected
+            this.classList.add('selected');
+            
+            // Update hidden inputs
+            serviceTypeInput.value = category;
+            serviceSubtypeInput.value = value;
+            
+            // Get the service name for display
+            const categoryIcon = this.closest('.service-category').querySelector('.category-icon').textContent;
+            const categoryName = this.closest('.service-category').querySelector('.category-title').textContent;
+            const subtypeName = this.querySelector('.subcategory-name').textContent;
+            
+            // Update trigger display
+            trigger.innerHTML = `
+                <span class="selected-service">${categoryIcon} ${categoryName} → ${subtypeName}</span>
+                <span class="dropdown-arrow">▼</span>
+            `;
+            
+            // Close dropdown
+            accordion.classList.remove('show');
+            trigger.classList.remove('active');
+            
+            // Reset categories visibility
+            document.querySelectorAll('#serviceAccordion .service-category').forEach(cat => {
+                cat.classList.remove('hidden', 'expanded');
+            });
         });
-        
-        // Mark this as selected
-        this.classList.add('selected');
-        
-        // Update hidden inputs
-        serviceTypeInput.value = category;
-        serviceSubtypeInput.value = value;
-        
-        // Get the service name for display
-        const categoryIcon = this.closest('.service-category').querySelector('.category-icon').textContent;
-        const categoryName = this.closest('.service-category').querySelector('.category-title').textContent;
-        const subtypeName = this.querySelector('.subcategory-name').textContent;
-        const fullServiceName = `${categoryIcon} ${categoryName} → ${subtypeName}`;
-        
-        // Update trigger display
-        trigger.innerHTML = `
-            <span class="selected-service">${fullServiceName}</span>
-            <span class="dropdown-arrow">▼</span>
-        `;
-        
-        // Close dropdown
-        accordion.classList.remove('show');
-        trigger.classList.remove('active');
-        
-        // Reset categories visibility
-        document.querySelectorAll('#serviceAccordion .service-category').forEach(cat => {
-            cat.classList.remove('hidden', 'expanded');
-        });
-        
-        // ✅ NEW: Show form fields after service selection
-        showFormFields(fullServiceName);
     });
-});
     
     // Close dropdown when clicking outside
     document.addEventListener('click', function(e) {
@@ -14814,13 +13687,7 @@ async function showWarrantyForm() {
     }
     
     // All checks passed - show the form
-    const warrantyForm = document.getElementById('warrantyForm');
-warrantyForm.classList.remove('hidden');
-warrantyForm.style.display = 'flex'; // Show as flex for centering
-}
-
-function closeWarrantyForm() {
-    document.getElementById('warrantyForm').classList.add('hidden');
+    document.getElementById('warrantyForm').classList.remove('hidden');
 }
 
 // Complete Work
@@ -14972,7 +13839,7 @@ async function acceptCompletion() {
         
         // STEP 2: Show confirmation with seeker's credit bonus (PRIVACY PROTECTED)
 const confirmMessage = warrantyDays > 0
-    ? `✅ Accept work completion?\n\n💳 You'll receive +${seekerBonus} credits after ${warrantyDays} days warranty expires (first acceptance only).\n\n⭐ ⭐ Rate the provider to earn +10 bonus credits for this request!`
+    ? `✅ Accept work completion?\n\n💳 You'll receive +${seekerBonus} credits after ${warrantyDays} days warranty expires (first acceptance only).\n\n⭐ Rate the provider to earn +10 bonus credits (first rating only)!`
     : `✅ Accept work completion?\n\n💳 You'll receive +${seekerBonus} credits immediately (first acceptance only).\n\n⭐ Rate the provider to earn +10 bonus credits (first rating only)!`;
         
         if (!confirm(confirmMessage)) return;
@@ -17630,62 +16497,6 @@ function showPrivacyFromDropdown() {
     showPrivacy();
 }
 
-// ============================================
-// APP GUIDE MODAL FUNCTIONS
-// ============================================
-
-// Open App Guide Modal
-function openAppGuideModal() {
-    console.log('🟢 openAppGuideModal called');
-    const modal = document.getElementById('appGuideModal');
-    console.log('🔍 Modal element:', modal);
-    if (modal) {
-        modal.style.display = 'flex';
-        console.log('✅ Modal display set to flex');
-    } else {
-        console.error('❌ Modal element not found!');
-    }
-}
-
-// Close App Guide Modal
-function closeAppGuideModal() {
-    document.getElementById('appGuideModal').style.display = 'none';
-}
-
-// Switch between tabs
-function switchGuideTab(tabId) {
-    // Hide all tab contents
-    const allContents = document.querySelectorAll('.guide-content');
-    allContents.forEach(content => {
-        content.style.display = 'none';
-        content.classList.remove('active');
-    });
-    
-    // Remove active class from all tabs
-    const allTabs = document.querySelectorAll('.guide-tab');
-    allTabs.forEach(tab => {
-        tab.classList.remove('active');
-    });
-    
-    // Show selected tab content
-    document.getElementById('guide-' + tabId).style.display = 'block';
-    document.getElementById('guide-' + tabId).classList.add('active');
-    
-    // Add active class to clicked tab
-    const activeTab = document.querySelector(`.guide-tab[data-tab="${tabId}"]`);
-    if (activeTab) {
-        activeTab.classList.add('active');
-    }
-}
-
-// Close modal when clicking outside
-document.addEventListener('click', function(event) {
-    const modal = document.getElementById('appGuideModal');
-    if (event.target === modal) {
-        closeAppGuideModal();
-    }
-});
-
 // Close dropdown when clicking outside
 document.addEventListener('click', function(event) {
     const userMenu = document.querySelector('.user-menu');
@@ -20080,114 +18891,6 @@ document.addEventListener('keydown', function(e) {
         </div>
     </div>
 </div>
-
-<!-- About App Modal -->
-<div id="aboutModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
-    <div style="background: white; border-radius: 12px; padding: 2rem; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative;">
-        <span onclick="closeAboutModal()" style="position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; cursor: pointer; color: #999;">&times;</span>
-        
-        <h2 style="color: #6B5B95; margin-bottom: 1.5rem;">About HelpBuddy</h2>
-        
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem; border-radius: 8px; text-align: center;">
-                <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.5rem;">Version</div>
-                <div id="modalVersion" style="font-size: 1.25rem; font-weight: bold;">-</div>
-            </div>
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem; border-radius: 8px; text-align: center;">
-                <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.5rem;">Build</div>
-                <div id="modalBuild" style="font-size: 1.25rem; font-weight: bold;">-</div>
-            </div>
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem; border-radius: 8px; text-align: center;">
-                <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.5rem;">Date</div>
-                <div id="modalDate" style="font-size: 0.875rem; font-weight: bold; margin-top: 0.5rem;">-</div>
-            </div>
-        </div>
-        
-        <button id="updateBtn" onclick="checkForUpdates()" style="width: 100%; padding: 1rem; background: #6B5B95; color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; margin-bottom: 1.5rem; font-weight: 600;">
-            Check for Updates
-        </button>
-        
-        <div style="border-top: 2px solid #e0e0e0; padding-top: 1.5rem;">
-            <h3 style="color: #333; margin-bottom: 1rem;">What's New in v<span id="changelogVersion">-</span></h3>
-            <ul id="changelogList" style="list-style: none; padding: 0; color: #555;"></ul>
-        </div>
-    </div>
-</div>
-
-<script src="version.js"></script>
-<script>
-    // Populate version info from APP_CONFIG
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('modalVersion').textContent = APP_CONFIG.version;
-        document.getElementById('modalBuild').textContent = '#' + APP_CONFIG.versionCode;
-        document.getElementById('modalDate').textContent = APP_CONFIG.releaseDate;
-        document.getElementById('changelogVersion').textContent = APP_CONFIG.version;
-        
-        // Populate changelog using translation keys
-        const changelogList = document.getElementById('changelogList');
-        changelogList.innerHTML = ''; // Clear first
-        
-        APP_CONFIG.changelogKeys.forEach(key => {
-            const li = document.createElement('li');
-            li.style.padding = '0.5rem 0';
-            li.style.paddingLeft = '1.5rem';
-            li.style.position = 'relative';
-            li.textContent = t(key); // Use translation function
-            
-            // Add checkmark
-            const check = document.createElement('span');
-            check.textContent = '✓';
-            check.style.position = 'absolute';
-            check.style.left = '0';
-            check.style.color = '#28a745';
-            check.style.fontWeight = 'bold';
-            li.insertBefore(check, li.firstChild);
-            
-            changelogList.appendChild(li);
-        });
-    });
-    
-    function openAboutModal() {
-        document.getElementById('aboutModal').style.display = 'flex';
-    }
-    
-    function closeAboutModal() {
-        document.getElementById('aboutModal').style.display = 'none';
-    }
-    
-    async function checkForUpdates() {
-        const btn = document.getElementById('updateBtn');
-        btn.disabled = true;
-        btn.textContent = t('about_checking'); // Translated
-        
-        try {
-            if ('serviceWorker' in navigator) {
-                const registration = await navigator.serviceWorker.getRegistration();
-                if (registration) {
-                    await registration.update();
-                    btn.textContent = t('about_up_to_date'); // Translated
-                    setTimeout(() => {
-                        btn.disabled = false;
-                        btn.textContent = t('about_check_updates'); // Translated
-                    }, 2000);
-                }
-            }
-        } catch (error) {
-            btn.textContent = t('about_check_failed'); // Translated
-            setTimeout(() => {
-                btn.disabled = false;
-                btn.textContent = t('about_check_updates'); // Translated
-            }, 2000);
-        }
-    }
-    
-    // Close modal when clicking outside
-    document.getElementById('aboutModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeAboutModal();
-        }
-    });
-</script>
 
 </body>
 </html>
