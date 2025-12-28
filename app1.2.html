@@ -717,7 +717,7 @@ body.light-theme {
     line-height: 1.6;
 }
 	.info { background: #e3f2fd; border: 1px solid #90caf9; color: #1976d2; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
-        .hidden { display: none !important; }
+        .hidden { display: none; }
 	/* Chat View Overlay */
 #chatView {
     position: fixed;
@@ -2447,87 +2447,11 @@ body.dark-theme .info-bubble {
     color: #ffffff !important; /* White icon/text */
 }
 
-<!-- CSS for Modal (Add to your <style> section) -->
-<style>
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 10000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-}
-
-.modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.3s ease;
-}
-
-.modal-content {
-    background: white;
-    padding: 30px;
-    border-radius: 16px;
-    max-width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    animation: slideUp 0.3s ease;
-}
-
-.modal-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    font-size: 32px;
-    font-weight: 700;
-    color: #999;
-    background: none;
-    border: none;
-    cursor: pointer;
-    line-height: 1;
-    padding: 0;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.2s;
-}
-
-.modal-close:hover {
-    background: #f0f0f0;
-    color: #333;
-    transform: rotate(90deg);
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideUp {
-    from { 
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to { 
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-</style>
-</style>
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1 id="appLogo"> HelpBuddy</h1>
+        <h1 id="appLogo">🛠️ HelpBuddy</h1>
         
        <!-- Login View -->
 <div id="loginView" class="hidden auth-page-container">
@@ -2575,10 +2499,7 @@ body.dark-theme .info-bubble {
             <a href="#" onclick="showPrivacy(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">🔒 <span data-i18n="privacy_policy">Privacy Policy</span></a>
         </div>
         <div style="margin-bottom: 8px; color: #888;">
-            📧 <a href="#" onclick="openContactModal(); return false;" 
-      style="color: #667eea; text-decoration: underline; cursor: pointer; font-weight: 600;">
-    Contact Us
-</a>
+            📧 Contact: <a href="mailto:helpbuddy.assist@gmail.com" style="color: #667eea; text-decoration: underline; cursor: pointer; font-weight: 500;">helpbuddy.assist@gmail.com</a>
         </div>
         <div style="color: #999;">
             © 2025 HelpBuddy
@@ -2982,7 +2903,7 @@ body.dark-theme .info-bubble {
     </div>
     <small style="color: #999; font-size: 12px; margin-top: 8px; display: block;"><span data-i18n="select_at_least_one_service">* Select at least one service you provide</span></small>
 </div>
-</div>
+                </div>
 
 		<!-- ✅ Terms & Conditions Checkbox - ADD THIS -->
 <div class="checkbox-group" style="margin-top: 30px; margin-bottom: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
@@ -3008,10 +2929,7 @@ body.dark-theme .info-bubble {
                     <a href="#" onclick="showPrivacy(); return false;" style="color: #667eea; text-decoration: none; font-weight: 500;">🔒 <span data-i18n="privacy_policy">Privacy Policy</span></a>
                 </div>
                 <div style="margin-bottom: 8px; color: #888;">
-                    📧 <a href="#" onclick="openContactModal(); return false;" 
-   style="color: #667eea; text-decoration: underline; cursor: pointer; font-weight: 600;">
-    <span data-i18n="contact">Contact</span> Us
-</a>
+                    📧 <span data-i18n="contact">Contact</span>: <a href="mailto:helpbuddy.assist@gmail.com" style="color: #667eea; text-decoration: underline; cursor: pointer; font-weight: 500;">helpbuddy.assist@gmail.com</a>
                 </div>
                 <div style="color: #999;">
                     © 2025 HelpBuddy
@@ -3340,7 +3258,7 @@ body.dark-theme .info-bubble {
 <!-- App Logo Header (Dashboard Only) -->
 <div id="dashboardHeader" style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
     <h1 style="margin: 0; color: white; font-size: 28px; font-weight: bold;">
-         HelpBuddy
+        🛠️ HelpBuddy
     </h1>
 </div>
     <!-- Row 2: Create Request (LEFT) + User Profile (MIDDLE) + Profile Photo/Back (RIGHT) -->
@@ -3539,7 +3457,7 @@ body.dark-theme .info-bubble {
                 <button class="sub-tab" onclick="filterMyRequests('negotiating')">
     <span data-i18n="negotiating">Negotiating</span>
     <div class="sub-tab-badges">
-        <span class="count-badge hidden" id="negotiatingCount" style="display: none;">0</span>
+        <span class="count-badge" id="negotiatingCount">0</span>
         <span class="info-badge" style="background: #dc3545; color: white;" id="negotiatingNewResponses">🆕 0</span>
         <div class="badge-container hidden" id="negotiatingUnread" style="display: none;">
             <div class="chat-bubble-icon"></div>
@@ -8809,7 +8727,7 @@ if (currentUser && currentProfile && currentProfile.email_verified && !currentPr
             }
         });
 
-// Signup
+        // Signup
 document.getElementById('signupForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
@@ -8951,7 +8869,7 @@ const generateReferralCode = () => {
 const newUserReferralCode = generateReferralCode();
 
 const { error: profileError } = await supabase.from('profiles').insert([{
-    user_id: authData.user.id,  // ✅ CORRECT - Your original code
+    user_id: authData.user.id,
     name: formData.name,
     phone: formData.phone,
     house_number: formData.house_number,
@@ -8966,9 +8884,9 @@ const { error: profileError } = await supabase.from('profiles').insert([{
     email_verified: false,
     verification_link_expires_at: expiryTime.toISOString(),
     last_verification_email_sent_at: new Date().toISOString(),
-    referral_code: newUserReferralCode,
-    referred_by: referrerId,
-    referral_bonus_awarded: false,
+    referral_code: newUserReferralCode,  // ← NEW: Assign referral code
+    referred_by: referrerId,  // ← ADD THIS (will be null if no referral code used)
+    referral_bonus_awarded: false,  // ← ADD THIS
 }]);
 
 console.log('✅ STEP 5 COMPLETE: Profile creation result:', profileError);
@@ -9038,8 +8956,7 @@ if (formData.is_provider) {
         }
         
         // Update profile with radius
-        // BACK TO ORIGINAL (CORRECT):
-await supabase.from('profiles').update({ radius_km: radius }).eq('user_id', authData.user.id);
+        await supabase.from('profiles').update({ radius_km: radius }).eq('user_id', authData.user.id);  // ✅ FIXED
     }
 } else {
     console.log('✅ STEP 6 SKIPPED: Not a provider');
@@ -11797,16 +11714,7 @@ const completedCount = completedRequests.length;
 const noResponseCountEl = document.getElementById('noResponseCount');
 const negotiatingCountEl = document.getElementById('negotiatingCount');
 if (noResponseCountEl) noResponseCountEl.textContent = openCount;
-if (negotiatingCountEl) {
-    negotiatingCountEl.textContent = negotiatingCount;
-    if (negotiatingCount === 0) {
-        negotiatingCountEl.classList.add('hidden');
-        negotiatingCountEl.style.setProperty('display', 'none', 'important');
-    } else {
-        negotiatingCountEl.classList.remove('hidden');
-        negotiatingCountEl.style.setProperty('display', 'inline-flex', 'important');
-    }
-}
+if (negotiatingCountEl) negotiatingCountEl.textContent = negotiatingCount;
 
 // ✅ NEW: Update Negotiating tab badges (new responses + unread messages)
 const negotiatingNewResponsesEl = document.getElementById('negotiatingNewResponses');
@@ -18600,35 +18508,6 @@ function isUserLoggedIn() {
     return !!(token && userId); // Returns true if both exist
 }
 
-<!-- JavaScript Functions (Add to your <script> section) -->
-
-function openContactModal() {
-    const modal = document.getElementById('contactModal');
-    modal.classList.remove('hidden');
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
-}
-
-function closeContactModal() {
-    const modal = document.getElementById('contactModal');
-    modal.classList.remove('active');
-    modal.classList.add('hidden');
-    document.body.style.overflow = 'auto'; // Restore scrolling
-}
-
-// Close modal when clicking outside
-document.getElementById('contactModal')?.addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeContactModal();
-    }
-});
-
-// Close modal with Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeContactModal();
-    }
-});
 </script>
 
 <!-- Feedback Modal -->
@@ -18811,83 +18690,6 @@ document.addEventListener('keydown', function(e) {
 <audio id="newChatSound" preload="auto">
     <source src="/sounds/notification-loud.mp3" type="audio/mp3">
 </audio>
-
-<!-- Contact Modal HTML (Add this BEFORE the closing </body> tag) -->
-<div id="contactModal" class="modal hidden">
-    <div class="modal-content" style="max-width: 500px;">
-        <button class="modal-close" onclick="closeContactModal()">&times;</button>
-        
-        <div style="text-align: center; margin-bottom: 20px;">
-            <div style="font-size: 48px; margin-bottom: 10px;">💬</div>
-            <h2 style="margin: 0; color: #333;">Get in Touch</h2>
-            <p style="color: #666; font-size: 14px; margin-top: 8px;">We're here to help you!</p>
-        </div>
-
-        <!-- WhatsApp Section -->
-        <div style="background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); padding: 20px; border-radius: 12px; margin-bottom: 15px; color: white;">
-            <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                <span style="font-size: 28px; margin-right: 12px;">📱</span>
-                <div>
-                    <div style="font-weight: 700; font-size: 16px;">WhatsApp (Preferred)</div>
-                    <div style="font-size: 14px; opacity: 0.9;">Quick responses for your queries</div>
-                </div>
-            </div>
-            <a href="https://wa.me/919725933110" target="_blank" 
-               style="display: block; background: white; color: #128C7E; padding: 12px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; font-size: 18px; letter-spacing: 1px;">
-                +91 97259 33110
-            </a>
-            <div style="margin-top: 10px; font-size: 12px; opacity: 0.9; text-align: center;">
-                ⏰ Available: 10:00 AM - 6:00 PM
-            </div>
-        </div>
-
-        <!-- Phone Call Section -->
-        <div style="background: #f8f9fa; padding: 18px; border-radius: 12px; margin-bottom: 15px; border: 2px solid #e9ecef;">
-            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                <span style="font-size: 24px; margin-right: 10px;">☎️</span>
-                <div>
-                    <div style="font-weight: 700; font-size: 15px; color: #333;">Phone Call</div>
-                    <div style="font-size: 13px; color: #666;">For urgent matters only</div>
-                </div>
-            </div>
-            <a href="tel:+919725933110" 
-               style="display: block; background: #667eea; color: white; padding: 10px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 600; font-size: 16px;">
-                +91 97259 33110
-            </a>
-            <div style="margin-top: 10px; font-size: 12px; color: #666; text-align: center;">
-                ⏰ Call between 10:00 AM - 6:00 PM
-            </div>
-            <div style="margin-top: 8px; padding: 8px; background: #fff3cd; border-radius: 6px; font-size: 12px; color: #856404; text-align: center;">
-                💡 Tip: WhatsApp us first for faster response!
-            </div>
-        </div>
-
-        <!-- Email Section -->
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; color: white;">
-            <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                <span style="font-size: 28px; margin-right: 12px;">📧</span>
-                <div>
-                    <div style="font-weight: 700; font-size: 16px;">Email</div>
-                    <div style="font-size: 14px; opacity: 0.9;">Available 24/7</div>
-                </div>
-            </div>
-            <a href="mailto:helpbuddy.assist@gmail.com" 
-               style="display: block; background: white; color: #667eea; padding: 12px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 600; font-size: 14px; word-break: break-all;">
-                helpbuddy.assist@gmail.com
-            </a>
-            <div style="margin-top: 10px; font-size: 12px; opacity: 0.9; text-align: center;">
-                ⏱️ We'll reply within 24 hours
-            </div>
-        </div>
-
-        <!-- Note Section -->
-        <div style="margin-top: 20px; padding: 15px; background: #e8f5e9; border-left: 4px solid #4caf50; border-radius: 6px;">
-            <div style="font-size: 13px; color: #2e7d32; line-height: 1.6;">
-                <strong>📌 Note:</strong> We're here to assist you! For quick questions or minor issues, WhatsApp works best. For detailed queries, email us anytime. We appreciate your understanding! 😊
-            </div>
-        </div>
-    </div>
-</div>
 
 </body>
 </html>
