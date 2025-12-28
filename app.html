@@ -20083,10 +20083,10 @@ document.addEventListener('keydown', function(e) {
 
 <!-- About App Modal -->
 <div id="aboutModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
-    <div style="background: white; border-radius: 12px; padding: 2rem; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative;">
-        <span onclick="closeAboutModal()" style="position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; cursor: pointer; color: #999;">&times;</span>
+    <div class="about-modal-content" style="background: var(--bg-primary, white); border-radius: 12px; padding: 2rem; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+        <span onclick="closeAboutModal()" style="position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; cursor: pointer; color: var(--text-secondary, #999);">&times;</span>
         
-        <h2 style="color: #6B5B95; margin-bottom: 1.5rem;">About HelpBuddy</h2>
+        <h2 style="color: var(--text-primary, #6B5B95); margin-bottom: 1.5rem; font-weight: 600;">About HelpBuddy</h2>
         
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem; border-radius: 8px; text-align: center;">
@@ -20103,16 +20103,42 @@ document.addEventListener('keydown', function(e) {
             </div>
         </div>
         
-        <button id="updateBtn" onclick="checkForUpdates()" style="width: 100%; padding: 1rem; background: #6B5B95; color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; margin-bottom: 1.5rem; font-weight: 600;">
+        <button id="updateBtn" onclick="checkForUpdates()" style="width: 100%; padding: 1rem; background: #6B5B95; color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; margin-bottom: 1.5rem; font-weight: 600; transition: background 0.3s;">
             Check for Updates
         </button>
         
-        <div style="border-top: 2px solid #e0e0e0; padding-top: 1.5rem;">
-            <h3 style="color: #333; margin-bottom: 1rem;">What's New in v<span id="changelogVersion">-</span></h3>
-            <ul id="changelogList" style="list-style: none; padding: 0; color: #555;"></ul>
+        <div style="border-top: 2px solid var(--border-color, #e0e0e0); padding-top: 1.5rem;">
+            <h3 style="color: var(--text-primary, #333); margin-bottom: 1rem; font-weight: 600;">What's New in v<span id="changelogVersion">-</span></h3>
+            <ul id="changelogList" style="list-style: none; padding: 0; color: var(--text-secondary, #555);"></ul>
         </div>
     </div>
 </div>
+<style>
+/* Dark Mode Support for About Modal */
+body.dark-mode .about-modal-content,
+body.dark-mode #aboutModal .about-modal-content {
+    background: var(--bg-primary, #1a1a2e) !important;
+    border: 1px solid var(--border-color, #333);
+}
+
+body.dark-mode #aboutModal h2,
+body.dark-mode #aboutModal h3 {
+    color: var(--text-primary, #ffffff) !important;
+}
+
+body.dark-mode #aboutModal #changelogList {
+    color: var(--text-secondary, #cccccc) !important;
+}
+
+body.dark-mode #aboutModal .about-modal-content > span {
+    color: var(--text-secondary, #aaa) !important;
+}
+
+body.dark-mode #aboutModal #updateBtn:hover {
+    background: #7d6ba8 !important;
+}
+</style>
+
 
 <script src="version.js"></script>
 <script>

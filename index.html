@@ -1324,9 +1324,15 @@ document.addEventListener('click', function(e) {
 </script>
 
 <!-- Version Display Footer -->
-<footer style="text-align: center; padding: 1rem 0; color: #666; font-size: 0.875rem; margin-top: 2rem;">
-    <p>HelpBuddy v<span id="appVersion">Loading...</span> | © 2025</p>
+<!-- Version Display Footer -->
+<footer style="text-align: center; padding: 1rem 0; color: #333; font-size: 0.875rem; margin-top: 2rem; font-weight: 500;">
+    <p style="margin: 0;">HelpBuddy v<span id="appVersion">Loading...</span> | © 2025</p>
 </footer>
+
+<script src="version.js"></script>
+<script>
+    document.getElementById('appVersion').textContent = APP_CONFIG.version;
+</script>
 
 <script src="version.js"></script>
 <script>
