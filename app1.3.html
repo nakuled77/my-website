@@ -11107,57 +11107,90 @@ async function addCredits(userId, amount, description, relatedRequestId = null, 
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     
     try {
-        // Call RPC function to update credits AND log transaction (bypasses RLS for both)
-        console.log('💾 Calling add_credits_bypass_rls RPC...');
-        const { data: rpcData, error: rpcError } = await supabase.rpc('add_credits_bypass_rls', {
-            target_user_id: userId,
-            credit_amount: amount,
-            description_text: description,
-            request_id_param: relatedRequestId,
-            status_param: status,
-            warranty_param: warrantyExpiresAt
-        });
-        
-        console.log('💾 RPC result:');
-        console.log('   - rpcData:', rpcData);
-        console.log('   - rpcError:', rpcError);
-        
-        if (rpcError) {
-            console.error('❌ RPC CALL FAILED!');
-            console.error('   Error details:', JSON.stringify(rpcError, null, 2));
-            throw rpcError;
-        }
-        
-        console.log('✅ Profile credits AND transaction logged successfully via RPC!');
-        
-        // ✅ If the updated user is the currently logged-in user, refresh their UI
-        if (currentUser && currentUser.id === userId) {
-            console.log('🔄 Refreshing current user profile...');
-            await loadProfile(currentUser.id);
-            displayCreditBalance();
+        // If status is 'completed', add credits immediately
+        if (status === 'completed') {
+            console.log('✅ Status is completed, proceeding to update profile...');
             
-            // Also reload referral data if it exists
-            if (typeof loadReferralData === 'function') {
-                await loadReferralData();
+            // Use RPC function to bypass RLS
+            console.log('💾 Calling add_credits_bypass_rls RPC...');
+            const { data: rpcData, error: rpcError } = await supabase.rpc('add_credits_bypass_rls', {
+                target_user_id: userId,
+                credit_amount: amount
+            });
+            
+            console.log('💾 RPC result:');
+            console.log('   - rpcData:', rpcData);
+            console.log('   - rpcError:', rpcError);
+            
+            if (rpcError) {
+                console.error('❌ RPC CALL FAILED!');
+                console.error('   Error details:', JSON.stringify(rpcError, null, 2));
+                throw rpcError;
             }
-        }
-        
-        // Verify the update
-        console.log('🔍 Verifying credit update...');
-        const { data: verifyProfile, error: verifyError } = await supabase
-            .from('profiles')
-            .select('credits, name')
-            .eq('user_id', userId)
-            .single();
-        
-        if (verifyError) {
-            console.error('⚠️ Could not verify update:', verifyError);
+            
+            console.log('✅ Profile credits updated successfully via RPC!');
+            
+            // ✅ If the updated user is the currently logged-in user, refresh their UI
+            if (currentUser && currentUser.id === userId) {
+                console.log('🔄 Refreshing current user profile...');
+                await loadProfile(currentUser.id);
+                displayCreditBalance();
+                
+                // Also reload referral data if it exists
+                if (typeof loadReferralData === 'function') {
+                    await loadReferralData();
+                }
+            }
+            
+            // Verify the update
+            console.log('🔍 Verifying credit update...');
+            const { data: verifyProfile, error: verifyError } = await supabase
+                .from('profiles')
+                .select('credits, name')
+                .eq('user_id', userId)
+                .single();
+            
+            if (verifyError) {
+                console.error('⚠️ Could not verify update:', verifyError);
+            } else {
+                console.log('✅ Verification result:');
+                console.log('   Name:', verifyProfile.name);
+                console.log('   Credits:', verifyProfile.credits);
+            }
         } else {
-            console.log('✅ Verification result:');
-            console.log('   Name:', verifyProfile.name);
-            console.log('   Credits:', verifyProfile.credits);
+            console.log('⏸️ Status is pending, skipping profile update');
         }
         
+        // Log transaction
+        console.log('📝 Logging transaction...');
+        const transactionData = {
+            user_id: userId,
+            transaction_type: 'credit',
+            amount: amount,
+            description: description,
+            status: status,
+            related_request_id: relatedRequestId,
+            warranty_expires_at: warrantyExpiresAt
+        };
+        
+        console.log('   Transaction data:', transactionData);
+        
+        const { data: logData, error: logError } = await supabase
+            .from('credit_transactions')
+            .insert([transactionData])
+            .select();
+        
+        console.log('📝 Transaction log result:');
+        console.log('   - logData:', logData);
+        console.log('   - logError:', logError);
+        
+        if (logError) {
+            console.error('❌ TRANSACTION LOG FAILED!');
+            console.error('   Error details:', JSON.stringify(logError, null, 2));
+            throw logError;
+        }
+        
+        console.log('✅ Transaction logged successfully');
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         console.log('🎉 addCredits() COMPLETED SUCCESSFULLY');
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
@@ -11172,6 +11205,19 @@ async function addCredits(userId, amount, description, relatedRequestId = null, 
         console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         throw error;
     }
+
+// ✅ If the updated user is the currently logged-in user, refresh their UI
+if (currentUser && currentUser.id === userId) {
+    console.log('🔄 Refreshing current user profile...');
+    await loadProfile(currentUser.id);
+    displayCreditBalance();
+    
+    // ✅ Also reload referral data
+    if (typeof loadReferralData === 'function') {
+        await loadReferralData();
+    }
+}
+
 }
 
 // Award referral bonus to both users
@@ -15679,22 +15725,6 @@ async function selectProvider(requestId, providerId) {
                         console.log(`✅ System message sent to rejected provider ${response.provider_id}`);
                     }
                     
-                    // 🆕 STEP 3D: Mark provider as 'not_selected' in rejection table
-                    const { error: rejectionError } = await supabase
-                        .from('request_rejected_providers')
-                        .insert({
-                            request_id: requestId,
-                            provider_id: response.provider_id,
-                            rejected_by: currentUser.id,
-                            rejection_reason: 'not_selected'
-                        });
-                    
-                    if (rejectionError) {
-                        console.error(`❌ Error marking provider as not_selected:`, rejectionError);
-                    } else {
-                        console.log(`✅ Marked provider ${response.provider_id} as 'not_selected'`);
-                    }
-                    
                 } catch (error) {
                     console.error(`❌ Error processing refund for provider ${response.provider_id}:`, error);
                     // Continue processing other providers even if one fails
@@ -15889,38 +15919,29 @@ const unreadCount = chat.messages.filter(m => {
             };
         }));
         
-        // 🆕 UPDATED: Check for rejection status (both deselected and not_selected)
-const rejectionChecks = await Promise.all(responses.map(async (response) => {
+        // ✅ NEW: Check for deselected providers FIRST (before any filtering)
+const deselectedChecks = await Promise.all(responses.map(async (response) => {
     const { data: rejectionCheck } = await supabase
         .from('request_rejected_providers')
-        .select('rejection_reason')
+        .select('id')
         .eq('request_id', response.request_id)
         .eq('provider_id', currentProfile.user_id)
         .maybeSingle();
     
     return {
         requestId: response.request_id,
-        rejectionReason: rejectionCheck?.rejection_reason || null
+        isDeselected: !!rejectionCheck
     };
 }));
 
-// 🆕 UPDATED: Filter out open requests, deselected, AND not_selected requests
+// Filter out open requests AND deselected requests from active responses
 const activeResponses = responses.filter(response => {
     const request = requests.find(r => r.id === response.request_id);
     
-    // Get rejection status
-    const rejectionInfo = rejectionChecks.find(d => d.requestId === response.request_id);
-    const rejectionReason = rejectionInfo?.rejectionReason;
-    
-    // Skip deselected requests (never show)
-    if (rejectionReason === 'deselected') {
-        console.log('⏭️ Filtering out deselected request:', response.request_id);
-        return false;
-    }
-    
-    // 🆕 Skip not_selected requests when status is open (they go to Available Work)
-    if (rejectionReason === 'not_selected' && request?.status === 'open') {
-        console.log('⏭️ Filtering out not_selected (open) request:', response.request_id);
+    // ✅ NEW: Skip deselected requests
+    const deselectedInfo = deselectedChecks.find(d => d.requestId === response.request_id);
+    if (deselectedInfo && deselectedInfo.isDeselected) {
+        console.log('⏭️ Filtering out deselected request from responses:', response.request_id);
         return false;
     }
     
@@ -15936,20 +15957,11 @@ const combinedData = activeResponses.map(response => {
         return null;
     }
     
-    // 🆕 UPDATED: Check rejection status
-    const rejectionInfo = rejectionChecks.find(d => d.requestId === response.request_id);
-    const rejectionReason = rejectionInfo?.rejectionReason;
-    
-    // Skip deselected requests
-    if (rejectionReason === 'deselected') {
+    // ✅ NEW: Check if this provider is DESELECTED
+    const deselectedInfo = deselectedChecks.find(d => d.requestId === response.request_id);
+    if (deselectedInfo && deselectedInfo.isDeselected) {
         console.log('⏭️ Skipping deselected request:', request.id);
-        return null;
-    }
-    
-    // 🆕 Skip not_selected + open requests (they go to Available Work)
-    if (rejectionReason === 'not_selected' && request.status === 'open') {
-        console.log('⏭️ Skipping not_selected (open) request:', request.id);
-        return null;
+        return null; // Skip deselected requests - they go to Missed Opportunities
     }
     
     // Check if this is a "missed opportunity"
@@ -16309,7 +16321,7 @@ if (req.status === 'completed') {
     container.innerHTML = html;
 }
 
-// Load Nearby Requests (Provider View)
+        // Load Nearby Requests (Provider View)
 // Load Nearby Requests (Provider View) - WITH DEBUG LOGS
 async function loadNearbyRequests() {
     try {
@@ -16447,92 +16459,29 @@ console.log('✅ Provider offers this service:', req.service_id);
 
         const missedOpportunities = [];
 
-// 🆕 UPDATED: Check for rejected requests (both deselected and not_selected)
-const { data: rejectedRequests, error: rejectedError } = await supabase
+// ✅ NEW: Check for deselected requests
+const { data: deselectedRequests, error: deselectedError } = await supabase
     .from('request_rejected_providers')
-    .select('request_id, rejection_reason')
+    .select('request_id')
     .eq('provider_id', currentProfile.user_id);
 
-if (rejectedError) {
-    console.error('Error fetching rejected requests:', rejectedError);
+if (deselectedError) {
+    console.error('Error fetching deselected requests:', deselectedError);
 }
 
-const rejectionMap = new Map(
-    (rejectedRequests || []).map(r => [r.request_id, r.rejection_reason])
-);
+const deselectedRequestIds = new Set((deselectedRequests || []).map(r => r.request_id));
 
-console.log('🔵 Rejection Map:', Object.fromEntries(rejectionMap));
-
-
-
-console.log('🔵 Rejection reasons:', Object.fromEntries(rejectionMap));
+console.log('🔵 Deselected request IDs:', Array.from(deselectedRequestIds));
 
 for (let req of allRespondedRequests || []) {
-    const rejectionReason = rejectionMap.get(req.id);
-    
-    // Check if this is a regular missed opportunity
+    // Check if this is a regular missed opportunity (another provider was selected)
     const isMissed = (req.status === 'in_progress' || req.status === 'completed' || req.status === 'pending_completion') && 
                      req.selected_provider_id !== currentProfile.user_id;
     
-    // 🆕 CASE 1: Provider marked as 'not_selected' AND request is 'open' → Available Work
-    if (rejectionReason === 'not_selected' && req.status === 'open') {
-        console.log('✅ Adding NOT_SELECTED request back to Available Work:', req.id);
-        
-        if (req.request_latitude && req.request_longitude) {
-            const distance = calculateDistance(
-                currentProfile.latitude,
-                currentProfile.longitude,
-                req.request_latitude,
-                req.request_longitude
-            );
-            
-            const matchingService = providerServices.find(s => s.service_id === req.service_id);
-            
-            if (matchingService && distance <= matchingService.service_radius) {
-                nearby.push({
-                    ...req,
-                    distance: distance,
-                    serviceRadius: matchingService.service_radius,
-                    service_name: req.service?.name || req.service_id,
-                    isReopenedRequest: true
-                });
-            }
-        }
-        
-        continue;
-    }
+    // ✅ NEW: Check if this provider was DESELECTED
+    const isDeselected = deselectedRequestIds.has(req.id);
     
-    // 🆕 CASE 2: Provider marked as 'deselected' → NEVER show in Available Work, only Missed Opportunities
-    if (rejectionReason === 'deselected') {
-        console.log('✅ Adding DESELECTED request back to Available Work:', req.id);
-        
-        if (req.request_latitude && req.request_longitude) {
-            const distance = calculateDistance(
-                currentProfile.latitude,
-                currentProfile.longitude,
-                req.request_latitude,
-                req.request_longitude
-            );
-            
-            // Check if provider offers this service
-            const matchingService = providerServices.find(s => s.service_id === req.service_id);
-            
-            if (matchingService && distance <= matchingService.service_radius) {
-                nearby.push({
-                    ...req,
-                    distance: distance,
-                    serviceRadius: matchingService.service_radius,
-                    service_name: req.service?.name || req.service_id,
-                    isReopenedRequest: true  // ✅ Mark as reopened
-                });
-            }
-        }
-        
-        continue; // Skip adding to missed opportunities
-    }
-    
-    // Regular missed opportunities (NOT deselected, just another provider selected)
-    if (isMissed && rejectionReason !== 'deselected' && req.request_latitude && req.request_longitude) {
+    if ((isMissed || isDeselected) && req.request_latitude && req.request_longitude) {
         const distance = calculateDistance(
             currentProfile.latitude,
             currentProfile.longitude,
@@ -16543,13 +16492,14 @@ for (let req of allRespondedRequests || []) {
         console.log('📊 Adding to missed opportunities:', {
             id: req.id,
             title: req.title,
-            isMissed: isMissed
+            isMissed: isMissed,
+            isDeselected: isDeselected
         });
         
         missedOpportunities.push({
             ...req,
             distance: distance,
-            isDeselected: false
+            isDeselected: isDeselected  // ✅ NEW: Mark deselected requests
         });
     }
 }
@@ -16575,22 +16525,6 @@ if (!lastMissedOpenedAt) {
 }
 
 console.log('🔵 New missed opportunities count:', newMissedCount);
-
-// 🆕 FILTER: Remove requests from nearby if provider already responded (and no rejection)
-        const filteredNearby = nearby.filter(req => {
-            const hasResponded = respondedIds.has(req.id);
-            const rejection = rejectionMap.get(req.id);
-            
-            // If already responded AND no rejection record, exclude from Available Work
-            if (hasResponded && !rejection) {
-                console.log(`❌ Excluding from Available Work (already responded): ${req.id}`);
-                return false;
-            }
-            
-            return true;
-        });
-        
-        console.log('🔵 Filtered Available Work:', filteredNearby.length, '(was', nearby.length, ')');
 
         // Update badges
         const availableCount = nearby.length;
@@ -16784,36 +16718,6 @@ async function respondToRequest(requestId) {
     }
     
     try {
-
-// 🆕 NEW: Check if provider has 'not_selected' record and delete it
-        console.log('🔍 Checking for not_selected record...');
-        
-        const { data: existingRejection, error: rejectionCheckError } = await supabase
-            .from('request_rejected_providers')
-            .select('*')
-            .eq('request_id', requestId)
-            .eq('provider_id', currentProfile.user_id)
-            .eq('rejection_reason', 'not_selected')
-            .maybeSingle();
-        
-        if (rejectionCheckError && rejectionCheckError.code !== 'PGRST116') {
-            console.error('❌ Error checking rejection status:', rejectionCheckError);
-        }
-        
-        if (existingRejection) {
-            console.log('🗑️ Found not_selected record, deleting it...');
-            
-            const { error: deleteError } = await supabase
-                .from('request_rejected_providers')
-                .delete()
-                .eq('id', existingRejection.id);
-            
-            if (deleteError) {
-                console.error('❌ Error deleting not_selected record:', deleteError);
-            } else {
-                console.log('✅ Deleted not_selected record - provider can now respond fresh');
-            }
-        }
         // Check if already responded
         const { data: existingResponse, error: checkError } = await supabase
             .from('request_responses')
