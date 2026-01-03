@@ -18839,17 +18839,6 @@ function closeGetHelpModal() {
     if (modal) {
         modal.classList.remove('active');
     }
-    
-    // Check if user came from landing page
-    const urlParams = new URLSearchParams(window.location.search);
-    const returnTo = urlParams.get('return');
-    
-    if (returnTo === 'landing') {
-        window.location.href = 'index.html';
-    } else {
-        // Remove mode parameter to go back to login page
-        window.location.href = 'app.html?mode=login';
-    }
 }
 
 // Open Get Help Modal for Logged-In Users (with Contact Support visible)

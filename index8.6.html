@@ -6,14 +6,7 @@
     <meta name="description" content="HelpBuddy - Connect with local service providers. Zero commission. Direct contact. Find electricians, plumbers, carpenters and more.">
     <title>HelpBuddy - Tension Mat Lo, Buddy Hai Na!</title>
     <style>
-        * 
-	html, body {
-    width: 100%;
-    overflow-x: hidden;
-    margin: 0;
-    padding: 0;
-}
-	{
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -693,27 +686,24 @@
     }
 }
 
-       .why-section {
-    padding: 60px 0;
-    background: white;
-    width: 100%;
-    overflow-x: hidden;
-}
+        /* Why Section */
+        .why-section {
+            padding: 80px 20px;
+            background: white;
+        }
 
-.why-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    width: 100%;
-    max-width: 100%;
-    padding: 0 10px;
-    margin: 0;
-    box-sizing: border-box;
-}
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-.why-card {
-    padding: 20px 10px;
-    border-radius: 12px;
+        .why-card {
+            background: linear-gradient(135deg, rgba(102,126,234,0.05), rgba(118,75,162,0.05));
+            padding: 40px 30px;
+            border-radius: 15px;
             text-align: center;
             transition: all 0.3s ease;
         }
@@ -900,14 +890,6 @@
             .hero-cta-soft {
                 margin: 25px 0 15px 0;  /* Tighter spacing on mobile */
             }
-	    .why-section {
-        padding: 60px 5px;  /* Minimal padding on mobile */
-    }
-    
-    .why-grid {
-        max-width: 100vw;  /* Force full viewport width */
-    }
-}
 	     
         }
 
@@ -1066,6 +1048,7 @@
                 <h3 class="why-title" id="whyLaunchTitle">Hum Sath Mein Bana Rahe Hain!</h3>
                 <p class="why-desc" id="whyLaunchDesc">HelpBuddy abhi launch ho raha hai aur aap iske pehle members mein se ek ban sakte hain! Humara saath dein aur is platform ko behtar banane mein apna yogdaan dein. Aapki feedback, aapke suggestions - sab matter karte hain. Chalo milkar India ki sabse trusted local services platform banayen! 💪</p>
             </div>
+        <div class="why-grid">
             <div class="why-card">
                 <div class="why-icon">💰</div>
                 <h3 class="why-title" id="why1Title">₹0 Commission</h3>
@@ -1165,10 +1148,6 @@
                 <div class="service-icon">🔨</div>
                 <div class="service-name" id="service7">Appliance Repair</div>
             </div>
-	    <div class="service-card" style="background: linear-gradient(135deg, rgba(255,193,7,0.1), rgba(255,152,0,0.1)); border: 2px dashed rgba(102,126,234,0.3);">
-    <div class="service-icon">➕</div>
-    <div class="service-name" id="service8">और भी आ रहे हैं!</div>
-</div>
         </div>
     </section>
 
@@ -1320,7 +1299,7 @@
             <div class="footer-logo">HelpBuddy</div>
             <p class="footer-tagline" id="footerTagline">Tension Mat Lo, Buddy Hai Na!</p>
             <div class="footer-links">
-    <a href="app.html?mode=help&return=landing" class="footer-link" id="footerAbout">Get Help</a>
+    <a href="app.html?mode=help" class="footer-link" id="footerAbout">Get Help</a>
     <a href="app.html?mode=contact" class="footer-link" id="footerContact">Contact</a>
     <a href="app.html?mode=privacy" class="footer-link" id="footerPrivacy">Privacy Policy</a>
     <a href="app.html?mode=terms" class="footer-link" id="footerTerms">Terms & Conditions</a>
@@ -1415,12 +1394,12 @@
         bonusDesc: 'लॉन्च सेलिब्रेशन! अभी साइन अप करें और तुरंत ⚡200 क्रेडिट्स अपने अकाउंट में पाएं!',
         bonusHighlight: 'Early adopters को एक्स्ट्रा बेनिफिट्स मिलेंगे! हमारी जर्नी का हिस्सा बनें और प्लेटफॉर्म को शेप देने में मदद करें। 🚀',
         bonusNote: '+ दोस्तों को इनवाइट करें और BONUS क्रेडिट्स पाते रहें!',
-        finalCtaTitle: 'हमारी यात्रा का हिस्सा बनें!',
+        finalCtaTitle: 'हमारी जर्नी का हिस्सा बनें!',
         finalCtaDesc: 'HelpBuddy अभी लॉन्च हो रहा है। पहले मेंबर्स में शामिल हों और प्लेटफॉर्म को साथ में बनाएं!',
         finalCtaExtra: 'अपनी जरूरतें पूरी करें, पैसा कमाएं, और अपने एरिया की कम्यूनिटी को strong बनाएं। 💪',
         finalCtaPrimaryText: '🚀 पहले मेंबर्स में शामिल हों - ⚡200 FREE!',
         finalCtaSecondaryText: '🔐 पहले से मेंबर हैं? लॉगिन करें →',
-        finalCtaFootnote: 'कोई पाबंदी नहीं। कोई छुपा हुआ खर्च नहीं। बस आपका और हमारा साथ। ❤️',
+        finalCtaFootnote: 'कोई commitment नहीं। कोई hidden charges नहीं। बस आपका और हमारा साथ। ❤️',
         footerTagline: 'टेंशन मत लो, Buddy है ना!',
         footerAbout: 'हेल्प लें',
         footerContact: 'संपर्क करें',
@@ -1429,8 +1408,6 @@
         copyright: '© 2025 HelpBuddy. सर्वाधिकार सुरक्षित। कम्यूनिटी को जोड़ना, लोकल लोगों को सशक्त बनाना।',
         whyLaunchTitle: 'हम साथ में बना रहे हैं!',
         whyLaunchDesc: 'HelpBuddy अभी लॉन्च हो रहा है और आप इसके पहले मेंबर्स में से एक बन सकते हैं! हमारा साथ दें और इस प्लेटफॉर्म को बेहतर बनाने में अपना योगदान दें। आपकी फीडबैक, आपके सुझाव - सब मैटर करते हैं। चलो मिलकर India की सबसे trusted local services platform बनाएं! 💪',
-	service7: 'अप्लायंस रिपेयर',
-	service8: 'और भी आ रहे हैं!',
 
     },
     en: {
@@ -1529,8 +1506,6 @@
         copyright: '© 2025 HelpBuddy. All Rights Reserved. Connecting communities, empowering locals.',
 	whyLaunchTitle: 'We\'re Building This Together!',
         whyLaunchDesc: 'HelpBuddy is launching now and you can be among the first members! Join us and contribute to making this platform better. Your feedback, your suggestions - everything matters. Let\'s build India\'s most trusted local services platform together! 💪',
-	service7: 'Appliance Repair',
-	service8: 'More Coming Soon!',
 
     }
 };
@@ -1591,6 +1566,15 @@ document.addEventListener('click', function(e) {
 <footer style="text-align: center; padding: 1rem 0; color: #333; font-size: 0.875rem; margin-top: 2rem; font-weight: 500;">
     <p style="margin: 0;">HelpBuddy v<span id="appVersion">Loading...</span> | © 2025</p>
 </footer>
+
+<script>
+    // Version config
+    const APP_CONFIG = { version: '1.0.0' };
+    const versionEl = document.getElementById('appVersion');
+    if (versionEl) {
+        versionEl.textContent = APP_CONFIG.version;
+    }
+</script>
 
 </body>
 </html>
