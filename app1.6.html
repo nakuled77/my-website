@@ -11059,15 +11059,7 @@ async function geocodeByPinCode(formData) {
 
 // Deduct credits from user
 async function deductCredits(userId, amount, description, relatedRequestId = null, status = 'completed', warrantyExpiresAt = null) {
-     console.log('🔥 DEDUCT CREDITS CALLED:', {
-        userId,
-        amount,
-        description,
-        relatedRequestId,
-        status,
-        stackTrace: new Error().stack
-     });
-     try {
+    try {
         console.log(`💳 Deducting ${amount} credits from user ${userId}`);
         
         // If status is 'completed', deduct credits immediately
@@ -16807,7 +16799,7 @@ async function respondToRequest(requestId) {
                 requestId
             );
             
-            //currentProfile.credits -= 40;
+            currentProfile.credits -= 40;
             displayCreditBalance();
             
             alert('✅ You can now respond to this request again!\n\n💳 40 credits charged.');
@@ -16867,7 +16859,7 @@ async function respondToRequest(requestId) {
             requestId
         );
         
-        //currentProfile.credits -= responseCost;
+        currentProfile.credits -= responseCost;
         displayCreditBalance();
 
         alert(`✅ ${t('response_sent_success')}\n\n💳 -${responseCost} credits deducted`);

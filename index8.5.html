@@ -53,15 +53,15 @@
             transform: translateY(-2px);
         }
 
-/* Hero Section */
+        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%);
             color: white;
-            padding: 80px 20px 60px;
+            padding: 80px 20px 120px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            min-height: 85vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -77,18 +77,6 @@
             background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
             background-size: 50px 50px;
             animation: drift 20s linear infinite;
-        }
-
-        /* Peek effect - show next section slightly */
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 100px;
-            background: linear-gradient(to bottom, transparent, rgba(247, 250, 252, 0.3));
-            pointer-events: none;
         }
 
         @keyframes drift {
@@ -121,161 +109,11 @@
         .subtitle {
             font-size: 1.2rem;
             opacity: 0.95;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             line-height: 1.8;
             max-width: 700px;
             margin-left: auto;
             margin-right: auto;
-        }
-
-	/* Trust Badges */
-        .trust-badges {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin: 50px 0 40px 0;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .badge-icon {
-            font-size: 2rem;
-        }
-
-        .badge-text {
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-
-        /* Soft Discover CTA */
-        .hero-cta-soft {
-            margin: 30px 0 20px 0;
-        }
-
-        .cta-discover {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 16px 40px;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            text-decoration: none;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .cta-discover:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .arrow-down {
-            font-size: 1.4rem;
-            animation: bounce-arrow 2s ease-in-out infinite;
-        }
-
-        @keyframes bounce-arrow {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(5px); }
-        }
-
-        /* Small Login Link */
-        .hero-login-link {
-            margin: 20px 0 40px 0;
-        }
-
-        .link-login {
-            color: white;
-            font-size: 0.95rem;
-            text-decoration: underline;
-            opacity: 0.95;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: inline-block;
-            position: relative;
-        }
-
-        .link-login:hover {
-            opacity: 1;
-            color: #a8daff;
-            text-decoration-color: #a8daff;
-            transform: translateX(3px);
-        }
-
-        .link-login:hover::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #a8daff, transparent);
-            animation: shimmer 0.6s ease-in-out;
-        }
-
-        @keyframes shimmer {
-            0% { opacity: 0; transform: translateX(-100%); }
-            50% { opacity: 1; }
-            100% { opacity: 0; transform: translateX(100%); }
-        }
-
-        /* Scroll Invitation */
-        .scroll-invitation {
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    animation: fade-in-up 1s ease-out 1s both;
-    pointer-events: none;  /* ← ADD THIS LINE */
-}
-
-        @keyframes fade-in-up {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-
-        .scroll-arrow {
-            font-size: 2.5rem;
-            color: white;
-            animation: bounce-scroll 2s ease-in-out infinite;
-            margin-bottom: 10px;
-        }
-
-        @keyframes bounce-scroll {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .scroll-text {
-            font-size: 0.9rem;
-            color: white;
-            opacity: 0.9;
-            font-weight: 500;
-            margin: 0;
-        }
-
-        /* Smooth scroll behavior */
-        html {
-            scroll-behavior: smooth;
         }
 
         /* CTA Buttons Container */
@@ -872,25 +710,9 @@
         /* Responsive */
         @media (max-width: 768px) {
             .hero {
-                padding: 60px 20px 100px;  /* More bottom padding */
-                min-height: 85vh;  /* Keep 85vh on mobile too */
+                padding: 60px 20px 80px;
+                min-height: auto;
             }
-            
-            .scroll-invitation {
-                bottom: 10px;  /* Even closer to bottom on mobile */
-            }
-            
-            .scroll-text {
-                font-size: 0.8rem;  /* Smaller text on mobile */
-            }
-	    .hero-login-link {
-                margin: 15px 0 30px 0;  /* Adjusted for mobile */
-            }
-            
-            .hero-cta-soft {
-                margin: 25px 0 15px 0;  /* Tighter spacing on mobile */
-            }
-        }
 
             .logo {
                 font-size: 2.2rem;
@@ -995,14 +817,23 @@
             <p class="tagline" id="tagline">Tension Mat Lo, Buddy Hai Na!</p>
             <p class="subtitle" id="subtitle">Apne area mein electrician, plumber, carpenter aur har service dhundein. Seedha connect karen. 100% FREE. Zero Commission.</p>
             
-            <!-- Trust Badges -->
+            <!-- CTA Buttons -->
+            <div class="cta-buttons">
+                <a href="app.html?mode=signup" class="cta-primary" id="ctaPrimary">
+                    <span id="ctaPrimaryText">🆕 Sign Up Free - ₹200 Credits Payen!</span>
+                </a>
+                <a href="app.html?mode=login" class="cta-secondary" id="ctaSecondary">
+                    <span id="ctaSecondaryText">🔐 Pehle Se Member Hain? Login Karen →</span>
+                </a>
+            </div>
+            
             <div class="trust-badges">
                 <div class="badge">
                     <div class="badge-icon">💯</div>
                     <div class="badge-text" id="badge1">100% FREE</div>
                 </div>
                 <div class="badge">
-                    <div class="badge-icon">⚡</div>
+                    <div class="badge-icon">₹</div>
                     <div class="badge-text" id="badge2">0% Commission</div>
                 </div>
                 <div class="badge">
@@ -1011,72 +842,8 @@
                 </div>
                 <div class="badge">
                     <div class="badge-icon">🎁</div>
-                    <div class="badge-text" id="badge4">⚡200 Bonus</div>
+                    <div class="badge-text" id="badge4">₹200 Bonus</div>
                 </div>
-            </div>
-
-            <!-- Soft CTA - Discover More -->
-            <div class="hero-cta-soft">
-                <a href="#why-section" class="cta-discover" id="ctaDiscover">
-                    <span id="ctaDiscoverText">Jaanein Kaise Kaam Karta Hai</span>
-                    <span class="arrow-down">↓</span>
-                </a>
-            </div>
-
-            <!-- Small Login Link -->
-            <div class="hero-login-link">
-    <a href="app.html?mode=login" class="link-login" id="linkLogin">
-        <span id="linkLoginText" style="pointer-events: none;">Pehle se member hain? Login karen →</span>
-    </a>
-</div>
-
-            <!-- Scroll Invitation -->
-            <div class="scroll-invitation">
-                <div class="scroll-arrow">↓</div>
-                <p class="scroll-text" id="scrollText">Scroll karein aur ⚡200 FREE credits ke baare mein jaanein</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Why Section -->
-    <section class="why-section" id="why-section">
-        <h2 class="section-title" id="whyTitle">HelpBuddy Kyun Choose Karen?</h2>
-        <div class="why-grid">
-            <div class="why-card" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(37,211,102,0.1), rgba(32,186,90,0.1)); border: 2px solid var(--green);">
-                <div class="why-icon">🚀</div>
-                <h3 class="why-title" id="whyLaunchTitle">Hum Sath Mein Bana Rahe Hain!</h3>
-                <p class="why-desc" id="whyLaunchDesc">HelpBuddy abhi launch ho raha hai aur aap iske pehle members mein se ek ban sakte hain! Humara saath dein aur is platform ko behtar banane mein apna yogdaan dein. Aapki feedback, aapke suggestions - sab matter karte hain. Chalo milkar India ki sabse trusted local services platform banayen! 💪</p>
-            </div>
-        <div class="why-grid">
-            <div class="why-card">
-                <div class="why-icon">💰</div>
-                <h3 class="why-title" id="why1Title">₹0 Commission</h3>
-                <p class="why-desc" id="why1Desc">Providers ka poora paisa unke paas rehta hai. Hum beech mein se kuch nahi lete.</p>
-            </div>
-            <div class="why-card">
-                <div class="why-icon">🤝</div>
-                <h3 class="why-title" id="why2Title">Direct Connection</h3>
-                <p class="why-desc" id="why2Desc">Koi middleman nahi. Seedha baat karo, better rates pao, trust banao.</p>
-            </div>
-            <div class="why-card">
-                <div class="why-icon">📍</div>
-                <h3 class="why-title" id="why3Title">Local Focus</h3>
-                <p class="why-desc" id="why3Desc">Aapke area ke liye specially banaya gaya. Chhote shahron aur gaon ke liye perfect.</p>
-            </div>
-            <div class="why-card">
-                <div class="why-icon">⚡</div>
-                <h3 class="why-title" id="why4Title">Dual Role Support</h3>
-                <p class="why-desc" id="why4Desc">Provider bhi ban sakte ho, seeker bhi. Ek account, dono features. Flexibility hai!</p>
-            </div>
-            <div class="why-card">
-                <div class="why-icon">🎁</div>
-                <h3 class="why-title" id="why5Title">Rewards System</h3>
-                <p class="why-desc" id="why5Desc">Signup bonus, referral rewards, completion bonuses. Har action pe benefits milenge.</p>
-            </div>
-            <div class="why-card">
-                <div class="why-icon">🇮🇳</div>
-                <h3 class="why-title" id="why6Title">Hindi + English</h3>
-                <p class="why-desc" id="why6Desc">Dono languages mein available. Jo comfortable ho, use karen. Sabke liye hai!</p>
             </div>
         </div>
     </section>
@@ -1261,36 +1028,68 @@
     </div>
 </section>
 
+    <!-- Why Section -->
+    <section class="why-section">
+        <h2 class="section-title" id="whyTitle">HelpBuddy Kyun Choose Karen?</h2>
+        <div class="why-grid">
+            <div class="why-card">
+                <div class="why-icon">💰</div>
+                <h3 class="why-title" id="why1Title">₹0 Commission</h3>
+                <p class="why-desc" id="why1Desc">Providers ka poora paisa unke paas rehta hai. Hum beech mein se kuch nahi lete.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">🤝</div>
+                <h3 class="why-title" id="why2Title">Direct Connection</h3>
+                <p class="why-desc" id="why2Desc">Koi middleman nahi. Seedha baat karo, better rates pao, trust banao.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">📍</div>
+                <h3 class="why-title" id="why3Title">Local Focus</h3>
+                <p class="why-desc" id="why3Desc">Aapke area ke liye specially banaya gaya. Chhote shahron aur gaon ke liye perfect.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">⚡</div>
+                <h3 class="why-title" id="why4Title">Dual Role Support</h3>
+                <p class="why-desc" id="why4Desc">Provider bhi ban sakte ho, seeker bhi. Ek account, dono features. Flexibility hai!</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">🎁</div>
+                <h3 class="why-title" id="why5Title">Rewards System</h3>
+                <p class="why-desc" id="why5Desc">Signup bonus, referral rewards, completion bonuses. Har action pe benefits milenge.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">🇮🇳</div>
+                <h3 class="why-title" id="why6Title">Hindi + English</h3>
+                <p class="why-desc" id="why6Desc">Dono languages mein available. Jo comfortable ho, use karen. Sabke liye hai!</p>
+            </div>
+        </div>
+    </section>
+
     <!-- Bonus Section -->
     <section class="bonus-section">
         <div class="bonus-content">
             <div class="bonus-icon">🎉</div>
-            <h2 class="bonus-title" id="bonusTitle">Pehle Members Ko Special Bonus!</h2>
-            <div class="bonus-amount" id="bonusAmount">⚡200 FREE</div>
-            <p class="bonus-desc" id="bonusDesc">Launch celebration! Abhi sign up karen aur turant ⚡200 credits apne account mein payen!</p>
-            <p class="bonus-highlight" id="bonusHighlight">Early adopters ko extra benefits milenge! Humari journey ka hissa banein aur platform ko shape dene mein madad karen. 🚀</p>
-            <p style="font-size: 1rem; color: var(--dark); margin-top: 15px; font-weight: 600;" id="bonusNote">+ Dosto ko invite karen aur BONUS credits paate rahen!</p>
+            <h2 class="bonus-title" id="bonusTitle">Signup Bonus Payen!</h2>
+            <div class="bonus-amount" id="bonusAmount">₹200 FREE</div>
+            <p class="bonus-desc" id="bonusDesc">Abhi sign up karen aur turant ₹200 credits apne account mein payen!</p>
+            <p class="bonus-highlight" id="bonusHighlight">+ Referral code use karein ya doston ko invite karen aur EXTRA bonus credits payen! 🚀</p>
         </div>
     </section>
 
     <!-- Final CTA -->
     <section class="final-cta">
-        <h2 class="final-cta-title" id="finalCtaTitle">Humari Journey Ka Hissa Banein!</h2>
-        <p class="final-cta-desc" id="finalCtaDesc">HelpBuddy abhi launch ho raha hai. Pehle members mein shamil hon aur platform ko sath mein banayen!</p>
-        <p style="font-size: 1.1rem; margin-bottom: 40px; opacity: 0.95;" id="finalCtaExtra">Apni zarooratein poori karen, paisa kamayein, aur apne area ki community ko strong banayein. 💪</p>
+        <h2 class="final-cta-title" id="finalCtaTitle">Shuru Karne Ke Liye Taiyar Hain?</h2>
+        <p class="final-cta-desc" id="finalCtaDesc">HelpBuddy community mein shamil hon aur apni zarooratein poori karen ya paisa kamayein!</p>
         
-        <!-- CTA Buttons -->
-        <div class="cta-buttons">
-            <a href="app.html?mode=signup" class="cta-primary">
-                <span id="finalCtaPrimaryText">🚀 Pehle Members Mein Shamil Hon - ⚡200 FREE!</span>
-            </a>
-            <a href="app.html?mode=login" class="cta-secondary">
-                <span id="finalCtaSecondaryText">🔐 Pehle se member hain? Login karen →</span>
-            </a>
-        </div>
-
-        <p style="font-size: 0.95rem; margin-top: 30px; opacity: 0.85;" id="finalCtaFootnote">Koi commitment nahi. Koi hidden charges nahi. Bas aapka aur humara sath. ❤️</p>
-    </section>
+        <!-- Repeat CTA Buttons -->
+<div class="cta-buttons">
+    <a href="app.html?mode=signup" class="cta-primary">
+        <span id="finalCtaPrimaryText">🆕 फ्री साइन अप करें - ₹200 क्रेडिट्स पाएं!</span>
+    </a>
+    <a href="app.html?mode=login" class="cta-secondary">
+        <span id="finalCtaSecondaryText">🔐 पहले से मेंबर हैं? लॉगिन करें →</span>
+    </a>
+</div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -1316,9 +1115,6 @@
         logo: 'HelpBuddy',
         tagline: 'टेंशन मत लो, Buddy है ना!',
         subtitle: 'अपने एरिया में इलेक्ट्रीशियन, प्लंबर, कारपेंटर और हर सर्विस ढूंढें। सीधा कनेक्ट करें। 100% फ्री। जीरो कमीशन।',
-        ctaDiscoverText: 'जानें कैसे काम करता है',
-        linkLoginText: 'पहले से मेंबर हैं? लॉगिन करें →',
-        scrollText: 'स्क्रॉल करें और ⚡200 FREE क्रेडिट्स के बारे में जानें',
         ctaPrimaryText: '🆕 फ्री साइन अप करें - ⚡200 क्रेडिट्स पाएं!',
         ctaSecondaryText: '🔐 पहले से मेंबर हैं? लॉगिन करें →',
         badge1: '100% फ्री',
@@ -1388,35 +1184,26 @@
         why5Desc: 'साइनअप बोनस, रेफरल रिवॉर्ड्स, कम्प्लीशन बोनस। हर कदम पे बेनिफिट्स मिलेंगे।',
         why6Title: 'हिंदी + English',
         why6Desc: 'दो भाषाओँ में उपलब्ध। सुविधानुसार चुने। सबके लिए है!',
-        bonusTitle: 'पहले मेंबर्स को स्पेशल बोनस!',
+        bonusTitle: 'साइनअप बोनस पाएं!',
         bonusAmount: '⚡200 फ्री',
-        bonusDesc: 'लॉन्च सेलिब्रेशन! अभी साइन अप करें और तुरंत ⚡200 क्रेडिट्स अपने अकाउंट में पाएं!',
-        bonusHighlight: 'Early adopters को एक्स्ट्रा बेनिफिट्स मिलेंगे! हमारी जर्नी का हिस्सा बनें और प्लेटफॉर्म को शेप देने में मदद करें। 🚀',
-        bonusNote: '+ दोस्तों को इनवाइट करें और BONUS क्रेडिट्स पाते रहें!',
-        finalCtaTitle: 'हमारी जर्नी का हिस्सा बनें!',
-        finalCtaDesc: 'HelpBuddy अभी लॉन्च हो रहा है। पहले मेंबर्स में शामिल हों और प्लेटफॉर्म को साथ में बनाएं!',
-        finalCtaExtra: 'अपनी जरूरतें पूरी करें, पैसा कमाएं, और अपने एरिया की कम्यूनिटी को strong बनाएं। 💪',
-        finalCtaPrimaryText: '🚀 पहले मेंबर्स में शामिल हों - ⚡200 FREE!',
+        bonusDesc: 'अभी साइन अप करें और तुरंत ⚡200 क्रेडिट्स अपने अकाउंट में पाएं!',
+        bonusHighlight: '+ रेफरल कोड यूज़ करें या दोस्तों को इनवाइट करें और एक्स्ट्रा बोनस क्रेडिट्स पाएं! 🚀',
+        finalCtaTitle: 'शुरू करने के लिए तैयार हैं?',
+        finalCtaDesc: 'HelpBuddy कम्यूनिटी में शामिल हों और अपनी जरूरतें पूरी करें या पैसा कमाएं!',
+        finalCtaPrimaryText: '🆕 फ्री साइन अप करें - ⚡200 क्रेडिट्स पाएं!',
         finalCtaSecondaryText: '🔐 पहले से मेंबर हैं? लॉगिन करें →',
-        finalCtaFootnote: 'कोई commitment नहीं। कोई hidden charges नहीं। बस आपका और हमारा साथ। ❤️',
         footerTagline: 'टेंशन मत लो, Buddy है ना!',
         footerAbout: 'हेल्प लें',
         footerContact: 'संपर्क करें',
         footerPrivacy: 'गोपनीयता नीति',
         footerTerms: 'नियम और शर्तें ',
-        copyright: '© 2025 HelpBuddy. सर्वाधिकार सुरक्षित। कम्यूनिटी को जोड़ना, लोकल लोगों को सशक्त बनाना।',
-        whyLaunchTitle: 'हम साथ में बना रहे हैं!',
-        whyLaunchDesc: 'HelpBuddy अभी लॉन्च हो रहा है और आप इसके पहले मेंबर्स में से एक बन सकते हैं! हमारा साथ दें और इस प्लेटफॉर्म को बेहतर बनाने में अपना योगदान दें। आपकी फीडबैक, आपके सुझाव - सब मैटर करते हैं। चलो मिलकर India की सबसे trusted local services platform बनाएं! 💪',
-
+        copyright: '© 2025 HelpBuddy. सर्वाधिकार सुरक्षित। कम्यूनिटी को जोड़ना, लोकल लोगों को सशक्त बनाना।'
     },
     en: {
         langText: '🇮🇳 हिंदी में देखें',
         logo: 'HelpBuddy',
         tagline: 'Don\'t Worry, Buddy\'s Here!',
         subtitle: 'Find electricians, plumbers, carpenters, and all services in your area. Connect directly. 100% FREE. Zero Commission.',
-        ctaDiscoverText: 'Discover How It Works',
-        linkLoginText: 'Already a member? Login →',
-        scrollText: 'Scroll down to learn about ⚡200 FREE credits',
         ctaPrimaryText: '🆕 Sign Up Free - Get ⚡200 Credits!',
         ctaSecondaryText: '🔐 Already a Member? Login →',
         badge1: '100% FREE',
@@ -1486,26 +1273,20 @@
         why5Desc: 'Signup bonus, referral rewards, completion bonuses. Benefits on every action.',
         why6Title: 'Hindi + English',
         why6Desc: 'Available in both languages. Use whatever is comfortable. For everyone!',
-        bonusTitle: 'Special Bonus for First Members!',
+        bonusTitle: 'Get Signup Bonus!',
         bonusAmount: '⚡200 FREE',
-        bonusDesc: 'Launch celebration! Sign up now and instantly get ⚡200 credits in your account!',
-        bonusHighlight: 'Early adopters get extra benefits! Be part of our journey and help shape the platform. 🚀',
-        bonusNote: '+ Invite friends and keep earning BONUS credits!',
-        finalCtaTitle: 'Be Part of Our Journey!',
-        finalCtaDesc: 'HelpBuddy is launching now. Join as one of the first members and build the platform together!',
-        finalCtaExtra: 'Fulfill your needs, earn money, and strengthen your local community. 💪',
-        finalCtaPrimaryText: '🚀 Join First Members - ⚡200 FREE!',
-        finalCtaSecondaryText: '🔐 Already a member? Login →',
-        finalCtaFootnote: 'No commitment. No hidden charges. Just you and us together. ❤️',
+        bonusDesc: 'Sign up now and instantly get ⚡200 credits in your account!',
+        bonusHighlight: '+ Use referral code or invite friends for EXTRA bonus credits! 🚀',
+        finalCtaTitle: 'Ready to Get Started?',
+        finalCtaDesc: 'Join the HelpBuddy community and fulfill your needs or earn money!',
+        finalCtaPrimaryText: '🆕 Sign Up Free - Get ⚡200 Credits!',
+        finalCtaSecondaryText: '🔐 Already a Member? Login →',
         footerTagline: 'Don\'t Worry, Buddy\'s Here!',
         footerAbout: 'Get Help',
         footerContact: 'Contact',
         footerPrivacy: 'Privacy Policy',
         footerTerms: 'Terms & Conditions',
-        copyright: '© 2025 HelpBuddy. All Rights Reserved. Connecting communities, empowering locals.',
-	whyLaunchTitle: 'We\'re Building This Together!',
-        whyLaunchDesc: 'HelpBuddy is launching now and you can be among the first members! Join us and contribute to making this platform better. Your feedback, your suggestions - everything matters. Let\'s build India\'s most trusted local services platform together! 💪',
-
+        copyright: '© 2025 HelpBuddy. All Rights Reserved. Connecting communities, empowering locals.'
     }
 };
 
@@ -1531,24 +1312,6 @@
 
         // Initialize with Hindi
         updateLanguage();
-
-// Smooth scroll for Discover button
-        document.addEventListener('DOMContentLoaded', function() {
-            const discoverBtn = document.getElementById('ctaDiscover');
-            if (discoverBtn) {
-                discoverBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const whySection = document.getElementById('why-section');
-                    if (whySection) {
-                        whySection.scrollIntoView({ 
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            }
-        });
-
     </script>
 <script>
 // Temporary debug code
@@ -1566,13 +1329,14 @@ document.addEventListener('click', function(e) {
     <p style="margin: 0;">HelpBuddy v<span id="appVersion">Loading...</span> | © 2025</p>
 </footer>
 
+<script src="version.js"></script>
 <script>
-    // Version config
-    const APP_CONFIG = { version: '1.0.0' };
-    const versionEl = document.getElementById('appVersion');
-    if (versionEl) {
-        versionEl.textContent = APP_CONFIG.version;
-    }
+    document.getElementById('appVersion').textContent = APP_CONFIG.version;
+</script>
+
+<script src="version.js"></script>
+<script>
+    document.getElementById('appVersion').textContent = APP_CONFIG.version;
 </script>
 
 </body>
