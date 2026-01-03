@@ -121,7 +121,7 @@
         .subtitle {
             font-size: 1.2rem;
             opacity: 0.95;
-            margin-bottom: 40px;
+            margin-bottom: -10px;
             line-height: 1.8;
             max-width: 700px;
             margin-left: auto;
@@ -871,13 +871,13 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .hero {
-                padding: 60px 20px 100px;  /* More bottom padding */
-                min-height: 85vh;  /* Keep 85vh on mobile too */
+          .hero {
+               padding: 40px 20px 100px;  /* Reduced top from 60px to 40px */
+               min-height: 85vh;
             }
             
             .scroll-invitation {
-                bottom: 10px;  /* Even closer to bottom on mobile */
+                bottom: -75px;  /* Even closer to bottom on mobile */
             }
             
             .scroll-text {
@@ -890,6 +890,7 @@
             .hero-cta-soft {
                 margin: 25px 0 15px 0;  /* Tighter spacing on mobile */
             }
+	     
         }
 
             .logo {
