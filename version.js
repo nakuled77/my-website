@@ -4,17 +4,17 @@
 
 const APP_CONFIG = {
     // Current version information
-    version: '1.8.4',
-    versionCode: 184,
-    releaseDate: '2025-12-28',
-    cacheName: 'helpbuddy-v1.8.4',
+    version: '1.9.0',
+    versionCode: 190,
+    releaseDate: '2025-01-11',
+    cacheName: 'helpbuddy-v1.9.0',
     
     // Changelog items (use translation keys)
     changelogKeys: [
-        'changelog_v184_item1',
-        'changelog_v184_item2',
-        'changelog_v184_item3',
-        'changelog_v184_item4',
-        'changelog_v184_item5'
+        'changelog_v190_item1',
+        'changelog_v190_item2',
+        'changelog_v190_item3',
+        'changelog_v190_item4',
+        'changelog_v190_item5'
     ]
 };
