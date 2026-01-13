@@ -5,24 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="HelpBuddy - Connect with local service providers. Zero commission. Direct contact. Find electricians, plumbers, carpenters and more.">
     <title>HelpBuddy - Tension Mat Lo, Buddy Hai Na!</title>
-    <!-- PWA Configuration -->
-    <link rel="manifest" href="/site.webmanifest">
-    <meta name="theme-color" content="#667eea">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="HelpBuddy">
-    <link rel="apple-touch-icon" href="/icon-192x192.png">
-    
-    <!-- Service Worker Registration -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(reg => console.log('✅ Service Worker registered'))
-                    .catch(err => console.log('❌ Service Worker registration failed:', err));
-            });
-        }
-    </script>
     <style>
         * 
 	html, body {
