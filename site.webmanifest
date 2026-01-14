@@ -1,8 +1,8 @@
 {
   "name": "HelpBuddy",
   "short_name": "HelpBuddy",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
     {
       "src": "/icon-72x72.png",
