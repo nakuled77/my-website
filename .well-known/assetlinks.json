@@ -2,7 +2,7 @@
   "relation": ["delegate_permission/common.handle_all_urls"],
   "target": {
     "namespace": "android_app",
-    "package_name": "app.vercel.helpbuddy_app.twa2",
+    "package_name": "app.vercel.helpbuddy_app",
     "sha256_cert_fingerprints": ["43:1E:2F:8C:B4:45:A8:72:57:76:B3:48:3F:2B:3F:FC:FB:3A:D6:3A:79:70:72:72:71:DE:C3:55:3B:25:D7:20"]
   }
 }]
