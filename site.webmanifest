@@ -1,9 +1,9 @@
 {
   "name": "HelpBuddy",
   "short_name": "HelpBuddy",
-  "start_url": "/",
-  "scope": "/",
-  "id": "/",
+  "start_url": "https://helpbuddy-app.vercel.app/",
+  "scope": "https://helpbuddy-app.vercel.app/",
+  "id": "https://helpbuddy-app.vercel.app/"
   "icons": [
     {
       "src": "/icon-72x72.png",
