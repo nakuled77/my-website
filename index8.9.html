@@ -23,31 +23,6 @@
             });
         }
     </script>
-	<!-- Authentication Check -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
-<script>
-// Initialize Supabase
-const SUPABASE_URL = 'https://nzhivzzzcanniejzqvsc.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56aGl2enp6Y2FubmllanpxdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NTcxMDEsImV4cCI6MjA3NTIzMzEwMX0.ex0z4DZF38IKc57l6V3X-DofTi6ZZUfPVFrajo1cBRY';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// Check if user is already logged in and redirect to dashboard
-async function checkAuthAndRedirect() {
-    try {
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (session) {
-            // User is logged in, redirect to dashboard
-            window.location.href = 'app.html';
-        }
-    } catch (error) {
-        console.error('Auth check error:', error);
-    }
-}
-
-// Run check when page loads
-window.addEventListener('DOMContentLoaded', checkAuthAndRedirect);
-</script>
     <style>
         * 
 	html, body {
