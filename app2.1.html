@@ -5086,7 +5086,7 @@ body:not(.dark-theme) .service-info div {
     
 <!-- Edit Request View -->
         <div id="editRequestView" class="hidden">
-            <button class="btn btn-secondary" onclick="closeEditRequest()">← <span data-i18n="back">Back</span></button>
+            <button class="btn btn-secondary" onclick="window.history.back()">← <span data-i18n="back">Back</span></button>
             <h2 style="margin-top: 20px;"><span data-i18n="edit_service_request">Edit Service Request</span></h2>
             <div id="editRequestError" class="error hidden"></div>
             <div id="editRequestInfo" class="info hidden"></div>
@@ -19854,95 +19854,63 @@ console.log('✅ Provider rejection recorded via RPC');
 
 // Edit Request - Load form with existing data
         async function editRequest(requestId) {
-    try {
-        console.log('🔵 EDIT-1: editRequest called with ID:', requestId);
-        
-        showLoading();
-        console.log('🔵 EDIT-2: showLoading done');
-        
-        // Check if request has any responses
-        const { data: responses, error: respError } = await supabase
-            .from('request_responses')
-            .select('id')
-            .eq('request_id', requestId);
-        
-        console.log('🔵 EDIT-3: responses query done. Count:', responses?.length, 'Error:', respError);
-        
-        if (responses && responses.length > 0) {
-            console.log('🔴 EDIT-3B: Has responses, going back to dashboard');
-            alert('Cannot edit - has responses');
-            showDashboard();
-            return;
+            try {
+                showLoading();
+                
+                // Check if request has any responses
+                const { data: responses } = await supabase
+                    .from('request_responses')
+                    .select('id')
+                    .eq('request_id', requestId);
+                
+                if (responses && responses.length > 0) {
+                    alert(`⚠️ ${t('cannot_edit_after_responses')}`);
+                    showDashboard();
+                    return;
+                }
+                
+                // Load request data
+                const { data: request, error } = await supabase
+                    .from('requests')
+                    .select('*')
+                    .eq('id', requestId)
+                    .single();
+                
+                if (error) throw error;
+                
+                if (request.status !== 'open') {
+                    alert(`⚠️ ${t('only_open_requests_editable')}`);
+                    showDashboard();
+                    return;
+                }
+                
+                // Show edit view and populate form
+                hideAllViews();
+                document.getElementById('editRequestView').classList.remove('hidden');
+                
+                // Populate form fields
+                document.getElementById('editRequestId').value = request.id;
+                document.getElementById('editServiceType').value = request.service_id;
+                document.getElementById('editRequestTitle').value = request.title;
+                document.getElementById('editRequestDescription').value = request.description;
+                
+                // Update character counters
+                document.getElementById('editTitleCounter').textContent = request.title.length;
+                document.getElementById('editDescCounter').textContent = request.description.length;
+                
+                // Set urgency
+                document.getElementById('editUrgentRadio').checked = request.urgency === 'urgent';
+                document.getElementById('editNormalRadio').checked = request.urgency === 'normal';
+                document.getElementById('editLowRadio').checked = request.urgency === 'low';
+                
+                // Show current location (read-only)
+                document.getElementById('currentLocationText').textContent = request.request_location_address;
+                
+            } catch (error) {
+                alert('Error loading request: ' + error.message);
+                showDashboard();
+            }
         }
-        
-        // Load request data
-        const { data: request, error } = await supabase
-            .from('requests')
-            .select('*')
-            .eq('id', requestId)
-            .single();
-        
-        console.log('🔵 EDIT-4: request query done. Data:', request?.id, 'Status:', request?.status, 'Error:', error);
-        
-        if (error) throw error;
-        
-        if (request.status !== 'open') {
-            console.log('🔴 EDIT-4B: Status is not open:', request.status);
-            alert('Only open requests can be edited');
-            showDashboard();
-            return;
-        }
-        
-        console.log('🔵 EDIT-5: About to show edit view');
-        
-        // Show edit view as modal (keep dashboard visible in background)
-const loadingView = document.getElementById('loadingView');
-if (loadingView) {
-    loadingView.classList.add('hidden');
-    loadingView.style.display = 'none';
-}
-
-// ✅ CRITICAL: Show parent dashboardView first
-const dashboardView = document.getElementById('dashboardView');
-if (dashboardView) {
-    dashboardView.classList.remove('hidden');
-    dashboardView.style.display = 'block';
-}
-
-const editView = document.getElementById('editRequestView');
-if (editView) {
-    editView.className = ''; // Remove ALL classes including hidden
-    editView.style.display = 'block';    editView.style.position = 'fixed';
-    editView.style.top = '0';
-    editView.style.left = '0';
-    editView.style.width = '100%';
-    editView.style.height = '100%';
-    editView.style.backgroundColor = 'white';
-    editView.style.zIndex = '1000';
-    editView.style.overflow = 'auto';
-    editView.style.padding = '20px';
-}
-        
-        // Populate form fields
-        document.getElementById('editRequestId').value = request.id;
-        document.getElementById('editServiceType').value = request.service_id;
-        document.getElementById('editRequestTitle').value = request.title;
-        document.getElementById('editRequestDescription').value = request.description;
-        document.getElementById('editTitleCounter').textContent = request.title.length;
-        document.getElementById('editDescCounter').textContent = request.description.length;
-        document.getElementById('editUrgentRadio').checked = request.urgency === 'urgent';
-        document.getElementById('editNormalRadio').checked = request.urgency === 'normal';
-        document.getElementById('editLowRadio').checked = request.urgency === 'low';
-        document.getElementById('currentLocationText').textContent = request.request_location_address;
-        
-        console.log('✅ EDIT-9: All form fields populated successfully');
-        
-    } catch (error) {
-        console.log('🔴 EDIT-ERROR:', error.message, error);
-        alert('Error loading request: ' + error.message);
-        showDashboard();
-    }
-}
 
 // Edit Request Form Submission
         document.getElementById('editRequestForm').addEventListener('submit', async (e) => {
@@ -19980,8 +19948,7 @@ if (editView) {
 
                 infoDiv.classList.add('hidden');
                 alert(`✅ ${t('request_updated_success')}`);
-                closeEditRequest();
-                await loadUserRequests();
+                showDashboard();
             } catch (error) {
                 errorDiv.textContent = error.message;
                 errorDiv.classList.remove('hidden');
@@ -19990,15 +19957,6 @@ if (editView) {
                 infoDiv.classList.add('hidden');
             }
         });
-
-// Close edit request modal
-function closeEditRequest() {
-    const editView = document.getElementById('editRequestView');
-    if (editView) {
-        editView.classList.add('hidden');
-        editView.style.display = 'none';
-    }
-}
 
         // Create Request
 document.getElementById('createRequestForm').addEventListener('submit', async (e) => {
